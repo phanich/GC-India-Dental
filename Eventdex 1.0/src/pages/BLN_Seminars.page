@@ -1,0 +1,4 @@
+<apex:page controller="BLN_SeminarsjsCon" showHeader="false" sidebar="false" standardStylesheets="false">
+  <c:myComponentForTable BLN_UtillDisplayLinks="{!myticket}" id="cmp">
+  </c:myComponentForTable>
+</apex:page>

@@ -1,0 +1,185 @@
+<apex:page showHeader="false" standardStylesheets="false" sidebar="false" controller="BLN_TicketSalesReportCon" action="{!hideEventsTab}">
+ <c:myComponentForTable BLN_UtillDisplayLinks="{!myticket}">                
+<script type="text/javascript" src="{!URLFOR($Resource.Reports, 'Reports/nwdatatable/js/jquery.js')}"></script>
+<script type="text/javascript" src="{!URLFOR($Resource.Reports, 'Reports/nwdatatable/js/jquery.dataTables.js')}"></script>
+
+        
+ <apex:stylesheet value="{!URLFOR($Resource.nwdatatable, 'nwdatatable/css/jquery.dataTables.css')}"/> 
+
+<script type="text/javascript" language="javascript" class="init">
+
+$(document).ready(function() {
+$('#example').dataTable( {
+"pagingType": "full_numbers",
+"iDisplayLength" : 30,
+"bLengthChange": false,
+"bInfo": false,
+
+"bSort": false,
+
+
+/*default orderid in asc sorting*/
+/* "order": [[ 0, "asc" ]],*/
+/*sorting coloumn disable*/
+/* "aoColumnDefs": [
+{ 'bSortable': false, 'aTargets': [ 0 ] },
+
+]*/
+
+} );
+$('#example_filter').hide();
+} );
+
+</script>
+  
+        <apex:form >  
+
+
+
+  <table width="100%" border="0">
+  <tr>
+    <td width="15%" id="labeltext">From Date:</td>
+    <td width="15%"><apex:inputField value="{!EventDates.Start_Date__c}" style="width:150px;"/></td>
+    <td width="15%" id="labeltext" >To Date:</td>
+    <td width="15%" id="labeltext"><apex:inputField value="{!EventDates.End_Date__c}" style="width:150px;"/> </td>
+    <td width="15%" style="padding-left:0px;"><apex:commandButton value="Go" action="{!ticketSalesReport}"  styleClass="button-a blue"/></td>
+    <td width="15%" id="labeltext">Search</td>
+    <td width="15%">
+    <apex:inputText value="{!SearchString}" style="width:150px;">
+    <apex:actionSupport event="onkeyup" action="{!ticketSalesReport}"/>
+    </apex:inputText>
+    </td>
+    <td align="right" width="15%">   
+    <apex:commandButton action="{!exportTicketSales}" image="{!URLFOR($Resource.Export)}" style="width:25px;height:25px;" />
+         
+    </td>
+     <td align="right" width="15%">
+             <apex:commandLink action="{!printTicketSales}" target="_blank">
+                 <apex:commandButton action="{!printTicketSales}" image="{!URLFOR($Resource.Print)}" style="width:25px;height:25px;" />
+             </apex:commandLink>
+    </td>
+  </tr>
+  <tr><td height="10" colspan="10"></td></tr>
+</table>
+
+       
+<div class="content-gird"> 
+        <div style=" width:99%; margin:0px auto; margin-top:0px;"> 
+        
+         <style>
+                #statisticstbl { border-collapse:collapse;}
+                #statisticstbl tr td{ padding:5px; font-size:12px; font-weight:700;}
+                 .labeltitles{ color:#247dba; font-size:14px;}
+                </style>
+
+          
+                <!----------------end of statistics-------------->  
+   
+      <table id="example" class="display" cellspacing="0"  border="0" bordercolor="#F7F7F7" width="100%">
+         <thead>
+           <tr>                   
+             <th>Ticket Name</th>
+             <th>Tag</th>
+             <th>Payment Type</th>
+             <th>Quantity</th>
+             <th>Price</th>
+             <th>Discount</th>
+             <th>Amount</th>            
+          </tr>
+        </thead>
+      <tbody>
+      
+      <apex:repeat value="{!TicketsInnerList}" var="ticket">
+      <tr>
+        <td>{!ticket.ticketData.item_name__c}<apex:outputText rendered="{!IF(ticket.ticketData.item_name__c == NULL, TRUE, FALSE)}" value="Total Sales"/></td>
+        <td>{!ticket.ticketData.item_type__r.Name}</td>
+        <td></td>
+        <td>{!ticket.usedTickets}</td>
+        <td><apex:outputText rendered="{!IF(ticket.ticketData.price__c != NULL, TRUE, FALSE)}" value="${!ticket.ticketData.price__c}"/></td>
+        <td>${!ticket.totalDiscount}</td>
+        <td>${!ticket.totalAmount}</td>
+        
+      </tr>
+      <tr>
+        <td></td>
+        <td></td>
+        <td>Credit</td>
+        <td>{!ticket.creditCardTicketCount}</td>
+        <td></td>
+        <td>${!ticket.creditCardDiscountAmount}</td>
+        <td>${!ticket.creditCardTotalAmount}</td>
+        
+      </tr>
+    
+    <tr>
+        <td></td>
+        <td></td>
+        <td>Check</td>
+        <td>{!ticket.checkTicketCount}</td>
+        <td></td>
+        <td>${!ticket.checkDiscountAmount}</td>
+        <td>${!ticket.checkTotalAmount}</td>
+        
+      </tr>
+      </apex:repeat>
+               <!--------------------------------------------------------->
+        
+        
+        
+        
+                        
+                </tbody>
+            </table>
+        </div>
+       </div>
+         
+
+<!--<table border="1">
+  <tr>
+    <th>Ticket Name</th>
+    <th>Tag</th>
+    <th>Payment Type</th>
+    <th>Quantity</th>
+    <th>Price</th>
+    <th>Discount</th>
+    <th>Amount</th>
+  </tr>
+  <apex:repeat value="{!TicketsInnerList}" var="ticket">
+  <tr>
+    <td>{!ticket.ticketData.item_name__c}</td>
+    <td>{!ticket.ticketData.item_name__c}</td>
+    <td></td>
+    <td>{!ticket.usedTickets}</td>
+    <td>${!ticket.ticketData.price__c}</td>
+    <td>${!ticket.totalDiscount}</td>
+    <td>${!ticket.totalAmount}</td>
+    
+  </tr>
+  <tr>
+    <td></td>
+    <td></td>
+    <td>Credit</td>
+    <td>{!ticket.creditCardTicketCount}</td>
+    <td></td>
+    <td>${!ticket.creditCardDiscountAmount}</td>
+    <td>${!ticket.creditCardTotalAmount}</td>
+    
+  </tr>
+
+<tr>
+    <td></td>
+    <td></td>
+    <td>Check</td>
+    <td>{!ticket.checkTicketCount}</td>
+    <td></td>
+    <td>${!ticket.checkDiscountAmount}</td>
+    <td>${!ticket.checkTotalAmount}</td>
+    
+  </tr>
+
+</apex:repeat>
+</table>-->
+
+    </apex:form>
+    </c:myComponentForTable>
+</apex:page>

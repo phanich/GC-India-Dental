@@ -1,0 +1,10 @@
+<apex:page controller="aws_ses_test_con">
+<apex:form >
+
+  <!-- Begin Default Content REMOVE THIS -->
+  <h1>Congratulations</h1>
+  This is your new Page: aws_ses_test
+  <apex:commandButton action="{!SendEmail}" value="Send Mail"/>
+  <!-- End Default Content REMOVE THIS -->
+</apex:form>
+</apex:page>

@@ -1,0 +1,2446 @@
+<apex:page showHeader="false"  standardController="BLN_Event__c" extensions="BLN_EventsCon" >
+   
+<!-------------------------------------------- Styles, Javascript and Jquery References Start ------------------------------------------
+<apex:stylesheet value="{!URLFOR($Resource.ScanAttendee_V1, 'AttendeeScan/scanattendee/css/style.css')}"/> ------->
+<apex:stylesheet value="{!URLFOR($Resource.NewDBEvents, 'css/style.css')}"/> 
+<apex:stylesheet value="{!URLFOR($Resource.ScanAttendee_V1, 'AttendeeScan/scanattendee/css/style-button.css')}"/>
+<apex:stylesheet value="{!URLFOR($Resource.ScanAttendee_V1, 'AttendeeScan/scanattendee/css/jquery-ui-1.8.16.custom.css')}"/>
+<apex:stylesheet value="{!URLFOR($Resource.ScanAttendee_V1, 'AttendeeScan/scanattendee/css/fullcalendar.css')}"/>
+<apex:stylesheet value="{!URLFOR($Resource.ScanAttendee_V1, 'AttendeeScan/scanattendee/css/tipTip.css')}"/>
+<apex:stylesheet value="{!URLFOR($Resource.ScanAttendee_V1, 'AttendeeScan/scanattendee/css/tables.css')}"/>
+<apex:stylesheet value="{!URLFOR($Resource.ScanAttendee_V1, 'AttendeeScan/scanattendee/css/chosen.css')}"/> 
+<apex:stylesheet value="{!URLFOR($Resource.ScanAttendee_V1, 'AttendeeScan/scanattendee/css/responsive.css')}"/>
+
+<!---
+<script type="text/javascript" src="code.jquery.com/jquery-1.9.1.js}"></script>  ---->
+<!-------------------Sticky Nav js &css--------------->
+ 
+<script type="text/javascript" src="{!URLFOR($Resource.ScanAttendee_V1, 'AttendeeScan/scanattendee/js/jquery.min.js')}"></script>  
+ 
+<script type="text/javascript" src="{!URLFOR($Resource.NewDBEvents, 'js/zebra_accordion.src.js')}"></script>  
+
+<apex:stylesheet value="{!URLFOR($Resource.NewBLTabs, 'jqueryui.css')}"/> 
+ 
+
+<!-------------------------------------------------------------->
+
+
+<!--- ---->
+
+<script type="text/javascript" src="{!URLFOR($Resource.ScanAttendee_V1, 'AttendeeScan/scanattendee/js/jquery-ui-1.8.16.custom.min.js')}"></script>
+<script type="text/javascript" src="{!URLFOR($Resource.ScanAttendee_V1, 'AttendeeScan/scanattendee/js/fancybox.js')}"></script>
+<script type="text/javascript" src="{!URLFOR($Resource.ScanAttendee_V1, 'AttendeeScan/scanattendee/js/fullcalendar.min.js')}"></script>
+<script type="text/javascript" src="{!URLFOR($Resource.ScanAttendee_V1, 'AttendeeScan/scanattendee/js/elfinder.min.js')}"></script>
+<script type="text/javascript" src="{!URLFOR($Resource.ScanAttendee_V1, 'AttendeeScan/scanattendee/js/jquery.wysiwyg.js')}"></script>
+<script type="text/javascript" src="{!URLFOR($Resource.ScanAttendee_V1, 'AttendeeScan/scanattendee/js/jquery.tipTip.minified.js')}"></script>
+<script type="text/javascript" src="{!URLFOR($Resource.ScanAttendee_V1, 'AttendeeScan/scanattendee/js/forms.js')}"></script>
+
+<script type="text/javascript" src="{!URLFOR($Resource.ScanAttendee_V1, 'AttendeeScan/scanattendee/js/chosen.jquery.min.js')}"></script>
+<script type="text/javascript" src="{!URLFOR($Resource.ScanAttendee_V1, 'AttendeeScan/scanattendee/js/autoresize.jquery.min.js')}"></script>
+<script type="text/javascript" src="{!URLFOR($Resource.ScanAttendee_V1, 'AttendeeScan/scanattendee/js/colorpicker.js')}"></script>
+ <!--- <script type="text/javascript" src="{!URLFOR($Resource.ScanAttendee_V1, 'AttendeeScan/scanattendee/js/functions.js')}"/> 
+
+<script type="text/javascript" src="{!URLFOR($Resource.ScanAttendee_V1, 'AttendeeScan/scanattendee/slider js/jquery.touchslider.js')}"/> ----->
+
+<style type="text/css">
+<!----
+input.styled {
+    display: none;
+}
+select.styled {
+    position: relative;
+    width: 190px;
+    opacity: 0;
+    filter: alpha(opacity=0);
+    z-index: 5;
+}  ----->
+.disabled {
+    opacity: 0.5;
+    filter: alpha(opacity=50);
+}
+</style>
+
+
+
+<apex:form id="AllStyles">
+
+
+<style type="text/css">
+dl.Zebra_Accordion {
+    width: 100%;
+    font-family: Arial, sans-serif;
+    font-size: 12px;
+}
+dl.Zebra_Accordion dt {
+    background-color: #4f9d42;
+   background-image: -ms-linear-gradient(#68b946, #4f9d42);
+    background-image: -moz-linear-gradient(#68b946, #4f9d42);
+    /* background-image: -webkit-linear-gradient(#68b946,#4f9d42); */
+    background-image: linear-gradient(#68b946, #4f9d42);
+    box-shadow: 0 1px 0 rgba(255,255,255,0.18);
+    border-color: #4f9d42;
+    color: #fff !important;
+    text-shadow: 0 1px 0 #3d7933;
+    ;
+    margin-left: 81.3%;
+    width: 18%;
+    cursor: pointer;
+    border-radius: 3px;
+    color: #FFF;
+    font-weight: bold;
+    padding: 5px;
+}
+dl.Zebra_Accordion dd {
+    background: #EFEFEF;
+    padding: 15px;
+    margin: 1px 0;
+}
+dl.Zebra_Accordion dt.Zebra_Accordion_Expanded {
+    background: #C40000;
+}
+
+</style>
+<!-------------------End of Zebra Accordian js and css---------------->
+<style type="text/css">
+.more_info_button{
+     background-color: #4f9d42; margin-bottom:2px; 
+background-color: #eeae0c;
+margin-top:15px; 
+background-image: -ms-linear-gradient(#ffc534,#eeae0c);
+background-image: -moz-linear-gradient(#ffc534,#eeae0c);
+background-image: -webkit-linear-gradient(#ffc534,#eeae0c);
+background-image: linear-gradient(#ffc534,#eeae0c);
+border-color: #eeae0c;box-shadow: 0 1px 0 rgba(255,255,255,0.18);
+cursor:pointer;
+letter-spacing:0.2px;
+font-size:14px;
+font-weight:700px;
+color: #fff !important;
+width:100%;
+ text-align:center; vertical-align:middle;border-radius:3px; border:none; outline:none;
+    padding:8px 10px 8px 29px;
+
+    }
+    
+#ticketinfo 
+{
+height:27px;
+width:30px;
+margin-top:2px;
+margin-left:25%;
+
+
+}
+#package-button{
+        background-color: #4f9d42;
+*/  background-image: -ms-linear-gradient(#68b946, #4f9d42);
+    background-image: -moz-linear-gradient(#68b946, #4f9d42);
+    /* background-image: -webkit-linear-gradient(#68b946,#4f9d42); */
+    background-image: linear-gradient(#68b946, #4f9d42);
+    box-shadow: 0 1px 0 rgba(255,255,255,0.18);
+    border-color: #4f9d42;
+    color: #fff !important;
+    text-shadow: 0 1px 0 #3d7933;
+    border:0; font-size:20px;
+    font-weight:100;
+    font-family:cuprum;
+    cursor: pointer;
+    border-radius: 3px;
+    color: #FFF;
+    padding: 8px 8px 8px 8px;
+    }
+    </style> 
+<script type="text/javascript">
+
+
+$(document).ready(function() {
+    
+    var nav =$('.speedbar');
+    var banner=$('#headercontainer');
+    var pos=nav.position();
+    $(window).scroll(function(){
+        var windowpos=$(window).scrollTop();
+        if (windowpos>=banner.outerHeight()){
+            nav.addClass('fixedtop');
+        }
+            else{
+                nav.removeClass('fixedtop');
+                }
+    }
+);
+                
+
+                $('#login-trigger').click(function(){
+                    $(this).next('#login-content').slideToggle();
+                    $(this).toggleClass('active');                  
+                    
+                    });
+                    
+           <!---------------------------- jQuery Function.js ---------------------------->
+            $('.title-grid').append('<span></span>');
+        $('.grid-1 span').each(function() {
+            var trigger = $(this), state = false, el = trigger.parent().next('.content-gird');
+            trigger.click(function(){
+                state = !state;
+                el.slideToggle();
+                trigger.parent().parent().toggleClass('inactive');
+            });
+        });
+                $('.grid-2 span').each(function() {
+            var trigger = $(this), state = false, el = trigger.parent().next('.content-gird');
+            trigger.click(function(){
+                state = !state;
+                el.slideToggle();
+                trigger.parent().parent().toggleClass('inactive');
+            });
+        });
+        
+        
+
+                $('.grid-3 span').each(function() {
+            var trigger = $(this), state = false, el = trigger.parent().next('.content-gird');
+            trigger.click(function(){
+                state = !state;
+                el.slideToggle();
+                trigger.parent().parent().toggleClass('inactive');
+            });
+        });         
+                    
+      
+        <!-------------------------------------   Zebra Accordian ------------------------------------>
+      var flagexp=0;  
+        
+        var myAccordion = new $.Zebra_Accordion($('.Zebra_Accordion'));
+   $( ".Zebra_Accordion dt" ).click(function() {
+       
+            if(flagexp==0){
+                 flagexp=1;
+                 document.getElementById("addicon").src="{!URLFOR($Resource.NewDBEvents, 'images/boothleads_logo_with_whitetext.png')}";
+            }
+            else{
+                  document.getElementById("addicon").src="{!URLFOR($Resource.NewDBEvents, 'images/Addoptions.png')}"
+                 flagexp=0;
+            }
+    });             
+        $(".chzn-select").chosen(); $(".chzn-select-deselect").chosen({allow_single_deselect:true});  
+        
+               
+}); 
+</script>
+<!-------------------------------------------- Styles, Javascript and Jquery References End ------------------------------------------------->
+
+ </apex:form>
+
+
+<apex:form id="theForm">
+   
+  <div id="headercontainer">   
+<div id="header">
+       <div id="logo">
+        <apex:outputLink value="/apex/SA_ManageEvents">
+            <apex:image url="{!URLFOR($Resource.NewDBEvents, 'images/boothleads_logo_with_whitetext.png')}" style="padding-top:10px;padding-left:10px;"/>
+        </apex:outputLink>
+        </div><!--close of logo-->
+    </div><!--close of header--->
+    
+    <div  id="ribbon"></div><!--close of ribbon-->
+    <header>
+        <div id="centered-head" class="res"> 
+        <nav>
+          <ul style="margin-left:0px;">
+            <li id="login" style=" margin-left:0px;"> <span id="login-trigger"> <span id="login-triggers"> <span id="user-panel-check"></span> <span id="user-panel-title ">My Account</span> </span> </span>
+              <div id="login-content" style="border:0px solid red;">
+                <ul style="margin-left:0px;">                                                                        
+                  <li style=" margin-left:0px;"><a href="#"> <apex:image url="{!URLFOR($Resource.NewDBEvents, 'images/setting.png')}"/> <span>Settings</span></a></li>
+                  <li style=" margin-left:0px;"><a href="#"> <apex:image url="{!URLFOR($Resource.NewDBEvents, 'images/upgrade.png')}" height="13px" width="13px;"/> <span>Upgrade Account</span> </a></li>
+                  <li style=" margin-left:0px;"><a href="#"> <apex:image url="{!URLFOR($Resource.NewDBEvents, 'images/logout.png')}"/>  <span>Log Out</span></a></li>
+                </ul>
+              </div>
+            </li>
+          </ul>
+        </nav>
+        <div class="account-name">
+            <p><span class="welcome">Welcome, </span><strong>{!$User.Firstname}&nbsp;{!$User.Lastname}</strong></p>
+                <div class="account-separator"></div>
+        </div>
+        <div class="account-name"></div>
+        <div class="account-name" style="float:left;valign:middle;align:left;">
+        <apex:outputLink value="/apex/SA_ManageEvents">
+            <apex:image value="{!$Resource.HomeIcon}" height="40" width="40"/>
+        </apex:outputLink></div>
+        <!-- Navigation end--> 
+        </div>
+    </header>
+ </div> 
+ <!---------Close of Header Containet --------------------->
+     
+ </apex:form> 
+   <section id="middle" style=" border:0px #000000 solid;" class="res" >
+  <div id="container" style="border:1px #ccc solid; background-color: #EFEFEF; margin-top:10px;">
+    <div id="content" style="padding:0px;">
+      <div class="speedbar" style="   border:0px #FF0000 solid; background-image:url({!URLFOR($Resource.CreateEventsSteps, 'images/background-header.png')} ); height:50px; margin-right:0px; ">
+        <div class="speedbar-nav" style=" margin:0px auto;  margin-left:7%; text-align:center; border:0px #FF0000 solid;">
+            <table width="100%" border="0" style="color:#fff; font-size:18px; border-collapse:collapse; ">
+                <tr>
+                   <td style="color:#fff; font-size:18px; padding:5px; padding-right:15px;"> Create Event </td>
+                   <td style="color:#fff; font-size:18px; padding:5px;"> <apex:image url="{!URLFOR($Resource.CreateEventsSteps, 'images/help-arrow-step.png')}"/> </td>
+                   <td style="color:#fff; font-size:18px; padding:5px; padding-left:15px; padding-right:15px;">  Create Tickets </td>
+                   <td style="color:#fff; font-size:18px; padding:5px;"> <apex:image url="{!URLFOR($Resource.CreateEventsSteps, 'images/help-arrow-step.png')}"/> </td>
+                   <td style="color:#fff; font-size:18px; padding:5px; padding-left:15px; padding-right:15px;"> Design Template</td>
+                   <td style="color:#fff; font-size:18px; padding:5px;"> <apex:image url="{!URLFOR($Resource.CreateEventsSteps, 'images/help-arrow-step.png')}"/> </td>
+                   <td style="color:#fff; font-size:18px; padding:5px; padding-left:15px; padding-right:15px;"> Publish Event</td>
+                </tr>
+            </table> 
+         <!-- <ul style="list-style:none; padding:0px; margin:0px; margin-top:-30px; display:inline;  color:#fff; font-size:18px;">     <!---- steps - Copy/help-arrow-step.png -----------
+            <li style="list-style:none; display:inline; margin-right:15px ;"><span  style="list-style:none; display:inline; margin-right:15px ;"> Create An Event </span><span  style="list-style:none; display:inline; margin-right:15px ;">  <apex:image url="{!URLFOR($Resource.CreateEventsSteps, 'images/help-arrow-step.png')}"/> </span> </li>
+            <li style="list-style:none; display:inline;margin-right:15px;"> Create Tickets <span> <apex:image url="{!URLFOR($Resource.CreateEventsSteps, 'images/help-arrow-step.png')}"/> </span> </li>
+            <li style="list-style:none; display:inline"> Design An Event <span> <apex:image url="{!URLFOR($Resource.CreateEventsSteps, 'images/help-arrow-step.png')}"/> </span> </li>
+            <li style="list-style:none; display:inline;margin-left:15px;;"> Publish An Event<!-- <span><img src="help-arrow-step.png" style="margin-bottom:-8px; margin-left:15px;"/></span>---------- </li>
+           <!--<li style="list-style:none; display:inline;margin-left:15px;;"> Payment<span style="font-size:12px; margin-left:5px; color: #33D2EE;">(Live Mode)</span></li>
+          </ul>-->
+        </div>
+        <!--close of speedbar-nav--> 
+        
+      </div>
+      
+      <!---------------Create Event---------------------->
+       
+    <apex:form id="eventAddpage">  <!----- End FORM At 304 Line -------->
+    
+    <script type="text/javascript" src="{!URLFOR($Resource.NewDBEvents, 'js/zebra_accordion.src.js')}"></script>  
+    <script>
+         var flagexp=0;  
+        
+        var myAccordion = new $.Zebra_Accordion($('.Zebra_Accordion'));
+       $( ".Zebra_Accordion dt" ).click(function() {
+           
+                if(flagexp==0){
+                     flagexp=1;
+                     document.getElementById("addicon").src="{!URLFOR($Resource.NewDBEvents, 'images/boothleads_logo_with_whitetext.png')}";
+                }
+                else{
+                      document.getElementById("addicon").src="{!URLFOR($Resource.NewDBEvents, 'images/Addoptions.png')}"
+                     flagexp=0;
+                }
+        });
+    </script>
+    
+    
+      <div class="grid-1" style="border:0px solid #4f91cd;margin-top:30px; margin-left:1.3%; ">
+        <div class="content-gird"  style="background-color:#efefef; padding:0px; padding-bottom:20px; box-shadow:#ccc 3px 3px 15px 2px; width:90.4%; margin:0px auto; ">
+         <!--- <apex:image url="{!URLFOR($Resource.CreateEventsSteps, 'images/022.png')}"/> --->
+          <div class="title-grid" style="margin:0px; width:98%; height:80px; background:none;  border:none; ">
+            <div style=" background: url({!URLFOR($Resource.CreateEventsSteps, 'images/022.png')}) no-repeat; height:80px; margin-left:-15px; margin-top:5px; width:100%">   
+              <div style="width:6%; height:50px; float:left;  text-align:center;">
+                <p style="margin-left:0px; font-size:20px; font-family: Arial, Helvetica, sans-serif; color:#928c87; font-weight:bold; padding-top:8px; ">1 <br/></p>
+                <p style="margin-left:0px; margin-top:0px; font-size:17px; color:#928c87; font-family:cuprum; ">Step</p>
+              </div>
+              <div style=" width:15%;margin-left:24px; text-align:center;    margin-top:2px; float:left; height:50px; ">
+                <p style=" color:#FFF; font-size:19px;  padding-top:18px; font-family:cuprum;">Create Event</p>
+              </div>
+            </div>
+          </div>
+          <div class="form" style="width:50%; margin:0px auto; background-color:#EFEFEF;  border:0px solid #000; ">
+            <div class="elem">
+              <label style="font-size:13px; color:#666; font-weight:700;">Event Name: </label>
+                <label id="mandatory">*</label>
+               <div class="indent" style="margin-left:120px;">
+                    <apex:inputField value="{!selectedEvent.Name}" showDatePicker="true"/>   
+              </div>
+            </div>
+            <div class="elem">
+              <label style="font-size:13px; color:#666; font-weight:700;" >Event Start Date:</label>
+                <label id="mandatory">*</label>
+                 <div class="indent" style="margin-left:120px; padding-top:0px; border:1px solid red;" >
+                     
+                            <c:RemoveLink id="SD" >
+                            <apex:inputField value="{!selectedEvent.Start_Date__c}" style="width:20%; line-height:3.6; "/>
+             <apex:inputField value="{!selectedEvent.Start_Time__c}" style="width:25%; border: 1px solid #E3E3E3; height: 28px; font-family: Helvetica,Arial,sans-serif; padding-left: 10px; padding-right: 10px; border-radius: 3px; color: #575757; background-color: #FFF;"/>
+                            
+                        </c:RemoveLink>
+     
+                      
+                     
+                 </div>
+            </div>
+            <div class="elem">
+              <label style="font-size:13px; color:#666; font-weight:700;" >Event End Date:</label>
+                <label id="mandatory">*</label>
+                 <div class="indent" style="margin-left:120px;">
+                  <c:RemoveLink id="SDE">
+                    <apex:inputField value="{!selectedEvent.End_Date__c}" style="width:20%;"/>  
+                    <apex:inputField value="{!selectedEvent.End_Time__c}" styleClass="chzn-select medium-select select" style="width:30%;"/>
+                    </c:RemoveLink>   
+                 </div>
+            </div>
+            <div class="elem">
+              <label style="font-size:13px; color:#666; font-weight:700;">Venue:</label>
+                <label id="mandatory">*</label>
+              <div class="indent" style="margin-left:120px;">
+                <apex:inputField value="{!selectedEvent.Venue_Name__c}"/>
+              </div>
+            </div>
+            <div class="elem">
+              <label style="font-size:13px; color:#666; font-weight:700;">Event Type:</label>
+                <label id="mandatory">*</label>
+              <div class="indent" style="margin-left:120px;">
+                   <apex:inputField value="{!selectedEvent.Event_Type__c}" styleClass="chzn-select medium-select select" style="width:333px;"/>
+              </div>
+            </div>
+            
+          </div>
+          
+          <div style= "width:20%; height:auto; margin-right:5px; margin-top:-220px; float:right; border:2px solid #78DBE9; padding-bottom:20px;  background-color:#F5F5F5; background: url({!URLFOR($Resource.CreateEventsSteps, 'images/timer-component-bg.jpg')}); box-shadow: #999 1px 3px 10px 0px;"> 
+          <style>
+          
+          
+          </style>
+          
+           
+         <table id="eventoptionstitles" width="101%" border="0" style="border-collapse:collapse;" >
+              <tr style="width:100%; height:30px; background-color:#78DBE9;" >
+                <td colspan="3"><h1 style="color:#FFF; font-size:19px; text-align:center;"> Event Options</h1></td>
+              </tr>
+             <apex:repeat value="{!eventSelectOptions}" var="eveOpt"> 
+                 <tr>
+                    <td width="20%" style="text-align:center;"> <apex:inputCheckbox value="{!eveOpt.eventOptionsBoolean}"/>  </td>
+                      <td><span>  <apex:image url="/servlet/servlet.ImageServer?id={!eveOpt.eventOptionItemType.Event_Options_Image_URL__c}&oid={!$Organization.Id}"/> </span></td>
+                    <td> <h1 style="color:#000; font-size:19px; "> <apex:outputText value="{!eveOpt.eventOptionItemType.Event_Option_Desc__c}"></apex:outputText> </h1></td>
+                  </tr>
+             
+             </apex:repeat>
+     <!--  <tr>
+              <td width="20%" style="text-align:center;"><input type="checkbox" id="lead retrieval"  value="17" /></td>
+                  <td><span>  <apex:image url="{!URLFOR($Resource.CreateEventsSteps, 'images/20x20.png')}"/> </span></td>
+                <td><a href="#" target="_blank" title="Lead Retrieval" style="text-decoration:none;"><h1 style="color:#000; font-size:19px; "> Lead Retrieval</h1></a></td>
+              </tr>
+              <tr>
+              <td style="text-align:center;"><input type="checkbox" id="matchleads"  value="18" /></td>
+                  <td><span><apex:image url="{!URLFOR($Resource.CreateEventsSteps, 'images/ml-20x20.png')}"/> </span></td>
+                <td><a href="#" target="_blank" title="Match Leads" style="text-decoration:none;"><h1 style="color:#000; font-size:19px;"> Match Leads</h1></a></td>
+              </tr>
+              <tr>
+              <td style="text-align:center;"><input type="checkbox" id="attendeescan"  value="19" /></td>
+                  <td><span><apex:image url="{!URLFOR($Resource.CreateEventsSteps, 'images/scanattendee.png')}"/>  </span></td>
+                <td><a href="#" target="_blank" title="Attendee Scan" style="text-decoration:none;"><h1 style="color:#000; font-size:19px; "> Attendee Scan</h1></a></td>
+              </tr>
+              <tr>
+               <td style="text-align:center;"><input type="checkbox" id="kiosk"  value="20" /></td>
+                  <td><span><apex:image url="{!URLFOR($Resource.CreateEventsSteps, 'images/kiosk.png')}"/>   </span></td>
+                <td> <a href="#" target="_blank" title="Kiosk" style="text-decoration:none;"><h1 style="color:#000; font-size:19px; "> Kiosk</h1></a></td>
+              </tr>
+               <tr>
+               <td style="text-align:center;"><input type="checkbox" id="boothmaps"  value="21" /></td>
+               <td><span> <apex:image url="{!URLFOR($Resource.CreateEventsSteps, 'images/boothmap.png')}"/> </span></td>
+                <td><a href="#" target="_blank" title="Booth Maps" style="text-decoration:none;"><h1 style="color:#000; font-size:19px; "> Booth Maps</h1></a></td>
+              </tr>  --->
+            </table>
+         </div>
+         
+          <!--close of form--> 
+          <!---------More Events------------>
+          <div></div>
+          <!--reveal pop up-----> 
+   
+        <script type="text/javascript" src="{!URLFOR($Resource.NewDBEvents, 'js/jquery.reveal.js')}"></script> 
+          <div  style="margin-bottom:2px; margin-left:66.3%;"> 
+     <!--      <a href="#" style="text-decoration:none;color: #FFF;" data-reveal-id="myModal" data-animation="none">
+          
+          <input type="button" id="more-info-button" value="More info"/>
+         
+       <apex:image url="{!URLFOR($Resource.NewDBEvents, 'images/Addoptions.png')}"  style="height:16px; height:16px; margin-left:-93px; margin-bottom:-11px;"/> , eventAddpage ---->
+         
+          <apex:commandLink action="{!eventmoreOptions}"  styleClass="more_info_button" id="more-info-button2" style="margin-left:0px; border-right-top-radius:0px; border-right-bottom-radius:0px;  "  reRender="eventMoreOptions, eventMoreOptionsText,AllStyles"> 
+              <apex:image url="{!URLFOR($Resource.NewDBEvents, 'images/Addoptions.png')}"  style="height:16px; margin-left:-22px;  margin-bottom:-5px;"/>
+          </apex:commandLink>    
+          <apex:commandLink action="{!eventmoreOptions}" value="More info" styleClass="more_info_button" id="more-info-button" style="margin-left:-1px; padding-left:0px; border-left-top-radius:0px; border-left-bottom-radius:0px;  "  reRender="eventMoreOptions, eventMoreOptionsText,AllStyles"> 
+                
+          </apex:commandLink>      
+          
+     <!---   </a> &nbsp;&nbsp;  --->
+             
+            <!------------->
+           </div>
+             
+             
+              
+        </div>
+        <!--close of content-grid--> 
+      </div>
+      <!--close of grid-1-------->
+ <!--   </apex:form>   ---------------------FORM------------->  
+ 
+      <div class="grid-1" style="border:0px solid #4f91cd;margin-top:8px; margin-left:1.3%; ">
+        <div class="content-gird"  style="background-color:#EFEFEF;padding:0px;  box-shadow:#ccc 3px 3px 15px 2px; width:90.4%; margin:0px auto;   ">
+        
+     <apex:outputPanel id="individualsAndPackages"> <!--------------------Tickets & Packages Concepts --------------------------->
+          <div class="title-grid" style="margin:0px; width:98%;  height:80px; background:none;  ">
+            <div style=" background: url({!URLFOR($Resource.CreateEventsSteps, 'images/011.png')}) no-repeat; height:80px; margin-left:-15px; margin-top:5px; width:102.4%">
+              <div style="width:6%; height:50px; float:left;  text-align:center;">
+                
+                <p style="margin-left:0px; font-size:20px; font-family: Arial, Helvetica, sans-serif; color:#928c87; font-weight:bold; padding-top:8px; ">2 <br/></p>
+                <p style="margin-left:0px; margin-top:0px; font-size:17px; color:#928c87; font-family:cuprum; ">Step</p>
+                 
+              </div>
+              <div style=" width:15%;margin-left:20px;  text-align:center;    margin-top:2px; float:left; height:50px; ">
+                <p style=" color:#FFF; font-size:19px;  padding-top:17px; font-family:cuprum;">Create Tickets </p>
+              </div>
+              <!---script for show package div --->
+                
+     <!--------------------end of script-------------->
+              <div id="package" style="  margin:0px; padding:0px; float:right; margin-right:3.7%; margin-top:10px; "     > 
+    <!----    <apex:form id="pannel2">    ------>
+           <apex:commandLink id="package-button" value="Create Package" style="margin-right:0px;"  reRender="individualsAndPackages"  action="{!Packages}" />  <!------ PackageForm ------->
+         
+   <!-----     </apex:form>    onClick="showpackage('package1','dynamictickets')" reRender="newPackages, eventTicketPannel"----------->
+    
+              </div><!--close of package-->
+            </div>
+          </div>
+          <br/>
+          
+     
+     
+          <!-------css for dynamic table-------------------->
+          <!------  ----->
+          <style type="text/css">  
+       <!-- .del{background: url({!URLFOR($Resource.CreateEventsSteps, 'images/removerow.png')} )  center no-repeat; width:30px; height:30px;
+          background-color: #DDD; border-radius:3px; cursor:pointer;}
+        
+         .add{ background: url({!URLFOR($Resource.CreateEventsSteps, 'images/addrow.png')}) no-repeat; width:30px; height:30px;
+          background-color:#DDD;border-radius:3px; cursor:pointer; }  ------->
+        .selectoption{
+            width:93%; height:28px; background-image:url({!URLFOR($Resource.CreateEventsSteps, 'images/input.png')} )
+                 ; border-radius:3px; border:1px solid #e3e3e3;color: #575757;outline:none }
+        #three{width:65.5%;}    
+        #one{width:87.5%;}   
+    
+        </style> 
+          
+          <!------------------------------------------------->
+    <apex:outputPanel id="eventTicketPannel" rendered="{!NOT(packageBool)}">   
+    <!----  <apex:form id="TicPannel">   ------>
+         <div id="dynamictickets">
+          <table class="display dynamic" id="options-table" style="width:99%; margin:0px auto;" >
+            <thead>
+              <tr>
+                <th width="28%" style="padding:3px 0px 3px 2px; text-indent:5px;">Ticket Name   </th>
+                <th width="15%" style="padding:3px 0px 3px 2px;text-indent:5px;">Ticket pay Type</th>
+                <th width="12.5%" style="padding:3px 0px 3px 2px;text-indent:5px;">Quantity</th>
+                  <th width="11%" style="padding:3px 0px 3px 2px;text-indent:5px;">Price</th>
+                
+                <th width="10%" style="padding:3px 0px 3px 2px;text-indent:5px; ">More Info</th>
+                <th></th>
+              </tr>
+              <apex:variable value="{!0}" var="ticketmainoptions"/>  
+            </thead>
+            <!------------------------------------------------Ticket Repeat ----------------------------------------->
+          <apex:repeat value="{!insertTickets}" var="itt">
+            <tr>
+              <td> <apex:inputField value="{!itt.itemPool.Item_Pool_Name__c}"/> </td>
+              <td> <apex:inputField value="{!itt.items.Payment__c}" /> </td>
+              <td> <apex:inputField value="{!itt.itemPool.Item_Count__c}"/> </td>
+               <td>  
+                   <apex:inputField value="{!itt.items.price__c}" rendered="{!itt.itemsList.size = 1}"/>
+                    <apex:outputText >
+                        <apex:outputText value="Multiple Prices" rendered="{!itt.itemsList.size >= 2}"> </apex:outputText>
+                    </apex:outputText>
+               </td>
+               
+                   <td >   
+                    <!----   <apex:commandLink value="more options...." action="{!ticketMoreOptions}"  reRender="ticketMoreOptions"> <!--- ----  </apex:commandLink>
+                           <apex:image url="{!URLFOR($Resource.CreateEventsSteps, 'images/document_add.png')}" width="30px" height="30px"/>  ------->
+                             
+                           <apex:commandLink action="{!ticketMoreOptions}" style="width:30px; height:30px; border:none;" reRender="ticketMoreOptions, ticketMoreOptionsPannel" rendered="{!itt.itemTypes.Item_Type_Number__c != packageItemType.Item_Type_Number__c}">
+                               <apex:image url="{!URLFOR($Resource.CreateEventsSteps, 'images/document_add.png')}" width="30px" height="27px;"/>
+                                   <apex:param value="{!itt.count}" name="moreTic"/>
+                           </apex:commandLink>  
+                           
+                           <!-------------------PackagMoreOptions ----------------------------- onClick="showpackage('package1','dynamictickets')"  reRender="individualsAndPackages"   -->
+                         <apex:commandLink action="{!ticketMoreOptions}"   style="width:30px; height:30px; border:none;"   reRender="individualsAndPackages"  rendered="{!itt.itemTypes.Item_Type_Number__c = packageItemType.Item_Type_Number__c}">
+                               <apex:image url="{!URLFOR($Resource.CreateEventsSteps, 'images/document_add.png')}" width="30px" height="27px;"/>
+                                   <apex:param value="{!itt.count}" name="moreTic"/>
+                           </apex:commandLink> 
+                           
+                      
+                  </td>
+                   
+                   
+              <td>   
+                  <apex:commandButton image="{!URLFOR($Resource.CreateEventsSteps, 'images/removerow.png')}"  action="{!deleteTicket}" reRender="eventTicketPannel" onclick="confirm('Are you Sure Delete Item ?');"> 
+                       <apex:param value="{!itt.count}" name="delTic"/>
+                   </apex:commandButton> 
+                   &nbsp;&nbsp;
+                   <apex:commandButton image="{!URLFOR($Resource.CreateEventsSteps, 'images/addrow.png')}" rendered="{!insertTickets.size = (ticketmainoptions+1) }"   action="{!addOnemoreTicket}" reRender="eventTicketPannel" immediate="true" > 
+                   </apex:commandButton>
+                   
+                  <apex:variable value="{!ticketmainoptions+1}" var="ticketmainoptions"/>      
+              </td>
+     
+            </tr>
+          </apex:repeat> 
+      <!--    <tr>
+               <td> &nbsp; </td>
+               <td> &nbsp; </td>
+               <td> &nbsp; </td>
+               <td> &nbsp; </td>
+               <td> &nbsp; </td>
+               <td>    <!----  eventAddpage -----
+                   <apex:commandButton image="{!URLFOR($Resource.CreateEventsSteps, 'images/addrow.png')}"   action="{!addOnemoreTicket}" reRender="eventTicketPannel" immediate="true" > 
+                   </apex:commandButton>
+               </td>
+           </tr>  ----> 
+            <!------------------------------------------------Ticket Repeat ----------------------------------------->
+          </table>
+          </div><!---div dynamictickets-->
+          <!-------------------------------->
+    <!-----  </apex:form>    ------->
+   </apex:outputPanel>  
+        
+          
+          
+          <!---------------------Start of Create-Package hide div-------------------------->
+  
+  <style type="text/css">
+  .title-grid1 span {
+        right: 0;
+        top: 30%;
+        cursor: pointer;
+        width: 16px;
+        height: 13px;
+        margin-top:4px;
+        background: url({!URLFOR($Resource.CreateEventsSteps, 'images/trigger.png')}  ) no-repeat left bottom;
+        display: block;
+        font-size: 0;
+        float:right;
+   }
+.inactive .title-grid1 span {
+        background-position: left top;
+    }
+  
+  </style>
+  <!---script for on click  close during package  div --->
+                 <script>
+function showclose(show,hide)
+{
+document.getElementById(show).style.display="none";
+document.getElementById(hide).style.display="block";
+
+
+}
+     </script>         
+     
+     <!--------------------end of script-------------->
+  <!------ <apex:form id="PackagePannel">  display:none;" ------->
+      
+          
+       <apex:outputPanel id="newPackages" rendered="{!packageBool}"> 
+          <div id="package1" style="width:99%; margin:0px auto; margin-top:20px;  height:auto;" > 
+           <div class="grid-1" style=" width:100%; margin-left:0px;"  >
+          <div class="title-grid1" style=" border:0px solid #000;"><span></span>
+          <apex:image url="{!URLFOR($Resource.CreateEventsSteps, 'images/redheaderbg.png')}" style="margin-top:-6px; margin-left:-2%; width:150px; height:37px;"/>
+         <!--- <img src="steps - Copy/redheaderbg.png"  style="margin-top:-5px; margin-left:-2%;"/> ----> <p style="color:#FFF; font-size:16px; font-family:cuprum; margin-top:-30px;">Create Package </p>
+          
+          <div style="float:right;height:15px; margin-right:2%; margin-top:-17px;   width:2%; ">
+        <!--  <apex:image url="{!URLFOR($Resource.CreateEventsSteps, 'images/close.png')}" onClick="showclose('package1','dynamictickets')" title="Close" style="cursor:pointer;"/>  ---->
+          <apex:commandButton image="{!URLFOR($Resource.CreateEventsSteps, 'images/close.png')}" action="{!cancel}" immediate="true" title="Close" style="cursor:pointer;" reRender="individualsAndPackages" />
+         <!-- <img src="images/cross symb.png" onClick="showclose('package1','dynamictickets')" title="Close" style="cursor:pointer;"/>---></div></div><!--close of title-grid1-->
+          
+          <div class="content-gird" style=" border: 1px solid #e3e3e3;">
+           <!----------------------Dynamic Table for Package-------------------------->
+     <!----       <style type="text/css">
+        .del1{background: url(images/removerow.png)  center no-repeat; width:30px; height:30px;
+          background-color: #DDD; border-radius:3px; cursor:pointer;}
+        
+         .add1{ background: url(images/addrow.png) no-repeat; width:30px; height:30px;
+          background-color:#DDD;border-radius:3px; cursor:pointer; }
+          </style>  ----->
+      
+          
+          <table width="100%" border="0" style="border-collapse:collapse;  background-color:#F6F6F6; padding:5px; border-top: 1px solid #BDBDBD;border-bottom: 0px solid #BDBDBD; font-size:13px; color:#424242; font-family:Arial, Helvetica, sans-serif;">
+          <tr>
+          <td  width="1%" style="font-size:17px; text-align:left; text-indent:10px; color: #4f91cd;font-family:cuprum">1</td>
+    <td width="10%" height="55px" style="texr-indent:5px; text-align:right;">Package Name:</td>
+    <td width="20%" style="">     <apex:inputField value="{!newPackageItems.packageItemPool.Item_Pool_Name__c}" styleClass="medium" style="width:78%;margin-left:10px;" />  </td>
+   
+    <td width="3%" style="text-align:right;">Price:</td>
+    <td width="10%">  <apex:inputField value="{!newPackageItems.packageItems.price__c}" styleClass="medium" style="margin-left:10px; width:60%;" /> </td>
+     <td width="6%" height="55px" style="text-align:right;">Quantity:</td>
+    <td width="8%">  <apex:inputField value="{!newPackageItems.packageItemPool.Item_Count__c}" styleClass="medium"   style="margin-left:10px;width:50%;"/>  </td>
+  <td width="9%" style="text-align:right;">Badge Label:</td>
+     <td width="20%" style="text-indent:10px;"  > 
+         <apex:inputField value="{!newPackageItems.packageItemPool.Badge_Label__c}"/>
+              <!--  <select data-placeholder="Select Ticket Category" class="chosen-select" style="width:100%; border: 1px solid #e3e3e3;" tabindex="17" id="single-label-example" 
+                 <select class="chzn-select medium-select select" style="width:90%">
+                  <option value="1">Corporate</option>
+                  <option value="2">Free</option>
+                </select> --->
+    </td>            
+              <td width="8%" style="text-indent:25px;"> 
+              <apex:commandLink action="{!packageMoreInfo}" >
+                  <apex:image url="{!URLFOR($Resource.CreateEventsSteps, 'images/document_add.png')}" width="30px" height="30px"/>
+              </apex:commandLink>
+                 <!--  <a href="#" style="text-decoration:none;color: #FFF;" data-reveal-id="morepackageinfo" data-animation="none">
+                  
+                  <apex:image url="{!URLFOR($Resource.CreateEventsSteps, 'images/document_add.png')}" width="30px" height="30px"/>
+                  <!--  <img id="ticketinfo" src="creditcards/document_add.png" title="Add more info"/> 
+                  </a> --->
+             </td> 
+  </tr>
+  
+ 
+  
+</table>
+
+
+            
+            
+            <!--close of more package info popup------------->
+     <apex:outputPanel id="newPackagesLine"> 
+       <script>
+            choosenForPopUp();
+       </script>
+          <table class="display dynamic2" id="options-table" style="width:100%; margin:0px auto; margin-top:0px;" >
+            <thead>
+              <tr>
+                <th width="40%" style="padding:3px 0px 3px 2px; text-indent:5px;">Package Item Name </th>
+              
+                <th width="15%" style="padding:3px 0px 3px 2px;text-indent:5px;">Add On to Qty</th>
+                 <!-- <th width="11%" style="padding:3px 0px 3px 2px;text-indent:5px;">Price</th>-->
+                <th width="35%" style="padding:3px 0px 3px 2px;text-indent:5px;">Ticket Category</th>
+             <!--   <th width="9%" style="padding:3px 0px 3px 2px;text-indent:5px; ">More Info</th>-->
+                <th width="35%" style="padding:3px 0px 3px 2px;text-indent:5px;"></th>
+              </tr>
+                <apex:variable value="{!0}" var="pakItems"/>  
+            </thead>
+             
+            <apex:repeat value="{!newPackageItems.packageLineItemPool}" var="pakLine">
+            <tr>
+              <td> <apex:inputText value="{!pakLine.Item_Pool_Name__c}" />  </td>
+              <td> <apex:inputtext value="{!pakLine.Item_Count__c}" /> </td>
+              <td>  
+                   <apex:selectList value="{!pakLine.Item_Type__c}" multiselect="false" size="1" styleClass="chzn-select medium-select select" style="width:80%" required="true" id="eventAddpage">
+                     <apex:selectOptions value="{!ItemTypesOptions}"/>
+                 </apex:selectList>
+              </td>
+              <td> <!--- <apex:commandButton image="{!URLFOR($Resource.CreateEventsSteps, 'images/removerow.png')}" /> --->
+                      <apex:commandLink action="{!deletePackageLineItems}" reRender="newPackagesLine"  onclick="confirm('Are you Sure Delete Item');" rendered="{!newPackageItems.packageLineItemPool.size > 1}" >
+                         <apex:image url="{!URLFOR($Resource.CreateEventsSteps, 'images/removerow.png')}"/>
+                          <apex:param value="{!pakItems}" name="pakDelTic"/>
+                      </apex:commandLink>  
+                      &nbsp; &nbsp; &nbsp;
+                      <apex:commandLink action="{!AddpackageLineItems}" rendered="{!newPackageItems.packageLineItemPool.size = (pakItems+1)}" reRender="newPackagesLine" immediate="true"  > 
+                         <apex:image url="{!URLFOR($Resource.CreateEventsSteps, 'images/addrow.png')}"/>
+                     </apex:commandLink>
+              </td>
+            </tr>
+           <apex:variable value="{!pakItems+1}" var="pakItems"/>   
+        </apex:repeat>
+           
+              <tr>
+                <td colspan="4" text-align="right">  
+                     <apex:commandButton value="Save" action="{!addPackageToItemPool}" reRender="individualsAndPackages"/>  
+                     <apex:commandButton value="Cancel" action="{!cancel}"/>
+                 </td>
+              </tr>
+                
+          </table>
+          <!-------------------------------->   
+     </apex:outputPanel>          
+          
+          
+          </div></div>
+          
+          </div> 
+   </apex:outputPanel>   
+ </apex:outputPanel>
+    <!-------  -----combination for package and individualtickets ---------->
+ <!------------ </apex:form>    ----------------->     
+          
+          <!------------------------End of create Package Div------------------------->
+      
+          <dl class="Zebra_Accordion" style=" margin-top:20px;">
+           <!--   <apex:selectRadio value="{!selectedEvent.Event_Ticket_Options__c}"  layout="LineDirection"  required="true" id="eventTicketOptions">
+                     Event Options:-    <apex:selectOptions value="{!evTicOptions}" id="eventOptionsList"/>
+                     </apex:selectRadio>   ----->
+            <dt>
+                 
+              <h3 style="color:#FFF;"><span><img id="addicon" src="{!URLFOR($Resource.NewDBEvents, 'images/Addoptions.png')}" width="16" height="16" style=" padding-bottom:-8px;margin-right:8px"/></span>Payment Options</h3>
+              <h6 style="font-size: 12px; color:#FFF">Click here to view the Payment Options</h6>
+              
+            </dt>
+            <dd>
+              <hr/>
+              <div class="form" id="paymentOptionClass" style="width:100%; height:auto; padding-bottom:150px; ">
+                <style type="text/css">
+                   .distance p{ float:none; line-height:none;}
+               </style>
+       
+                <script>
+
+function showhidediv( rad )
+    {
+       // var rads = document.getElementsByName( rad );
+        
+           if(rad == 'PayPal'){
+               document.getElementById( 'paypal' ).style.display = 'block' ;
+               document.getElementById( 'authorize' ).style.display = 'none';
+               document.getElementById( 'stripe' ).style.display = 'none';
+
+               
+           }else if(rad == 'Stripe'){
+               document.getElementById( 'stripe' ).style.display = 'block';
+               document.getElementById( 'paypal' ).style.display = 'none' ;
+               document.getElementById( 'authorize' ).style.display = 'none';
+               
+           }else if(rad == 'Authorize .Net'){
+               document.getElementById( 'authorize' ).style.display = 'block';
+               document.getElementById( 'stripe' ).style.display = 'none';
+               document.getElementById( 'paypal' ).style.display = 'none'
+
+          }
+    }
+function showCashCheckdiv(moneyTypes){
+    if(moneyTypes == 'Cash'){
+         document.getElementById( 'cashInput' ).style.display = 'block';
+    }
+    
+    if(moneyTypes == 'Check'){
+         document.getElementById( 'checkInput' ).style.display = 'block';
+    }
+    
+}
+
+</script> 
+                
+                <!-------------------------------------------------------->
+           <div  style="width:100%; margin-top:15px; text-align:left; "  >     
+                <h3 style=" margin-left:5px;font-size:18px; margin-top:18px; font-family:cuprum; color:#4f91cd;">Payment Gateway Option for Event:</h3>
+          </div>   
+          <div style="width:100%; margin-top:5px; " >   
+                <div id="ticketopt-content" style="width:49%; margin-top:15px;float:left; "  >
+                    <table width="100%" > 
+                        <tr>
+                         <apex:repeat value="{!pgateWayLists}" var="p">
+                                
+                                 <td valign="middle" align="center">
+                                     <apex:outputText rendered="{!NOT(ISNULL(p.Image_URL__c))}">  
+                                         <input type="radio" id="pp1" style="outline:none;" onclick="showhidediv(this.value);" name="PGateWayType" value="{!p.Name}" />
+                                     </apex:outputText>    
+                                     <apex:outputText rendered="{!ISNULL(p.Image_URL__c)}">  
+                                         <input type="checkbox" id="pp1" style="outline:none;" onclick="showCashCheckdiv(this.value);" name="PGateCheckCash" value="{!p.Name}" /> 
+                                     </apex:outputText>
+                                 </td>    
+                                 <td>  
+                                        <apex:outputText rendered="{!NOT(ISNULL(p.Image_URL__c))}">    
+                                         <apex:image url="/servlet/servlet.ImageServer?id={!p.Image_URL__c}&oid={!$Organization.Id}" style="margin-left:3px;"  width="60" height="30" />
+                                       </apex:outputText>
+                                       <apex:outputText rendered="{!ISNULL(p.Image_URL__c)}">  
+                                          
+                                         <apex:outputText value="{!p.Name}"></apex:outputText>
+                                       </apex:outputText>
+                                 </td>
+                             
+                        </apex:repeat>
+                       </tr>
+                    </table>    
+                
+                 
+                  
+                    <!--ticketopt-content---> 
+                <!-------------------------------------------------------->
+                <div id="paypal" style=" display:none; padding:15px;">
+                    <table width="98%" style="margin:0px auto;"  border="0" cellspacing="0" cellpadding="0">
+                       <tr style="height:38px;">
+                           <td colspan="2" style=" margin-top:14px; margin-left:10px; font-size:18px; font-family:cuprum; color:#4f91cd; text-align:left; "> For PayPal: </td>
+                       </tr>    
+                        <tr style="height:38px;">
+                            <td style="width:35%; text-align:right; padding-right:10px; font-family:cuprum; font-size:15px; color:#414141;">Email Address:</td>
+                            <td style="width:65%;" > <input type="text" style="width:60%; outline:none;" id="name" name="name" class="medium" /> 
+                                
+                            </td>
+                        </tr>
+
+                    </table>
+                  
+                </div>
+                <!--close of paypal--> 
+                <!---------------------------------------------------->
+                <div id="stripe" style="display:none; padding:15px;">
+                     <table width="98%" style="margin:0px auto;"  border="0" cellspacing="0" cellpadding="0">
+                       <tr style="height:38px;">
+                           <td colspan="2" style=" margin-top:14px; margin-left:10px; font-size:18px; font-family:cuprum; color:#4f91cd; text-align:left; "> For Stripe: </td>
+                       </tr>    
+                        <tr style="height:38px;">
+                            <td style="width:35%; text-align:right; padding-right:10px; font-family:cuprum; font-size:15px; color:#414141;">Secret Key:</td>
+                            <td style="width:65%;">
+                                <apex:inputText value="{!stripepayGateway.PG_Pass_Secret__c}" id="StripeSecret" styleClass="medium" style="width:60%; outline:none;"/>
+                            </td>
+                        </tr>
+                         <tr style="height:38px;">
+                            <td style="width:35%; text-align:right; padding-right:10px; font-family:cuprum; font-size:15px; color:#414141;">Publishable Key:</td>
+                            <td style="width:65%;">
+                                <apex:inputText value="{!stripepayGateway.PG_User_Key__c}" id="StripePublishable" styleClass="medium" style="width:60%; outline:none;"/>
+                            </td>
+                        </tr>
+                    </table>
+                
+                  
+                  
+                </div>
+                <!--close of stripe--> 
+                <!--------------------------------------------------------> 
+                <!---------------------------------------------------->
+                <div id="authorize" style="display:none; font-family:cuprum; padding:15px;">
+                   <table width="98%" style="margin:0px auto;"  border="0" cellspacing="0" cellpadding="0">
+                       <tr style="height:38px;">
+                           <td colspan="2" style=" margin-top:14px; margin-left:10px; font-size:18px; font-family:cuprum; color:#4f91cd; text-align:left; "> For Authorize.Net: </td>
+                       </tr>    
+                        <tr style="height:38px;">
+                            <td style="width:35%; text-align:right; padding-right:10px; font-family:cuprum; font-size:15px; color:#414141;">Authorize.net Id:</td>
+                            <td style="width:65%;" >
+                                <apex:inputText value="{!stripepayGateway.PG_User_Key__c}" id="authorizeId" styleClass="medium" style="width:60%; outline:none;"/>
+                           </td>
+                        </tr>
+                         <tr style="height:38px;">
+                            <td style="width:35%; text-align:right; padding-right:10px; font-family:cuprum; font-size:15px; color:#414141;">Authorize.net Key:</td>
+                            <td style="width:65%;">
+                                <apex:inputText value="{!stripepayGateway.PG_Pass_Secret__c}" id="authorizeKey" styleClass="medium" style="width:60%; outline:none;"/>
+                            </td>
+                        </tr>
+                    </table>
+                    
+                </div>
+                <!--close of authorize-->  
+                </div>
+                <div  style="width:49%; margin-top:15px; float:left;"  >
+                    <div id="cashInput" style="display:none; font-family:cuprum; ">
+                       <table width="98%" style="margin:0px auto;"  border="0" cellspacing="0" cellpadding="0">
+                           <tr style="height:38px;">
+                               <td style=" margin-top:14px; margin-left:10px; font-size:18px; font-family:cuprum; color:#4f91cd; text-align:left; "> For Cash Address: </td>
+                                
+                           </tr> 
+                           <tr>
+                               <td> <input type="textarea" row="3" style="width:60%; outline:none;" id="name" name="name" class="medium" /> </td>
+                           </tr>
+                      </table>         
+                                   
+                </div>
+                <div id="checkInput" style="display:none; font-family:cuprum; ">
+                       <table width="98%" style="margin:0px auto;"  border="0" cellspacing="0" cellpadding="0">
+                           <tr style="height:38px;">
+                               <td style=" margin-top:14px; margin-left:10px; font-size:18px; font-family:cuprum; color:#4f91cd; text-align:left; "> For Check Address: </td>
+                                
+                           </tr> 
+                           <tr>
+                               <td>  
+                                    <input type="textarea" style="width:60%; outline:none;" id="name" name="name" class="medium" /> </td>
+                           </tr>
+                      </table>         
+                </div>
+           </div>     
+              
+                <!-------------------------------------------------------->
+                
+                <div class="clear"> </div>
+              </div>
+              <!--close of form--> 
+              
+             
+        </div>
+        <!--close of content-grid--> 
+        </dd>
+        </dl>        
+      </div>
+   </div>   
+      <!--close of grid-1--------> 
+      <!--------------------------------------------------------> 
+      
+      <!--------------------------------------------->
+      
+      <div class="grid-1" style="border:0px solid #4f91cd; margin-top:8px; margin-left:1.3%; "> 
+        <!-- <div class="title-grid"></div>-->
+        <div class="content-gird"  style="background-color:#EFEFEF; padding:0px; height:auto; box-shadow:#ccc 3px 3px 15px 2px; width:90.4%; margin:0px auto; ">
+          <div class="title-grid" style="margin:0px; width:98%; height:80px; background:none;  border:none; ">
+            <div style=" background: url({!URLFOR($Resource.CreateEventsSteps, 'images/033.png')} ) no-repeat; height:80px; margin-left:-15px; margin-top:5px; width:100%">
+              <div style="width:6%; height:50px; float:left;  text-align:center;">
+                 <p style="margin-left:0px; font-size:20px; font-family: Arial, Helvetica, sans-serif; color:#928c87; font-weight:bold; padding-top:8px; ">3 <br/></p>
+                <p style="margin-left:0px; margin-top:0px; font-size:17px; color:#928c87; font-family:cuprum; ">Step</p>
+                
+              </div>
+              <div style=" width:15%;margin-left:24px;  text-align:center;    margin-top:2px; float:left; height:50px; ">
+                <p style=" color:#FFF; font-size:19px;  padding-top:18px; font-family:cuprum;">Pick Template</p>
+                 
+              </div>
+               <div style=" float:right; padding:10px; margin-right:3%;   background-color: #eeae0c; 
+                                background-image: -ms-linear-gradient(#ffc534,#eeae0c);
+                                background-image: -moz-linear-gradient(#ffc534,#eeae0c);
+                                background-image: -webkit-linear-gradient(#ffc534,#eeae0c);
+                                background-image: linear-gradient(#ffc534,#eeae0c);
+                                border-color: #eeae0c;
+                                color: #fff;
+                                text-align:center;
+                                letter-spacing: 0.2px; border-radius:5px;">     
+            <a href="#" title="Design Event Page" target="_blank"  style="text-decoration:none;color:#FFF;font-family: cuprum; font-size:15px ; "> Design Your Own </a> </div>
+            </div>
+          </div>
+          <style type="text/css">
+            #temp{ width:80px; margin-top:0px; height:80px; padding:0px; margin-right:25Px;  background-color:#000; }
+             #radio-temp{ width:20px; margin-top:5px;  height:auto;  padding:0px; margin-right:10px; margin-left:26px; }
+            
+            
+            </style>
+          <div style="width:100%; height: auto; text-align:center;">
+            <ul style=" display: inline-block; margin:20px 0px 10px 0px; padding:0px;">
+               
+              <apex:repeat value="{!regTemplates}" var="r">
+                  
+                  <li style=" display:inline-block;">
+                   <label for="t5">  <div id="temp">
+                       <apex:outputLink value="BLN_Registration1?id={!selectedEvent.id}&rid={!r.id}" target="_blank">
+                           <apex:image url="/servlet/servlet.ImageServer?id={!r.Template_Image_URL__c}&oid={!$Organization.Id}"/>
+                       </apex:outputLink>
+                   </div></label>
+                    <div id="radio-temp">  
+                         
+                       <!-- <apex:selectRadio value="{!selectedEvent.Registration_Template__c}" ></apex:selectRadio> value="{!r.id}" ---->
+                       <apex:outputText rendered="{!selectedEvent.Registration_Template__c = r.id}"> 
+                            <input type="radio" style="outline:none;" name="regTemplate" id="r.id"  value="{!r.id}" checked="{! IF(selectedEvent.Registration_Template__c = r.id, 'checked','' )}" /> 
+                       </apex:outputText>
+                       <apex:outputText rendered="{!NOT(selectedEvent.Registration_Template__c = r.id)}"> 
+                            <input type="radio" style="outline:none;" name="regTemplate" id="r.id"  value="{!r.id}"  /> 
+                       </apex:outputText>
+                         
+                    </div>
+                  </li>
+              </apex:repeat>
+              
+            </ul>
+          <!---  
+            <apex:selectRadio value="{!selectedEvent.Registration_Template__c}" >  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                 <apex:selectOptions value="{!registrationtemplatesOptions}"></apex:selectOptions> 
+            </apex:selectRadio> ---->
+            <!---
+             <apex:selectRadio value="{!selectedEvent.Registration_Template__c}">  
+                   <apex:selectOption ></apex:selectOption>
+                 <apex:repeat value="{!regTemplates}" var="r">
+                     <apex:selectOption value="{!r.id}"></apex:selectOption>
+                 </apex:repeat>
+            </apex:selectRadio>  ---->
+          </div>
+        </div>
+        <!--close of content-grid--> 
+      </div>
+      <!--close of grid-1--------> 
+      
+      <!--------------------------------> 
+      
+      <!---------------------------------------------> 
+      <!-----------script for hide and show divs for publish--------------> 
+      <script >
+function show(show)
+{
+document.getElementById(show).style.display="block";
+
+}
+function hide(hide)
+{
+
+document.getElementById(hide).style.display="none";
+}
+</script>
+      <div class="grid-1" style="border:0px solid #4f91cd; margin-top:8px; margin-left:1.3%; "> 
+        <!-- <div class="title-grid"></div>-->
+        <div class="content-gird"  style="background-color:#EFEFEF; padding:0px; box-shadow:#ccc 3px 3px 15px 2px; width:90.4%; margin:0px auto; ">
+          <div class="title-grid" style="margin:0px; width:98%; height:80px; background:none;  border:none; ">
+            <div style=" background: url({!URLFOR($Resource.CreateEventsSteps, 'images/044.png')} ) no-repeat; height:80px; margin-left:-15px; margin-top:5px; width:100%">
+              <div style="width:6%; height:50px; float:left;  text-align:center;">
+                <p style="margin-left:0px; font-size:20px; font-family: Arial, Helvetica, sans-serif; color:#928c87; font-weight:bold; padding-top:8px; ">4 <br/></p>
+                <p style="margin-left:0px; margin-top:0px; font-size:17px; color:#928c87; font-family:cuprum; ">Step</p>
+                 
+              </div>
+              <div style=" width:15%;margin-left:24px;  text-align:center;    margin-top:2px; float:left; height:50px; ">
+                <p style=" color:#FFF; font-size:19px;  padding-top:18px; font-family:cuprum;">Publish Event</p>
+                 
+              </div>
+            </div>
+          </div>
+          <br/>
+        
+          <div style="border:0px solid #000; width:100%;">
+          <label style=" margin-left:10px; font-size:18px; color:#4f91cd; font-family:cuprum;" >Choose Publish mode:</label>
+        
+            <div class="indent distance" style=" border:0px solid #000;margin-top:5px; margin-left:170px; font-size:14px; " >
+              <input type="radio" id="dr"  onClick="hide('payment')" style="margin-left:10px;outline:none;"  name="2" value="2" />
+              <span style="margin-left:5px;"><label for="dr" style="float:none">Draft</label></span> <br/>
+              <br/>
+              <input type="radio" id="li" onClick="show('payment')" style="margin-left:10px;outline:none;"  name="2" value="2" />
+              <span style="margin-left:5px;"><label for="li" style="float:none">Live</label></span> <br/>
+              <br/>
+              <input type="radio" id="ps" onClick="hide('payment')"  style="margin-left:10px;outline:none;" name="2" value="2" />
+              <span style="margin-left:5px;"><label for="ps" style="float:none">Pause</label></span> <br/>
+              <br/>            
+            </div>
+          <!--------start of payment hide and show------------->
+            <div id="payment" style="width:60%; display:none; height:620px; margin-left:35%; margin-top:-150px; ">
+            
+             <div id="payment-box" style="width:85%; height:auto; padding:3px;  box-shadow:0 1px 3px rgba(0,0,0,0.1); border:1px solid #dedede;  border-radius:1px; background-color:#fff; margin-bottom:150px;">
+            <div id="payment-content-box" style="background: url({!URLFOR($Resource.CreateEventsSteps, 'images/strip_line_background.png')} ); width:100%; height:100%;">
+              <div id="paymenttitle" style=" text-align:center; font-family:Cuprum; font-weight:700; padding:3px; font-size:24px; color:#95a5a6"> Payment Information </div>
+              <!-- <hr style="width:50%; margin:0px auto;"/>-->
+              <div style="margin-top:20px;">  
+                <label style=" margin-left:10px; margin-top:50px; font-size:18px; color:#4f91cd; font-family:cuprum;" >Card Holder Information</label>
+              </div>
+              <!------Credit CardHolder Name------------->
+              <div id="inputbox"  style="width:50%;  margin:0px auto; outline:none; margin-bottom:0px; padding: 23px 30px ; border-radius: 4px; border-bottom-left-radius:0px; border-bottom-right-radius:0px; background: #95a5a6; margin-top:15px;"> 
+            
+            <div id="inputfield" style=" ">
+        
+           <!------- ******************  Change The Style  ****************................................ ------->
+           <input type="text" placeholder="Card Holder Name" class="input" place="" id="credit-input" pattern="\d*"  /> 
+           
+            </div><!--close of inputfield-->
+            
+            </div><!--close of inputbox-->
+            
+             <!------Credit CardHolder Email------------->
+              <div id="inputbox" 
+           style="width:50%;
+           outline:none;
+             margin:0px auto;
+       
+          margin-bottom: 20px;
+           padding: 13px 30px 25px 30px ; 
+            border-radius: 4px;
+            border-top-left-radius:0px;
+            border-top-right-radius:0px;
+            background: #95a5a6;
+           margin-top:0px;"> 
+            
+            <div id="inputfield" style=" ">
+        
+            Change The Style................................
+           <input type="text"  placeholder="Email" class="input" place="" id="credit-input" pattern="\d*"  /> 
+           
+            </div><!--close of inputfield-->
+            
+            </div><!--close of inputbox-->
+            
+            <!---------Credit Card details--------->
+             <div style="margin-top:20px;">
+                <label style=" margin-left:10px; margin-top:50px; font-size:18px; ; color:#4f91cd; font-family:cuprum;" >Credit Card Details</label>
+              </div>
+            <!--------------------->
+             <div id="inputbox" style="width:85%; height:auto; margin:0px auto; margin-bottom:10px; margin-top:8px; padding-top:10px; padding-bottom:10px; padding-left:5px; border-radius: 5px; background:#95a5a6; "> 
+             <!------------hide display script for creditcard-------> 
+                <script>
+
+function showhidediv1( rad )
+    {
+        var rads = document.getElementsByName( rad.name );
+        document.getElementById( 'visa' ).style.display = ( rads[0].checked ) ? 'block' : 'none';
+        document.getElementById( 'maestro' ).style.display = ( rads[1].checked ) ? 'block' : 'none';
+        document.getElementById( 'american' ).style.display = ( rads[2].checked ) ? 'block' : 'none';
+        document.getElementById( 'discover' ).style.display = ( rads[3].checked ) ? 'block' : 'none';
+    }
+
+
+</script> 
+                
+                <!-------------------------------------------------------->
+          
+        <label style=" margin-left:20px;font-size:15px; color:#fff; margin-top:10px;  font-family:cuprum;" >Credit Card Type:</label>
+     
+           
+            
+             <!---American exp Card holder-->
+            <div id="american" style="width:81.5%;  border-radius:5px;margin:0px auto; margin-top:10px; height:230px; background: url({!URLFOR($Resource.CreateEventsSteps, 'images/cardsRRR.png')} ) no-repeat"> 
+             
+              <div style="width:83%; margin:0px auto; height:80px;"></div>
+             <div id="cardno" style="width:86%; margin:0px auto; height:44px;">
+             
+             <input type="text" placeholder="Enter Number" style=" width:92%;outline:none; background:none; font-size:14px; color:#999; border-radius:3px; margin:0px auto;height:38px; border:none"/> 
+             
+             </div>
+             
+             <div style="width:100%; height:35px; "></div>
+             <div style="width:34%; height:37px; margin-left:6.5%; float:left;">
+             <select class="selectoption" style="outline:none; width:88%; margin-top:2px; height:100%; background:none;border:none;" >
+                   <option>- Month -</option>
+                  <option value="1">January (01)</option>
+                  <option value="2">February (02)</option>
+                   <option value="3">March (03) </option>
+                      <option value="4">April (04)</option>
+                  <option value="5">May (05)</option>
+                   <option value="6">June (06)</option>
+                      <option value="7">July (07)</option>
+                  <option value="8">August (08)</option>
+                   <option value="9">September (09)</option>
+                      <option value="10">October (10)</option>
+                  <option value="11">November (11)</option>
+                   <option value="12">December (12)</option>
+                </select>   
+             </div>
+              
+              <div style="width:21%; height:37px; margin-left:0%; float:left;">
+                    <!--       <input type="date" placeholder="January (01)" style="width:99%;background:none; margin-left:3%;   font-size:9px; color:#999; border-radius:3px; margin:0px auto;height:38px; border:none"/>-->
+               <select class="selectoption" style="outline:none; width:88%; margin-top:2px;  height:100%; background:none;border:none;">
+    <option>- Year -</option>
+    <option value="2011">2034</option>
+    <option value="2011">2033</option>
+    <option value="2011">2032</option>
+    <option value="2011">2032</option>
+    <option value="2011">2031</option>
+    <option value="2011">2030</option>
+    <option value="2011">2029</option>
+    <option value="2011">2028</option>
+    <option value="2011">2027</option>
+    <option value="2011">2026</option>
+    <option value="2011">2025</option>
+    <option value="2011">2024</option>
+    <option value="2011">2023</option>
+    <option value="2011">2022</option>
+    <option value="2011">2021</option>
+     <option value="2011">2020</option>
+    <option value="2010">2019</option>
+    <option value="2009">2018</option>
+    <option value="2008">2017</option>
+    <option value="2007">2016</option>
+    <option value="2006">2015</option>
+    <option value="2005">2014</option>
+   <!-- <option value="2004">2013</option>
+    <option value="2003">2012</option>
+    <option value="2011">2011</option>
+    <option value="2010">2010</option>
+    <option value="2009">2009</option>
+    <option value="2008">2008</option>
+    <option value="2007">2007</option>
+    <option value="2006">2006</option>
+    <option value="2005">2005</option>
+    <option value="2004">2004</option>
+    <option value="2003">2003</option>
+    <option value="2002">2002</option>
+    <option value="2001">2001</option>
+    <option value="2000">2000</option>
+    <option value="1999">1999</option>
+    <option value="1998">1998</option>
+    <option value="1997">1997</option>
+    <option value="1996">1996</option>
+    <option value="1995">1995</option>
+    <option value="1994">1994</option>
+    <option value="1993">1993</option>
+    <option value="1992">1992</option>
+    <option value="1991">1991</option>
+    <option value="1990">1990</option>
+    <option value="1989">1989</option>
+    <option value="1988">1988</option>
+    <option value="1987">1987</option>
+    <option value="1986">1986</option>
+    <option value="1985">1985</option>
+    <option value="1984">1984</option>
+    <option value="1983">1983</option>
+    <option value="1982">1982</option>
+    <option value="1981">1981</option>
+    <option value="1980">1980</option>
+    <option value="1979">1979</option>
+    <option value="1978">1978</option>
+    <option value="1977">1977</option>
+    <option value="1976">1976</option>
+    <option value="1975">1975</option>
+    <option value="1974">1974</option>
+    <option value="1973">1973</option>
+    <option value="1972">1972</option>
+    <option value="1971">1971</option>
+    <option value="1970">1970</option>
+    <option value="1969">1969</option>
+    <option value="1968">1968</option>
+    <option value="1967">1967</option>
+    <option value="1966">1966</option>
+    <option value="1965">1965</option>
+    <option value="1964">1964</option>
+    <option value="1963">1963</option>
+    <option value="1962">1962</option>
+    <option value="1961">1961</option>
+    <option value="1960">1960</option>
+    <option value="1959">1959</option>
+    <option value="1958">1958</option>
+    <option value="1957">1957</option>
+    <option value="1956">1956</option>
+    <option value="1955">1955</option>
+    <option value="1954">1954</option>
+    <option value="1953">1953</option>
+    <option value="1952">1952</option>
+    <option value="1951">1951</option>
+    <option value="1950">1950</option>
+    <option value="1949">1949</option>
+    <option value="1948">1948</option>
+    <option value="1947">1947</option>
+    <option value="1946">1946</option>
+    <option value="1945">1945</option>
+    <option value="1944">1944</option>
+    <option value="1943">1943</option>
+    <option value="1942">1942</option>
+    <option value="1941">1941</option>
+    <option value="1940">1940</option>
+    <option value="1939">1939</option>
+    <option value="1938">1938</option>
+    <option value="1937">1937</option>
+    <option value="1936">1936</option>
+    <option value="1935">1935</option>
+    <option value="1934">1934</option>
+    <option value="1933">1933</option>
+    <option value="1932">1932</option>
+    <option value="1931">1931</option>
+    <option value="1930">1930</option>
+    <option value="1929">1929</option>
+    <option value="1928">1928</option>
+    <option value="1927">1927</option>
+    <option value="1926">1926</option>
+    <option value="1925">1925</option>
+    <option value="1924">1924</option>
+    <option value="1923">1923</option>
+    <option value="1922">1922</option>
+    <option value="1921">1921</option>
+    <option value="1920">1920</option>
+    <option value="1919">1919</option>
+    <option value="1918">1918</option>
+    <option value="1917">1917</option>
+    <option value="1916">1916</option>
+    <option value="1915">1915</option>
+    <option value="1914">1914</option>
+    <option value="1913">1913</option>
+    <option value="1912">1912</option>
+    <option value="1911">1911</option>
+    <option value="1910">1910</option>
+    <option value="1909">1909</option>
+    <option value="1908">1908</option>
+    <option value="1907">1907</option>
+    <option value="1906">1906</option>
+    <option value="1905">1905</option>
+    <option value="1904">1904</option>
+    <option value="1903">1903</option>
+    <option value="1902">1902</option>
+    <option value="1901">1901</option>
+    <option value="1900">1900</option>  ------>
+</select>
+              </div>
+            
+            
+             <div style="width:16%; height:39px; margin-left:6.5%;  float:left;">
+                    <!--       <input type="date" placeholder="January (01)" style="width:99%;background:none; margin-left:3%;   font-size:9px; color:#999; border-radius:3px; margin:0px auto;height:38px; border:none"/>-->
+                  <input type="text" placeholder="ABC" style=" outline:none;width:92%; background:none; font-size:14px; color:#999; border-radius:3px; margin:0px auto;height:38px; border:none" />
+              </div>
+
+            
+            </div><!--close ofcardplaceholder-->
+            
+             <!---Discover Card holder-->
+            
+            <!--close ofcardplaceholder-->
+            
+            
+       
+            </div><!--close of inputbox-->
+            <!---------------------->
+            
+            </div><!--close of paymentcontentbox--> 
+            
+            
+          </div>
+          <!--close of paymentbox--> 
+            
+            </div><!--close of payment-------->
+          </div>
+          
+        </div>
+        
+        <!--close of content-grid--> 
+      </div>
+      
+      <!--close of grid-1-------->
+  
+  <!-----------<apex:form >     --------->
+      <div class="grid-1" style="border:0px solid #4f91cd; margin-top:8px; margin-left:1.3%; ">
+        <div class="content-gird"  style="background-color:#EFEFEF; padding:0px; border:none;  width:90.4%; margin:0px auto; text-align:left; ">
+          <div style=" width:25%;  height:32px;  float:right; margin-top:10px;">
+            <apex:commandButton value="Save Event" action="{!saveEvent}" style="width:45%;height:32px; "  styleClass="button-a blue"/>
+            
+            &nbsp;&nbsp;
+            <button class="button-a dark-blue" style="width:45%; height:32px; "  >Cancel</button>
+          </div>
+        </div>
+      </div>
+      <!----------------------------------->
+      
+      <div class="clear"></div>
+    </apex:form>   <!----- START FORM At 304 Line --------> 
+    </div>
+    <!-- #content--> 
+  </div>
+  <!-- #container-->
+  
+  <footer style="width:100%; padding:0px;">
+    <div class="info-footer" style="margin:0px;" >
+      <div id="left">
+        <p>Copyright © 2014  Global Nest.</p>
+      </div>
+      <div id="right">
+        <p>Booth Leads </p>
+      </div>
+    </div>
+  </footer>
+</section>
+<!-- #middle-->
+
+<div class="clear"></div>
+
+
+<style type="text/css">
+    .fixedtop {
+        position:fixed;
+        top:0px;
+        background-image:url(images/background-header.png);
+        
+        margin:0px auto;
+        width: 93%;
+        z-index:999999;
+        
+    }
+</style>
+<!------------END OF sticky js and css-------------->
+ <!------------------------------------ Ticket More Info Options -------------------------------------->
+   <!---tmore ticket info popup------------->
+ 
+   <!------------------------------------ End Of Ticket More Info Options 1501-------------rendered="{!eventMoreOptionBool}" ------------------> 
+   <!------------------------------------------------------------------------------------------------------------->
+   <apex:form id="ticketMoreOptions">
+<apex:outputPanel styleClass="popupBackground" layout="block" id="eventMoreOptionsText" style="width:100%;position:absolute; top:event.pageY; left: event.pageX" rendered="{!moreTicketBool}"/>  
+    <apex:outputPanel styleClass="custPopup" style="width:80%; padding-bottom:70px;" rendered="{!moreTicketBool}"  >
+       
+       <div id="eventMoreOptionsDiv"  style="width:100%; margin-left:0px; left:13% ">  
+              <div  class="grid-1" style="text-align:left;"  >
+                
+                <div class="title-grid">Ticket More Info</div>
+       <div class="content-gird" >        
+    
+    <table  cellpadding="0" cellspacing="0" border="0">      <tr>
+        <td > <a onclick="showTicketinfofun();" style="text-decoration:none;" value="Bus Info">
+                <div class="activeTab" id="ticketinfotab" style="visibility:visible;position:relative;cursor:pointer;" onclick="showTicketinfofun();">
+                     Ticket Info  
+                </div> 
+              </a>
+        </td>
+        <td > <a onclick="demoGraphicsinfofun();" style="text-decoration:none;" value="demographics Info">
+                <div class="inactiveTab" id="demographicstab" style="visibility:visible;position:relative;cursor:pointer;" onclick="demoGraphicsinfofun();">
+                     Demographics
+                </div> 
+              </a>
+        </td>
+        <td > <a onclick="promoCodesinfofun();" style="text-decoration:none;" value="promocodes Info">
+                <div class="inactiveTab" id="promocodestab" style="visibility:visible;position:relative;cursor:pointer;" onclick="promoCodesinfofun();">
+                     Promo Codes 
+                </div> 
+              </a>
+        </td>
+        <td > <a onclick="surveyquestionsinfofun();" style="text-decoration:none;" value="demographics Info">
+                <div class="inactiveTab" id="suerveyquestionstab" style="visibility:visible;position:relative;cursor:pointer;" onclick="surveyquestionsinfofun();">
+                     Survey Questions 
+                </div> 
+              </a>
+        </td>
+      </tr>
+   </table>
+   <div style="border: 1px solid #d3d3d3 ; padding-bottom:10px;">
+    <table width="100%" ><tr>
+        <td>  
+            <div id="ticketMoreInfo" style="display:visible;">   
+              <apex:repeat value="{!ticketmoreTic}" var="itt">        
+                <script>
+                    choosenForPopUp();
+                </script>  
+                <table style=" font-size:12px; text-align:left;" width="100%"  align="center" border="0"> 
+                     <tr><td width="50%" height="28px">
+                         <div class="form">
+                    <div id="left-form" style=" width:49%; padding-bottom:20px; margin-top:15px;  border:0px #000000 solid; float:left">
+                      <div class="elem">
+                        <label>Ticket Name: </label>
+                        <label id="mandatory">*</label>
+                        <div class="indent">
+                            <apex:inputField value="{!itt.itemPool.Item_Pool_Name__c}" styleClass="medium"/> 
+                        </div>
+                      </div>
+                       <div class="elem">
+                        <label>Ticket Type: </label>
+                        <label id="mandatory">*</label>
+                        <div class="indent">
+                            <apex:inputField value="{!itt.items.Payment__c}"/>
+                        </div>
+                      </div>
+                      
+                        <div class="elem">
+                        <label>Item Type:</label>
+                        <div class="indent">
+                             <apex:selectList value="{!itt.items.item_type__c}" multiselect="false" size="1" styleClass="chzn-select medium-select select" style="width:80%" required="true" id="eventAddpage">
+                                 <apex:selectOptions value="{!ItemTypesOptions}"/>
+                             </apex:selectList>
+                        </div>
+                      </div>
+                       
+                <!--       <div class="elem">
+                        <label>Event Category:</label>
+                        <div class="indent">
+                          <apex:selectList value="{!itt.items.item_type__c}" multiselect="false" size="1"  styleClass="chzn-select medium-select select" style="width:80%" required="true" id="eventCat">
+                                 <apex:selectOptions value="{!ItemTypesOptions}"/>
+                             </apex:selectList>
+                        </div>
+                      </div>  ---->
+                     <apex:outputPanel id="itemPoolCount">
+                        <div class="elem">
+                            <label>Quantity Available: </label>
+                           
+                            <div class="indent">
+                                <apex:outputText value="{!itt.itemPool.Item_Count__c}"/> 
+                            </div>
+                        </div>
+                     </apex:outputPanel>      
+                    
+                    
+                    
+                    <div style=" margin-top:50px;">
+                      <label>Service Fee: </label>
+                        <div style="margin-left:150px; margin-top:-30px;">
+                                <apex:selectRadio value="{!itt.items.service_fee__c}"  layout="PageDirection"  required="true" id="itemServiceFee">
+                                     <apex:selectOptions value="{!ticketServiceFee}"/>
+                                 </apex:selectRadio>
+                            </div>
+                        </div>
+                       
+                 </div>    
+                    
+                    
+                    
+                    
+                    <!--close of left-form-->
+                    
+                    <div class="right-form"  style=" width:49%; padding-bottom:20px; margin-top:15px;  border:0px #000000 solid; float:right">
+                    
+                      
+                        <div class="elem">
+                        <label>Ticket visibility: </label>
+                         <div class="indent" style="margin-top:5px;">
+                           <apex:inputField value="{!itt.items.Visibility__c}"/>
+                        </div>
+                      </div>
+                      <div class="elem">
+                        <label>Ticket Description:</label>
+                        <div class="indent">
+                            <apex:inputField value="{!itt.items.Description__c}" style="width:75%"/>
+                           
+                        </div>
+                      </div>
+                       <div class="elem">
+                        <label>Ticket Image:</label>
+                        <div class="indent">
+                          <div class="uploader black">
+                             Ticket Images.....
+                          </div>
+                        </div>
+                      </div>
+                        
+                        <div class="elem">
+                        <label> Badge Label:</label>
+                        <div class="indent">
+                            <apex:inputField value="{!itt.itemPool.Badge_Label__c}" style="width:75%"/>
+                       <!---     
+                          <select class="chzn-select medium-select select" style="width:99%">
+                            <option value="1">Sponsor</option>
+                            <option value="2">Attendee</option>
+                            <option value="3">Exhibitor</option>
+                            <option value="4">Corporate</option>
+                            <option value="4">MBE</option>
+                          </select>  ---->
+                        </div>
+                      </div>
+             <apex:outputPanel id="hashtagsForRender">     
+                      <div class="elem">
+                  <label>Add Tags:</label>
+                  <div class="indent">
+                    
+                       <apex:selectList value="{!itt.hashTagsToshow}" multiselect="true" size="1" styleClass="chzn-select medium-select select" style="width:80%" id="ticketMoreinfoTags">
+                             <apex:selectOptions value="{!eventHashTags}"/>
+                      <!----  <apex:actionSupport action="{!addTagItems}" event="onchange" reRender=""/> ---->
+                         </apex:selectList>
+              <!----       
+                    <select class="chzn-select medium-select select" multiple="">
+                      <option value="o1">Vip</option>
+                      <option value="o2">Golden Sponsor</option>
+                      <option value="o3">Platinum Sponsor</option>
+                    </select>
+               ----->     
+                    <apex:commandButton value="Add Tag" action="{!addTagsToTickets}" reRender="eventHashTagsOptions"/>
+                    
+                  </div>
+                </div>
+          </apex:outputPanel>                
+                      <br/>
+                </div> <!--close of right-form-->
+         
+      <apex:outputPanel id="ticketMoreOptionsItems">  
+         <table class="display dynamic3" id="options-table" style="width:100%; margin:0px auto;" >
+            <thead>
+              <tr>
+                <th width="25%" style="padding:3px 0px 3px 2px; text-indent:5px;">Ticket Name</th>
+                <th width="14%" style="padding:3px 0px 3px 2px;text-indent:5px;">Start Date</th>
+                <th width="14%" style="padding:3px 0px 3px 2px;text-indent:5px;">End Date</th>
+                <th width="7%" style="padding:3px 0px 3px 2px;text-indent:5px;">Qty</th>
+                <th width="10%" style="padding:3px 0px 3px 2px;text-indent:5px;">Price</th>
+                <th width="10%" style="padding:3px 0px 3px 2px;text-indent:5px;">Min Quantity</th>
+                <th width="10%" style="padding:3px 0px 3px 2px;text-indent:5px;">Max Quantity</th>
+                <th width="10%" style="padding:3px 0px 3px 2px;text-indent:5px;">Action</th>
+              </tr>
+              <apex:variable value="{!0}" var="counterVar"/>
+            </thead>
+          
+            <apex:repeat value="{!itt.itemsList}" var="item">
+            <tr>
+              <td><apex:inputField value="{!item.item_name__c}"/></td>
+              <td> <c:RemoveLink id="itemPoolStart"> <apex:inputField value="{!item.sale_start__c}"/>  </c:RemoveLink></td>
+              <td> <c:RemoveLink id="itemPoolEnd"> <apex:inputField value="{!item.sale_end__c}"/> </c:RemoveLink></td>
+              <td><apex:inputField value="{!item.item_count__c}"/> </td>
+              <td><apex:inputField value="{!item.price__c}"/></td>
+              <td><apex:inputField value="{!item.min_per_order__c}"/></td>
+              <td><apex:inputField value="{!item.max_per_order__c}"/></td>
+              <td>  
+                   <!-- <apex:commandLink value="Delete...." action="{!deleteMoreTicketItems}" rendered="{!itt.itemsList.size > 1}" onclick="confirm('Are you Sure Delete Item');">
+                        <apex:param value="{!counterVar}" name="delItem"/>
+                    </apex:commandLink>  ---->
+                    
+                    <apex:commandLink action="{!deleteMoreTicketItems}" reRender="ticketMoreOptionsItems" onclick="confirm('Are you Sure Delete Item');" rendered="{!itt.itemsList.size > 1}"  >
+                         <apex:image url="{!URLFOR($Resource.CreateEventsSteps, 'images/removerow.png')}"/>
+                          <apex:param value="{!counterVar}" name="delItem"/>
+                      </apex:commandLink>  
+                    &nbsp;&nbsp;
+                    <apex:commandButton image="{!URLFOR($Resource.CreateEventsSteps, 'images/addrow.png')}" rendered="{!itt.itemsList.size = (counterVar+1) }" action="{!addAnotherItems}" reRender="ticketMoreOptionsItems,itemPoolCount"   > 
+                   </apex:commandButton>
+                   
+                   <apex:variable value="{!counterVar+1}" var="counterVar"/> 
+              </td>
+            </tr>
+         </apex:repeat>    
+         
+     <!---  <tr style="align:right;">
+               <td colspan="7">
+                   <apex:commandButton value="Save" action="{!updateTicket}" /> &nbsp;&nbsp;
+                   <apex:commandButton value="Cancel" action="{!Cancel}" />
+               </td>
+           </tr> ----->
+          </table>
+      </apex:outputPanel>               
+                    <div class="indent" style="float:right; margin-top:10px; margin-right:10px;"> 
+                        <apex:commandButton value="Save" action="{!updateTicket}" styleClass="button-a blue" rendered="{!NOT(packageBool)}" reRender="ticketMoreOptions,individualsAndPackages"/> &nbsp;&nbsp;
+                        <apex:commandButton value="Save Package" action="{!updatePackageTicket}" styleClass="button-a blue" rendered="{!packageBool}" reRender="ticketMoreOptions,individualsAndPackages"/> &nbsp;&nbsp;
+                        
+                       <apex:commandButton value="Cancel" action="{!Cancel}" styleClass="button-a dark-blue" reRender="ticketMoreOptions"/>
+                    </div>
+                      
+                    <!----dynamic table for tickets on the popup---->
+                       
+          <!------------------------------end of dynamic table------------>
+                    <div class="clear"> </div>
+                  </div><!--close of form-->
+                  
+              </td>
+          </tr>
+      </table>
+    </apex:repeat>  
+   </div>   
+       <!-----------------------------------------------------2nd tab Demo graphics ------------------------------------------------->
+        <div id="demographicsInfo" style="display:none; border:0px #d3d3d3 solid; border-top:0px;">
+              <table width="100%" border="0" id="demographics" style="border-collapse:collapse;">
+                  <tr>
+                    <td style="text-align:center"><input type="checkbox" name="9" id="fname" value="" /></td>
+                    <td width="30%">First Name</td>
+                    <td style="text-align:center"><input type="checkbox" name="10" id="lname" value="" /></td>
+                    <td width="30%">Last Name</td>
+                     <td style="text-align:center"><input type="checkbox" name="11" id="email" value="" /></td>
+                    <td width="30%">Email</td>
+                   
+                  </tr>
+                  <tr>
+                        <td style="text-align:center"><input type="checkbox" name="12" id="Company" value=""  / ></td>
+                        <td width="30%">Company</td>
+                        <td style="text-align:center"><input type="checkbox" name="13" id="Work Phone No" value=""   /></td>
+                        <td>Work Phone Number</td>
+                        <td style="text-align:center"><input type="checkbox" name="14" id="Work Address" value=""   /></td>
+                        <td>Work Address</td>
+                  </tr>
+                  <tr>
+                    <td style="text-align:center"><input type="checkbox" name="15" id="Ship Address" value=""   /></td>
+                    <td>Ship Address</td>
+                     <td style="text-align:center"><input type="checkbox" name="16" id="Home Address" value=""  / ></td>
+                    <td>Home Address</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                  </tr>
+               </table>
+          </div><!--close of tabs2-->
+       <!------------------------------------------------------2 nd Tab End -------------------------------------------------------->    
+        <!-----------------------------------------------------3rd Tab Start  -------------------------------------------------------->    
+         <div id="promotionalInfo" style="display:none;  border:0px #d3d3d3 solid; border-top:0px;">
+    
+          <!--dynamic tables for promocodes---------->
+          <table class="display dynamic6" id="options-table" style="width:99%; margin:0px auto; margin-top:10px;" >
+            <thead>
+              <tr>
+                <th width="20%" style="padding:3px 0px 3px 2px; text-indent:5px;">Promotional Name</th>
+                <th width="13%" style="padding:3px 0px 3px 2px;text-indent:5px;">Promo Code</th>
+                <th width="12%" style="padding:3px 0px 3px 2px;text-indent:5px;">Discount Amount</th>
+                  <th width="12%" style="padding:3px 0px 3px 2px;text-indent:5px;">Usage Count</th>
+                <th width="12%" style="padding:3px 0px 3px 2px;text-indent:5px;">Start Date</th>
+                 <th width="12%" style="padding:3px 0px 3px 2px;text-indent:5px;">End Date</th>
+                   <th width="15%" style="padding:3px 0px 3px 2px;text-indent:5px;">Promo Code Text</th>
+               
+                <th width="4%" style="padding:3px 0px 3px 2px;text-indent:5px;"></th>
+              </tr>
+            </thead>
+            <tr>
+              <td><input type="text"   id="one" name="input_box_one[]" style="padding:0px; width:91%;" /></td>
+               <td><input type="text" id="three" name="input_box_three[]" style="padding:0px; width:91%;" /></td>
+              <td><span><select class="selectoption" style="width:42%; margin-right:3px;" >
+                  <option value="1">%</option>
+                  <option value="2">$</option>
+                </select></span><input type="text" id="three" name="input_box_three[]" style="padding:0px; width:51%;" /></td>
+               <td><input type="text" id="three" name="input_box_three[]" style="padding:0px; width:91%;" /></td>    
+              <td><input type="text" class="datepicker,small" style="padding:0px;  width:91%; " /></td>
+              <td> <input type="text" class="datepicker,small" style="padding:0px;  width:91%; " /></td>
+               <td> <input type="text" id="three" name="input_box_three[]" style="padding:0px; width:91%;" /></td>
+              
+                   
+                   
+              <td><input type="button" class='del6' title='Delete Ticket' value='' /></td>
+     
+            </tr>
+            <tr>
+              <td><input type="text"   id="one" name="input_box_one[]" style=" padding:0px; width:91%;"  /></td>
+               <td><input type="text" id="three" name="input_box_three[]" style="padding:0px; width:91%;"  /></td>
+              <td><span><select class="selectoption" style="width:42%; margin-right:3px;" >
+                  <option value="1">%</option>
+                  <option value="2">$</option>
+                </select></span><input type="text" id="three" name="input_box_three[]" style="padding:0px; width:51%;"  /></td>
+               <td><input type="text" id="three" name="input_box_three[]" style="padding:0px; width:91%;"  /></td>    
+              <td>  <input type="text"  class="datepicker,small" style="padding:0px;  width:91%;"  /></td>
+              <td><input type="text" class="datepicker,small" style="padding:0px;  width:91%;"   /></td>
+               <td><input type="text" id="three" name="input_box_three[]" style="padding:0px; width:91%;"  /></td>
+                
+               
+                               
+              
+              <td><input type="button"  class="add6" value="" title='Add More Ticket' /></td>
+          
+            </tr>
+          </table>
+         </div><!--close of tabs3-->
+        
+       <!-----------------------------------------------------3rd Tab End -------------------------------------------------------->    
+       <!-----------------------------------------------------4th Tab Start -------------------------------------------------------->  
+           <div id="surveyQuestionsInfo" style=" display:none;  border:0px #d3d3d3 solid; border-top:0px;">
+                  <div class="form" style="width:50%; margin:0px auto;   border:0px solid #000; ">
+            <div class="elem">
+              <label style="">Questions: </label>
+              <div class="indent" style="margin-left:120px;">
+                <input type="text"  id="name" name="name" class="medium"/>
+              </div>
+            </div>
+            <div class="elem">
+              <label style="">Questions Type: </label>
+              <div class="indent" style="margin-left:120px;">
+                <input type="text"  id="name" name="name" class="medium"/>
+              </div>
+            </div>
+           
+            <div class="elem">
+              <label>Options:</label>
+          
+              <div class="indent" style="margin-left:120px;">
+                <select class="chzn-select medium-select select" style="width:230%">
+                  <option value="1">Text</option>
+                  <option value="2">Picklist</option>
+                  <option value="3">Checkbox</option>
+                  <option value="4">Radio</option>
+                </select>
+              </div>
+            </div>
+            
+            <div class="elem">
+              <label style="">Ticket Type: </label>
+              <div class="indent" style="margin-left:120px;">
+                <input type="text"  id="name" name="name" class="medium"/>
+              </div>
+            </div>
+          
+          </div><!--close of form-->
+                
+      </div><!--close of tabs4--> 
+       
+       <!-----------------------------------------------------4th Tab End -------------------------------------------------------->  
+   </td>
+ </tr>
+</table>
+</div>
+</div>
+</div>
+</div>
+</apex:outputPanel>
+</apex:form>
+   <!-------------------------------------------------------------------------------------------------------------->
+   <!----------------------------------------   Event more options ------------------------------------------>    
+   <style>
+       .custPopup{color:#000000;background-color:#f6f6f6;position: absolute;top:10px;left:0px;right:0px;z-index: 75;width:70%;height: auto; margin:0 auto;-moz-border-radius-bottomleft:6px; -webkit-border-bottom-left-radius:6px;
+-moz-border-radius-bottomright:6px; -webkit-border-bottom-right-radius:6px; border-radius:0 0 6px 6px; -moz-box-shadow:0 0 64px #000; -webkit-box-shadow:0 0 64px #000; box-shadow:0 0 64px #000;font: 12px/24px "Lucida Grande",Arial,sans-serif; padding-bottom:4px;
+//background-color:#eee; color:#000; padding-bottom:4px; width:600px; margin-top:0px;
+-moz-border-radius-bottomleft:6px; -webkit-border-bottom-left-radius:6px; -moz-border-radius-bottomright:6px;-webkit-border-bottom-right-radius:6px; border-radius:6px 0 6px 6px; -moz-box-shadow:6px 0 64px #000; -webkit-box-shadow:0 0 64px #000; box-shadow:0 0 64px #000; padding:0px; height:75%;}
+
+.custPopupForMorePopUp{color:#000000;background-color:#f6f6f6;position: absolute;top:10px;left:0px;right:0px;z-index: 85;width:70%;height: auto; margin:0 auto;-moz-border-radius-bottomleft:6px; -webkit-border-bottom-left-radius:6px;
+-moz-border-radius-bottomright:6px; -webkit-border-bottom-right-radius:6px; border-radius:0 0 6px 6px; -moz-box-shadow:0 0 64px #000; -webkit-box-shadow:0 0 64px #000; box-shadow:0 0 64px #000;font: 12px/24px "Lucida Grande",Arial,sans-serif; padding-bottom:4px;
+//background-color:#eee; color:#000; padding-bottom:4px; width:600px; margin-top:0px;
+-moz-border-radius-bottomleft:6px; -webkit-border-bottom-left-radius:6px; -moz-border-radius-bottomright:6px;-webkit-border-bottom-right-radius:6px; border-radius:6px 0 6px 6px; -moz-box-shadow:6px 0 64px #000; -webkit-box-shadow:0 0 64px #000; box-shadow:0 0 64px #000; padding:0px; height:75%;}
+
+
+
+.popupBackground{background-color:#000000; Opacity:0.50; width: 100%;height:100%;position: absolute;left:0px;top:0px; z-index: 50; }
+.popupBackgroundForMorePopUp{background-color:#000000; Opacity:0.50; width: 100%;height:100%;position: absolute;left:0px;top:0px; z-index: 80; }
+
+
+</style>
+ <script>
+ function choosenForPopUp(){
+        
+        $(".chzn-select-deselect").chosen({allow_single_deselect:true});   
+        $(".chzn-select").chosen(); $(".chzn-select-deselect").chosen({allow_single_deselect:true});  
+         
+     }
+  </script>       
+<apex:form id="eventMoreOptions" >    <!-------  rendered="{!eventMoreOptionBool}"  ----->
+
+    <apex:stylesheet value="{!URLFOR($Resource.ScanAttendee_V1, 'AttendeeScan/scanattendee/css/chosen.css')}"/> 
+    <script>
+        choosenForPopUp();
+    </script>
+  <apex:outputPanel styleClass="popupBackground" layout="block" id="eventMoreOptionsText" rendered="{!eventMoreOptionBool}" style="width:100%"/>  
+    <apex:outputPanel styleClass="custPopup" style="width:80%; height:720px;"  rendered="{!eventMoreOptionBool}">
+       
+       <div id="eventMoreOptionsDiv"  style="width:100%; margin-left:0px; left:13% ">  
+         
+              <div  class="grid-1" style="text-align:left;"  >
+                
+                <div class="title-grid">Create Event</div>
+                <div class="content-gird">
+                  <div class="form">
+                    <div id="left-form" style=" width:49%; padding-bottom:20px; margin-top:15px;  border:0px #000000 solid; float:left">
+                   
+                    <div class="elem">
+                        <label>Event Organizer Email: </label>
+                        <label id="mandatory">*</label>
+                        <div class="indent">    
+                            <apex:inputField value="{!eventMoreOptionEvents.Organizer_Email__c }" styleClass="medium"/>
+                        </div>
+                      </div>  
+                   
+                      <div class="elem">
+                        <label>Title: </label>
+                        <label id="mandatory">*</label>
+                        <div class="indent">  
+                            <apex:inputField value="{!eventMoreOptionEvents.Name }" styleClass="medium"/>
+                        </div>
+                      </div>
+                      <div class="elem">
+                        <label>Hosting Time Zone: </label>
+                        <div class="indent">
+                            <apex:inputField value="{!eventMoreOptionEvents.Time_Zone__c }" styleClass="chzn-select medium-select select"/>
+                        </div>
+                      </div>
+                      <div class="elem">
+                        <label >Start Date:</label>
+                        <label id="mandatory">*</label>
+                        <div class="indent">
+                          <c:RemoveLink id="EditPopUpStartDate" > 
+                             <apex:inputField value="{!selectedEvent.Start_Date__c}" style="width:20%;  "/>   
+                             <apex:inputField value="{!selectedEvent.Start_Time__c}" styleClass="chzn-select medium-select select" style="width:40%;  "/>  
+                          </c:RemoveLink>  
+                        </div>
+                      </div>
+                      <div class="elem">
+                        <label>End Date:</label>
+                        <label id="mandatory">*</label>
+                        <div class="indent">
+                            <c:RemoveLink id="EditPopUpEndDate" > 
+                                 <apex:inputField value="{!selectedEvent.End_Date__c}" style="width:20%;  "/>   
+                                 <apex:inputField value="{!selectedEvent.End_Time__c}" styleClass="chzn-select medium-select select" style="width:40%;  "/>  
+                              </c:RemoveLink>
+                             
+                        </div>
+                      </div>
+                      <div class="elem">
+                        <label>Phone Number: </label>
+                        <div class="indent">
+                            <apex:inputField value="{!eventMoreOptionEvents.Phone_Number__c }" styleClass="medium"/> 
+                        </div>
+                      </div>
+                      <div class="elem">
+                        <label>Website Url:</label>
+                        <div class="indent">
+                            <apex:inputField value="{!eventMoreOptionEvents.Website_Url__c }" styleClass="medium"/>
+                        </div>
+                      </div>
+                      <div class="elem">
+                        <label>Event Category:</label>
+                        <div class="indent">
+                            <apex:inputField value="{!eventMoreOptionEvents.Event_Type__c}" styleClass="chzn-select medium-select select"/>
+                        </div>
+                      </div>
+                      
+                      <div class="elem">
+                        <label>Primary Category:</label>
+                        <div class="indent">
+                            <apex:inputField value="{!eventMoreOptionEvents.Event_Topic__c}" styleClass="chzn-select medium-select select"/>
+                        </div>
+                      </div>
+                      <div class="elem">
+                        <label>Twitter Hash Tag: </label>
+                        <div class="indent">
+                          <apex:inputField value="{!eventMoreOptionEvents.Twitter_Hash_Tag__c}" styleClass=""/>
+                        </div>
+                      </div>
+                      
+                       <div class="elem">
+                        <label>Twitter URL: </label> 
+                        <div class="indent">
+                          <apex:inputField value="{!eventMoreOptionEvents.Twitter_URL__c}" styleClass=""/>
+                        </div>
+                      </div>
+                      
+                      <div class="elem">
+                        <label>Facebook URL: </label>
+                        <div class="indent">
+                           <apex:inputField value="{!eventMoreOptionEvents.Facebook_URL__c}" styleClass=""/>
+                        </div>
+                      </div>
+                      
+                       <div class="elem">
+                        <label>Event Status:</label>
+                        <div class="indent">
+                            <apex:inputField value="{!eventMoreOptionEvents.Event_Status__c}" styleClass="chzn-select medium-select select"/>
+                        </div>
+                      </div>
+                      <div class="elem">
+                        <label>Event Logo:</label>
+                        <div class="indent">
+                          <div class="uploader black">
+                             EVENT LOGOoooooooooooooooooooo
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <!--close of left-form-->
+                    
+                    <div class="right-form"  style=" width:49%; padding-bottom:20px; margin-top:15px;  border:0px #000000 solid; float:right">
+                      <div class="elem">
+                        <label>Hosting Organization: </label>
+                        <div class="indent">
+                          <input type="text" id="name" name="name" class="medium"/>
+                        </div>
+                      </div>
+                      <div class="elem">
+                        <label>Venue: </label>
+                        <div class="indent">
+                          <apex:inputField value="{!eventMoreOptionEvents.Venue_Name__c }" styleClass="medium"/>
+                        </div>
+                      </div>
+                      <div class="elem">
+                        <label>Hosting Address 1: </label>
+                        <div class="indent">
+                          <apex:inputField value="{!eventMoreOptionEvents.Street1__c}" styleClass="medium"/>
+                        </div>
+                      </div>
+                      <div class="elem">
+                        <label>Hosting Address 2: </label>
+                        <div class="indent">
+                          <apex:inputField value="{!eventMoreOptionEvents.Street2__c}" styleClass="medium"/>
+                        </div>
+                      </div>
+                      <div class="elem">
+                        <label>City: </label>
+                        <div class="indent">
+                          <apex:inputField value="{!eventMoreOptionEvents.City__c}" styleClass="medium"/>
+                        </div>
+                      </div>
+                     
+                      <div class="elem">
+                        <label>Country: </label>
+                        <div class="indent">
+                            
+                            <apex:selectList value="{!eventMoreOptionEvents.Country__c}" multiselect="false" size="1" styleClass="chzn-select medium-select select" style="width:80%" id="countrySelections">
+                                 <apex:selectOptions value="{!countryOptions}"/>
+                                
+                                 <apex:actionSupport event="onchange" action="{!statesBasedOnCountry}" reRender="statePannel" >
+                                     <apex:param value="{!eventMoreOptionEvents.Country__c}" assignTo="{!selectedCountry}"/>
+                                 </apex:actionSupport>    
+                             </apex:selectList>
+                        
+                        
+                       <!-----     <apex:selectList id="chooseCountry" value="{!selectedCountry}" size="1" styleClass="chzn-select medium-select select">
+                               <apex:selectOption itemValue="--None--" itemLabel="--None--" />
+                               
+                               <apex:repeat value="{!country}" var="c" >
+                                   <apex:selectOption itemValue="{!c.id}" itemLabel="{!c.Long_Name__c}" />
+                               </apex:repeat>
+                               <apex:actionSupport event="onclick"  reRender="countryPannel" />
+                            </apex:selectList> 
+                            <apex:inputField value="{!eventMoreOptionEvents.State__c}" styleClass="chzn-select medium-select select"/>  ---->
+                            
+                        </div>
+                      </div>
+                      <apex:outputPanel id="statePannel">
+                          <script>
+                            choosenForPopUp();
+                        </script>
+                       <div class="elem">
+                        <label>State:</label>
+                        <div class="indent">
+                            
+                            <apex:selectList value="{!eventMoreOptionEvents.State__c}" multiselect="false" size="1" styleClass="chzn-select medium-select select" style="width:80%" id="statesSelections">
+                                 <apex:selectOptions value="{!stateOptions}"/>
+                             </apex:selectList>
+                            
+                            
+         <!---           <apex:selectList id="chooseState" value="{!selectedState}" size="1" styleClass="chzn-select medium-select select">
+                               <apex:selectOption itemValue="--None--" itemLabel="--None--" />
+                               <apex:repeat value="{!states}" var="s" >
+                                   <apex:selectOption itemValue="{!s.Long_Name__c}" itemLabel="{!s.Long_Name__c}" rendered="{!s.Country__c = eventMoreOptionEvents.Country__c}"  />
+                               </apex:repeat>
+                            </apex:selectList> 
+                           <apex:inputField value="{!eventMoreOptionEvents.State__c}" styleClass="chzn-select medium-select select"/>   ----->
+                        </div>
+                      </div>
+                      </apex:outputPanel>
+                       <div class="elem">
+                        <label>Zip Code: </label>
+                        <div class="indent">
+                          <apex:inputField value="{!eventMoreOptionEvents.ZipCode__c}" styleClass="medium"/>
+                        </div>
+                      </div>
+                        <div class="elem">
+                        <label>Po Box: </label>
+                        <div class="indent">
+                          <apex:inputField value="{!eventMoreOptionEvents.PO_Box__c}" styleClass="medium"/>
+                        </div>
+                      </div>
+                      <div class="elem">
+                        <label>Event Description:</label>
+                        <div class="indent">
+                            <apex:inputField value="{!eventMoreOptionEvents.Description__c}" styleClass="medium"/>
+                        </div>
+                      </div>
+            <!---  <div style=" margin-top:10px;">
+                        <label>Event Description:</label>
+                        <div style="margin-left:150px; margin-top:-30px;">
+                            
+                            <apex:selectRadio value="{!eventMoreOptionEvents.Service_Fee__c}"  layout="PageDirection"  required="true" id="eventAddpage">
+                                 <apex:selectOptions value="{!eventServiceFee}"/>
+                             </apex:selectRadio>
+                        </div>
+                      </div>  ------>
+                      <br/>
+                      <div class="indent"> 
+   
+                        <apex:commandButton action="{!savePartEvent}" value="Save" reRender="eventMoreOptions, eventMoreOptionsText"/>
+                        &nbsp;&nbsp;
+                        <apex:commandButton action="{!Cancel}" value="Cancel" reRender="eventMoreOptions, eventMoreOptionsText"/>
+                      </div>
+                    </div>
+                    <!--close of right-form-->
+                    
+                    <div class="clear"> </div>
+                  </div><!--close of form-->
+                  <a class="close-reveal-modal">&#215;</a>
+                  <div class="clear"> </div>
+                </div><!--close of contentgrid-->
+           </div>
+         </div>
+        
+          <!---Close of More Events--->
+          <!----Start of Event Options--->    
+  </apex:outputPanel>           
+  </apex:form>          
+      
+   <!----------------------------------------  End of Event more options Start AT(1821) ------------------------------------------>   
+   
+   <!----------------------------------------   Package More Options -------------------------------------------------------------->
+   <!---tmore package info popup------------->
+<apex:form id="packageMore"> 
+  <apex:outputPanel styleClass="popupBackground" layout="block" id="packageMoreOpctionPool" rendered="{!eventMoreOptionBool}" style="width:100%"/>
+    <apex:outputPanel styleClass="custPopup" style="width:80%; height:720px;" rendered="{!eventMoreOptionBool}">
+     
+          <div  style="width:920px; margin-top:2%;; margin-left:0px; left:13%">
+                     <div class="grid-1" style="text-align:left;"  >
+                <div class="title-grid">Create Package</div>
+                <div class="content-gird">
+                  <div class="form">
+                    <div id="left-form" style=" width:49%; padding-bottom:20px; margin-top:15px;  border:0px #000000 solid; float:left">
+                   
+            
+                   
+                      <div class="elem">
+                        <label>Package Name: </label>
+                        <label id="mandatory">*</label>
+                        <div class="indent">
+                          <apex:inputField value="{!newPackageItems.packageItemPool.Item_Pool_Name__c}"/>
+                        </div>
+                      </div>
+                       <div class="elem">
+                        <label>Package Type: </label>
+                        <label id="mandatory">*</label>
+                        <div class="indent">
+                        <input type="radio"  style="outline:none;" checked="checked"   name="11" value="" /><span style="margin-left:5px; ">Paid</span><br/>
+                         <input type="radio"  style="outline:none;"   name="11" value="" /><span style="margin-left:5px; ">Free</span><br/>
+                          <input type="radio"  style="outline:none;"   name="11" value="" /><span style="margin-left:5px; ">Donation</span><br/>
+                        </div>
+                      </div>
+                      
+                      <div class="elem">
+                        <label>Amount: </label>
+                        <div class="indent">
+                            <apex:inputField value="{!newPackageItems.packageItems.price__c}"/>
+                        </div>
+                      </div>
+                       <div class="elem">
+                        <label>Event Category:</label>
+                        <div class="indent">
+                           <apex:inputField value="{!newPackageItems.packageItemPool.Pool_Group__c}"/>
+                        </div>
+                      </div>
+                       <div class="elem">
+                        <label>Quantity Available: </label>
+                        <div class="indent">
+                         <apex:inputField value="{!newPackageItems.packageItemPool.Item_Count__c}"/>
+                        </div>
+                      </div>
+                  </div>
+                    <!--close of left-form-->
+                    
+                    <div class="right-form"  style=" width:49%; padding-bottom:20px; margin-top:15px;  border:0px #000000 solid; float:right">
+                      
+                        <div class="elem">
+                        <label>Package visibility: </label>
+                         <div class="indent" style="margin-top:5px;">
+                       <input type="checkbox"  name="12" value="" />
+                      </div>
+                      </div>
+                      <div class="elem">
+                        <label>Package Description:</label>
+                        <div class="indent">
+                          <textarea class="medium" id="message" name="message" rows="5" style="width:75%"></textarea>
+                        </div>
+                      </div>
+                       <div class="elem">
+                        <label>Package Image:</label>
+                        <div class="indent">
+                          <div class="uploader black">
+                            <input type="text" style="width:58%" class="filename"  />
+                            <input type="button" name="file" class="button_files " value="Browse..."/>
+                            <input type="file"/>
+                          </div>
+                        </div>
+                      </div>
+                      <br/>
+                     
+                    </div> <!--close of right-form-->
+        <!--               <style type="text/css">
+      .del3{background: url(images/removerow.png)  center no-repeat; width:30px; height:30px;
+          background-color: #DDD; border-radius:3px; cursor:pointer;}
+        
+         .add3{ background: url(images/addrow.png) no-repeat; width:30px; height:30px;
+          background-color:#DDD;border-radius:3px; cursor:pointer; }
+          </style>
+        ----->
+                    <table class="display dynamic4" id="options-table" style="width:100%; margin:0px auto;" >
+            <thead>
+              <tr>
+                <th width="34%" style="padding:3px 0px 3px 2px; text-indent:5px;">Package Item Name</th>
+                <th width="15%" style="padding:3px 0px 3px 2px;text-indent:5px;">Start Date</th>
+                <th width="15%" style="padding:3px 0px 3px 2px;text-indent:5px;">End Date</th>
+                  <th width="11%" style="padding:3px 0px 3px 2px;text-indent:5px;">Qty</th>
+                <th width="19%" style="padding:3px 0px 3px 2px;text-indent:5px;">Item Type</th>
+               
+                <th></th>
+              </tr>
+            </thead>
+            <tr>
+              <td><input type="text"   id="one" name="input_box_one[]" /></td>
+              <td>  <input type="text" style="width:75%" class="datepicker,small"  /></td>
+              <td><input type="text" style="width:75%" class="datepicker,small"  /></td>
+               <td><input type="text" id="three" name="input_box_three[]" /></td>
+            <td><select class="selectoption"  style="outline:none; ;" >
+                  <option value="1">General Ticket</option>
+                            <option value="2">Admissions Ticket</option>
+                            <option value="3">Seats Ticket</option>
+                            <option value="4">Seminars</option>
+                            <option value="5">MatchLeads Buyers</option>
+                            <option value="6">MatchLeads Sellers</option>
+                            <option value="7">Booth</option>
+                            <option value="8">AttendeeScan</option>
+                            <option value="10">Kiosk</option>
+                             <option value="11">Booth Map</option>
+                              <option value="12">Items</option>
+                                <option value="12">Add-on</option>
+                </select></td>
+                   
+                   
+              <td><input type="button" class='del3' title='Delete Ticket' value='' /></td>
+     
+            </tr>
+            <tr>
+              <td><input type="text" id="one"   name="input_box_one[]" /></td>
+             <td>  <input type="text" style="width:75%" class="datepicker,small"  /></td>
+              <td><input type="text" style="width:75%" class="datepicker,small"  /></td>
+               <td><input type="text" id="three" name="input_box_three[]" /></td>
+         <td><select class="selectoption"  style="outline:none; ;" >
+                <option value="1">General Ticket</option>
+                            <option value="2">Admissions Ticket</option>
+                            <option value="3">Seats Ticket</option>
+                            <option value="4">Seminars</option>
+                            <option value="5">MatchLeads Buyers</option>
+                            <option value="6">MatchLeads Sellers</option>
+                            <option value="7">Booth</option>
+                            <option value="8">AttendeeScan</option>
+                            <option value="10">Kiosk</option>
+                            <option value="11">Booth Map</option>
+                           <option value="12">Items</option>
+                                <option value="12">Add-on</option>
+                </select></td>
+               
+                               
+              
+              <td><input type="button"  class="add3" value="" title='Add More Ticket' /></td>
+          
+            </tr>
+          </table>
+                   
+                    <div class="indent" style="float:right; margin-top:10px; margin-right:10px;"> 
+   
+                        <button class="button-a blue" onClick="location.href='#'" >Save</button>
+                        &nbsp;&nbsp;
+                        <button class="button-a dark-blue" onClick="location.href='#'" >Cancel</button>
+                      </div>
+                      
+                    <!----dynamic table for tickets on the popup---->
+                       
+          <!------------------------------end of dynamic table------------>
+                    <div class="clear"> </div>
+                  </div><!--close of form-->
+                  <a class="close-reveal-modal">&#215;</a>
+                  <div class="clear"> </div>
+                </div><!--close of contentgrid-->
+           </div>
+            </div>
+    </apex:outputPanel>        
+ </apex:form>    
+ 
+ <apex:form id="eventHashTagsOptions"> 
+    <apex:outputPanel styleClass="popupBackgroundForMorePopUp" layout="block" id="eventMoreOptionsText" style="width:100%;position:absolute; top:event.pageY; left: event.pageX" rendered="{!hashTagsBool}"/>  
+        <apex:outputPanel styleClass="custPopupForMorePopUp" style="width:80%; padding-bottom:70px;" rendered="{!hashTagsBool}">   
+                Display Hash tags Table 
+           <script>
+                    choosenForPopUp();
+                </script>       
+          <apex:repeat value="{!ticketmoreTic}" var="tic">     
+                
+                <apex:variable value="{!0}" var="hashTagVariable"/>
+                <table style="width:100%; border=2px; ">    
+                    <tr>
+                        <td>  Select HashTags  </td>
+                        <td>   
+                            <apex:selectList value="{!selectedTagsFromOptions}" multiselect="false" size="1" styleClass="chzn-select medium-select select" style="width:80%" id="eventHashTags">
+                                 <apex:selectOptions value="{!eventHashTags}"/>
+                                 <apex:actionSupport action="{!addTagItems}" event="onchange" /> 
+                             </apex:selectList>
+                          </td>
+                    </tr>  
+                    
+                    <tr>
+                        <td>  HashTag </td>
+                        <td>  Action    </td>
+                    </tr>
+                    <apex:repeat value="{!tic.hashTagsForPool}" var="hashtag">
+                        <tr>
+                            <td> <apex:outputText value="{! hashtag.Tag_Text__c }" />  </td>
+                            <td> <apex:commandLink value="Delete" action="{!deleteHashTags}"> 
+                                    <apex:param value="{!hashTagVariable}" name="toDeletehashTags"/>
+                                 </apex:commandLink>
+                            </td>
+                        </tr>
+                    </apex:repeat>  
+                    <apex:outputText rendered="{!IF(tic.hashTagsForPool.size = 0, TRUE, FALSE)}">
+                        <tr> <td colspan="2">
+                                    No Tags Found, Please add First tag.
+                             </td>
+                        </tr>
+                   </apex:outputText> 
+                    
+                     <tr> <td  colspan="2">
+                                 &nbsp;  </td>
+                        </tr>
+                        
+                        <tr> <td  >
+                                 <apex:inputText value="{!addNewTagItems}"/> </td>
+                             <td> 
+                                 <apex:commandLink value="Update" action="{!addTagItems}"  reRender="eventHashTagsOptions"/>   </td>
+                                  
+                        </tr>
+                    
+
+                    
+                    
+                      
+               </table>     
+                 <apex:commandButton value="SAVE" action="{!saveTagsToTickets}" rerender="eventHashTagsOptions, ticketMoreOptions, hashtagsForRender"/>           
+         </apex:repeat>        
+        
+        </apex:outputPanel> 
+ </apex:form>            
+   <!----------------------------------------   END of Package More options   1814 ---------------------------------------------------------->
+   
+   <style>
+       .activeTab{
+           padding:8px 15px;
+           text-decoration:none;
+           margin-right:10px;
+           color:#212121;
+           border:1px solid #d3d3d3;
+           border-top-left-radius: 4px;
+           border-top-right-radius: 4px;
+           border-bottom:0px;
+           background-color: #FFFFFF;
+           width:auto;
+           font-size:14px;
+           pointer:courser;
+       
+       }
+       .inactiveTab{
+           padding:8px 15px;
+           text-decoration:none;
+           margin-right:10px;
+           color:#212121;
+           border:1px solid #d3d3d3;
+           border-top-left-radius: 4px;
+           border-top-right-radius: 4px;
+           font-size:14px; 
+           background-color: #e6e6e6;
+           pointer:courser;
+           border-bottom:0px;
+       }
+       .inactiveTab:hover{
+           padding:8px 15px;
+           text-decoration:none;
+           margin-right:10px;
+           color:#212121;
+           border:1px solid #999999;
+           border-top-left-radius: 4px;
+           border-top-right-radius: 4px;
+           font-size:14px; 
+           background-color: #dadada;
+           border-bottom:0px;
+           pointer:courser;
+
+       
+       }
+       .popupcontentbox{
+           margin:0px auto;
+           margin-top:10px;
+           padding:10px;
+           backgroung-color:#FF0000;
+       
+       }
+       
+       
+   .revealmodal {
+            visibility: hidden;
+            top: -170px; 
+            left: 50%;
+            margin-left: -270px;
+            width: 520px;
+            
+            position: absolute;
+            z-index: 100000001;
+            padding: 10px 15px 30px 15px;
+            -moz-border-radius: 5px;
+            -webkit-border-radius: 5px;
+            border-radius: 5px;
+            -moz-box-shadow: 0 0 10px rgba(0,0,0,.4);
+            -webkit-box-shadow: 0 0 10px rgba(0,0,0,.4);
+            box-shadow: 0 0 10px rgba(0,0,0,.4);
+        }
+       
+   </style>
+   
+   <script>
+    
+    function showTicketinfofun() {
+     
+        document.getElementById("ticketinfotab").className = "activeTab";
+        document.getElementById("ticketMoreInfo").style.display= "block";
+        
+        document.getElementById("demographicsInfo").style.display="none";
+        document.getElementById("promotionalInfo").style.display="none";
+        document.getElementById("surveyQuestionsInfo").style.display="none";
+        
+        document.getElementById("demographicstab").className = "inactiveTab";
+        document.getElementById("promocodestab").className = "inactiveTab";
+        document.getElementById("suerveyquestionstab").className = "inactiveTab";
+       
+    }
+    
+    function demoGraphicsinfofun() {
+        document.getElementById("demographicstab").className = "activeTab";
+        document.getElementById("demographicsInfo").style.display= "block";
+        
+        document.getElementById("ticketMoreInfo").style.display="none";
+        document.getElementById("promotionalInfo").style.display="none";
+        document.getElementById("surveyQuestionsInfo").style.display="none";
+        
+        document.getElementById("ticketinfotab").className = "inactiveTab";
+        document.getElementById("promocodestab").className = "inactiveTab";
+        document.getElementById("suerveyquestionstab").className = "inactiveTab";
+         
+    }
+    
+    function promoCodesinfofun() {
+        document.getElementById("promocodestab").className = "activeTab";
+        document.getElementById("promotionalInfo").style.display= "block";
+        
+        document.getElementById("ticketMoreInfo").style.display="none";
+        document.getElementById("demographicsInfo").style.display="none";
+        document.getElementById("surveyQuestionsInfo").style.display="none";
+        
+        document.getElementById("ticketinfotab").className = "inactiveTab";
+        document.getElementById("demographicstab").className = "inactiveTab";
+        document.getElementById("suerveyquestionstab").className = "inactiveTab";
+         
+    }
+    
+    function surveyquestionsinfofun() {
+        document.getElementById("suerveyquestionstab").className = "activeTab";
+        document.getElementById("surveyQuestionsInfo").style.display= "block";
+        
+        document.getElementById("ticketMoreInfo").style.display="none";
+        document.getElementById("demographicsInfo").style.display="none";
+        document.getElementById("promotionalInfo").style.display="none";
+        
+        document.getElementById("ticketinfotab").className = "inactiveTab";
+        document.getElementById("demographicstab").className = "inactiveTab";
+        document.getElementById("promocodestab").className = "inactiveTab";
+         
+    }
+ </script>
+    
+</apex:page>

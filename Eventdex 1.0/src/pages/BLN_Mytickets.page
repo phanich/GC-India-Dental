@@ -1,0 +1,780 @@
+<apex:page showHeader="false" controller="BLN_MyticketsCon" standardStylesheets="false">
+  <head><title>Booth Leads</title></head>
+
+     
+     <title>Boothleads-My Tickets</title>
+     <apex:stylesheet value="{!URLFOR($Resource.MyTickets, 'css/style.css')}"/>
+     <apex:stylesheet value="{!URLFOR($Resource.MyTickets, 'style-button.css')}"/>
+    
+ 
+     <script type="text/javascript" src="{!URLFOR($Resource.MyTickets, 'js/jquery.min.js')}"></script>
+      <script type="text/javascript" src="{!URLFOR($Resource.MyTickets, 'js/jquery-ui-1.8.16.custom.min.js')}"></script>
+      <script type="text/javascript" src="{!URLFOR($Resource.MyTickets, 'js/functions.js')}"></script>
+     
+     <style>
+    .pophead{background-color:#54b5f1; width:100%;color:#414141;font-size:15px; text-align:left;font-weight:normal; padding-left:15px;
+   
+    background: #f9f9f9; /* Old browsers */
+background: -moz-linear-gradient(top, #f9f9f9 0%, #f1f1f1 40%, #e4e4e4 100%); /* FF3.6+ */
+background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#f9f9f9), color-stop(40%,#f1f1f1), color-stop(100%,#e4e4e4)); /* Chrome,Safari4+ */
+background: -webkit-linear-gradient(top, #f9f9f9 0%,#f1f1f1 40%,#e4e4e4 100%); /* Chrome10+,Safari5.1+ */
+background: -o-linear-gradient(top, #f9f9f9 0%,#f1f1f1 40%,#e4e4e4 100%); /* Opera 11.10+ */
+background: -ms-linear-gradient(top, #f9f9f9 0%,#f1f1f1 40%,#e4e4e4 100%); /* IE10+ */
+background: linear-gradient(to bottom, #f9f9f9 0%,#f1f1f1 40%,#e4e4e4 100%); /* W3C */
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f9f9f9', endColorstr='#e4e4e4',GradientType=0 ); /* IE6-9 */}
+
+    
+    .custPopup{color:#000000;background-color:#ccc;position: absolute;top:10px;left:0px;right:0px;z-index: 100;
+    
+        padding:5px;height: auto; margin:0 auto;-moz-border-radius-bottomleft:6px; -webkit-border-bottom-left-radius:6px; 
+        
+        -moz-border-radius-bottomright:6px; -webkit-border-bottom-right-radius:6px; border-radius:0 0 6px 6px; 
+        
+        -moz-box-shadow:0 0 64px #000; -webkit-box-shadow:0 0 64px #000; box-shadow:0 0 64px #000;
+        
+        font: 12px/24px "Lucida Grande",Arial,sans-serif;
+        
+        //background-color:#eee; color:#000;  padding-bottom:4px; width:600px; margin-top:15px; 
+        
+        -moz-border-radius-bottomleft:6px; -webkit-border-bottom-left-radius:6px; -moz-border-radius-bottomright:6px;
+        
+        -webkit-border-bottom-right-radius:6px; border-radius:6px 0 6px 6px; -moz-box-shadow:6px 0 64px #000; -webkit-box-shadow:0 0 64px #000; 
+        box-shadow:0 0 64px #000; padding:25px; height:400px;
+        
+        }
+        
+.popupBackground{ Opacity:0.50;  width: 100%;height:100%;
+    position: absolute;left:0px;top:0px; z-index: 50; } 
+        
+.btn{background-image:none;}
+ table{border:0px;} 
+ 
+table td{border:0px;}   
+.rightcontent{border:0px}
+</style>
+   
+     <!--------------------------------->
+       <style type="text/css">
+     
+input.styled {
+    display: none;
+}
+select.styled {
+    position: relative;
+    width: 190px;
+    opacity: 0;
+    filter: alpha(opacity=0);
+    z-index: 5;
+}
+.disabled {
+    opacity: 0.5;
+    filter: alpha(opacity=50);
+}
+</style>
+     <style>
+#ordersummary-box {
+    width: 100%;
+    height: auto;
+    padding: 5px 5px;
+    border: 1px solid #D6D3D3;
+    background: url({!URLFOR($Resource.MyTickets, 'orderimgs/bg.png')}) ;
+
+}
+#ordersummary-box table {
+    border-collapse: collapse;
+}
+#ordersummary-box table tr td {
+    padding: 3px;
+}
+#orderboxwrapper{ margin-bottom:10px;}
+
+#quickaction {
+/*  background: url(orderimgs/ul_playlist_li.png) repeat-x center bottom #F5F5F5;*/
+background: -webkit-linear-gradient(top, #f8faf9 0%,#d1d2d5 100%);
+    border-top: 1px solid #fff;
+    border-bottom: 1px solid #D0D0D0;
+    height: 15px;
+}
+#quickactionbox {
+    margin-right: 2%;
+    float: left;
+    font-family: cuprum;
+    font-size: 16px;
+background: -webkit-linear-gradient(top, #f8faf9 0%,#d1d2d5 100%);
+    border-top: 1px solid #fff;
+    border-bottom: 1px solid #D0D0D0;
+    cursor: pointer;
+    padding: 5px;
+    padding-left: 15px;
+    padding-right: 17px;
+    width: 72.5%;
+}
+#quickactionicon {
+    width: 30%;
+    height: 20px;
+    background: url({!URLFOR($Resource.MyTickets, 'orderimgs/bg_panel.png')}) repeat-x;
+    -webkit-border-radius: 3px;
+    float: left;
+    -moz-border-radius: 3px;
+    border: 1px solid #EFEFEF;
+    text-align: center;
+}
+#iconlabels {
+    color: #5f5f5f;
+    text-align: center;
+    font-size: 15px;
+    font-family: cuprum;
+    float: left;
+    text-align: center;
+    margin-left: 2%;
+    width: 81%;
+}
+#sequence {
+    font: AdobeHeitiStd;
+    font-weight: bold;
+    font-size: 55px;
+    text-align: center;
+    color: #0C6;
+}
+#eventtitle {
+    color: #247dba;
+    font-family: cuprum;
+    font-weight: 200;
+    font-size: 22px;
+}
+#eventlocation {
+    font-family: cuprum;
+    font-size: 22px;
+    color: #807f7f;
+}
+#orderid-label {
+    vertical-align: top;
+    border-bottom: 1px solid #fff;
+    color: #247dba;
+    font-family: cuprum;
+    font-weight: bold;
+    padding-left: 10px;
+    font-size: 18px;
+}
+#orderid-value {
+    color: #807f7f;
+    font-weight: normal;
+    margin-left: 1%;
+    font-size:18px;
+}
+#orderdate {
+    font-weight: normal;
+    color: #807f7f;
+    font-size: 16px;
+}
+#paidsection {
+    text-align: right;
+    border-bottom: 1px solid #fff;
+    padding-right: 5px;
+    vertical-align: top;
+    color: #247dba;
+    font-family: cuprum;
+    font-weight: bold;
+    font-size: 18px;
+}
+#amountvalue {
+    font-weight: normal;
+    margin-left: 1%;
+}
+#paid {
+    color: #807f7f;
+    font-size: 18px;
+    font-weight: normal;
+    color: #0c6;
+    font-family: cuprum;
+}
+#inprogress {
+    color: #CC0;
+    font-size: 18px;
+    font-weight: normal;
+    font-family: cuprum;
+}
+#notpaid {
+    color: #900;
+    font-size: 18px;
+    font-weight: normal;
+    font-family: cuprum;
+}
+#ordertype {
+    color: #807f7f;
+    margin-left: 1%;
+}
+#order-personaldetails {
+    border-bottom: 1px solid #fff;
+    line-height: 25px;
+    padding-left: 10px;
+    color: #807f7f;
+    vertical-align: top;
+    font-family: cuprum;
+    font-size: 18px;
+}
+#phoneno {
+    color: #247dba;
+    margin-right: 1%;
+}
+
+#calendar1{width:100%; margin-left:2%; background:url({!URLFOR($Resource.MyTickets, 'orderimgs/callll.png')}) no-repeat; height:130px; margin-top:-11px;}
+#cal-date{font-size:45px; font-family:cuprum; font-weight:700; color:#000;}
+#cal-month{font-size:19px; font-family:cuprum; color:#fff;}
+
+#tabsbuttons {
+    margin-right: 2%;
+    float: left;
+    font-family: cuprum;
+    font-size: 16px;
+background: -webkit-linear-gradient(top, #f8faf9 0%,#d1d2d5 100%);
+    border-top: 1px solid #fff;
+    border-bottom: 1px solid #D0D0D0;
+    cursor: pointer;
+    padding: 5px;
+    /*padding-left: 15px;
+    padding-right: 17px;*/
+    width:87%;
+}
+#orderdetailsbox {
+    width: 100%;
+     height: auto;
+    padding: 5px 5px;
+    border: 1px solid #D6D3D3;
+    background: url({!URLFOR($Resource.MyTickets, 'orderimgs/bg.png')});
+}
+
+
+#orderdetailtable {
+    border-collapse: collapse;
+    width: 100%;
+    border: 1px solid #FFF;
+}
+#orderdetailtable tr td {
+    padding: 5px;
+    text-align: center;
+    font-size: 16px;
+text-align: center;
+font-family: cuprum;
+}
+#ticketguesttable {
+    border-collapse: collapse;
+    width: 100%;
+    border: 1px solid #FFF;
+}
+#ticketguesttable tr td {
+    padding: 5px;
+    font-size: 16px;
+    text-align: center;
+    font-family: cuprum;
+    boder:1px solid #fff;
+}
+#tableheadings {
+    font-size: 16px;
+    text-align: center;
+    font-family: cuprum;
+    color: #247dba;
+}
+#tabletitleheadings {
+    background-color: #f7f7f7;
+    font-size: 18px;
+    font-weight: 700;
+    font-family: cuprum;
+    color: #247dba;
+}
+
+#cancel-order-img{display:none; width:100%; height:100%;}
+</style>
+   
+
+
+     <!--------------------------->
+ <!-- -------------------------------------------------------- apex functions ------------------------------------------ -->
+  <script>
+  function canceltickets(orderItemId,itemQuan){
+      if(itemQuan >= 1){
+       var r=confirm("Do you want to delete "+ itemQuan  +" tickets?");
+        if (r == true) {
+         candirectTic(orderItemId);
+         }
+     }
+ }
+
+
+function  displayordeItem(ordItem,ststus){
+ renderDetail(ordItem);
+}
+
+ function cancelTotalOrder(ordId){
+  var r=confirm("Are you sure, you want cancel order?");
+        if (r == true) {
+           canord(ordId);
+           return true;
+        } else {
+        
+         return false;
+        }
+ }
+    function canIndividualtickest(tcid){
+       var r=confirm("Are you sure, you want cancel ticket?");
+        if (r == true) {
+            cavticIndividual(tcid);
+           return true;
+        } else {
+        
+         return false;
+        }
+    }
+
+
+</script>
+
+
+
+ 
+<!-- -------------------------------------------------------- apex end------------------------------------------ -->
+    
+     
+ <div id="dialogoverlay"></div><!--close of dialogoverlay-->
+   <div id="dialogbox">
+    <div id="dialogboxhead"></div><!--close of dialoghead-->
+     <div id="dialogboxbody">
+
+      </div><!--close of dialogbody-->
+     <div id="dialogboxfoot" >
+   </div><!--close of dialogboxfoot-->
+  <div id="dialogboxfoot1">
+ </div><!--close of dialogboxfoot1--> 
+</div><!--close of dialogbox--> 
+
+<!----------------------->
+<div id="header">
+       <div id="logo">
+    <h1 style=" padding-top:5px; padding-left:20px; color:#FFF ">
+      <apex:image url="{!URLFOR($Resource.MyTickets, 'images/boothleads_logo_with_whitetext.png')}"/> 
+    </h1>
+  </div>
+       
+       <!--close of logo--> 
+     </div>
+<!--close of header--->
+<div  id="ribbon"></div>
+<!--close of ribbon-->
+
+<header>
+   <div id="centered-head" class="res">
+    <nav>
+       <ul>
+        <li id="login"> <span id="login-trigger"> <span id="login-triggers"> 
+          <span id="user-panel-check"></span> <span id="user-panel-title ">My Account</span> </span></span>
+           <div id="login-content">
+             <ul>
+                   <li><a href="editprofile.htm">
+                    <apex:image url="{!URLFOR($Resource.MyTickets, 'images/setting.png')}"/> 
+                   <span>Settings</span></a></li>
+                   <li><a href="upgradeacc.htm"><apex:image url="{!URLFOR($Resource.MyTickets, 'images/upgrade.png')}" width="13px" height="13px" /> <span>Upgrade Account</span></a></li>
+                  <!-- <li><a href="login.htm">  <apex:image url="{!URLFOR($Resource.MyTickets, 'images/logout.png')}"/>  <span>Log Out</span></a></li> -->
+                   <li style="width:100px:height:10px;margin-left:0px;padding-left:5px;">
+                    <apex:form >  <apex:commandLink action="{!$Site.Prefix}/secur/logout.jsp" style="padding-left:0px;"><apex:image value="{!URLFOR($Resource.ScanAttendee_V1, 'AttendeeScan/scanattendee/images/logout.png')}"/>
+                   <span>{!$Label.site.logout}</span></apex:commandLink></apex:form></li>
+                 </ul>
+            </div>
+          </li>
+      </ul>
+         </nav>
+          <div class="account-name">
+            <p><span class="welcome">Welcome,</span> <strong>{!$user.FirstName} {!$user.LastName}</strong></p>
+             <div class="account-separator"></div>
+          </div>
+          <div class="account-name"></div>
+            <div id="quickbuttons" style="border:0px solid #F00;" > <span><a title="My Events" style="text-decoration:none" href="/apex/BLN_UserEvents">
+              <apex:image url="{!URLFOR($Resource.MyTickets, 'images/myevents.png')}" width="79" height="45"/> </a></span> 
+              <!--<span ><a title="My Tickets" style="text-decoration:none;  margin-left:5%" href="mytickets.htm">
+              <apex:image url="{!URLFOR($Resource.MyTickets, 'images/ticketstab.png')}" width="120" height="44"/> </a></span>--> </div>
+               <!--close of quickbuttons--> 
+                <!-- Navigation end--> 
+            </div>
+         </header>
+     <div class="clear"></div>
+
+<!-- -------------------------------------- Header End  ------------------------------------------------------ -->
+
+<section id="middle" style=" border:0px #000000 solid" class="res">
+    <div id="container-main" >
+      <div id="container">
+           <div id="content">
+            <div class="speedbar" style=" border:0px #FF0000 solid">
+               <div class="speedbar-nav">Booth Leads ›› My Tickets</div>
+               <!--close of speedbar-nav--> 
+             </div>
+                <!--Statistic-->
+                  <div class="grid-1" style=" width:97%;margin-top:10px; margin-left:.8%"  > 
+                       <!-- ---------------------------------------- Main grid ------------------------------------------------ -->
+                 <apex:form id="firstfrm">
+                  <apex:actionFunction action="{!cancelDirectTicket}" name="candirectTic" reRender="mainpanel">
+                    <apex:param value="" name="canordItemId"/>
+                  </apex:actionFunction>
+                
+                 <apex:actionFunction action="{!cancelPerticularGuestsTic}" name="cavticIndividual" reRender="firstfrm">
+                  <apex:param value="" name="canticId"/>
+                
+                </apex:actionFunction>
+               
+                
+                <apex:actionFunction action="{!renderDetails}" name="renderDetail" reRender="firstfrm">
+                  <apex:param value="" name="guestindex"/>
+                </apex:actionFunction>
+                
+                
+                 <apex:actionFunction action="{!cancelTotalorder}" name="canord" reRender="firstfrm">
+                  <apex:param value="" name="guestindex12"/>
+                </apex:actionFunction>
+    
+         <apex:outputPanel rendered="{!IF(inncurrentTickets.size <=0,true,false)}"> 
+          <div style="color:#CCC;font-size:20px;font-weight:bold;text-align:center;margin:0px auto;width:100%">You have not register to any event</div></apex:outputPanel> 
+          
+          <apex:outputPanel id="mainpanel">
+           <apex:variable var="rowNum" value="{!0}"  />
+            <apex:repeat value="{!inncurrentTickets}" var="current">  
+             <div id="orderboxwrapper">
+              <div id="ordersummary-box" >
+               <div id="inside-left" style="width:99.8%; float:left; background-color:#f7f7f7; border-top:1px solid #FFF; border-bottom:1px solid #D0D0D0;border-left:1px solid #ffffff; border-right:1px solid #ffffff">
+                 <table width="100%" border="0" height="100%">
+                 <tr>
+                  <td rowspan="3"  width="14%" valign="top"    style="border-right:1px solid #FFF;border-bottom:1px solid #FFF;">
+                    <div id="calendar1" style="border:0px solid red;">
+                       
+                       <table width="100%" height="100%" style="border:0px solid blue;">
+                          <tr>
+                            <td height="45px" valign="bottom" style="text-align:center; padding-left:0px;">
+                            <p id="cal-month" >
+                              <span style="margin-left:1.5%;"> <apex:outputText value="{0, date, MMMM yyyy  }">
+                                <apex:param value="{!current.orderInn.Events__r.Start_Date__c}" /> 
+                             </apex:outputText>
+                            
+                            </span></p></td>
+                          </tr>
+                            <tr>
+                            <td valign="middle" style="text-align:center">
+                            <p id="cal-date" ><apex:outputText value="{0, date, d }">
+                                <apex:param value="{!current.orderInn.Events__r.Start_Date__c}" /> 
+                             </apex:outputText></p>
+                            </td>
+                          </tr>
+                       </table>
+                   </div><!--close of calender1-->
+
+                       
+                      </td>
+                       <td colspan="4" style="padding-left:10px; height:40px;border:1px solid #FFF; text-align:center;"><p style="margin-top:4px;"> <span id="eventtitle" style="">{!current.orderInn.events__r.Name}</span> <span id="eventlocation" style="">- {!current.orderInn.events__r.Venue_Name__c}</span> </p></td>
+                     </tr>
+                     <tr>
+                       <td id="orderid-label" style="padding-left:10px; vertical-align:middle;" > Order ID: <span id="orderid-value" >#{!current.orderInn.Name}</span> <br/>
+                        Order Date:  <span id="orderdate" style="  ">
+                        <apex:outputText value="{0, date, MMMM d','  yyyy}">
+                            <apex:param value="{!current.orderInn.createdDate}" /> 
+                         </apex:outputText>
+                         
+                         </span></td>
+                  <!-------------td for Cancel image order--------->
+                  
+                  <td width="30%">
+                   <apex:image url="{!URLFOR($Resource.MyTickets, 'orderimgs/cancelled.png')}" id="cancel-order-img" rendered="{!IF(current.orderInn.Order_Status__c=='Cancelled',true,false)}"/> 
+                 
+                  </td>
+               <!----------------------------------------------->
+                       
+                   <td id="paidsection" style="border-right:1px solid #FFF; vertical-align:middle; padding-right:10px;"  >$<span id="amountvalue" >{!current.orderPrice}</span><br/>
+                    <span id="paid">{!current.orderInn.Order_Status__c}</span> <span id="ordertype"> - {!current.paymentInn.Payment_Mode__c}</span></td>
+                       <td width="17%" style="border-bottom: 1px solid #fff"><table width="100%" border="0">
+                           <!--table for quickaction buttons with two rows-->
+                           <tr>
+                           <td style="padding:0px;">
+                           <apex:outputPanel rendered="{!IF(current.orderInn.Order_Status__c=='Cancelled',false,true)}">
+                           <div id="quickactionbox" style="margin-left: 4px;">
+                               <div id="quickactionicon" title="Print" style=" margin-right:.5%; margin-left:18%;  cursor:pointer;">
+                                <apex:image url="{!URLFOR($Resource.MyTickets, 'orderimgs/printconfirm.png')}" width="18" height="18"/> 
+                                 </div>
+                                 
+                               <div id="quickactionicon" onclick="cancelTotalOrder('{!current.orderInn.id}');" title="Cancel Order" style=" cursor:pointer; margin-left:3%;">
+                               <apex:image url="{!URLFOR($Resource.MyTickets, 'orderimgs/cancelico.png')}" width="16" height="16" style="margin-top:2px;"/>
+                               </div>
+                             
+                               </div><!--quickactionbox-->
+                                 </apex:outputPanel>
+                               </td>
+                         </tr>
+                           <tr>
+                           <td style="padding:0px;">
+                           <div id="tabsbuttons" style="margin-left: 4px; margin-top:5px;"   >
+                   
+                           <span style=" margin-left:5px;"><apex:image url="{!URLFOR($Resource.MyTickets, 'orderimgs/viewimg.png')}" width="16" height="16" style="margin-right:10px;" /></span>
+                             <a href="" onclick="displayordeItem('{!rowNum}','{!current.displayOrderItems}')" id="ancor" style="text-decoration:none;">
+                               Order Detail </a>
+                             <apex:variable var="rowNum" value="{!rowNum+1}"/>
+                            
+                          </div></td>
+                         </tr> 
+                         </table>
+                    <!--close of table of quickaction buttons--></td>
+                     </tr>
+              </table>
+                 
+                 </div>
+            <!--inside-left-->
+            
+            <div id="clear" style="clear:both;"></div>
+          </div><!--close of order summarybox--> 
+         <!-------------------------order item details---------------------->
+          <apex:outputPanel id="maindiv1">
+             <apex:outputPanel rendered="{!current.displayOrderItems}" id="rt">
+               
+               <div id="orderdetailsbox">
+                 <table id="orderdetailtable" width="100%" border="1">
+                           <tr>
+                        <td  id="tabletitleheadings" colspan="7" style="border-left:0px; text-align:left;"> Order Details
+                          <span style=" float:right; margin-right:.5%;">
+                          <!-- <apex:image url="{!URLFOR($Resource.MyTickets, 'images/cross.png')}"  onclick="displayordeItem('{!rowNum}')" title="Close" style="cursor:pointer;" width="14" height="14"/>
+                          <apex:image url="{!URLFOR($Resource.MyTickets, 'images/cross.png')}" onClick="close1('orderdetailsbox')" title="Close"                                style="cursor:pointer;" width="14" height="14"/> -->
+                          </span></td>
+                      </tr>
+                           <tr id="tableheadings">
+                        <td>Ticket Type</td>
+                        <td  width="13%" >Ticket Qty</td>
+                        <td width="10%">Ticket Price</td>
+                        <!--<td width="10%">Total Price</td> -->
+                        <td width="18%">Promo Code</td>
+                        <td width="15%">Final sale price</td>
+                        <td >Action</td>
+                      </tr>
+                    <apex:repeat value="{!current.orderItemInn}" var="cus" >
+                        <tr>
+                        <td>{!cus.item__r.item_name__c}</td>
+                        <td> {!cus.Item_Quantity__c} </td>
+                        <td>${!cus.Each_Ticket_Price__c}</td>
+                       <!--  <td>${!cus.Item_Total__c}</td> -->
+                        <td>{!cus.Promotion__r.Promo_Code__c }</td>
+                        <td>${!cus.Item_Total__c}</td>
+                        
+                        <td >
+                        <apex:outputPanel rendered="{!IF((((cus.Item_Quantity__c >= current.orderItemsMapWithTc[cus.id]) && (current.orderInn.Client_GN_User__r.User__c==$User.Id)) && (current.orderInn.Order_Status__c!='Cancelled')),true,false)}">
+                         <div id="quickactionicon" title="Cancel" style="cursor:pointer; margin-left:35%;">
+                           <apex:outputPanel >
+                              <a href="" onclick="canceltickets('{!cus}','{!cus.Item_Quantity__c}');" style="color:blue;cursor:pointer;">
+                               <apex:image url="{!URLFOR($Resource.MyTickets, 'orderimgs/cancelico.png')}" width="16" height="16" style="margin-top:2px; margin-left:1.5px;"/> </a>
+                          </apex:outputPanel>
+                       </div></apex:outputPanel></td>
+                      </tr>
+                      </apex:repeat>   
+                         </table>
+                    <!-----------------------ticket and guest details--------------> 
+                   <apex:outputPanel rendered="{!IF(current.ticketsInn.size>0,true,false)}" id="tickid"> 
+                    <table id="ticketguesttable" width="100%"  border="1">
+                           <tr>
+                        <td  id="tabletitleheadings" colspan="9" style=" border-left:0px; text-align:left;"><div style="float:left; margin-top:8px;">Guest Details</div>
+                               <span style=" float:right; margin-right:.5%;"></span></td>
+                      </tr>
+                          <tr id="tableheadings">
+                        <td width="11%">Ticket ID</td>
+                        <td width="11%">Ticket Type</td>
+                        <td width="12%">Name</td>
+                        
+                        <td width="19%">Email Address</td>
+                        <!--<td width="9%">Phone</td> -->
+                        <td width="13%">Company</td>
+                        <td >Badge Label</td>
+                        <td width="17%">Action</td>
+                      </tr>
+                  
+                       <apex:repeat value="{!current.ticketsInn}" var="cust" >
+                        <tr>
+                        <td>{!cust.Name}</td>
+                        <td>{!cust.item__r.item_name__c}</td>
+                        <td>{!cust.Client_GN_User__r.First_Name__c} {!cust.Client_GN_User__r.Last_Name__c}</td>
+                         <td>{!cust.Client_GN_User__r.user__r.email}</td>
+                        <!--<td>&nbsp;</td>-->
+                        <td>{!cust.Client_Company__r.Name}</td>
+                        <td>{!cust.Item_type__r.Name}</td>
+                        <td style="align:center;">
+                        
+                        
+                        <apex:outputPanel rendered="{!IF(current.orderInn.Client_GN_User__r.User__c==$User.Id,true,false)}">
+                         <div id="quickactionicon" title="Edit" style=" margin-right:.5%;  margin-left:25%;cursor:pointer;width:15%;" >
+                          <apex:commandLink action="{!editTicket}"   >
+                              <apex:image url="{!URLFOR($Resource.MyTickets, 'orderimgs/editico.png')}" />
+                             <apex:param value="{!cust.id}" name="TicketIdparam"/>
+                          </apex:commandLink> 
+                       <!-- </apex:image>-->
+                         </div>
+                         </apex:outputPanel>
+                         
+                       
+                         
+                        <div id="quickactionicon" title="Print Badge" style="float:left; margin-right:.5%; cursor:pointer;width:15%;">
+                        <apex:image url="{!URLFOR($Resource.MyTickets, 'orderimgs/printconfirm.png')}" />  </div>
+                        <apex:outputPanel rendered="{!IF(current.orderInn.Client_GN_User__r.User__c==$User.Id,true,false)}">
+                           <div id="quickactionicon"  title="Cancel" style=" margin-right:.5%; cursor:pointer;width:15%;" onclick="canIndividualtickest('{!cust.id}');">
+                             <apex:image url="{!URLFOR($Resource.MyTickets, 'orderimgs/cancelico.png')}" />
+                          </div>
+                         </apex:outputPanel>
+                        
+                        </td>
+                      </tr>
+                    </apex:repeat>     
+                         </table>                                            
+                     </apex:outputPanel>
+                    
+                    
+                     <!-- ---------------------------------------------------- Tickets Cancelled--------------------------------------------------- -->  
+                <apex:outputPanel rendered="{!if(current.cancelledTickets.size>0,true,false)}"  id="canid"> 
+                  <table id="ticketguesttable" width="100%" border="1">
+                           <tr>
+                        <td  id="tabletitleheadings" colspan="9" style=" border-left:0px; text-align:left;"><div style="float:left; margin-top:8px;">Cancelled Tickets</div>
+                               <span style=" float:right; margin-right:.5%;"></span></td>
+                      </tr>
+                          <tr id="tableheadings">
+                        <td width="9%">Ticket ID</td>
+                        <td width="11%">Ticket Type</td>
+                        <td width="15%"> Name</td>
+                         <td width="18%">Email Address</td>
+                        <!--<td width="9%">Phone</td> -->
+                        <td width="12%">Company</td>
+                        <td width="15%">Cancelled Date</td>
+                        <td>Price</td>
+                      </tr>
+                   <apex:repeat value="{!current.cancelledTickets}" var="custcan" >
+                           <tr>
+                        <td>{!custcan.Name}</td>
+                        <td>{!custcan.item__r.item_name__c}</td>
+                        <td>{!custcan.Client_GN_User__r.First_Name__c} {!custcan.Client_GN_User__r.Last_Name__c}</td>
+                       <td>{!custcan.Client_GN_User__r.email__C}</td>
+                        <!--<td>&nbsp;</td>-->
+                        <td>{!custcan.Client_Company__r.Name}</td>
+                        <td>
+                          <apex:outputText value="{0,date,M/d/yyyy hh:mm a}"> 
+                         
+                          <apex:param value="{!custcan.lastmodifiedDate}" /> 
+                         </apex:outputText>
+                        
+                        </td>
+                        <td>${!custcan.Order_Item__r.Each_Ticket_Price__c}</td>
+                      </tr>
+                    </apex:repeat>     
+                         </table>  
+           </apex:outputPanel>         
+          </div>
+           </apex:outputPanel>    </apex:outputPanel>              
+               <!--close of order detailbox---> 
+         </div>  </apex:repeat>
+           <!-----------------------ticket and guest details END-------------->
+     
+<!-- -------------------------------------------------- Cancel Tickets Screen close --------------------------------------------------- -->
+</apex:outputPanel>
+        </apex:form>  
+             
+ <apex:form id="secfrm">
+ 
+ <apex:outputPanel styleClass="popupBackground" layout="block" rendered="{!displyAddGuest}" id="Popup3"/>
+   <apex:outputPanel styleClass="custPopup" layout="block" rendered="{!displyAddGuest}" style="width:80%" id="guestForm">
+     <div style="float:right;position: absolute;top:1px;right:-2px;">
+       <apex:commandButton action="{!closeCan}" value="Close" image="{!$Resource.PopUpClose}" title="Close" style="width:26px;height:26px; color:#000000;font-size:16; font-weight:bold;" immediate="true"/>
+        </div>
+        
+     <div style="height:280px;">
+      <div>
+        <div class="grid-1" style="text-align:left">
+        <div class="title-grid">Add Guest Information</div>
+        <div class="content-gird">
+        <div class="form" style="margin-top:5px;">
+        
+        <apex:outputPanel id="guest">
+            <table class="display dynatable" width="100%">
+            <tr>
+           
+            <th width="18%" style="padding:3px 0px 3px 2px;" >Name </th>
+            <th width="18%" style="padding:3px 0px 3px 2px;" >Ticket Name </th>
+            <th width="25%" style="padding:3px 0px 3px 2px;" >Email</th>
+            <th width="25%" style="padding:3px 0px 3px 2px;" >Company</th>
+           
+             </tr>
+            </table>
+            </apex:outputPanel>
+            
+           <apex:outputPanel id="addPanel">
+              
+               <table class="display dynatable" width="100%">
+            <tr>
+            <th width="16%" style="padding:3px 0px 3px 2px;" >
+            <apex:inputField value="{!gnUser.First_Name__c}" /></th>
+            <th width="16%" style="padding:3px 0px 3px 2px;" ><apex:inputField value="{!gnUser.Last_Name__c}"/></th>
+            <th width="25%" style="padding:3px 0px 3px 2px;" ><apex:inputField value="{!gnUser.Email__c}"/></th>
+            <th width="25%" style="padding:3px 0px 3px 2px;" ><apex:inputtext value="{!companyName }"/></th>
+            
+             </tr>
+            </table>
+              
+            <div style="float:center;">
+            <apex:commandButton value="Save" action="{!SaveGuests}" styleClass="button-a blue"/>&nbsp;&nbsp;
+            <apex:commandButton value="Cancel" action="{!CloseGuests}" styleClass="button-a blue" immediate="true"/>
+            </div>
+           </apex:outputPanel>
+        
+        <div class="clear"> </div>
+         </div>
+
+        <div class="clear"> </div>
+          </div>
+          </div>
+          </div>
+        </div>
+</apex:outputPanel>
+ 
+</apex:form>    
+             
+             
+        <!-- ---------------------------------------- Main grid End------------------------------------------------ -->
+      
+                   <div class="clear"></div>
+                 </div>
+                 <!-- ----------------- Statistic --------------------------- -->
+              </div>
+           <!-- #content--> 
+         </div>
+              
+     <div id="cssmenu">
+           <aside class="sideLeft">
+        <ul class="menu">
+               <li class="expand"><a href="#" class="heading">Events<span class="holder"></span></a>
+            <!--<ul class="acitem content" style="display: block;">
+                   <li ><a href="order.htm" class="active" >Orders</a></li>
+                 </ul> -->
+          </li>
+             </ul>
+      </aside>
+         </div>
+  </div>
+    
+    
+  <!-- -------------------------------------------- Footer Start ---------------------------------------------------- -->  
+    
+  <footer style="">
+    <div class="info-footer">
+           <div id="left">
+        <p>Copyright © 2014  Global Nest.</p>
+      </div>
+           <div id="right">
+        <p>Booth Leads</p>
+      </div>
+         </div>
+  </footer>
+     </section>
+<!-- #middle-->
+
+
+
+
+
+
+
+
+</apex:page>

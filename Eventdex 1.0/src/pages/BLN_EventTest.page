@@ -1,0 +1,2971 @@
+<apex:page showHeader="false"  sidebar="false" standardController="BLN_Event__c" extensions="BLN_EventsConTest">
+
+
+
+<html><head>
+
+<title>Boothleads-Event</title>
+<!--<apex:stylesheet value="{!URLFOR($Resource.NewDBEvents, 'css/style.css')}"/> -->
+<apex:stylesheet value="{!URLFOR($Resource.MyTickets, 'css/style.css')}"/>
+<apex:stylesheet value="{!URLFOR($Resource.ScanAttendee_V1, 'AttendeeScan/scanattendee/css/style-button.css')}"/>
+<apex:stylesheet value="{!URLFOR($Resource.ScanAttendee_V1, 'AttendeeScan/scanattendee/css/jquery-ui-1.8.16.custom.css')}"/>
+<apex:stylesheet value="{!URLFOR($Resource.ScanAttendee_V1, 'AttendeeScan/scanattendee/css/fullcalendar.css')}"/>
+<apex:stylesheet value="{!URLFOR($Resource.ScanAttendee_V1, 'AttendeeScan/scanattendee/css/tipTip.css')}"/>
+<apex:stylesheet value="{!URLFOR($Resource.ScanAttendee_V1, 'AttendeeScan/scanattendee/css/tables.css')}"/>
+<apex:stylesheet value="{!URLFOR($Resource.ScanAttendee_V1, 'AttendeeScan/scanattendee/css/chosen.css')}"/> 
+<apex:stylesheet value="{!URLFOR($Resource.ScanAttendee_V1, 'AttendeeScan/scanattendee/css/responsive.css')}"/>
+<apex:stylesheet value="{!URLFOR($Resource.Promocodes, 'promocodes/css/nwbuttons.css')}"/>
+<apex:stylesheet value="{!URLFOR($Resource.datetimepicker, 'datetimepicker/jquery.datetimepicker.css')}"/>
+
+<script type="text/javascript" src="{!URLFOR($Resource.datetimepicker, 'datetimepicker/jquery-1.9.1.js')}"></script>  
+<script type="text/javascript" src="{!URLFOR($Resource.datetimepicker, 'datetimepicker/jquery-migrate-1.1.1.js')}"></script> 
+
+ <script type="text/javascript" src="{!URLFOR($Resource.ScanAttendee_V1, 'AttendeeScan/scanattendee/js/jquery-ui-1.8.16.custom.min.js')}"></script>
+<script type="text/javascript" src="{!URLFOR($Resource.ScanAttendee_V1, 'AttendeeScan/scanattendee/js/fancybox.js')}"></script>
+<script type="text/javascript" src="{!URLFOR($Resource.ScanAttendee_V1, 'AttendeeScan/scanattendee/js/fullcalendar.min.js')}"></script>
+<script type="text/javascript" src="{!URLFOR($Resource.ScanAttendee_V1, 'AttendeeScan/scanattendee/js/elfinder.min.js')}"></script>
+<script type="text/javascript" src="{!URLFOR($Resource.ScanAttendee_V1, 'AttendeeScan/scanattendee/js/jquery.wysiwyg.js')}"></script>
+<script type="text/javascript" src="{!URLFOR($Resource.ScanAttendee_V1, 'AttendeeScan/scanattendee/js/jquery.tipTip.minified.js')}"></script>
+<script type="text/javascript" src="{!URLFOR($Resource.ScanAttendee_V1, 'AttendeeScan/scanattendee/js/forms.js')}"></script>
+
+<script type="text/javascript" src="{!URLFOR($Resource.ScanAttendee_V1, 'AttendeeScan/scanattendee/js/chosen.jquery.min.js')}"></script>
+<script type="text/javascript" src="{!URLFOR($Resource.ScanAttendee_V1, 'AttendeeScan/scanattendee/js/autoresize.jquery.min.js')}"></script>
+<script type="text/javascript" src="{!URLFOR($Resource.ScanAttendee_V1, 'AttendeeScan/scanattendee/js/colorpicker.js')}"></script><!---js for radio and checkbox----->
+<script type="text/javascript" src="{!URLFOR($Resource.MyTickets, 'js/functions.js')}"></script>
+
+
+
+
+<!-------------------Sticky Nav js &css--------------->
+
+<script type="text/javascript">
+$(document).ready(function() {
+    var nav =$('.speedbar');
+    var banner=$('#headercontainer');
+    var pos=nav.position();
+    $(window).scroll(function(){
+        var windowpos=$(window).scrollTop();
+        if (windowpos>=banner.outerHeight()){
+            nav.addClass('fixedtop');
+        }
+            else{
+                nav.removeClass('fixedtop');
+                }
+    }
+)
+
+});
+</script>
+
+<style type="text/css">
+
+.fixedtop {
+    position:fixed;
+    top:0px;
+    background-image:url(images/background-header.png);
+    
+    margin:0px auto;
+    width: 93%;
+    z-index:999999;
+    
+}
+</style>
+<!------------END OF sticky js and css-------------->
+
+<!-----------dynamic Add or delete rows----------------->
+
+<script type="text/javascript">
+
+            $(document).ready(function(){       
+                
+                $('.del').live('click',function(){
+                    $(this).parent().parent().hide();
+                        
+                });
+                
+                $('.add').live('click',function(){
+                    $(this).val('');
+                    $(this).attr('class','del');
+                    var appendTxt = "<tr><td><input type='text' id='one' name='input_box_one[]' /></td> <td><SELECT class=' selectoption ' NAME=\"Animal\"><OPTION VALUE=\"Paid\">Paid<OPTION VALUE=\"Free\">Free</SELECT></td></td><td><input type='text' name='input_box_two[]' /></td><td><input type='text' id='three' name='input_box_three[]' /></td><td ><a href=# onClick='Alert3.render(this.parentNode.parentNode.rowIndex,this.parentNode.parentNode.children[0].children[0].value,this.parentNode.parentNode.children[2].children[0].value,this.parentNode.parentNode.children[3].children[0].value)'><img id='ticketinfo' src='creditcards/document_add.png' title='Add more info'  '/></a></td> <td><input type='button' class='add' value='' /></td></tr>";
+                    $(".dynamic tr:last").after(appendTxt);         
+                });        
+            });
+        </script>
+        <!-- <td><img id='addtag-img' onclick='Alert.render()' src='images/tag.png'   title='Add Tag'/></td>-->
+<!-----------end of dynamic table js---------------------->
+
+<!-----------dynamic Add or delete rows for package----------------->
+<script type="text/javascript">
+            $(document).ready(function(){       
+                
+                $('.del1').live('click',function(){
+                    $(this).parent().parent().remove();
+                        
+                });
+                
+                $('.add1').live('click',function(){
+                    $(this).val('');
+                    $(this).attr('class','del1');
+                    var appendTxt = "<tr><td><input type='text' id='one' name='input_box_one[]' /></td> <td><input type='text' id='three' name='input_box_three[]' /></td><td><SELECT class=' selectoption ' NAME=\"Animal\"><OPTION VALUE=\"Ticket\">Ticket<OPTION VALUE=\"Add on\">Add on</SELECT></td><td><input type='text' id='one'   name='input_box_one[]' style='width: 85%;' /></td><td><input type='button' class='add1' value='' /></td></tr>";
+                    $(".dynamic2 tr:last").after(appendTxt);            
+                });        
+            });
+        </script>
+<!-----------end of dynamic table js---------------------->
+
+<!-----------dynamic Add or delete rows for ticket in moreinfo popup----------------->
+<script type="text/javascript">
+            $(document).ready(function(){       
+                
+                $('.del2').live('click',function(){
+                    $(this).parent().parent().remove();
+                        
+                });
+                
+                $('.add2').live('click',function(){
+                    $(this).val('');
+                    $(this).attr('class','del2');
+                    var appendTxt = "<tr><td><input type='text' id='one' name='input_box_one[]' /></td> <td><input type='text' style='width:75%' class='datepicker' class='small'/></td><td><input type='text' style='width:75%' class='datepicker' class='small'/></td><td><input type='text' id='three' name='input_box_three[]' /><td><input type='text' id='three' name='input_box_three[]' /></td><td><input type='text' id='three' name='input_box_three[]' /></td></td><td><input type='text' id='three' name='input_box_three[]' /></td>  <td><input type='button' class='add2' value='' /></td></tr>";
+                    $(".dynamic3 tr:last").after(appendTxt);            
+                });        
+            });
+        </script>
+<!-----------end of dynamic table js---------------------->
+
+
+
+<!-----------dynamic Add or delete rows for package in moreinfo popup----------------->
+<script type="text/javascript">
+            $(document).ready(function(){       
+                
+                $('.del3').live('click',function(){
+                    $(this).parent().parent().remove();
+                        
+                });
+                
+                $('.add3').live('click',function(){
+                    $(this).val('');
+                    $(this).attr('class','del3');
+                    var appendTxt = "<tr><td><input type='text' id='one' name='input_box_one[]' /></td> <td><input type='text' style='width:75%' class='datepicker' class='small'/></td><td><input type='text' style='width:75%' class='datepicker' class='small'/></td><td><input type='text' id='three' name='input_box_three[]' /></td><td><SELECT class=' selectoption ' NAME=\"Animal\"><OPTION VALUE=\"General Ticket\">General Ticket<OPTION VALUE=\"Admissions Ticket\">Admissions Ticket<OPTION VALUE=\"Seats Ticket\">Seats Ticket<OPTION VALUE=\"Seminars\">Seminars<OPTION VALUE=\"MatchLeads Buyers\">MatchLeads Buyers<OPTION VALUE=\"MatchLeads Sellers\">MatchLeads Sellers<OPTION VALUE=\"Booth\">Booth<OPTION VALUE=\"Attendee Scan\">Attendee Scan<OPTION VALUE=\"Kiosk\">Kiosk<OPTION VALUE=\"Booth Map\">Booth Map<OPTION VALUE=\"Items\">Items<OPTION VALUE=\"Add-On\">Add-On</SELECT></td>  <td><input type='button' class='add3' value='' /></td></tr>";
+                    $(".dynamic4 tr:last").after(appendTxt);            
+                });        
+            });
+        </script>
+<!-----------end of dynamic table js---------------------->
+
+
+
+
+
+<!-------------------Zebra Accordian---------------->
+<script type="text/javascript" src="js/zebra_accordion.src.js"></script>
+<script >
+var flagexp=0;
+  $(document).ready(function() {
+  var myAccordion = new $.Zebra_Accordion($('.Zebra_Accordion'));
+  $( ".Zebra_Accordion dt" ).click(function() {
+                        if(flagexp==0)
+                        {
+                             flagexp=1;
+                            <!-- alert('expanded2');-->
+                             document.getElementById("addicon").src="images/minusoptions.png";
+                             
+                        }
+                        else
+                        {
+                             <!--alert('expanded');-->
+                              document.getElementById("addicon").src="images/Addoptions.png"
+                             flagexp=0;
+                        }
+}); 
+    
+});
+    
+  </script>
+
+
+<style type="text/css">
+dl.Zebra_Accordion {
+    width: 100%;
+    font-family: Arial, sans-serif;
+    font-size: 12px; 
+}
+dl.Zebra_Accordion dt {
+    background-color: #4f9d42;
+*/  background-image: -ms-linear-gradient(#68b946, #4f9d42);
+    background-image: -moz-linear-gradient(#68b946, #4f9d42);
+    /* background-image: -webkit-linear-gradient(#68b946,#4f9d42); */
+    background-image: linear-gradient(#68b946, #4f9d42);
+    box-shadow: 0 1px 0 rgba(255,255,255,0.18);
+    border-color: #4f9d42;
+    color: #fff !important;
+    text-shadow: 0 1px 0 #3d7933;
+    ;
+    margin-left: 81.3%;
+    width: 18%;
+
+    cursor: pointer;
+    border-radius: 3px;
+    color: #FFF;
+    font-weight: bold;
+    padding: 5px
+}
+dl.Zebra_Accordion dd {
+    background: #EFEFEF;
+    padding: 15px;
+    margin: 1px 0;
+
+    height:auto;
+}
+dl.Zebra_Accordion dt.Zebra_Accordion_Expanded {
+    background: #C40000;
+}
+
+</style>
+<!-------------------End of Zebra Accordian js and css---------------->
+
+<style type="text/css">
+#more-info-button{
+     background-color: #4f9d42; margin-bottom:2px; 
+background-color: #eeae0c;
+margin-top:15px; 
+background-image: -ms-linear-gradient(#ffc534,#eeae0c);
+background-image: -moz-linear-gradient(#ffc534,#eeae0c);
+background-image: -webkit-linear-gradient(#ffc534,#eeae0c);
+background-image: linear-gradient(#ffc534,#eeae0c);
+border-color: #eeae0c;box-shadow: 0 1px 0 rgba(255,255,255,0.18);
+cursor:pointer;
+letter-spacing:0.2px;
+font-size:14px;
+font-weight:700px;
+color: #fff !important;
+ text-align:center; vertical-align:middle;border-radius:3px; border:none; outline:none;
+    padding:8px 10px 8px 29px;
+
+    }
+    
+#ticketinfo 
+{
+height:27px;
+width:30px;
+margin-top:2px;
+margin-left:25%;
+
+
+}
+#package-button{
+        background-color: #4f9d42;
+*/  background-image: -ms-linear-gradient(#68b946, #4f9d42);
+    background-image: -moz-linear-gradient(#68b946, #4f9d42);
+    /* background-image: -webkit-linear-gradient(#68b946,#4f9d42); */
+    background-image: linear-gradient(#68b946, #4f9d42);
+    box-shadow: 0 1px 0 rgba(255,255,255,0.18);
+    border-color: #4f9d42;
+    color: #fff !important;
+    text-shadow: 0 1px 0 #3d7933;
+    border:0; font-size:20px;
+    font-weight:100;
+    font-family:cuprum;
+    cursor: pointer;
+    border-radius: 3px;
+    color: #FFF;
+    padding: 8px 8px 8px 8px;
+    }
+    </style>
+
+
+<!-------------------------------------------------------------->
+
+<!-----------------------------------multiselect css for forms---------------------------------->
+
+<script type="text/javascript" src="{!URLFOR($Resource.NewDBEvents, 'js/zebra_accordion.src.js')}"></script>  
+
+<apex:stylesheet value="{!URLFOR($Resource.NewBLTabs, 'jqueryui.css')}"/> 
+ 
+
+<!-------------------------------------------------------------->
+
+
+<!--- ---->
+
+
+<style type="text/css">
+input.styled {
+    display: none;
+}
+select.styled {
+    position: relative;
+    width: 190px;
+    opacity: 0;
+    filter: alpha(opacity=0);
+    z-index: 5;
+}
+.disabled {
+    opacity: 0.5;
+    filter: alpha(opacity=50);
+}
+</style>
+
+</head>
+<body>
+
+<div id="headercontainer">
+<div id="header">
+  <div id="logo"> <img src="images/boothleads_logo_with_whitetext.png" style="margin-left:20px; margin-top:10px;"/> 
+
+  </div>
+  <!--close of logo--> 
+</div>
+<!--close of header--->
+<div  id="ribbon"></div>
+<header style="margin-bottom:0px;">
+  <div id="centered-head" style="width:96.8%;" class="res"> 
+ 
+    
+    <!-- Navigation -->
+    <nav>
+      <ul>
+        <li id="login"> <span id="login-trigger"> <span id="login-triggers"> <span id="user-panel-check"></span> <span id="user-panel-title ">My Account</span> </span> </span>
+          <div id="login-content">
+            <ul>
+              <li><a href="manageprofile.htm"><img src="images/setting.png" alt=""/> <span>Settings</span></a></li>
+              <li><a href="#"><img src="images/upgrade.png" width="13px" height="13px" alt=""/><span>Upgrade Account</span></a></li>
+              <li><a href="login.htm"><img src="images/logout.png" alt=""/><span>Log Out</span></a></li>
+            </ul>
+          </div>
+        </li>
+      </ul>
+    </nav>
+    <div class="account-name">
+      <p><span class="welcome">Welcome,</span> <strong>David Cameron</strong></p>
+      <div class="account-separator"></div>
+    </div>
+    <div class="account-name"></div>
+     
+    <div id="quickbuttons" style="border:0px solid #F00;" >
+<span><a title="My Events" style="text-decoration:none" href="events.htm"><img src="images/myevents.png" width="79" height="45"  /></a></span>
+<!--<span ><a title="My Tickets" style="text-decoration:none;  margin-left:5%" href="mytickets.htm"><img src="images/ticketstab.png" width="120"  height="44"/></a></span>-->
+</div><!--close of quickbuttons-->
+
+    <!-- Navigation end--> 
+    
+  </div>
+</header>
+</div><!-- close of headercontainer-->
+
+<section id="middle" style="width:96.8%;border:0px #000000 solid;" class="res" >
+  <div id="container" style="border:1px #ccc solid; background-color: #EFEFEF; margin-top:10px;">
+    <div id="content" style="padding:0px;">
+      <div class="speedbar" style="   border:0px #FF0000 solid; background-image:url(images/background-header.png); height:50px; margin-right:0px; ">
+        <div class="speedbar-nav" style=" margin:0px auto;  margin-left:7%;">
+          <ul style="list-style:none; padding:0px; margin:0px;   display:inline;  color:#fff; font-size:20px; ">
+            <li style="list-style:none; display:inline; margin-top:30px; margin-right:15px ;"><span id="chg1">Create Event</span> <span><img src='steps - Copy/help-arrow-step.png' style="margin-bottom:-8px; margin-left:15px;"/></span> </li>
+            <li style="list-style:none; display:inline;margin-right:15px;"><span id="chg2"> Create Tickets </span><span><img src='steps - Copy/help-arrow-step.png' style="margin-bottom:-8px; margin-left:15px;"/></span> </li>
+            <li style="list-style:none; display:inline"><span id="chg3"> Design Event</span> <span><img src='steps - Copy/help-arrow-step.png' style="margin-bottom:-8px; margin-left:15px;"/></span> </li>
+            <li style="list-style:none; display:inline;margin-left:15px;;"><span id="chg4"> Publish Event</span><!-- <span><img src="help-arrow-step.png" style="margin-bottom:-8px; margin-left:15px;"/></span>--> </li>
+           <!--<li style="list-style:none; display:inline;margin-left:15px;;"> Payment<span style="font-size:12px; margin-left:5px; color: #33D2EE;">(Live Mode)</span></li>-->
+          </ul>
+        </div>
+        <!--close of speedbar-nav--> 
+        
+      </div>
+      <!-----------script for highlight label on sticky header-->
+      <script>
+       function highlight(chgs,chgs1,chgs2,chgs3)
+       {   
+     document.getElementById(chgs).style.color="#19c3fa";
+     document.getElementById(chgs).style.fontweight="bold";
+     document.getElementById(chgs1).style.color="#fff";
+     document.getElementById(chgs2).style.color="#fff";
+     document.getElementById(chgs3).style.color="#fff";
+
+    }
+      </script>
+      
+      <!--script for event session storage-->
+      <script>
+      var m;
+     
+      // get the state of the form
+function getEventBasicState() {
+  
+   var temp = sessionStorage.getItem('event');
+    var viewName = $.parseJSON(temp);
+    if(temp!=null)
+    eventmand=$.parseJSON(temp);
+  
+      try{
+      
+   document.getElementById('eventname').value=viewName.EventName ;
+   document.getElementById('eventsdate').value=viewName.EventSDate ;
+   document.getElementById('eventedate').value=viewName.EventEDate ;
+   document.getElementById('eventlocation').value=viewName.EventLocation;
+   }catch(e){}
+  
+}
+
+function getEventAllState() {
+    
+   var temp = sessionStorage.getItem('event');
+   var viewName = $.parseJSON(temp);
+   if(temp!=null)
+    eventmand=$.parseJSON(temp);
+    try{
+   document.getElementById('eventtitle').value=viewName.EventName ;
+   document.getElementById('eventorgemail').value=viewName.EventOrgEmail==undefined?'{!$user.email}':viewName.EventOrgEmail;
+   document.getElementById('meventsdate').value=viewName.EventSDate ;
+   document.getElementById('meventedate').value=viewName.EventEDate ;
+   document.getElementById('meventlocation').value=viewName.EventLocation;
+   }catch(e){}
+}
+
+var eventmand={};
+// save the state of the form
+function saveEventBasicState() {
+ 
+  eventmand.EventName = document.getElementById('eventname').value;
+  eventmand.EventSDate = document.getElementById('eventsdate').value;
+  eventmand.EventEDate = document.getElementById('eventedate').value;
+  eventmand.EventLocation = document.getElementById('eventlocation').value;
+  
+  sessionStorage['event']=JSON.stringify(eventmand);
+}
+
+
+function saveEventAllState() {
+  eventmand.EventName = document.getElementById('eventtitle').value;
+  eventmand.EventSDate = document.getElementById('meventsdate').value;
+  eventmand.EventEDate = document.getElementById('meventedate').value;
+  eventmand.EventLocation = document.getElementById('meventlocation').value;
+  eventmand.EventOrgEmail=document.getElementById('eventorgemail').value;
+  sessionStorage['event']=JSON.stringify(eventmand);
+}
+
+// run the above functions when the web page is loaded
+window.onload = function () {
+
+//set defaut values for event
+var select = document.getElementById('mcountry');
+   select.options[1].selected=true;
+   getstatejs(select.options[1].value);
+   document.getElementById('morgname').value='{!$user.companyName}';
+   document.getElementById('mhosttime').value=new Date().toString().match(/\(([A-Za-z\s].*)\)/)[1];
+ //end  
+
+ 
+    // check if HTML5 sessionStorage is supported by the browser
+    if ('sessionStorage' in window && window['sessionStorage'] !== null) {
+        // get the form state
+        getEventBasicState();
+        // save the state of the form each 15 seconds (customizable)
+        m=setInterval('saveEventBasicState()', 1 * 1000);
+    }
+}
+
+
+      </script>
+      
+      <!--end of script for event session storage-->
+      <!------------------------------------------------------>
+      <!---------------Create Event---------------------->
+      
+      <div class="grid-1" onClick="highlight('chg1','chg2','chg3','chg4')"  style="border:0px solid #4f91cd;margin-top:30px; margin-left:1.3%; ">
+        <div class="content-gird"  style="background-color:#efefef; padding:0px; padding-bottom:20px; box-shadow:#ccc 3px 3px 15px 2px; width:90.4%; margin:0px auto; ">
+          
+          <div class="title-grid" style="margin:0px; width:98%; height:80px; background:none;  border:none; ">
+            <div style=" background: url(steps%20-%20Copy/022.png) no-repeat; height:80px; margin-left:-15px; margin-top:5px; width:100%">
+              <div style="width:6%; height:50px; float:left;  text-align:center;">
+                <h1 style="margin-left:0px; font-size:20px; font-family: Arial, Helvetica, sans-serif; color:#928c87; font-weight:bold; padding-top:8px; ">1</h1>
+                <h3 style="margin-left:0px; margin-top:-9px; font-size:17px; color:#928c87">Step</h3>
+              </div>
+              <div style=" width:15%;margin-left:24px;  text-align:center;    margin-top:2px; float:left; height:50px; ">
+                <h1 style=" color:#FFF; font-size:19px;  padding-top:10px;">Create Event</h1>
+              </div>
+            </div>
+          </div>
+          <div class="form" style="width:50%; margin:0px auto; background-color:#EFEFEF;  border:0px solid #000; ">
+            <div class="elem">
+              <label style="font-size:13px; color:#666; font-weight:700;">Event Name: </label>
+                <label id="mandatory">*</label>
+              <div class="indent" style="margin-left:120px;">
+                <input type="text"  id="eventname" name="eventname" class="medium"/>
+              </div>
+            </div>
+            <div class="elem">
+              <label style="font-size:13px; color:#666; font-weight:700;" >Event Start Date:</label>
+                <label id="mandatory">*</label>
+              <div class="indent" style="margin-left:120px;">
+                
+                <input type="text" id="eventsdate" placeholder="__/__/____  __:__"/>
+                <span class="color-img"></span> </div>
+            </div>
+            <div class="elem">
+              <label style="font-size:13px; color:#666; font-weight:700;" >Event End Date:</label>
+                <label id="mandatory">*</label>
+              <div class="indent" style="margin-left:120px;">
+                <input type="text" id="eventedate" placeholder="__/__/____  __:__"/>
+                <span class="color-img"></span> </div>
+            </div>
+            <div class="elem">
+              <label style="font-size:13px; color:#666; font-weight:700;">Event Location:</label>
+                <label id="mandatory">*</label>
+              <div class="indent" style="margin-left:120px;">
+                <input type="text"  id="eventlocation" name="eventlocation" class="medium"/>
+              </div>
+            </div>
+            
+             <div class="elem">
+    
+              <div class="indent" style="margin-left:120px;">
+              <button class="button-a blue" style="width:45%;height:32px; " onclick="smoothScroll(document.getElementById('stepss2')); mask1();saveEvent();return false;">Save</button>
+            </div>
+            </div>
+            <!--<div class="elem">
+              <label style="font-size:13px; color:#666; font-weight:700;">Event Type:</label>
+                <label id="mandatory">*</label>
+              <div class="indent" style="margin-left:120px;">
+                <select class="chzn-select medium-select select" style="width:76%">
+                  <option value="1">Corporate</option>
+                  <option value="2">Free</option>
+                </select>
+              </div>
+            </div>-->
+           <!-- <div class="elem">
+              
+              <label style="font-size:13px; color:#666; font-weight:700;">Event Options:</label>
+               <div class="indent" style="margin-left:80px">
+               <p style=" margin-left:40px; line-height:20px">
+                      <input type="checkbox" name="1" id="boothmaps" value="2"   >
+                      <label for="boothmaps" style="font-size:13px; float:none;paddding-bottom:20px; margin-right:12px;">Booth Maps - $499</label>
+                   
+                          <input type="checkbox" id="kiosk" name="1" value="2" >
+                          <label for="kiosk" style="font-size:13px; float:none;">Kiosk - $499</label>
+                    </p></div>
+              
+            </div>-->
+          </div>
+          
+          <div style= "width:20%; height:auto; margin-right:5px; margin-top:-200px; float:right;
+          border:2px solid #78DBE9; padding-bottom:20px;  background-color:#F5F5F5; background: url(events-preview/images/timer-component-bg.jpg); box-shadow: #999 1px 3px 10px 0px;"> 
+          <style>
+          
+          
+          </style>
+   
+          
+          
+          <!--<div style="width:24%; height:25px; margin-top:-210px;  background:url(../room-bg.png) no-repeat; float:right"> </div>
+           <div style="width:24%; height:25px; margin-top:-200px;  background:url(../room-bg.png) no-repeat; float:right"> </div>
+             <div style="width:24%; height:25px; margin-top:-180px;  background:url(../room-bg.png) no-repeat; float:right"> </div>
+              <div style="width:24%; height:25px; margin-top:-160px;  background:url(../room-bg.png) no-repeat; float:right"> </div>-->
+              <table id="eventoptionstitles" width="101%" border="0" style="border-collapse:collapse;" >
+  <tr style="width:100%; height:30px; background-color:#78DBE9;" >
+    <td colspan="3"><h1 style="color:#FFF; font-size:19px; text-align:center;"> Booth Leads Products</h1></td>
+  </tr>
+  <apex:variable var="i" value="{!1}"/>
+  <apex:repeat value="{!eventSelectOptions}" var="eveOpt">
+   
+  <tr>
+  <td width="20%" style="text-align:center;"><input type="checkbox" id="chk{!i}" onClick="lrrow(this.id,'{!eveOpt.eventOptionItemType.Item_Type_Number__c}','{!eveOpt.eventOptionItemType.Id}')"  value="17" /></td>
+      <td><span><img src="/servlet/servlet.ImageServer?id={!eveOpt.eventOptionItemType.Event_Options_Image_URL__c}&oid={!$Organization.Id}"/></span></td>
+    <td><h1 style="color:#000; font-size:19px; ">{!eveOpt.eventOptionItemType.Event_Option_Desc__c}</h1></td>
+   
+  </tr>
+  <apex:variable var="i" value="{!i+1}"/>
+  </apex:repeat>
+  
+</table>
+
+              </div>
+         
+          <!--close of form--> 
+          <!---------More Events------------>
+          <div></div>
+          
+          <!--event more info button-----> 
+          <div style="margin-bottom:2px; margin-left:66.3%;">
+     
+        
+         
+         <script type="text/javascript">
+    var __sfdcSessionId = '{!GETSESSIONID()}';
+</script>
+<script src="/soap/ajax/29.0/connection.js" type="text/javascript"></script>
+         <script>
+         var contents;
+         function checkfile()
+         {
+            var oFReader = new FileReader();
+          var f = document.getElementById("eventlogo").files[0];
+          
+
+           if (f) {
+      var r = new FileReader();
+      r.onload = function(e) { 
+      contents = e.target.result;
+      
+                 
+      }
+      r.readAsBinaryString(f);
+     
+    } else { 
+      alert("Failed to load file");
+    }
+
+         }
+         
+         function saveEvent()
+         {
+         
+         
+           
+             var eventmain = sessionStorage.getItem('event');
+             var viewName = $.parseJSON(eventmain);
+           
+           var select = document.getElementById('mcurrset');
+           var options = select.options;
+           var selected = select.options[select.selectedIndex];
+           viewName.CurrencySetting=selected.value;
+           
+           select = document.getElementById('mlangset');
+           options = select.options;
+           selected = select.options[select.selectedIndex];
+           viewName.LanguageSetting=selected.value;
+           
+           viewName.HostingTimeZone=document.getElementById('mhosttime').value;
+           
+           select = document.getElementById('meventcat');
+           options = select.options;
+           selected = select.options[select.selectedIndex];
+           viewName.EventCategory=selected.value;
+           
+           viewName.OrgName=document.getElementById('morgname').value;
+           
+           select = document.getElementById('meventstat');
+           options = select.options;
+           selected = select.options[select.selectedIndex];
+           viewName.EventStatus=selected.value;
+           
+           viewName.WebUrl=document.getElementById('mweburl').value;
+         
+         var o_radio_group = document.getElementsByName('mattreg');
+         for (var a = 0; a < o_radio_group.length; a++) {
+            if (o_radio_group[a].checked) {
+                _result = o_radio_group[a].value;
+                break;
+            }
+        }
+        viewName.AttendeeReg=_result;
+        viewName.PhoneNo=document.getElementById('mphone').value;
+        viewName.EventDesc=document.getElementById('meventdesc').value;
+        viewName.HostingAddress1=document.getElementById('mhostaddr1').value;
+        viewName.HostingAddress2=document.getElementById('mhostaddr2').value;
+        viewName.EventCity=document.getElementById('mcity').value;
+        
+        select = document.getElementById('mstate');
+           options = select.options;
+           selected = select.options[select.selectedIndex];
+          viewName.EventState=selected.value;
+           
+           select = document.getElementById('mcountry');
+           options = select.options;
+           selected = select.options[select.selectedIndex];
+           viewName.EventCountry=selected.value;
+           viewName.ZipCode=document.getElementById('mzipcode').value;
+           viewName.PoBox=document.getElementById('mpobox').value;
+           viewName.EventHashTag=document.getElementById('meventhashtag').value;
+           viewName.TwitterUrl=document.getElementById('mtwiturl').value;
+           viewName.FacebookUrl=document.getElementById('mfacebookurl').value;
+           //sessionStorage['event']=JSON.stringify(eventmand);
+           
+           
+           
+           console.log(eventmain);
+        
+        
+       if(contents==undefined)
+       contents='';
+       var eventlogourl='';
+       if(contents!=''){
+          var doc = new sforce.SObject("document");
+  doc.Body = new sforce.Base64Binary(contents);
+  doc.FolderId =  '00lF0000001VI7Y';
+                                 doc.IsPublic = 'True';
+                                 doc.Name = 'EventLogos1.jpg';
+                                 doc.contentType='image/png';
+
+  result = sforce.connection.create([doc]);
+  console.log(result);
+  try{
+  eventlogourl=result[0].id;}catch(e){eventlogourl='';}
+  }
+                      
+           Visualforce.remoting.Manager.invokeAction(
+            '{!$RemoteAction.BLN_EventsConTest.savesEventInfo}',
+            JSON.stringify(viewName),
+            eventlogourl,
+            function(result, event){
+            if (event.status){
+             eventmand.EventID=result;  
+             sessionStorage['event']=JSON.stringify(eventmand); }         
+            }, 
+            {escape: true}
+        );
+
+         }
+         
+         
+         
+         function getstatejs(val)
+         {
+            
+             Visualforce.remoting.Manager.invokeAction(
+            '{!$RemoteAction.BLN_EventsConTest.currencyBasedOnCountry}',
+            val,
+            function(result, event){
+            var opt;
+            $('#mcurrset').empty();  
+           $.each(result, function (i, vals) {
+           
+             opt = document.createElement('option');
+             opt.value = vals.Id;
+             opt.innerHTML = vals.Currency_Name__c;
+             document.getElementById('mcurrset').add(opt);
+             });
+                   
+            }, 
+            {escape: true}
+        );
+        
+        
+         Visualforce.remoting.Manager.invokeAction(
+            '{!$RemoteAction.BLN_EventsConTest.statesBasedOnCountry}',
+            val,
+            function(result, event){
+            var opt;
+            $('#mstate').empty();  
+           $.each(result, function (i, vals) {
+          
+             opt = document.createElement('option');
+             opt.value = vals.Id;
+             opt.innerHTML = vals.Long_Name__c;
+             document.getElementById('mstate').add(opt);
+             });
+                   
+            }, 
+            {escape: true}
+        );
+        
+        
+           
+         }
+         </script>
+           <a href="#" style="text-decoration:none;color: #FFF;" onClick='Alert1.render()'>
+         <input type="button" id="more-info-button" value="More info"/>
+          <img src="images/Addoptions.png" style="height:16px; height:16px; margin-left:-93px; margin-bottom:-11px;"/>
+         </a> &nbsp;&nbsp;
+         </div>
+          <!--end of more info button-->
+          <!--event more info pop up content -->
+          <style>
+#titleheadings{
+padding:5px 0px;
+}
+
+#stripe-line{
+background:url(images/stripe.png);
+overflow:hidden;
+height:12px;
+margin-top:5px;
+}
+
+#titlecontent{
+font-size:22px;
+color:#5283cc;
+margin-right:10px;
+letter-spacing:.5px;
+font-family:Bebas Neue;
+font-weight:normal;float:left;
+overflow:hidden;
+}
+
+#details-form{
+width:97.5%;
+height:auto;
+background-color:#fff;
+padding:10px;
+margin-bottom:20px;
+
+background: white;
+border-radius: 1px;
+-moz-border-radius: 1px;
+-webkit-border-radius: 1px;
+box-shadow: 0 1px 3px 0 #b5b5b5;
+-moz-box-shadow: 0 1px 3px 0 #b5b5b5;
+-webkit-box-shadow: 0 1px 3px 0 #b5b5b5;
+border: 1px solid #DDD;
+border-bottom:4px solid #5283cc;
+
+}
+
+#details-form table{ border-collapse:collapse;font-size:13px; letter-spacing:.2px; color:#666; }
+#details-form table tr td{ padding:4px;}
+
+
+</style>
+          <div id="dialogoverlay"></div>
+          <!--end of event more info pop up content-->
+          <div id="dialogbox1">
+          <!--content start-->
+           <a href="#" id="close" onclick="Alert1.Cancel()">×</a>
+                  <div class="grid-1" style="text-align:left;"  >
+                
+                <div class="content-gird" style=" padding:10px 20px;border-radius:5px;margin-bottom:20px; background-image: url({!URLFOR($Resource.create_eventimages,'Newfolder/background.gif')})">
+                <div id="titleheadings"> 
+               <h3 id="titlecontent" style=""> Event Details</h3>
+              
+                  <div id="stripe-line" style="background-image: url({!URLFOR($Resource.create_eventimages,'Newfolder/stripe.png')})"></div><!--close fo stripe-line-->
+                    </div><!--close of title heading-->
+                  <div id="details-form" >
+                  
+                  <table  width="100%" border="0">
+  <tr>
+    <td><label>Title:</label><label id="mandatory">*</label></td>
+     <td colspan="3">
+      <input type="text"  id="eventtitle" name="eventtitle" class="medium" style="width:99%; text-indent:3px; padding:0px;"/>
+     </td>
+  </tr>
+  <tr>
+    <td width="21%"><label>Event Organizer Email:</label><label id="mandatory">*</label></td>
+    <td>
+      <input type="text"  id="eventorgemail" name="eventorgemail" class="medium" style="width:83%;text-indent:3px; padding:0px;"/>
+     </td>
+     <td><label>Event Logo:</label></td>
+        <td >
+   <div class="" style="width:112%">
+    
+    <input type="file" id="eventlogo" onchange="checkfile()" accept="image/jpeg,image/png"/>
+      </div>
+    </td>
+  </tr>
+   <!--<tr>
+    <td width="%"><label>Website URL :</label></td>
+    <td colspan="3">
+      <input type="text"  id="name" name="name" class="medium" style="width:99%;text-indent:3px; padding:0px;"/>
+     </td>
+  </tr>-->
+  
+  <tr>
+  <!--  <td><label>Hosting Time Zone:</label></td>-->
+   <!--<td> <input type="text"  id="name" name="name" class="medium" style="width:99%; padding:0px;"/></td>-->
+     <td><label>Start date:</label><label id="mandatory">*</label></td>
+   
+   <!--<td width="34%" ><input type="text" style="width:83%; padding:0px;text-indent:3px;" placeholder="(dd-mm-yyy)" class="datepicker" class="small"/></td>-->
+   
+   <td  width="34%" ><input type="text" id="meventsdate" placeholder="__/__/____  __:__"/>
+   </td>
+   <td width="17%"><label>End Date :</label><label id="mandatory">*</label></td>
+   <td width="34%" ><input type="text" id="meventedate" placeholder="__/__/____  __:__"/>
+   </td>
+    <!--<td><input type="text" style="width:97%; padding:0px; text-indent:3px;"  placeholder="(dd-mm-yyy)" class="datepicker" class="small"/></td>-->
+  </tr>
+ <tr>
+    <td><label>Currency Settings:</label></td>
+    <td> <select style="width:84%; padding:0px;" id="mcurrset">
+                <option></option>           
+                          </select></td>
+     <td><label>Language Settings:</label></td>
+    <td><select class="chzn-select medium-select select" style="width:98%; padding:0px;" id="mlangset">
+                            <apex:repeat value="{!LanguageSetting}" var="lst">
+                            <option value="{!lst.value}">{!lst.label}
+                            </option>
+                            </apex:repeat>
+                            
+                          </select></td>
+    
+    
+  </tr>
+  <tr>
+    <td><label>Hosting Time Zone: </label></td>
+    <td> <input type="text"  class="medium" style="width:83%; text-indent:3px; padding:0px;" id="mhosttime"/></td>
+<td colspan="2">
+ <div id="titleheadings" >
+               <h3 id="titlecontent" style="">Company Details</h3>
+              
+                  <div id="stripe-line" style="background-image: url({!URLFOR($Resource.create_eventimages,'Newfolder/stripe.png')})"></div><!--close fo stripe-line-->
+                    </div><!--close of title heading--> 
+</td>
+<!--    <td><label>Phone Number : </label></td>
+   <td > <input type="text"  id="name" name="name" class="medium" style="width:98%; text-indent:3px; padding:0px;"/></td>-->
+    
+  </tr>
+  <tr>
+    <td><label>Event Category: </label></td>
+    <td >
+    <select class="chzn-select medium-select select" style="width:84%; padding:0px;" id="meventcat">
+                           <apex:repeat value="{!EventTypes}" var="et">
+                            <option value="{!et.value}">{!et.label}
+                            </option>
+                            </apex:repeat>
+                          </select>
+    </td>
+     <td><label>Organization Name: </label></td>
+   <td >  <input type="text"  class="medium" style="width:97%; padding:0px;" id="morgname"/></td>
+    
+    
+  </tr>
+  <tr>
+    <td><label>Event Status:</label></td>
+    <td >
+    <select class="chzn-select medium-select select" style="width:84%; padding:0px;" id="meventstat">
+                           <apex:repeat value="{!EventStatus}" var="es">
+                            <option value="{!es.value}">{!es.label}
+                            </option>
+                            </apex:repeat>
+                          </select>
+                          </td>
+    <td><label>Website URL:</label></td>
+       <td >  <input type="text"   class="medium" style="width:97%; padding:0px;" id="mweburl"/></td>
+   
+  </tr>
+  <tr>
+    <td><label>Attendee Registration:</label></td>
+    <td><input type="radio"  style="outline:none;"  checked="checked"   value="By Global Nest" name="mattreg" /><span style="margin-left:5px; ">By Global Nest</span>
+    
+    
+    </td>
+     <td><label>Phone Number : </label></td>
+   <td > <input type="text"  class="medium" style="width:97%; text-indent:3px; padding:0px;" id="mphone"/></td>
+   
+   
+  </tr>
+  <tr>
+    <td>&nbsp;</td>
+    <td valign="top"><input type="radio"  style="outline:none;"   value="By Others" name="mattreg"/><span style="margin-left:5px; ">By Others </span></td>
+    <td><!--<label>Primary Category:</label>--></td>
+    <td > <!--<select class="chzn-select medium-select select" style="width:98%; padding:0px;">
+                            <option value="1">Information Services</option>
+                            <option value="2">Manufacturing</option>
+                            <option value="3">Banking</option>
+                          </select>--></td>
+   
+  
+  </tr>
+   
+  <tr>
+    <td><label>Event Description:</label></td>
+    <td colspan="3"><textarea class="medium" id="meventdesc" name="meventdesc" rows="3" style="width:96%;text-indent:3px;"></textarea> </td>
+    
+ 
+  </tr>
+ 
+</table>
+   </div><!--close of details-form-->
+                  <div  id="venuedetails" style="width:72%; float:left;margin-top:-16px; ">
+ <div id="titleheadings" >
+               <h3 id="titlecontent" style="">Event Location Details</h3>
+              
+                  <div id="stripe-line" style="background-image: url({!URLFOR($Resource.create_eventimages,'Newfolder/stripe.png')})"></div><!--close fo stripe-line-->
+                    </div><!--close of title heading--> 
+                    
+                    <div id="details-form" >
+                     <table width="100%" border="0">
+  
+  <tr>
+    <td width="18%"><label>Hosting Location:</label></td>
+    <td width="33%">   <input type="text"  id="meventlocation" class="medium" style="width:90%;text-indent:3px; padding:0px;"/></td>
+    <td ><label>Hosting Address 1:</label></td>
+    <td>   <input type="text"  id="mhostaddr1" class="medium" style="width:99%;text-indent:3px; padding:0px;"/></td>
+  </tr>
+  <tr>
+    <td><label>Hosting Address 2:</label></td>
+    <td>   <input type="text"  id="mhostaddr2" class="medium" style="width:90%;text-indent:3px; padding:0px;"/></td>
+    <td><label>City:</label></td>
+    <td>   <input type="text"  id="mcity" class="medium" style="width:99%;text-indent:3px; padding:0px;"/></td>
+  </tr>
+  <tr>
+    <td><label>State:</label></td>
+    <td> <select  style="width:91%" id="mstate">
+                     <option></option>            
+                          </select></td>
+    <td><label>Country</label></td>
+    <td> <select style="width:106%" id="mcountry" onchange="getstatejs(this.value);">
+                            <apex:repeat value="{!Country}" var="ec">
+                           <option value="{!ec.value}">{!ec.label}
+                            </option>
+                            </apex:repeat>
+                          </select></td>
+  </tr>
+  <tr style="height:123px">
+    <td valign="top"><label>Zip Code:</label></td>
+    <td valign="top">   <input type="text"  id="mzipcode" class="medium" style="width:90%;text-indent:3px; padding:0px;"/></td>
+    <td valign="top"><label>Po Box:</label></td>
+    <td valign="top">   <input type="text"  id="mpobox" class="medium" style="width:99%;text-indent:3px; padding:0px;"/></td>
+  </tr>
+  
+</table>
+
+                     
+                     
+                     </div>  <!--close of details-form-->             
+          </div><!--close of venue details-->
+         
+         
+         
+          <div id="socialbox" style="width:24%; float:right;margin-top:-16px; margin-right:10px; " >
+          <div id="titleheadings" >
+               <h3 id="titlecontent" style=""> Social Links</h3>
+              
+                  <div id="stripe-line" style="background-image: url({!URLFOR($Resource.create_eventimages,'Newfolder/stripe.png')})"></div><!--close fo stripe-line-->
+                    </div><!--close of title heading-->        
+                  <div id="details-form" style="width:94%" >
+                  <table width="100%" border="0">
+  <tr>
+    <td><img src="{!URLFOR($Resource.create_eventimages,'Newfolder/twhashurl.png')}" width="35px" height="35px" style="float:left;"/><p style="margin-left:18%; margin-top:4px; font-family:Bebas Neue;  font-size:19px;">TAG:</p></td>
+  </tr>
+  <tr>
+    <td><input type="text"  id="meventhashtag" class="medium" style="width:99%;text-indent:3px; padding:0px;"/></td>
+  </tr>
+  <tr>
+    <td><img src="{!URLFOR($Resource.create_eventimages,'Newfolder/twurl.png')}" width="35px" height="35px" style="float:left;"/><p style="margin-left:18%; text-indent:3px;margin-top:5px; font-family:Bebas Neue;  font-size:19px;">URL:</p></td>
+  </tr>
+  <tr>
+    <td><input type="text"  id="mtwiturl" class="medium" style="width:99%;text-indent:3px; padding:0px;"/></td>
+  </tr>
+  <tr>
+    <td><img src="{!URLFOR($Resource.create_eventimages,'Newfolder/facebook.png')}" width="35px" height="30px" style="float:left"/><p style="margin-left:18%; margin-top:5px; font-family:Bebas Neue;  font-size:19px;">URL:</p></td>
+  </tr>
+  <tr>
+  <td>
+  <input type="text"  id="mfacebookurl" class="medium" style="width:99%; padding:0px;"/>
+</td>
+</tr>
+</table>
+
+                  
+                  
+                  </div><!--close of details-form-->
+                  </div><!--close of social links-->
+           <!--start of more info style and script-->         
+          <!--------more info pop up-------->
+<style>
+                   #dialogoverlay{
+    display:none;
+    /*opacity: .8;*/
+position: fixed;
+top: 0px;
+left: 0px;
+background-color: #484848;
+width: 100%;
+z-index: 99;
+height: 100%;
+
+    
+    }
+ 
+ #dialogoverlay2{
+    display:none;
+    opacity: .8;
+position: fixed;
+top: 0px;
+left: 0px;
+background-color: #484848;
+width: 100%;
+z-index:999999;
+height: 100%;
+    
+    } 
+  
+  #dialogbox1{ display:none; position:absolute;padding:5px;;
+width:90%; margin-left:-3%; z-index:100; height:auto; padding-bottom:30px; /overflow:auto;/ border-radius:3px;
+-webkit-border-radius: 3px;-moz-border-radius: 3px;
+}
+  #dialogbox4{ display:none; position:fixed;padding:5px;;
+ width:90%; margin-left:4.8%; z-index:9999991; height:630px; padding-bottom:30px;  overflow:auto; border-radius:3px;
+  -webkit-border-radius: 3px;-moz-border-radius: 3px;}
+  
+  
+  #dialogbox3{ display:none; position:fixed;padding:5px;;
+ width:90%; margin-left:-2.3%; z-index:9999999; height:630px; padding-bottom:30px;  overflow:auto; border-radius:3px;
+  -webkit-border-radius: 3px;-moz-border-radius: 3px;}
+ 
+   
+ #close{font-size: 25px;
+font-weight: bold;
+color: #fff;
+text-decoration: none;
+float: right;
+margin-right: .2%;
+margin-top:-9px;}
+
+#close:hover{font-size: 25px;
+text-decoration: underline;
+font-weight: bold;
+color: #fff;
+float: right;
+margin-right: .2%;
+margin-top:-9px;} 
+
+</style>
+<!-- end of more info popup-->
+
+<script type="text/javascript">
+var t;
+function CustomAlert(){
+this.render =function(dialog){
+clearTimeout(m);
+if ('sessionStorage' in window && window['sessionStorage'] !== null) {
+        // get the form state
+        getEventAllState();
+        // save the state of the form each 15 seconds (customizable)
+        t=setInterval('saveEventAllState()', 1 * 1000);
+    }
+
+  
+  
+  
+
+//pop up the existing values
+//document.getElementById('eventtitle').value=document.getElementById('eventname').value;
+//
+
+var winW = window.innerWidth;
+var winH = window.innerHeight;
+var dialogoverlay =document.getElementById('dialogoverlay');
+var dialogbox = document.getElementById('dialogbox1');
+dialogoverlay.style.display="block";
+/*dialogoverlay.style.height = winH +"px";
+dialogbox.style.left=(winW/2) -(905*.5)+"px";*/
+dialogbox.style.top="-160px";
+dialogbox.style.display="block";
+
+}
+this.Cancel = function(){
+document.getElementById('dialogbox1').style.display ="none";
+document.getElementById('dialogoverlay').style.display ="none";
+//remove the popup box timeout,
+clearTimeout(t);
+getEventBasicState();
+ m=setInterval('saveEventBasicState()', 1 * 1000);
+return false;
+
+}
+
+}
+
+var Alert1 = new CustomAlert();
+
+</script>
+
+
+
+
+<!--end of more info pop script--->       
+                  <div class="clear"> </div>
+                </div><!--close of contentgrid-->
+           </div>
+          <!--content end-->
+          </div>
+          <!--close of dialog box-->
+         
+         
+          
+        
+        </div>
+        <!--close of content-grid--> 
+      </div>
+      <!--close of grid-1-------->
+      
+      
+      <div  id="stepss2"  style="position:relative">
+      <!--start of ticket section-->
+       <!-----------------------------------------tickets section--------------------->
+      <div class="grid-1" onClick="highlight('chg2','chg1','chg3','chg4')"  style="border:0px solid #4f91cd;margin-top:8px; margin-left:1.3%;;position:relative;">
+        <div class="content-gird"  style="background-color:#EFEFEF;padding:0px;  box-shadow:#ccc 3px 3px 15px 2px; width:90.4%; margin:0px auto; ">
+          <div class="title-grid" style="margin:0px; width:98%;  height:80px; background:none;  border:none;    ">
+            <div style=" background: url(steps%20-%20Copy/011.png) no-repeat; height:80px; margin-left:-15px; margin-top:5px; width:102.4%">
+              <div style="width:6%; height:50px; float:left;  text-align:center;">
+                <h1 style="margin-left:0px; font-size:20px; font-family: Arial, Helvetica, sans-serif; color:#928c87; font-weight:bold; padding-top:8px; ">2</h1>
+                <h3 style="margin-left:0px; margin-top:-9px; font-size:17px; color:#928c87">Step</h3>
+              </div>
+              <div style=" width:15%;margin-left:24px;  text-align:center;    margin-top:2px; float:left; height:50px; ">
+                <h1 style=" color:#FFF; font-size:19px;  padding-top:10px;">Create Tickets</h1>
+              </div>
+              <!---script for show package div --->
+                 <script>
+function showpackage(show,hide,blnewpack)
+{
+isnewpackage=blnewpack;
+document.getElementById(show).style.display="block";
+document.getElementById(hide).style.display="none";
+
+
+}
+     </script>         
+     
+     <!--------------------end of script-------------->
+<!--start of package create button-->
+              <div id="package" style="  margin:0px; padding:0px; float:right; margin-right:3.7%; margin-top:10px; ">
+          
+            
+          <input type="button" id="package-button"  onClick="showpackage('package1','dynamictickets','true')"   value="Create Package" style="margin-right:0px;"  />
+          
+        
+    
+              </div><!--close of package create button-->
+            </div>
+          </div>
+          <br/>
+          
+     
+     
+          <!-------css for dynamic table-------------------->
+          <style type="text/css">
+        .del{background: url(images/removerow.png)  center no-repeat; width:30px; height:30px;
+          background-color: #DDD; border-radius:3px; cursor:pointer;}
+        
+         .add{ background: url(images/addrow.png) no-repeat; width:30px; height:30px;
+          background-color:#DDD;border-radius:3px; cursor:pointer; }
+        .selectoption{
+            width:93%; height:28px; background-image:url(images/input.png)
+                 ; border-radius:3px; border:1px solid #e3e3e3;color: #575757;outline:none }
+        #three{width:65.5%;}    
+        #one{width:87.5%;}   
+    
+        </style>
+           <style>
+                   #addtag-img{margin-left:10%; cursor:pointer;}
+                   </style>
+          <!------------------------------------------------->
+         <div id="dynamictickets">
+          <table class="display dynamic" id="tickettable" style="width:99%; margin:0px auto;" >
+            <thead>
+              <tr>
+                <th width="32%" style="padding:3px 0px 3px 2px; text-indent:5px;">Ticket Name</th>
+                <th width="29%" style="padding:3px 0px 3px 2px;text-indent:5px;">Ticket pay Type</th>
+                <th width="12%" style="padding:3px 0px 3px 2px;text-indent:5px;">Qty</th>
+                 <!--  <th width="10%" style="padding:3px 0px 3px 2px;text-indent:5px;">Min-Qty</th>-->
+                     <!-- <th width="10%" style="padding:3px 0px 3px 2px;text-indent:5px;">Max-Qty</th>-->
+                  <th width="10%" style="padding:3px 0px 3px 2px;text-indent:5px;">Price</th>
+<!--                <th width="19%" style="padding:3px 0px 3px 2px;text-indent:5px;">Ticket Category</th>-->
+                <th width="9%" style="padding:3px 0px 3px 2px;text-indent:5px; ">More Info</th>
+                <!--<th width="7%" style="padding:3px 0px 3px 2px;text-indent:5px; ">Add Tag</th>-->
+                <th ></th>
+              </tr>
+            </thead>
+              <tr>
+              <td><input type="text"   id="one"        name="input_box_one[]" /></td>
+              <td><select class="selectoption" style="outline:none;" >
+                  <option value="1">Paid</option>
+                  <option value="2">Free</option>
+                   <option value="3">Donation</option>
+                </select></td>
+              <td><input type='text'   style="width:70%;"  name='input_box_two[]' /></td>
+               <!--<td><input type='text'   style="width:70%;"  name='input_box_two[]' /></td>
+                <td><input type='text'   style="width:70%;"  name='input_box_two[]' /></td>-->
+               <td><input type="text" id="three" name="input_box_three[]" /></td>
+              <!--<td><select class="selectoption"  style="outline:none; ;" >
+                  <option value="1">Attendee</option>
+                  <option value="2">Exhibitor</option>
+                </select></td>-->
+               
+                   <td >
+                   <a href="#" onClick="Alert3.render(this.parentNode.parentNode.rowIndex,this.parentNode.parentNode.children[0].children[0].value,this.parentNode.parentNode.children[2].children[0].value,this.parentNode.parentNode.children[3].children[0].value)"><img id='ticketinfo' src='creditcards/document_add.png' title='Add more info'/></a>
+                  </td>
+                   <!--<td><img id="addtag-img" src='images/tag.png' onclick="Alert.render()"   title="Add Tag"/></td>-->   
+                   
+              <td>
+              <input type="button" class='del' title='Delete Ticket' value='' /></td>
+     
+            </tr>
+            
+          
+            
+            
+            <tr>
+              <td><input type="text" id="one"   name="input_box_one[]" /></td>
+              <td><select class="selectoption"  >
+                  <option value="1">Paid</option>
+                  <option value="2">Free</option>
+                </select></td>
+              <td><input type="text" style="width:70%;"      name="input_box_two[]" /></td>
+              <!-- <td><input type='text'   style="width:70%;"  name='input_box_two[]' /></td>
+                <td><input type='text'   style="width:70%;"  name='input_box_two[]' /></td>-->
+                 <td><input type="text"  id="three" name="input_box_three[]" /></td>
+             <!-- <td><select class="selectoption" >
+                  <option value="1">Attendee</option>
+                  <option value="2">Exhibitor</option>
+                </select></td>-->
+              
+                <td style="text-align:center;">
+                <a href="#" onClick="Alert3.render(this.parentNode.parentNode.rowIndex,this.parentNode.parentNode.children[0].children[0].value,this.parentNode.parentNode.children[2].children[0].value,this.parentNode.parentNode.children[3].children[0].value)"><img id='ticketinfo' src='creditcards/document_add.png' title='Add more info'/></a>
+                  </td>
+           
+                  <!--<td><img id="addtag-img" src='images/tag.png' onclick="Alert.render()" title="Add Tag"/></td>-->               
+              
+              <td><input type="button"  class="add" value="" title='Add More Ticket' /></td>
+          
+            </tr>
+            
+          </table>
+          </div><!---div dynamictickets-->
+          <!-------------------------------->
+          
+          
+ 
+
+<script type="text/javascript">
+var parentrowindex;
+ var flag;
+ var earlybudname;
+ var isnewpackage;
+ 
+function CustomAlert(){
+    this.render =function(rowindex,tname,tqty,tprice){
+    parentrowindex=rowindex;
+    
+    for(var i=0;i<ticketlist.length;i++)
+    {
+       if(ticketlist[i].trowid==parentrowindex)
+       {
+          if(ticketlist[i].ispackage=="true"){
+          renderpackage(i,tname,tqty,tprice);
+          
+          }
+          else
+          renderticket(i,tname,tqty,tprice);
+       }
+    }      
+    
+  }  
+    
+  
+    this.Cancel = function(){
+        document.getElementById('dialogbox3').style.display ="none";
+                document.getElementById('dialogoverlay2').style.display ="none";
+            
+                
+                return false;
+        
+        }
+    
+    }
+    
+    var Alert3 = new CustomAlert(); 
+    function renderpackage(i,tname,tqty,tprice)
+    {
+       showpackage('package1','dynamictickets','false');
+       document.getElementById('packagename').value=tname;
+       document.getElementById('packageqty').value=tqty;
+       document.getElementById('packageprice').value=tprice;
+       var appendTxt='';
+       
+       for(var j=0;j<ticketlist[i].ticketcount;j++)
+           {
+               
+            appendTxt += "<tr><td><input type='text' id='one' name='input_box_one[]' value='"+ticketlist[i].grouptickets[j].tname+"'/></td> <td><input type='text' style='width:75%' class='datepicker' class='small' value='"+ticketlist[i].grouptickets[j].sdate+"'/></td><td><input type='text' style='width:75%' class='datepicker' class='small' value='"+ticketlist[i].grouptickets[j].edate+"'/></td><td><input type='text' id='three' name='input_box_three[]' value='"+ticketlist[i].grouptickets[j].qty+"'/></td><td><SELECT class=' selectoption ' NAME=\"Animal\"><OPTION VALUE=\"General Ticket\">General Ticket<OPTION VALUE=\"Admissions Ticket\">Admissions Ticket<OPTION VALUE=\"Seats Ticket\">Seats Ticket<OPTION VALUE=\"Seminars\">Seminars<OPTION VALUE=\"MatchLeads Buyers\">MatchLeads Buyers<OPTION VALUE=\"MatchLeads Sellers\">MatchLeads Sellers<OPTION VALUE=\"Booth\">Booth<OPTION VALUE=\"Attendee Scan\">Attendee Scan<OPTION VALUE=\"Kiosk\">Kiosk<OPTION VALUE=\"Booth Map\">Booth Map<OPTION VALUE=\"Items\">Items<OPTION VALUE=\"Add-On\">Add-On</SELECT></td>  <td><input type='button' class='add3' value='' /></td></tr>";
+
+           }
+      $(".dynamic4").find("tr:gt(0)").remove();
+      $(".dynamic4 tr:last").after(appendTxt);
+        flag=ticketlist[i].ticketcount-1; 
+        
+        appendTxt='';
+        for(var j=0;j<ticketlist[i].subpackagegroup.length;j++)
+           {
+           appendTxt += "<tr><td><input type='text' id='one' name='input_box_one[]' value='"+ticketlist[i].subpackagegroup[j].pkgitemname+"'/></td> <td><input type='text' id='three' name='input_box_three[]' value='"+ticketlist[i].subpackagegroup[j].pkgitemqty+"'/></td><td><SELECT class=' selectoption ' NAME=\"Animal\" value='"+ticketlist[i].subpackagegroup[j].ttype+"'><OPTION VALUE=\"Ticket\">Ticket<OPTION VALUE=\"Add on\">Add on</SELECT></td><td><input type='text' id='one'   name='input_box_one[]' style='width: 85%;' value='"+ticketlist[i].subpackagegroup[j].badgelabel+"'/></td><td><input type='button' class='add1' value='' /></td></tr>";    
+            
+
+           }
+           $(".dynamic2").find("tr:gt(0)").remove();
+      $(".dynamic2 tr:last").after(appendTxt);
+       
+    }
+    
+   function renderticket(i,tname,tqty,tprice)
+   {
+  
+    //LOGIC FOR RENDERING TICKETS FROM TICKETLIST
+    earlybudname=tname;
+   
+    var appendTxt='';
+    flag=-1;
+     //clear all checkbox in tags
+      var testimonialElements = $(".results");
+      for(var l=0; l<testimonialElements.length; l++){
+                            
+                                  var element = testimonialElements.eq(l);
+                                  element[0].children[0].children[0].children[0].children[0].checked=false;
+                                  }
+   
+          
+           for(var j=0;j<ticketlist[i].ticketcount;j++)
+           {
+               
+             appendTxt =appendTxt + "<tr><td><input type='text' id='one' name='input_box_one[]' value='"+ticketlist[i].grouptickets[j].tname+"'/></td><td>  <input type='text' style='width:75%' value='"+ticketlist[i].grouptickets[j].sdate+"'/></td><td><input type='text' style='width:75%' value='"+ticketlist[i].grouptickets[j].edate+"'/></td><td><input type='text' id='three' name='input_box_three[]' value='"+ticketlist[i].grouptickets[j].qty+"'/></td><td><input type='text' id='three' name='input_box_three[]' value='"+ticketlist[i].grouptickets[j].minqty+"' /></td><td><input type='text' id='three' name='input_box_three[]' value='"+ticketlist[i].grouptickets[j].maxqty+"' /></td><td><input type='text' id='three' name='input_box_three[]' value='"+ticketlist[i].grouptickets[j].tprice+"' /></td><td id='regticket' style='display:none;'><input type='button' class='del2' title='Delete Ticket' value='' /></td></tr>";
+             
+           }
+      $(".dynamic3").find("tr:gt(0)").remove();
+      $(".dynamic3 tr:last").after(appendTxt);
+        flag=ticketlist[i].ticketcount-1; 
+        
+        //prepopulate tags
+        
+        
+        for(var k=0;k<ticketlist[i].tags.length;k++)
+           {
+               var testimonialElements = $(".results");
+                             for(var l=0; l<testimonialElements.length; l++){
+                            
+                                  var element = testimonialElements.eq(l);
+                                  if(ticketlist[i].tags[k].tagname==element[0].children[0].children[0].children[1].innerHTML)
+                                  element[0].children[0].children[0].children[0].children[0].checked=true;
+                                  
+                                  }
+             
+           }
+        //end of prepopulate tags
+        
+     
+   
+    if(flag==-1){
+   
+    appendTxt = "<tr><td><input type='text' id='one' name='input_box_one[]' value='"+tname+"'/></td><td>  <input type='text' style='width:75%' placeholder='07/15/2014'/></td><td><input type='text' style='width:75%' placeholder='07/25/2014'/></td><td><input type='text' id='three' name='input_box_three[]' value='"+tqty+"' /></td><td><input type='text' id='three' name='input_box_three[]' value='' /></td><td><input type='text' id='three' name='input_box_three[]' value='' /></td><td><input type='text' id='three' name='input_box_three[]' value='"+tprice+"' /></td><td id='regticket' style='display:none;'><input type='button' class='del2' title='Delete Ticket' value='' /></td></tr>";
+      $(".dynamic3").find("tr:gt(0)").remove();
+      $(".dynamic3 tr:last").after(appendTxt);
+     
+      
+      }
+       //END OF LOGIC FOR RENDERING TICKETS FROM TICKETLIST
+        var winW = window.innerWidth;
+        var winH = window.innerHeight;
+        var dialogoverlay =document.getElementById('dialogoverlay2');
+        var dialogbox = document.getElementById('dialogbox3');
+        dialogoverlay.style.display="block";
+        /*dialogoverlay.style.height = winH +"px";
+        dialogbox.style.left=(winW/2) -(905*.5)+"px";*/
+        dialogbox.style.top="10px";
+        dialogbox.style.display="block";
+        
+    } 
+    
+
+function lrrow(chkid,ittypenumber,id){
+if (document.getElementById(chkid).checked==true){
+Visualforce.remoting.Manager.invokeAction(
+            '{!$RemoteAction.BLN_EventsConTest.getTickets}',
+            ittypenumber,
+            id, 
+            function(result, event){
+             
+ $.each(result, function(i, resulteach){
+                console.log(resulteach.ticketName);
+               if(resulteach.show==true){
+      var appendTxt = "<tr id="+id+"><td><input type='text' id='one' name='input_box_one[]' value='"+resulteach.ticketName+"'></td> <td><SELECT class=' selectoption ' NAME=\"Animal\"><OPTION VALUE=\"Paid\">Paid<OPTION VALUE=\"Free\">Free</SELECT></td></td><td><input type='text' name='input_box_two[]' /></td><td><input type='text' id='three' name='input_box_three[]' placeholder='"+resulteach.ticketPrice+"' /></td><td ><a href=# onClick=Alert3.render(this.parentNode.parentNode.rowIndex,this.parentNode.parentNode.children[0].children[0].value,this.parentNode.parentNode.children[2].children[0].value,this.parentNode.parentNode.children[3].children[0].value)><img id='ticketinfo' src='creditcards/document_add.png' title='Add more info'  '/></a></td> <td><input type='button' class='del' value='' /></td></tr>";
+      $(".dynamic tr:last").after(appendTxt); 
+      }
+            });
+            
+            }, 
+            {escape: true}
+        );
+}
+else
+{
+
+ for(var j=0;j<ticketlist.length;j++)
+           {
+           if(ticketlist[j].trowid==$("#"+id).index()){
+            ticketlist.splice(j, 1);
+            ticketlist.push({tname:"",tpaytype:"",tqty:"",tprice:"",trowid:"",grouptickets:[],ticketcount:"",tags:[],subpackagegroup:[],ispackage:"",itemtype:""});
+            }
+           
+           }
+               
+
+  $("#"+id).remove();
+  //$("#"+id).attr("id",""); 
+}
+ }
+
+</script>
+
+<!--end of more info pop script--->
+          <!---tmore ticket info popup------------->
+        <div id="dialogoverlay2"></div>
+          <div id="dialogbox3">
+          <a href="#" id="close" onclick="Alert3.Cancel()">×</a>
+        
+              <div class="grid-1" style="text-align:left;"  >
+             
+                <div class="title-grid">More Information</div>
+                <div class="content-gird" style="">
+     
+
+                
+                  <div class="form">
+                    <div id="left-form" style=" width:49%; padding-bottom:20px; margin-top:15px;  border:0px #000000 solid; float:left">
+                   
+                    
+                   
+                      <div class="elem">
+                        <label>Ticket Name: </label>
+                        <label id="mandatory">*</label>
+                        <div class="indent">
+                          <input type="text"  id="name" name="name" class="medium"/>
+                        </div>
+                      </div>
+                       <div class="elem">
+                        <label>Payment Type: </label>
+                        <label id="mandatory">*</label>
+                        <div class="indent">
+                        <input type="radio"  style="outline:none;" checked="checked"   name="11" value="" /><span style="margin-left:5px; ">Paid</span><br/>
+                         <input type="radio"  style="outline:none;"   name="11" value="" /><span style="margin-left:5px; ">Free</span><br/>
+                          <input type="radio"  style="outline:none;"   name="11" value="" /><span style="margin-left:5px; ">Donation</span><br/>
+                        </div>
+                      </div>
+                      
+                        <div class="elem">
+                        <label>Ticket Type:</label>
+                        <div class="indent">
+                          <select id="itemtype">
+                            <apex:repeat value="{!itemtypes}" var="ittype">
+                            <option value="{!ittype.value}">{!ittype.label}
+                            </option>
+                            </apex:repeat>
+                            
+                            
+                          </select>
+                        </div>
+                      </div>
+                      
+                      
+                      <div class="elem">
+                        <label>Amount: </label>
+                        <div class="indent">
+                          <input type="text" id="name" name="name" class="medium"/>
+                        </div>
+                      </div>
+                       <!--<div class="elem">
+                        <label>Event Category:</label>
+                        <div class="indent">
+                          <select class="chzn-select medium-select select" style="width:78%">
+                            <option value="1">Sponsor</option>
+                            <option value="2">Attendee</option>
+                            <option value="3">Exhibitor</option>
+                            <option value="4">Corporate</option>
+                            <option value="4">MBE</option>
+                          </select>
+                        </div>
+                      </div>-->
+                        <div class="elem">
+                        <label>Quantity Available: </label>
+                        <div class="indent">
+                          <input type="text" id="name" name="name" class="medium"/>
+                        </div>
+                      </div>
+                      
+                         <div class="elem">
+                        <label for="ch_effects">Ticket visibility: </label>
+                         <!--<div class="indent" style="margin-top:-15px;">-->
+                         <!--<div class="onoffswitch" style="width:40%;">
+    <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="myonoffswitch" checked>
+    <label class="onoffswitch-label" for="myonoffswitch" style="margin-top:-10px;">
+        <span class="onoffswitch-inner"></span>
+        <span class="onoffswitch-switch"></span>
+    </label>
+</div>-->
+                        
+                     
+                        <div class="indent">
+                        <input type="radio"  style="outline:none;" checked="checked"   name="11" value="" /><span style="margin-left:5px; ">Public</span><br/>
+                         <input type="radio"  style="outline:none;"   name="11" value="" /><span style="margin-left:5px; ">Private</span><br/>
+                         <!-- <input type="radio"  style="outline:none;"   name="11" value="" ><span style="margin-left:5px; ">Invisible</span><br/>-->
+                        </div>
+             
+                        <!-- <input type="checkbox" id="ch_effects" name="ch_effects" data-on="Show effects" data-off="Hide effects" />-->
+                     <!--  <input type="checkbox"  name="12" value="" >-->
+                     
+                      </div>
+                     
+                        
+          <!--            <div class="elem">
+                        <label >Start Sales:</label>
+                        <label id="mandatory">*</label>
+                        <div class="indent">
+                          <input type="text" style="width:45%" />
+                          <span class="color-img">(dd-mm-yyyy)</span> </div>
+                      </div>
+                      <div class="elem">
+                        <label>End Sales:</label>
+                        <label id="mandatory">*</label>
+                        <div class="indent">
+                          <input type="text" style="width:45%" />
+                          <span class="color-img">(dd-mm-yyyy)</span> </div>
+                      </div>
+                      <div class="elem">
+                        <label>Min Ticket per Order: </label>
+                        <div class="indent">
+                          <input type="text" id="name" name="name" class="medium"/>
+                        </div>
+                      </div>
+                    <div class="elem">
+                        <label>Max Ticket per Order: </label>
+                        <div class="indent">
+                          <input type="text" id="name" name="name" class="medium"/>
+                        </div>
+                      </div>-->
+                    
+                     
+                    </div>
+                    <!--close of left-form-->
+                    
+                    <!------------on off switch -------------->
+                    
+                    <style>
+
+.onoffswitch {
+    position: relative; width: 90px;
+    -webkit-user-select:none; -moz-user-select:none; -ms-user-select: none;
+    
+}
+.onoffswitch-checkbox {
+    display: none;
+}
+.onoffswitch-label {
+    display: inline-block; overflow: hidden; cursor: pointer;
+    border: 0px solid #999999; border-radius: 20px;
+}
+.onoffswitch-inner {
+    display: inline-block; width: 200%; margin-left: -100%;
+    -moz-transition: margin 0.3s ease-in 0s; -webkit-transition: margin 0.3s ease-in 0s;
+    -o-transition: margin 0.3s ease-in 0s; transition: margin 0.3s ease-in 0s;
+}
+.onoffswitch-inner:before, .onoffswitch-inner:after {
+    display: inline-block; float: left; width: 50%; height: 33px; padding: 0; line-height: 30px;
+    font-size: 14px; color: white; font-family: Trebuchet, Arial, sans-serif; font-weight: bold;
+    -moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box;
+}
+.onoffswitch-inner:before {
+    content: "Show";
+    padding-left:22%;
+    background-color: #2FCCFF; color: #FFFFFF;
+        background: url(images/on.png) no-repeat;
+}
+.onoffswitch-inner:after {
+    content: "Hide";
+  
+      padding-right:12%;
+    background-color: #2FCCFF; color: #FFFFFF;
+    background: url(images/off.png) no-repeat;
+    text-align: right;
+    border:0px #9a1518 solid;
+    border-radius:20px;
+}
+
+.onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-inner {
+    margin-left: 0;
+}
+.onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-switch {
+    right: 0px; 
+}
+
+
+
+</style>
+
+<!--script for add tags flag------------------->
+                    
+                <script>
+                  var flagexppp=0;
+                function showet1(){
+                if(flagexppp==0)
+                        { 
+                        flagexppp=1;
+                        /*alert("block");*/
+                            document.getElementById("tagcontentblock").style.display="";
+                            
+                        }
+                        else if (flagexppp==1)
+                        {
+                            /*alert("hide");*/
+                            flagexppp=0;
+                            document.getElementById("tagcontentblock").style.display="none";
+                             
+                        
+                        }
+                        
+            }
+            
+        
+                
+                </script>    
+                   <!--------close of script---------------> 
+                    <script type="text/javascript"> 
+
+   function appendtags() {
+   
+    
+     var name  = $('input[name="addtagtext"]').val();
+if(name !==''){
+        /*alert('no value for addtagtext');*/
+   //if($('.results').length < 1) {
+       $('#abc').append('<table class="results">'
+                         +'<tr>' 
+                          +'<td>'+'<input type="checkbox" />'+'</td>'
+                            +'<td>'+name+'</td>'
+                            
+                           +'</tr>'
+                       + '</table>');
+                       
+                    $('#addtextlabel').val(''); //clearing textbox value
+
+ //  }
+    }
+    
+   
+    
+}
+    
+  
+   
+
+
+
+ function addtagsshow(){
+     document.getElementById("addtagtext").style.display="";
+     document.getElementById("addtagsshow").style.display="none";
+     
+     }
+</script>
+                    <!------------------------->
+               <style> 
+    #tagwrapper {
+        width:20%; height:auto; background-color:#ffffff; margin-left:13%; border-radius:3px;  position:absolute;margin-top: -2px;
+        }               
+     #tagtitleblock{
+        width:100%; border:1px solid #D0D0D0; height:auto; border-radius:3px; padding:5px 0px;background: url(orderimgs/ul_playlist_li.png) repeat-x center bottom #F5F5F5; 
+         }             
+          #tagtitleblock p{  
+          font-size:13px; color: #424242; text-align:center;
+           } 
+           
+           #addtagsdiv{width:100%; height:auto; padding-bottom:0px; background-color:#ffffff; padding-top:5px;}      
+           /* Styles for results table */
+.results {
+  /*  width: 600px;*/
+    width:95%; 
+    margin:0px auto;
+    margin-top: 0px;
+    text-align:left;
+    border: 0px solid #999;
+    padding:3px;
+    display:block; margin-bottom:5px;
+    background-color:#F5F5F5;
+    overflow:hidden;
+}
+
+.results td{ padding:0px 2px;}
+
+        </style>                
+                    <div class="right-form"  style=" width:49%; padding-bottom:20px; margin-top:15px;  border:0px #000000 solid; float:right">
+                       <!--start of tags--->
+                       <div style="float:left;"> Tags:</div>
+                       <div id="tagwrapper" style="">
+                       
+                       <div id="tagtitleblock" onClick="showet1()" style="">
+                       
+                       <p style=""><span><img src="orderimgs/check.png"  style="margin-right:5%;"/></span>Tags</p>
+                       </div><!--close of tagtitleblock-->
+         
+          <div id="tagcontentblock" style="width:100%;height:auto; display:none; z-index:999999; border:1px solid #D0D0D0; border-top:0px; position:relative; background-color:#ffffff; ">
+          
+          
+          <div id="addtagsdiv" style="">
+          
+           <!----------------------------------------------------->
+            <div id="abc" style="width:100%;">
+
+
+</div>
+
+  <!--------------------------------------->
+  <div style="display:block; border-top: 1px #E5E5E5 solid;border-bottom: 1px #E5E5E5 solid; background-color:#F7F7F7; text-align:center;font-size:18px; font-family:cuprum; color:#5283cc;">
+    <div id="addtagsshow" onClick="addtagsshow()" >
+     <span style="margin-right:10%;"><img src="images/addtag.png" width="18px" height="18px" style="margin-right:2%; margin-bottom:-3px;"/>Add Tags</span>
+    </div>
+    <table id="addtagtext" border="0" width="95%" style="margin:0px auto; margin-top:5px; margin-bottom:5px; display:none;">
+    <tbody>
+        <tr>
+      <!--<td style="text-align:left">Tag Name</td>-->
+      <td><input id="addtextlabel" type="text" name="addtagtext" placeholder="" style="width:80%;"/></td>
+      <td>
+       <div class="buttonHolder">   
+    <input class="button-a blue"  type="button" name="submit" value="Save" onclick="appendtags()" id="btn_s"/>
+    <!--<input class="button-a blue"  value="clear" type="button" id="btn_i">--> 
+  </div></td>
+      <!--<td><input type="checkbox" name="check"></td>-->
+    
+    </tr>
+    
+  </tbody></table>
+  </div>
+ 
+ 
+             <!-------------------------------------------------------->
+          </div><!--close of addtagsdiv-->
+           
+           <div id="managetagbtn" onclick="Alert.render()"  style="width:100%; cursor:pointer; text-align:center; background-color:#F7F7F7; padding:5px 0px; font-size:18px; font-family:cuprum; color:#5283cc;">
+           
+           <img src="images/manage.png" width="20px" height="20px" style="margin-right:2%; margin-bottom:-3px;"/>Manage Tags
+           
+           </div><!--close of managetagbutton-->
+          
+          <!--------------------------------------------------------------------->
+         
+          
+          
+          
+          </div><!--close of tagcontentblock-->
+          
+          </div><!--close of tagwrapper-->
+                        <!--End of tags--->
+                     
+                      <div class="elem" style="margin-top:25px;">
+                        <label>Ticket Description:</label>
+                        <div class="indent">
+                          <textarea class="medium" id="message" name="message" rows="5" style="width:75%"></textarea>
+                        </div>
+                      </div>
+                       <div class="elem">
+                        <label>Ticket Image:</label>
+                        <div class="indent">
+                          <div class="uploader black">
+                            <input type="text" style="width:58%" class="filename" />
+                            <input type="button" name="file" class="button_files " value="Browse..." />
+                            <input type="file"/>
+                          </div>
+                        </div>
+                      </div>
+                        
+                        <div class="elem">
+                        <label> Badge Label:</label>
+                        <div class="indent">
+                          <select class="chzn-select medium-select select" style="width:240%">
+                            <option value="1">Sponsor</option>
+                            <option value="2">Attendee</option>
+                            <option value="3">Exhibitor</option>
+                            <option value="4">Corporate</option>
+                            <option value="4">MBE</option>
+                          </select>
+                        </div>
+                      </div>
+                      <!------------------------------------->
+                      
+                      
+                      <br/>
+                      
+                      
+                     
+                    </div> <!--close of right-form-->
+                    <script>
+                 
+function showet()
+{
+
+$(".dynamic3").find("tr:gt(0)").remove();
+var appendTxt = "<tr><td><input type='text' id='one' name='input_box_one[]' placeholder='' value='"+earlybudname+" Early'/></td><td>  <input type='text' style='width:75%' placeholder='07/15/2014'/></td><td><input type='text' style='width:75%' placeholder='07/25/2014'/></td><td><input type='text' id='three' name='input_box_three[]' placeholder='50' /></td><td><input type='text' id='three' name='input_box_three[]' placeholder='10' /></td><td><input type='text' id='three' name='input_box_three[]' placeholder='15' /></td><td><input type='text' id='three' name='input_box_three[]' placeholder='$ 100' /></td><td id='regticket' style='display:none;'><input type='button' class='del2' title='Delete Ticket' value='' /></td></tr>";
+appendTxt += "<tr><td><input type='text' id='one' name='input_box_one[]' placeholder='' value='"+earlybudname+" Regular'/></td><td>  <input type='text' style='width:75%' placeholder='07/15/2014'/></td><td><input type='text' style='width:75%' placeholder='07/25/2014'/></td><td><input type='text' id='three' name='input_box_three[]' placeholder='50' /></td><td><input type='text' id='three' name='input_box_three[]' placeholder='10' /></td><td><input type='text' id='three' name='input_box_three[]' placeholder='15' /></td><td><input type='text' id='three' name='input_box_three[]' placeholder='$ 100' /></td><td id='regticket' style='display:none;'><input type='button' class='del2' title='Delete Ticket' value='' /></td></tr>";
+appendTxt += "<tr><td><input type='text' id='one' name='input_box_one[]' placeholder='' value='"+earlybudname+" Late'/></td><td>  <input type='text' style='width:75%' placeholder='07/15/2014'/></td><td><input type='text' style='width:75%' placeholder='07/25/2014'/></td><td><input type='text' id='three' name='input_box_three[]' placeholder='50' /></td><td><input type='text' id='three' name='input_box_three[]' placeholder='10' /></td><td><input type='text' id='three' name='input_box_three[]' placeholder='15' /></td><td><input type='text' id='three' name='input_box_three[]' placeholder='$ 100' /></td><td id='regticket' style='display:none;'><input type='button' class='del2' title='Delete Ticket' value='' /></td></tr>";
+$(".dynamic3 tr:last").after(appendTxt);
+
+      
+
+
+}
+            
+                    </script>
+                    <div style="clear:both;"></div>
+                    
+                    
+                    
+                    
+                  <!--------------------------------------->
+                 
+                  
+                  
+                  
+                  <!--------------------------->
+                      <div style="float:left; margin-bottom:10px;">
+         <button id="earlybirdbuttons" class="button-a blue" onClick="showet();return false;"  style="float:left">Early Bird Tickets</button>
+               </div>
+                     <style type="text/css">
+        .del2{background: url(images/removerow.png)  center no-repeat; width:30px; height:30px;
+          background-color: #DDD; border-radius:3px; cursor:pointer;}
+        
+         .add2{ background:url(images/addrow.png) no-repeat; width:30px; height:30px;
+          background-color:#DDD;border-radius:3px; cursor:pointer; }
+          </style>
+          <!-------------------------------------------------->
+          <!--<table class="display"  border="0" style = "width:100%; margin:0px auto; margin-bottom:10px;">
+    <thead>
+  <tr>
+ 
+    <th width="27%" style="padding:3px 0px 3px 2px; font-size:13px; text-indent:8px;">Ticket Name</th>
+                <th width="15%" style="padding:3px 0px 3px 2px;font-size:13px;text-indent:8px;">Sale Start Date</th>
+                <th width="15%" style="padding:3px 0px 3px 2px;font-size:13px;text-indent:8px;">Sale End Date</th>
+                  <th width="11%" style="padding:3px 0px 3px 2px;font-size:13px;text-indent:8px;">Qty</th>
+                  <th width="10%" style="padding:3px 0px 3px 2px;font-size:13px;;text-indent:0px;">Order Min-Qty</th>
+                  <th width="10%" style="padding:3px 0px 3px 2px;font-size:13px;text-indent:0px;">Order Max-Qty</th>
+                <th width="13%" style="padding:3px 0px 3px 2px;font-size:13px;text-indent:8px;">Price</th>
+               
+               
+  </tr>
+  </thead>
+  <tr>
+    <td>Booth</td>
+    <td>07/15/2014</td>
+    <td>07/25/2014</td>
+    <td>50</td>
+    <td>10</td>
+    <td>15</td>
+    <td>$ 20</td>
+  
+  </tr>
+</table>-->
+
+          
+          <!---------------------------------------------------->
+          
+        
+                    <table id="mytab1" class="display dynamic3"  style="width:100%; margin:0px auto; display:;" >
+            <thead>
+              <tr>
+                <th width="27%" style="padding:3px 0px 3px 2px; font-size:13px; text-indent:8px;">Ticket Name</th>
+                <th width="15%" style="padding:3px 0px 3px 2px;font-size:13px;text-indent:8px;">Sale Start Date</th>
+                <th width="15%" style="padding:3px 0px 3px 2px;font-size:13px;text-indent:8px;">Sale End Date</th>
+                  <th width="11%" style="padding:3px 0px 3px 2px;font-size:13px;text-indent:8px;">Qty</th>
+                  <th width="10%" style="padding:3px 0px 3px 2px;font-size:13px;;text-indent:0px;">Order Min-Qty</th>
+                  <th width="10%" style="padding:3px 0px 3px 2px;font-size:13px;text-indent:0px;">Order Max-Qty</th>
+                <th width="13%" style="padding:3px 0px 3px 2px;font-size:13px;text-indent:8px;">Price</th>
+               
+                <th id="regth" width="" style="display:none;"></th>
+              </tr>
+            </thead>
+            
+            
+           
+            
+             
+          </table>
+          
+       
+                   
+                    <div class="indent" style="float:right; margin-top:10px; margin-right:10px;"> 
+   
+                        <button class="button-a blue" onclick="getAll();return false;" >Save</button>
+                        &nbsp;&nbsp;
+                        <button class="button-a dark-blue" onclick="Alert3.Cancel()" >Cancel</button>
+                      </div>
+                      
+                     <script>
+                     
+                     
+                      
+                     function getAll()
+                     {
+                        
+                                                 
+                        for(var pi=0;pi<ticketlist.length;pi++) 
+                        {
+                             if(ticketlist[pi].trowid==parentrowindex)
+                             {
+                                  //set the grouptickets array to null
+                                 
+                                   ticketlist[pi].grouptickets=[];
+                                   
+                                 //Get the inner table values
+                                 var table = document.getElementById("mytab1");
+                                 for (var i = 1, row,nhiderow=0,totqty=0,totprice=0; row = table.rows[i]; i++) {
+                                 if(row.style.display!='none'){
+                       
+                        ticketlist[pi].grouptickets.push({tname:"",sdate:"",edate:"",qty:"",minqty:"",maxqty:"",tprice:""});
+                        ticketlist[pi].grouptickets[nhiderow].tname=row.cells[0].children[0].value;
+                        ticketlist[pi].grouptickets[nhiderow].sdate=row.cells[1].children[0].value;
+                        ticketlist[pi].grouptickets[nhiderow].edate=row.cells[2].children[0].value;
+                        ticketlist[pi].grouptickets[nhiderow].qty=row.cells[3].children[0].value;
+                        ticketlist[pi].grouptickets[nhiderow].minqty=row.cells[4].children[0].value;
+                        ticketlist[pi].grouptickets[nhiderow].maxqty=row.cells[5].children[0].value;
+                        ticketlist[pi].grouptickets[nhiderow].tprice=row.cells[6].children[0].value;
+                        totqty+=Number(row.cells[3].children[0].value);
+                        totprice+=Number(row.cells[6].children[0].value);
+                        nhiderow++;
+                        }
+                             }
+                             
+                             ticketlist[pi].ticketcount=nhiderow;
+                              ticketlist[pi].itemtype=document.getElementById('itemtype').value;
+                             ticketlist[pi].ispackage="false";
+                             
+                             document.getElementById("tickettable").rows[parentrowindex].cells[2].children[0].value=totqty;
+                             if(ticketlist[pi].ticketcount>1)
+                             document.getElementById("tickettable").rows[parentrowindex].cells[3].children[0].value='Group Tickets';
+                             else
+                             document.getElementById("tickettable").rows[parentrowindex].cells[3].children[0].value=totprice;
+                             
+                             //set the tags array to null
+                                   
+                                  ticketlist[pi].tags=[];
+                             //code for adding tags
+                             var testimonialElements = $(".results");
+                             for(var f=0,tgindex=0; f<testimonialElements.length; f++){
+                                  
+                                  var element = testimonialElements.eq(f);
+                                  if(element[0].children[0].children[0].children[0].children[0].checked){
+                                  ticketlist[pi].tags.push({tagname:""});
+                                  ticketlist[pi].tags[tgindex].tagname=element[0].children[0].children[0].children[1].innerHTML;
+                                  tgindex++;
+                                  }
+                                  }
+                             //end of tags
+                            
+                        }
+                        }
+                         
+                      
+                     
+                    }
+                     </script>
+                    <!----dynamic table for tickets on the popup---->
+                       
+          <!------------------------------end of dynamic table------------>
+                    <div class="clear"> </div>
+                  </div><!--close of form-->
+                  
+          
+                  <!------------------->
+                  
+                
+              
+                  
+                  
+           
+                  
+                  
+                
+                  <div class="clear"> </div>
+                </div><!--close of contentgrid-->
+             
+           </div><!--close of grid-1-->
+           
+            </div><!--close of dialogbox3-->
+            
+            
+            <!--close of more ticket info popup------------->
+          
+          
+          <!---------------------Start of Create-Package hide div-------------------------->
+  
+  <style type="text/css">
+  .title-grid1 span {
+        right: 0;
+        top: 30%;
+        cursor: pointer;
+        width: 16px;
+        height: 13px;
+        margin-top:4px;
+        background: url(images/trigger.png) no-repeat left bottom;
+        display: block;
+        font-size: 0;
+        float:right;
+}
+
+.inactive .title-grid1 span {
+        background-position: left top;
+    }
+  
+  </style>
+  <!---script for on click  close during package  div --->
+                 <script>
+function showclose(show,hide)
+{
+document.getElementById(show).style.display="none";
+document.getElementById(hide).style.display="block";
+
+
+}
+
+function savepackageinfo()
+{
+     
+     
+      var rowindex;
+      if(isnewpackage=="true")
+       rowindex=$(".dynamic tr:last").index()+1;
+       else
+       rowindex=parentrowindex-1;
+       ticketlist[rowindex].trowid=rowindex;
+       ticketlist[rowindex].ispackage="true";
+       
+       //store the package items/subgroup
+       ticketlist[rowindex].subpackagegroup=[];
+       var table = document.getElementById("packagetable");
+       for (var i = 1, row,nhiderow=0; row = table.rows[i]; i++) {
+       
+        if(row.style.display!='none'){
+              ticketlist[rowindex].subpackagegroup.push({pkgitemname:"",pkgitemqty:"",ttype:"",badgelabel:""});
+              ticketlist[rowindex].subpackagegroup[nhiderow].pkgitemname=row.cells[0].children[0].value;
+              ticketlist[rowindex].subpackagegroup[nhiderow].pkgitemqty=row.cells[1].children[0].value;
+              ticketlist[rowindex].subpackagegroup[nhiderow].ttype=row.cells[2].children[0].value;
+              ticketlist[rowindex].subpackagegroup[nhiderow].badgelabel=row.cells[3].children[0].value;
+              nhiderow++;
+         }
+       }
+      
+       //
+      
+       //store the package more ingo group
+        ticketlist[rowindex].grouptickets=[];
+       var table = document.getElementById("packagemoreinfotable");
+       for (var i = 1, row,nhiderow=0; row = table.rows[i]; i++) {
+       
+        if(row.style.display!='none'){
+              ticketlist[rowindex].grouptickets.push({tname:"",sdate:"",edate:"",qty:"",tprice:""});
+              ticketlist[rowindex].grouptickets[nhiderow].tname=row.cells[0].children[0].value;
+              ticketlist[rowindex].grouptickets[nhiderow].sdate=row.cells[1].children[0].value;
+              ticketlist[rowindex].grouptickets[nhiderow].edate=row.cells[2].children[0].value;
+              ticketlist[rowindex].grouptickets[nhiderow].qty=row.cells[3].children[0].value;
+              //
+              ticketlist[rowindex].itemtype=table.rows[1].cells[4].children[0].value;
+              //
+              nhiderow++;
+         }
+       }
+        ticketlist[rowindex].ticketcount=nhiderow;
+       //
+        if(isnewpackage=="false")
+        {
+              document.getElementById("tickettable").rows[parentrowindex].cells[0].children[0].value=document.getElementById('packagename').value;
+              document.getElementById("tickettable").rows[parentrowindex].cells[2].children[0].value=document.getElementById('packageqty').value;
+               document.getElementById("tickettable").rows[parentrowindex].cells[3].children[0].value=document.getElementById('packageprice').value;
+        }
+      else{ 
+      var appendTxt = "<tr><td><input type='text' id='one' name='input_box_one[]' value='"+document.getElementById('packagename').value+"'></td> <td><SELECT class=' selectoption ' NAME=\"Animal\"><OPTION VALUE=\"Paid\">Paid<OPTION VALUE=\"Free\">Free</SELECT></td></td><td><input type='text' name='input_box_two[]' value='"+document.getElementById('packageqty').value+"'/></td><td><input type='text' id='three' name='input_box_three[]' value='"+document.getElementById('packageprice').value+"' /></td><td ><a href=# onClick=Alert3.render(this.parentNode.parentNode.rowIndex,this.parentNode.parentNode.children[0].children[0].value,this.parentNode.parentNode.children[2].children[0].value,this.parentNode.parentNode.children[3].children[0].value)><img id='ticketinfo' src='creditcards/document_add.png' title='Add more info'  '/></a></td> <td><input type='button' class='del' value='' /></td></tr>";
+      $(".dynamic tr:last").after(appendTxt); 
+      }
+       
+}
+
+     </script>         
+     
+     <!--------------------end of script-------------->
+  
+  
+          <div id="package1" style="width:99%; margin:0px auto; margin-top:20px;  height:auto; display:none;"> 
+         
+          
+           <div class="grid-1" style=" width:100%; margin-left:0px;"  >
+          <div class="title-grid1" style=" border:0px solid #000;"><span></span>
+          <img src="steps - Copy/redheaderbg.png"  style="margin-top:-8px; 
+          margin-left:-2%;"/> <p style="color:#FFF; font-size:16px; font-family:cuprum; margin-top:-37px;">Create Package </p>
+          
+          <div style="float:right;height:15px; margin-right:2%; margin-top:-17px;   width:2%; ">
+        
+          <img src="images/cross symb.png" onClick="showclose('package1','dynamictickets');return false;" title="Close" style="cursor:pointer;"/></div></div><!--close of title-grid1-->
+          
+          <div class="content-gird" style=" border: 1px solid #e3e3e3;">
+           <!----------------------Dynamic Table for Package-------------------------->
+            <style type="text/css">
+        .del1{background: url(images/removerow.png)  center no-repeat; width:30px; height:30px;
+          background-color: #DDD; border-radius:3px; cursor:pointer;}
+        
+         .add1{ background: url(images/addrow.png) no-repeat; width:30px; height:30px;
+          background-color:#DDD;border-radius:3px; cursor:pointer; }
+          </style>
+      
+     <!-----------------------popupscript for package moreinfo -------------------------------->
+<script type="text/javascript">
+function CustomAlert(){
+    this.render =function(){
+ 
+        var winW = window.innerWidth;
+        var winH = window.innerHeight;
+        var dialogoverlay =document.getElementById('dialogoverlay2');
+        var dialogbox = document.getElementById('dialogbox4');
+        dialogoverlay.style.display="block";
+        
+        dialogbox.style.top="10px";
+        dialogbox.style.display="block";
+        
+    }
+    this.Cancel = function(){
+        document.getElementById('dialogbox4').style.display ="none";
+                document.getElementById('dialogoverlay2').style.display ="none";
+            
+                
+                return false;
+        
+        }
+    
+    }
+    
+    var Alert4= new CustomAlert();  
+
+</script>     
+          <table width="100%" border="0" style="border-collapse:collapse;  background-color:#F6F6F6; padding:5px; border-top: 1px solid #BDBDBD;border-bottom: 0px solid #BDBDBD; font-size:13px; color:#424242; 
+          font-family:Arial, Helvetica, sans-serif;">
+          <tr>
+          <td  style="font-size:17px; text-align:left;  text-indent:10px; color: #4f91cd;font-family:cuprum">1.</td>
+    <td width="10%" height="55px"  style="texr-indent:5px; text-align:right;">Package Name:</td>
+    <td width="20%" style="">      <input type="text"  id="packagename" name="packagename" class="medium"  style="width:78%;margin-left:10px;"/></td>
+   
+    <td width="5%" style="text-align:right;">Price:</td>
+    <td width="10%">      <input type="text"  id="packageprice" name="packageprice" class="medium" style="margin-left:10px; width:60%;"/></td>
+     <td width="6%" height="55px" style="text-align:right;">Quantity:</td>
+    <td width="20%">      <input type="text"  id="packageqty" name="packageqty" class="medium" style="margin-left:10px;width:80%;"/></td>
+
+  <td  >
+  <a href="#" style="text-decoration:none;color: #FFF;" onClick='Alert4.render()' data-animation="none">
+   <img id="ticketinfo" src="creditcards/document_add.png" title="Add more info"/>
+   </a> 
+ </td>
+  </tr>
+  
+ 
+  
+</table>
+
+<div id="dialogoverlay2"></div>
+            <div id="dialogbox4">
+          <a href="#" id="close" onclick="Alert4.Cancel()">×</a>
+
+<!---tmore package info popup------------->
+          
+          
+          <div id="morepackageinfo" style="width:920px; margin-top:2%;; margin-left:0px; left:13%">
+                     <div class="grid-1" style="text-align:left;"  >
+                <div class="title-grid">Create Package</div>
+                <div class="content-gird">
+                  <div class="form">
+                    <div id="left-form" style=" width:49%; padding-bottom:20px; margin-top:15px;  border:0px #000000 solid; float:left">
+                   
+                    
+                   
+                      <div class="elem">
+                        <label>Package Name: </label>
+                        <label id="mandatory">*</label>
+                        <div class="indent">
+                          <input type="text"  id="name" name="name" class="medium"/>
+                        </div>
+                      </div>
+                       <div class="elem">
+                        <label>Package Type: </label>
+                        <label id="mandatory">*</label>
+                        <div class="indent">
+                        <input type="radio"  style="outline:none;" checked="checked"   name="11" value="" /><span style="margin-left:5px; ">Paid</span><br/>
+                         <input type="radio"  style="outline:none;"   name="11" value="" /><span style="margin-left:5px; ">Free</span><br/>
+                          <input type="radio"  style="outline:none;"   name="11" value="" /><span style="margin-left:5px; ">Donation</span><br/>
+                        </div>
+                      </div>
+                      
+                        <!--<div class="elem">
+                        <label>Item Type:</label>
+                        <div class="indent">
+                          <select class="chzn-select medium-select select" style="width:180%">
+                            <option value="1">General Ticket</option>
+                            <option value="2">Admissions Ticket</option>
+                            <option value="3">Seats Ticket</option>
+                            <option value="4">Seminars</option>
+                            <option value="5">MatchLeads Buyers</option>
+                            <option value="6">MatchLeads Sellers</option>
+                            <option value="7">Booth</option>
+                            <option value="8">AttendeeScan</option>
+                            <option value="10">Kiosk</option>
+                             <option value="11">Booth Map</option>
+                              <option value="12">Items</option>
+                                <option value="12">Add-on</option>
+                            
+                            
+                          </select>
+                        </div>
+                      </div>-->
+                      
+                      
+                      <div class="elem">
+                        <label>Amount: </label>
+                        <div class="indent">
+                          <input type="text" id="name" name="name" class="medium"/>
+                        </div>
+                      </div>
+                       <div class="elem">
+                        <label>Event Category:</label>
+                        <div class="indent">
+                          <select class="chzn-select medium-select select" style="width:178%">
+                            <option value="1">Sponsor</option>
+                            <option value="2">Attendee</option>
+                            <option value="3">Exhibitor</option>
+                            <option value="4">Corporate</option>
+                            <option value="4">MBE</option>
+                          </select>
+                        </div>
+                      </div>
+                       <div class="elem">
+                        <label>Quantity Available: </label>
+                        <div class="indent">
+                          <input type="text" id="name" name="name" class="medium"/>
+                        </div>
+                      </div>
+                        
+          <!--            <div class="elem">
+                        <label >Start Sales:</label>
+                        <label id="mandatory">*</label>
+                        <div class="indent">
+                          <input type="text" style="width:45%" />
+                          <span class="color-img">(dd-mm-yyyy)</span> </div>
+                      </div>
+                      <div class="elem">
+                        <label>End Sales:</label>
+                        <label id="mandatory">*</label>
+                        <div class="indent">
+                          <input type="text" style="width:45%" />
+                          <span class="color-img">(dd-mm-yyyy)</span> </div>
+                      </div>
+                      <div class="elem">
+                        <label>Min Ticket per Order: </label>
+                        <div class="indent">
+                          <input type="text" id="name" name="name" class="medium"/>
+                        </div>
+                      </div>
+                    <div class="elem">
+                        <label>Max Ticket per Order: </label>
+                        <div class="indent">
+                          <input type="text" id="name" name="name" class="medium"/>
+                        </div>
+                      </div>-->
+                    
+                     
+                    </div>
+                    <!--close of left-form-->
+                    
+                    <div class="right-form"  style=" width:49%; padding-bottom:20px; margin-top:15px;  border:0px #000000 solid; float:right">
+                     
+                      
+                        <div class="elem">
+                        <label>Package visibility: </label>
+                         <div class="indent" style="margin-top:5px;">
+                       <input type="checkbox"  name="12" value="" />
+                      </div>
+                      </div>
+                      <div class="elem">
+                        <label>Package Description:</label>
+                        <div class="indent">
+                          <textarea class="medium" id="message" name="message" rows="5" style="width:75%"></textarea>
+                        </div>
+                      </div>
+                       <div class="elem">
+                        <label>Package Image:</label>
+                        <div class="indent">
+                          <div class="uploader black">
+                            <input type="text" style="width:58%" class="filename"/>
+                            <input type="button" name="file" class="button_files " value="Browse..."/>
+                            <input type="file"/>
+                          </div>
+                        </div>
+                      </div>
+                      <br/>
+                     
+                    </div> <!--close of right-form-->
+                     <style type="text/css">
+        .del3{background: url(images/removerow.png)  center no-repeat; width:30px; height:30px;
+          background-color: #DDD; border-radius:3px; cursor:pointer;}
+        
+         .add3{ background: url(images/addrow.png) no-repeat; width:30px; height:30px;
+          background-color:#DDD;border-radius:3px; cursor:pointer; }
+          </style>
+        
+                    <table class="display dynamic4" id="packagemoreinfotable" style="width:100%; margin:0px auto;" >
+            <thead>
+              <tr>
+                <th width="34%" style="padding:3px 0px 3px 2px; text-indent:5px;">Package Item Name</th>
+                <th width="15%" style="padding:3px 0px 3px 2px;text-indent:5px;">Start Date</th>
+                <th width="15%" style="padding:3px 0px 3px 2px;text-indent:5px;">End Date</th>
+                  <th width="11%" style="padding:3px 0px 3px 2px;text-indent:5px;">Qty</th>
+                <th width="19%" style="padding:3px 0px 3px 2px;text-indent:5px;">Item Type</th>
+               
+                <th></th>
+              </tr>
+            </thead>
+            <tr>
+              <td><input type="text"   id="one" name="input_box_one[]" /></td>
+              <td>  <input type="text" style="width:75%" /></td>
+              <td><input type="text" style="width:75%" /></td>
+               <td><input type="text" id="three" name="input_box_three[]" /></td>
+            <td>
+                <select class="selectoption"  style="outline:none; ;" >
+                            <apex:repeat value="{!itemtypes}" var="ittype">
+                            <option value="{!ittype.value}">{!ittype.label}
+                            </option>
+                            </apex:repeat>
+                            
+                            
+                          </select></td>
+                   
+                   
+              <td><input type="button" class='del3' title='Delete Ticket' value='' /></td>
+     
+            </tr>
+            <tr>
+              <td><input type="text" id="one"   name="input_box_one[]" /></td>
+             <td>  <input type="text" style="width:75%" /></td>
+              <td><input type="text" style="width:75%" /></td>
+               <td><input type="text" id="three" name="input_box_three[]" /></td>
+         <td><select class="selectoption"  style="outline:none; ;" >
+                            <apex:repeat value="{!itemtypes}" var="ittype">
+                            <option value="{!ittype.value}">{!ittype.label}
+                            </option>
+                            </apex:repeat>
+                            
+                            
+                          </select></td>
+               
+                               
+              
+              <td><input type="button"  class="add3" value="" title='Add More Ticket' /></td>
+          
+            </tr>
+          </table>
+                   
+                    <div class="indent" style="float:right; margin-top:10px; margin-right:10px;"> 
+   
+                        <button class="button-a blue" onClick="Alert4.Cancel();return false;" >Save</button>
+                        &nbsp;&nbsp;
+                        <button class="button-a dark-blue" onClick="Alert4.Cancel();return false;" >Cancel</button>
+                      </div>
+                      
+                    <!----dynamic table for tickets on the popup---->
+                       
+          <!------------------------------end of dynamic table------------>
+                    <div class="clear"> </div>
+                  </div><!--close of form-->
+                 
+                  <div class="clear"> </div>
+                </div><!--close of contentgrid-->
+           </div>
+            </div>
+            
+            </div>
+            <!--close of more package info popup------------->
+
+         
+          <table class="display dynamic2" id="packagetable" style="width:100%; margin:0px auto; margin-top:0px;" >
+            <thead>
+              <tr>
+                <th width="33%" style="padding:3px 0px 3px 2px; text-indent:5px;">Package Item Name</th>
+              
+                <th width="16.5%" style="padding:3px 0px 3px 2px;text-indent:5px;">Package Item Qty</th>
+                 <!-- <th width="11%" style="padding:3px 0px 3px 2px;text-indent:5px;">Price</th>-->
+                <th width="26%" style="padding:3px 0px 3px 2px;text-indent:5px;">Ticket Type</th>
+             <!--   <th width="9%" style="padding:3px 0px 3px 2px;text-indent:5px; ">More Info</th>-->
+                  <th width="20%" style="padding:3px 0px 3px 2px;text-indent:5px;">Badge label</th>
+   
+                  
+                <th width=""></th>
+              </tr>
+            </thead>
+            <tr>
+              <td><input type="text"   id="one"        name="input_box_one[]" /></td>
+             
+            <!--  <td><input type='text'   style="width:70%;"  name='input_box_two[]' /></td>-->
+               <td><input type="text" id="three" name="input_box_three[]" /></td>
+              <td><select>
+                            <apex:repeat value="{!itemtypes}" var="ittype">
+                            <option value="{!ittype.value}">{!ittype.label}
+                            </option>
+                            </apex:repeat>
+                            
+                            
+                          </select></td>
+                  <!-- <td >
+                   <a href="#" style="text-decoration:none;color: #FFF;" data-reveal-id="morepackageinfo" data-animation="none">
+                 
+                  <img id="ticketinfo" src="creditcards/document_add.png" title="Add more info"/>
+                  </a> 
+                  </td>-->
+                   
+                  <td><input type="text" id="one"   name="input_box_one[]" style="width: 85%;" /></td> 
+              <td><input type="button" class='del1' title='Delete Ticket' value='' /></td>
+     
+            </tr>
+            <tr>
+              <td><input type="text" id="one"   name="input_box_one[]" /></td>
+                
+            <!--  <td><input type="text" style="width:70%;"      name="input_box_two[]" /></td>-->
+                 <td><input type="text"  id="three" name="input_box_three[]" /></td>
+              <td><select>
+                            <apex:repeat value="{!itemtypes}" var="ittype">
+                            <option value="{!ittype.value}">{!ittype.label}
+                            </option>
+                            </apex:repeat>
+                            
+                            
+                          </select></td>
+                    
+                 <!--   <td>
+                       <a href="#" style="text-decoration:none;color: #FFF;" data-reveal-id="morepackageinfo" data-animation="none">
+                      
+                      <img id="ticketinfo" src="creditcards/document_add.png" title="Add more info"/>
+                      </a> 
+                      </td>
+           -->
+                               
+              <td width="15%"><input type="text" id="one"   name="input_box_one[]" style="width: 85%;" /></td>
+              <td><input type="button"  class="add1" value="" title='Add More Ticket' /></td>
+          
+            </tr>
+          </table>
+          <!-------------------------------->   
+            <div class="indent" style="float:right; margin-top:20px;  margin-right:10px;"> 
+   
+                        <button class="button-a blue" onClick="showclose('package1','dynamictickets');savepackageinfo();return false;" >Save</button>
+                        &nbsp;&nbsp;
+                        <button class="button-a dark-blue" onClick="showclose('package1','dynamictickets');return false;" >Cancel</button>
+                      </div>
+                      
+          
+          
+          </div></div>
+          
+          </div>
+          
+          
+          <!------------------------End of create Package Div------------------------->
+         
+          <div class="elem">
+    
+              <div class="indent" style="margin-left:120px;">
+              <button class="button-a blue" style="width:45%;height:32px; " onclick="saveTicket();return false;">Save</button>
+            </div>
+            </div>
+        
+          <dl class="Zebra_Accordion" style=" margin-top:30px; padding-bottom:0px;">
+          
+           <!--start of ticket options-->
+          <style>
+          #ticketopt tr td{ padding:2px;}
+          </style>
+          
+          <table id="ticketopt" width="70%" border="0" style=" font-family:Cuprum; font-size:16px; color:# 999; margin-left:.5%; border-collapse:collapse; margin-bottom:0px;">
+  <tr>
+  <td width="16%"><span style=" color:#69C; font-size:18px;">Ticket Options:</span></td>
+    <td valign="bottom" style="padding:0px;" width="2.5%"><input type="radio"  id="inf-att" style="outline:none;"   name="8" value="8" /></td>
+    <td width="28%" valign="bottom" style="padding:0px;" ><label for="inf-att">Collect info from All Attendees.</label></td>
+    <td valign="bottom" style="padding:0px;" width="2.5%"><input type="radio" id="inf-main" style="outline:none;"   name="8" value="8" /></td>
+    <td valign="bottom" style="padding:0px;"><label for="inf-main">Collect info from main Attendee.</label></td>
+  </tr>
+  
+</table>
+ <!--end of ticket options-->
+          
+            <dt>
+            <h3 style="color:#FFF;"><span><img src="images/Addoptions.png" id="addicon" width="16" height="16" style=" padding-bottom:-8px;margin-right:8px"/></span>Payment Options</h3>
+              <h6 style="font-size: 12px; color:#FFF">Click here to view the Payment Options</h6>
+            </dt>
+            <dd style="height:auto; padding-bottom:50px;">
+              <hr/>
+              <div class="form" id="and" style="width:100%; height:auto; padding-bottom:100px; ">
+                <style type="text/css">
+       
+       .distance p{ float:none; line-height:none;}
+       </style>
+                <h3 style=" margin-left:5px;font-size:18px; font-family:cuprum; color:#4f91cd;">Service Fee Option for Event:</h3>
+                <div id="ticketopt-content" style="width:50%; margin-left:12.3%;; margin-top:15px;  "  >
+                  <ul style="font-size:15px; display:inline-block; list-style:none;">
+                    <li style="display:inline-block; margin-right:20px; "> Service Fee </li>
+                    <li style="display:inline-block; margin-bottom:-3px">
+                      <input type="radio" style="outline:none;"  id="add" checked="checked"  name="4" value="4" />
+                    </li>
+                    <label for="add"> <li style="display:inline-block; font-size:13px;">Add Booth Leads fee on top of the total ticket price </li></label>
+                  </ul>
+                </div>
+                <!--ticketopt-content---> 
+                <!-------------------------------------------------------->
+                
+                <div id="ticketopt-content" style="width:50%; margin-left:12.3%;; margin-top:5px; "  >
+                  <ul style="font-size:15px; display:inline-block; list-style:none;">
+                    <li style="display:inline-block; margin-right:20px; width:78px; "> &nbsp; </li>
+                    <li style="display:inline-block; margin-bottom:-3px">
+                      <input id="inc" style="outline:none;"  type="radio"  name="4" value="4" />
+                    </li>
+                 <label for="inc"><li style="display:inline-block; font-size:13px;">Include the Booth Leads fee in to the total ticket price </li></label>
+                  </ul>
+                </div>
+                <!--ticketopt-content---> 
+                
+                <!------------hide display script for payment gateway-------> 
+                <script>
+
+function showhidediv( rad )
+    {
+        var rads = document.getElementsByName( rad.name );
+        document.getElementById( 'paypal' ).style.display = ( rads[0].checked ) ? 'block' : 'none';
+        document.getElementById( 'stripe' ).style.display = ( rads[1].checked ) ? 'block' : 'none';
+        document.getElementById( 'authorize' ).style.display = ( rads[2].checked ) ? 'block' : 'none';
+    }
+
+
+</script> 
+
+<!--<script>
+
+document.getElementById('check1').onchange = function() {
+    document.getElementById('paycheck').style.display = this.checked ? 'block' : 'none';
+};
+
+
+</script>
+-->
+<script>
+function hidethischeck() {
+    if(document.getElementById('check1').checked){
+        document.getElementById('paycheck').style.display = 'block';    
+        }else{
+        document.getElementById('paycheck').style.display = 'none';
+    }
+};
+
+</script>
+                
+                <!-------------------------------------------------------->
+                
+                <h3 style=" margin-left:5px;font-size:18px; margin-top:18px; font-family:cuprum; color:#4f91cd;">Payment Gateway Option for Event:</h3>
+                <div id="ticketopt-content" style="width:50%;   margin-left:12.3%;; margin-top:15px;  "  >
+                  <ul style="font-size:15px; display:inline-block; list-style:none;">
+                    <li style="display:inline-block; margin-top:-25px; vertical-align:middle;">
+                      <input type="radio" id="pp" style="outline:none;"  checked="checked" onclick="showhidediv(this);"  name="5" value="5" />
+                    </li>
+                   <label for="pp">  <li style="display:inline-block; font-size:13px;  margin-right:20px;"><img src="creditcards/paypal-logo-transparent1.png" style="margin-left:-3px;"  width="60" height="30"/></li></label>
+                    <li style="display:inline-block;  margin-top:-25px; vertical-align:middle;">
+                      <input type="radio" id="str" style="outline:none;"  onclick="showhidediv(this);"  name="5" value="5" />
+                    </li>
+                <label for="str"><li style="display:inline-block; font-size:13px;margin-right:20px;"><img src="creditcards/stripe.png" width="60" height="30"/></li></label>
+                    <li style="display:inline-block;  margin-top:-25px; vertical-align:middle;">
+                      <input type="radio" id="aut" style="outline:none;" onclick="showhidediv(this);"  name="5" value="5" />
+                    </li>
+                    <label for="aut"> <li style="display:inline-block; font-size:13px;margin-right:20px;"><img src="creditcards/auth-logo13.png" width="90"  style="margin-left:-5px;" height="30"/></li></label>
+                
+                 
+                 <!-- onClick="hidethischeck()"-->
+                  
+                  </ul>
+                </div>
+                
+              
+                
+                
+                <!--ticketopt-content---> 
+                <!-------------------------------------------------------->
+                <div id="paypal" style="" >
+                  <h3 style="  margin-left:10px;font-size:18px; font-family:cuprum; color:#4f91cd;">For PayPal:</h3>
+                  <div id="ticketopt-content" style="width:50%; margin-left:1%;">
+                    <ul style="font-size:15px; display:inline-block; list-style:none;">
+                      <li style="display:inline-block; margin-right:5px; ">Email Address:</li>
+                      <li style="display:inline-block; margin-bottom:-3px">
+                        <input type="text" style="width:100%;outline:none;" id="name" name="name" class="medium" />
+                      </li>
+                    </ul>
+                  </div>
+                  <!--ticketopt-content---> 
+                </div>
+                <!--close of paypal--> 
+                <!---------------------------------------------------->
+                <div id="stripe" style="display:none;">
+                  <h3 style=" margin-top:14px; margin-left:10px;font-size:18px; font-family:cuprum; color:#4f91cd;">For Stripe:</h3>
+                  <div id="ticketopt-content" style="width:50%;margin-left:4.1%;">
+                    <ul style="font-size:15px; display:inline-block; list-style:none;">
+                      <li style="display:inline-block; margin-right:5px; ">Secret Key:</li>
+                      <li style="display:inline-block; margin-bottom:-3px">
+                        <input type="text" style="width:100%;outline:none;" id="name" name="name" class="medium" />
+                      </li>
+                    </ul>
+                  </div>
+                  <!--ticketopt-content--->
+                  
+                  <div id="ticketopt-content" style="width:50%;margin-left:1%; margin-top:10px;">
+
+                    <ul style="font-size:15px; display:inline-block; list-style:none;">
+                      <li style="display:inline-block; margin-right:5px; ">Publishable Key:</li>
+                      <li style="display:inline-block; margin-bottom:-3px">
+                        <input type="text" style="width:100%; outline:none;" id="name" name="name" class="medium" />
+                      </li>
+                    </ul>
+                  </div>
+                  <!--ticketopt-content---> 
+                </div>
+                <!--close of stripe--> 
+                <!--------------------------------------------------------> 
+                
+                <!---------------------------------------------------->
+                <div id="authorize" style="display:none;">
+                  <h3 style=" margin-top:14px; margin-left:10px;font-size:18px; font-family:cuprum; color:#4f91cd;">For Authorize.Net:</h3>
+                  <div id="ticketopt-content" style="width:50%; margin-left:2.3%;">
+                    <ul style="font-size:15px; display:inline-block; list-style:none;">
+                      <li style="display:inline-block; margin-right:5px; ">Authorize.net Id:</li>
+                      <li style="display:inline-block; margin-bottom:-3px">
+                        <input type="text" style="width:100%; outline:none;" id="name" name="name" class="medium" />
+                      </li>
+                    </ul>
+                  </div>
+                  <!--ticketopt-content--->
+                  
+                  <div id="ticketopt-content" style="width:50%; margin-left:1%; margin-top:10px;">
+                    <ul style="font-size:15px; display:inline-block; list-style:none;">
+                      <li style="display:inline-block; margin-right:5px; ">Authorize.net Key:</li>
+                      <li style="display:inline-block; margin-bottom:-3px">
+                        <input type="text" style="width:100%; outline:none;" id="name" name="name" class="medium" />
+                      </li>
+                    </ul>
+                  </div>
+                  <!--ticketopt-content---> 
+                </div>
+                <!--close of authorize--> 
+                <!-------------------------------------------------------->
+                    <!-------------------------------------------------------->
+                    <!--ticketopt-content---> 
+                    
+                    <div  style=" margin-top:30px; margin-left:1%;">
+                     
+                      
+                   <label for="check1" style="font-size:16px; color:#4f91cd; font-family:Cuprum; margin-right:1%">Pay By Check</Label>
+                 <input type="checkbox" onClick="hidethischeck()" id="check1" style="outline:none;"  />
+                 
+                 <!-- onClick="hidethischeck()"-->
+                </div>
+                <!-------------------------------------------------------->
+                <!-------------------------------------------------------->
+                 <div id="paycheck" style="display:none; " >
+                  
+                  <div id="ticketopt-content" style="width:50%; margin-left:1%;; margin-top:5px; border:0px solid #F00;">
+                    <ul style="font-size:15px; display:inline-block; list-style:none;">
+                      <li style="display:inline-block; margin-right:5px; ">Mailing Address:<span>
+                      
+                         <textarea class="medium" id="message" name="message" rows="5" style="width:100%; margin-left:40%; margin-top:-20px;"></textarea></span>
+                      </li>
+                    </ul>
+                  </div>
+                  <!--ticketopt-content---> 
+                </div>
+                <!--close of paycheck--> 
+                <!---------------------------------------------------->
+              
+                
+                <div class="clear"> </div>
+              </div>
+              <!--close of form--> 
+              
+            </dd>
+          </dl>
+        </div>
+        <!--close of content-grid--> 
+      </div>
+      <!--close of grid-1--------> 
+      <!--------------------------------------------------------> 
+      
+      <!--------------pick template section---------------------------------------------->
+      
+
+   
+      <!-----------script for hide and show divs for publish--------------> 
+      <script >
+function show(show)
+{
+document.getElementById(show).style.display="block";
+
+}
+function hide(hide)
+{
+
+document.getElementById(hide).style.display="none";
+}
+</script>
+
+      <!--close of grid-1-------->
+      <div id="mask2overlay" style=" width:87.3%; height:95.5%; display:; background-color:#fff; opacity:0.7; position:absolute; top:0; left:5.6%;"></div>
+      </div>
+      <script type='text/javascript'>//<![CDATA[ 
+
+window.smoothScroll = function(target) {
+    var scrollContainer = target;
+    do { //find scroll container
+        scrollContainer = scrollContainer.parentNode;
+        if (!scrollContainer) return;
+        scrollContainer.scrollTop += 1;
+    } while (scrollContainer.scrollTop == 0);
+    
+    var targetY = 0;
+    do { //find the top of target relatively to the container
+        if (target == scrollContainer) break;
+        targetY += target.offsetTop;
+    } while (target = target.offsetParent);
+    
+    scroll = function(c, a, b, i) {
+        i++; if (i > 24) return;
+        c.scrollTop = a + (b - a) / 30 * i;
+        
+        setTimeout(function(){ scroll(c, a, b, i); }, 50);
+    }
+    // start scrolling
+    scroll(scrollContainer, scrollContainer.scrollTop, targetY,0);
+}
+  
+   var ticketlist=[{tname:"",tpaytype:"",tqty:"",tprice:"",trowid:"",grouptickets:[],ticketcount:"",tags:[],subpackagegroup:[],ispackage:"",itemtype:""},{tname:"",tpaytype:"",tqty:"",tprice:"",trowid:"",grouptickets:[],ticketcount:"",tags:[],subpackagegroup:[],ispackage:"",itemtype:""},{tname:"",tpaytype:"",tqty:"",tprice:"",trowid:"",grouptickets:[],ticketcount:"",tags:[],subpackagegroup:[],ispackage:"",itemtype:""},{tname:"",tpaytype:"",tqty:"",tprice:"",trowid:"",grouptickets:[],ticketcount:"",tags:[],subpackagegroup:[],ispackage:"",itemtype:""},{tname:"",tpaytype:"",tqty:"",tprice:"",trowid:"",grouptickets:[],ticketcount:"",tags:[],subpackagegroup:[],ispackage:"",itemtype:""},{tname:"",tpaytype:"",tqty:"",tprice:"",trowid:"",grouptickets:[],ticketcount:"",tags:[],subpackagegroup:[],ispackage:"",itemtype:""},{tname:"",tpaytype:"",tqty:"",tprice:"",trowid:"",grouptickets:[],ticketcount:"",tags:[],subpackagegroup:[],ispackage:"",itemtype:""},{tname:"",tpaytype:"",tqty:"",tprice:"",trowid:"",grouptickets:[],ticketcount:"",tags:[],subpackagegroup:[],ispackage:"",itemtype:""},{tname:"",tpaytype:"",tqty:"",tprice:"",trowid:"",grouptickets:[],ticketcount:"",tags:[],subpackagegroup:[],ispackage:"",itemtype:""},{tname:"",tpaytype:"",tqty:"",tprice:"",trowid:"",grouptickets:[],ticketcount:"",tags:[],subpackagegroup:[],ispackage:"",itemtype:""},{tname:"",tpaytype:"",tqty:"",tprice:"",trowid:"",grouptickets:[],ticketcount:"",tags:[],subpackagegroup:[],ispackage:"",itemtype:""},{tname:"",tpaytype:"",tqty:"",tprice:"",trowid:"",grouptickets:[],ticketcount:"",tags:[],subpackagegroup:[],ispackage:"",itemtype:""},{tname:"",tpaytype:"",tqty:"",tprice:"",trowid:"",grouptickets:[],ticketcount:"",tags:[],subpackagegroup:[],ispackage:"",itemtype:""},{tname:"",tpaytype:"",tqty:"",tprice:"",trowid:"",grouptickets:[],ticketcount:"",tags:[],subpackagegroup:[],ispackage:"",itemtype:""},{tname:"",tpaytype:"",tqty:"",tprice:"",trowid:"",grouptickets:[],ticketcount:"",tags:[],subpackagegroup:[],ispackage:"",itemtype:""},{tname:"",tpaytype:"",tqty:"",tprice:"",trowid:"",grouptickets:[],ticketcount:"",tags:[],subpackagegroup:[],ispackage:"",itemtype:""},{tname:"",tpaytype:"",tqty:"",tprice:"",trowid:"",grouptickets:[],ticketcount:"",tags:[],subpackagegroup:[],ispackage:"",itemtype:""},{tname:"",tpaytype:"",tqty:"",tprice:"",trowid:"",grouptickets:[],ticketcount:"",tags:[],subpackagegroup:[],ispackage:"",itemtype:""},{tname:"",tpaytype:"",tqty:"",tprice:"",trowid:"",grouptickets:[],ticketcount:"",tags:[],subpackagegroup:[],ispackage:"",itemtype:""},{tname:"",tpaytype:"",tqty:"",tprice:"",trowid:"",grouptickets:[],ticketcount:"",tags:[],subpackagegroup:[],ispackage:"",itemtype:""},{tname:"",tpaytype:"",tqty:"",tprice:"",trowid:"",grouptickets:[],ticketcount:"",tags:[],subpackagegroup:[],ispackage:"",itemtype:""},{tname:"",tpaytype:"",tqty:"",tprice:"",trowid:"",grouptickets:[],ticketcount:"",tags:[],subpackagegroup:[],ispackage:"",itemtype:""},{tname:"",tpaytype:"",tqty:"",tprice:"",trowid:"",grouptickets:[],ticketcount:"",tags:[],subpackagegroup:[],ispackage:"",itemtype:""},{tname:"",tpaytype:"",tqty:"",tprice:"",trowid:"",grouptickets:[],ticketcount:"",tags:[],subpackagegroup:[],ispackage:"",itemtype:""},{tname:"",tpaytype:"",tqty:"",tprice:"",trowid:"",grouptickets:[],ticketcount:"",tags:[],subpackagegroup:[],ispackage:"",itemtype:""},{tname:"",tpaytype:"",tqty:"",tprice:"",trowid:"",grouptickets:[],ticketcount:"",tags:[],subpackagegroup:[],ispackage:"",itemtype:""},{tname:"",tpaytype:"",tqty:"",tprice:"",trowid:"",grouptickets:[],ticketcount:"",tags:[],subpackagegroup:[],ispackage:"",itemtype:""},{tname:"",tpaytype:"",tqty:"",tprice:"",trowid:"",grouptickets:[],ticketcount:"",tags:[],subpackagegroup:[],ispackage:"",itemtype:""},{tname:"",tpaytype:"",tqty:"",tprice:"",trowid:"",grouptickets:[],ticketcount:"",tags:[],subpackagegroup:[],ispackage:"",itemtype:""},{tname:"",tpaytype:"",tqty:"",tprice:"",trowid:"",grouptickets:[],ticketcount:"",tags:[],subpackagegroup:[],ispackage:"",itemtype:""},{tname:"",tpaytype:"",tqty:"",tprice:"",trowid:"",grouptickets:[],ticketcount:"",tags:[],subpackagegroup:[],ispackage:"",itemtype:""},{tname:"",tpaytype:"",tqty:"",tprice:"",trowid:"",grouptickets:[],ticketcount:"",tags:[],subpackagegroup:[],ispackage:"",itemtype:""},{tname:"",tpaytype:"",tqty:"",tprice:"",trowid:"",grouptickets:[],ticketcount:"",tags:[],subpackagegroup:[],ispackage:"",itemtype:""},{tname:"",tpaytype:"",tqty:"",tprice:"",trowid:"",grouptickets:[],ticketcount:"",tags:[],subpackagegroup:[],ispackage:"",itemtype:""},{tname:"",tpaytype:"",tqty:"",tprice:"",trowid:"",grouptickets:[],ticketcount:"",tags:[],subpackagegroup:[],ispackage:"",itemtype:""},{tname:"",tpaytype:"",tqty:"",tprice:"",trowid:"",grouptickets:[],ticketcount:"",tags:[],subpackagegroup:[],ispackage:"",itemtype:""},{tname:"",tpaytype:"",tqty:"",tprice:"",trowid:"",grouptickets:[],ticketcount:"",tags:[],subpackagegroup:[],ispackage:"",itemtype:""},{tname:"",tpaytype:"",tqty:"",tprice:"",trowid:"",grouptickets:[],ticketcount:"",tags:[],subpackagegroup:[],ispackage:"",itemtype:""},{tname:"",tpaytype:"",tqty:"",tprice:"",trowid:"",grouptickets:[],ticketcount:"",tags:[],subpackagegroup:[],ispackage:"",itemtype:""},{tname:"",tpaytype:"",tqty:"",tprice:"",trowid:"",grouptickets:[],ticketcount:"",tags:[],subpackagegroup:[],ispackage:"",itemtype:""},{tname:"",tpaytype:"",tqty:"",tprice:"",trowid:"",grouptickets:[],ticketcount:"",tags:[],subpackagegroup:[],ispackage:"",itemtype:""},{tname:"",tpaytype:"",tqty:"",tprice:"",trowid:"",grouptickets:[],ticketcount:"",tags:[],subpackagegroup:[],ispackage:"",itemtype:""},{tname:"",tpaytype:"",tqty:"",tprice:"",trowid:"",grouptickets:[],ticketcount:"",tags:[],subpackagegroup:[],ispackage:"",itemtype:""},{tname:"",tpaytype:"",tqty:"",tprice:"",trowid:"",grouptickets:[],ticketcount:"",tags:[],subpackagegroup:[],ispackage:"",itemtype:""},{tname:"",tpaytype:"",tqty:"",tprice:"",trowid:"",grouptickets:[],ticketcount:"",tags:[],subpackagegroup:[],ispackage:"",itemtype:""},{tname:"",tpaytype:"",tqty:"",tprice:"",trowid:"",grouptickets:[],ticketcount:"",tags:[],subpackagegroup:[],ispackage:"",itemtype:""},{tname:"",tpaytype:"",tqty:"",tprice:"",trowid:"",grouptickets:[],ticketcount:"",tags:[],subpackagegroup:[],ispackage:"",itemtype:""},{tname:"",tpaytype:"",tqty:"",tprice:"",trowid:"",grouptickets:[],ticketcount:"",tags:[],subpackagegroup:[],ispackage:"",itemtype:""},{tname:"",tpaytype:"",tqty:"",tprice:"",trowid:"",grouptickets:[],ticketcount:"",tags:[],subpackagegroup:[],ispackage:"",itemtype:""},{tname:"",tpaytype:"",tqty:"",tprice:"",trowid:"",grouptickets:[],ticketcount:"",tags:[],subpackagegroup:[],ispackage:"",itemtype:""}];
+   function getTicketState()
+   {
+        if(sessionStorage['ticket']!=null){
+   
+   var temp = sessionStorage.getItem('ticket');
+    console.log('temp '+temp);
+   
+    ticketlist= $.parseJSON(temp);
+   
+   
+   
+    var appendTxt='';
+    for(var p=0;p<ticketlist.length;p++)
+    {
+        
+       if(ticketlist[p].trowid!=''){
+      appendTxt += "<tr><td><input type='text' id='one' name='input_box_one[]' value='"+ticketlist[p].tname+"'></td> <td><SELECT class=' selectoption ' NAME=\"Animal\"><OPTION VALUE=\"Paid\">Paid<OPTION VALUE=\"Free\">Free</SELECT></td></td><td><input type='text' name='input_box_two[]' value='"+ticketlist[p].tqty+"'/></td><td><input type='text' id='three' name='input_box_three[]' value='"+ticketlist[p].tprice+"' /></td><td ><a href=# onClick=Alert3.render(this.parentNode.parentNode.rowIndex,this.parentNode.parentNode.children[0].children[0].value,this.parentNode.parentNode.children[2].children[0].value,this.parentNode.parentNode.children[3].children[0].value)><img id='ticketinfo' src='creditcards/document_add.png' title='Add more info'  '/></a></td> <td><input type='button' class='del' value='' /></td></tr>";  
+        //alert(ticketlist[p].ticketcount);
+        
+      }
+    }
+     $(".dynamic").find("tr:gt(0)").remove();
+      $(".dynamic tr:last").after(appendTxt); 
+    }
+     m=setInterval('saveTicketSate()', 5 * 1000);
+   }
+   function saveTicketSate()
+   {
+ 
+   
+   
+         //create session for tickets
+        var table = document.getElementById("tickettable");
+             for (var i = 1, row,arrindex=0; row = table.rows[i]; i++) {
+              if(row.style.display!='none'){
+             col = row.cells[0];
+             ticketlist[arrindex].tname=col.children[0].value;
+             col = row.cells[1];
+             ticketlist[arrindex].tpaytype=col.children[0].value;
+             col = row.cells[2];
+             ticketlist[arrindex].tqty=col.children[0].value;
+             col = row.cells[3];
+             ticketlist[arrindex].tprice=col.children[0].value;
+             ticketlist[arrindex].trowid=col.parentNode.rowIndex;
+             arrindex++;
+             }
+           
+             }
+             
+            console.log(ticketlist);
+             sessionStorage['ticket']=JSON.stringify(ticketlist);
+           
+       
+   }
+   
+   
+   
+   
+   function saveTicket()
+   {
+   
+   
+   
+    Visualforce.remoting.Manager.invokeAction(
+            '{!$RemoteAction.BLN_EventsConTest.savesTicketInfo}',
+            JSON.stringify(ticketlist),
+            eventmand.EventID,
+            function(result, event){
+            if (event.status){
+            //sucess code
+             }         
+            }, 
+            {escape: true}
+        );
+        }
+  
+  var tcksesvar;
+  function mask1(){
+        
+        document.getElementById("mask2overlay").style.display="none";
+        //start timer for tickets
+        getTicketState();
+        
+       
+        
+               }
+        
+            
+    function mask2(){
+        
+        document.getElementById("mask3overlay").style.display="none";       }
+        
+        function mask3(){
+        
+        document.getElementById("mask4overlay").style.display="none";       }
+        
+
+</script>
+      <!--end of tickets section-->
+      
+     
+      <div class="grid-1" style="border:0px solid #4f91cd; margin-top:8px; margin-left:1.3%; ">
+        <div class="content-gird"  style="background-color:#EFEFEF; padding:0px; border:none;  width:90.4%; margin:0px auto; text-align:left; ">
+          <div style=" width:25%;  height:32px;  float:right; margin-top:10px;">
+            <button class="button-a blue" style="width:45%;height:32px; "  onClick="location.href='events.htm'">Save</button>
+            &nbsp;&nbsp;
+            <button class="button-a dark-blue" style="width:45%; height:32px; "  >Cancel</button>
+          </div>
+        </div>
+      </div>
+      <!----------------------------------->
+      
+      <div class="clear"></div>
+    </div>
+    <!-- #content--> 
+  </div>
+  <!-- #container-->
+  
+  
+  
+  <footer style="width:100%; padding:0px;">
+    <div class="info-footer" style="margin:0px;" >
+      <div id="left">
+        <p>Copyright © 2014  Global Nest.</p>
+      </div>
+      <div id="right">
+        <p>Booth Leads </p>
+      </div>
+    </div>
+  </footer>
+</section>
+<!-- #middle-->
+
+<div class="clear"></div>
+
+</body>
+
+</html>
+ <script type="text/javascript" src="{!URLFOR($Resource.datetimepicker, 'datetimepicker/jquery.datetimepicker.js')}"></script> 
+ <script>
+$('#eventsdate').datetimepicker({formatTime:'g:i A',formatDate: 'Y/m/d',defaultTime:'8:00 AM'});
+$('#eventsdate').datetimepicker({value:'',step:10});
+$('#eventedate').datetimepicker({formatTime:'g:i A',formatDate: 'Y/m/d',defaultTime:'5:00 PM'});
+$('#eventedate').datetimepicker({value:'',step:10});
+$('#meventsdate').datetimepicker();
+$('#meventsdate').datetimepicker({value:'',step:10});
+$('#meventedate').datetimepicker();
+$('#meventedate').datetimepicker({value:'',step:10});
+</script>
+
+</apex:page>

@@ -1,0 +1,12 @@
+<apex:page controller="phanisamplecon" showHeader="false" sidebar="false" contenttype="application/vnd.ms-excel"  standardStylesheets="false">
+  <apex:pageBlock >
+   <apex:repeat value="{!accList}" var="t">
+       <apex:pageBlockTable value="{!t}" var="f">
+          <apex:column value="{!f.id}" />
+         <apex:column value="{!f.NAme}"/>
+         <apex:column value="{!f.AccountNumber}"/>
+         <apex:column value="{!f.number__c}"/>
+ </apex:pageBlockTable>
+    </apex:repeat>
+ </apex:pageBlock>
+</apex:page>

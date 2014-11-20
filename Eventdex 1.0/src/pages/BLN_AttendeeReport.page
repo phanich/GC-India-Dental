@@ -1,0 +1,216 @@
+<apex:page showHeader="false" standardStylesheets="false" sidebar="false" controller="BLN_AttendeeReportCon" action="{!hideEventsTab}">
+     <c:myComponentForTable BLN_UtillDisplayLinks="{!myticket}">                  
+<script type="text/javascript" src="{!URLFOR($Resource.Reports, 'Reports/nwdatatable/js/jquery.js')}"></script>
+<script type="text/javascript" src="{!URLFOR($Resource.Reports, 'Reports/nwdatatable/js/jquery.dataTables.js')}"></script>
+<script type="text/javascript" src="{!URLFOR($Resource.Reports, 'Reports/nwdatatable/js/jquery.dataTables.js')}"></script>
+
+<apex:stylesheet value="{!URLFOR($Resource.Reports, 'Reports/nwdatatable/css/jquery.dataTables.css')}"/> 
+ 
+    <script type="text/javascript" language="javascript" class="init">
+
+$(document).ready(function() {
+    var table = $('#example').DataTable( {
+       
+        scrollX:        true,
+        scrollCollapse: true,
+       
+    } );
+    new $.fn.dataTable.FixedColumns( table );
+} );
+
+    </script>
+
+<style type="text/css">
+input.styled {
+    display: none;
+}
+select.styled {
+    position: relative;
+    width: 190px;
+    opacity: 0;
+    filter: alpha(opacity=0);
+    z-index: 5;
+}
+.disabled {
+    opacity: 0.5;
+    filter: alpha(opacity=50);
+}
+
+.dataTables_wrapper.no-footer .dataTables_scrollBody {
+border-bottom: 0px solid #111111;
+}
+</style>
+
+<!-----------------popup content for edit---------------->
+
+
+        <apex:form > 
+ 
+<section id="middle" style="width:96.8%; border:0px #000000 solid" class="res">
+  <div>
+    <div>
+      <div>
+       
+        <style>
+        #tablemenubar{
+            width:99.8%; height:50px;
+             background-color:#ccc; 
+            padding-top:10px;
+             margin-bottom:-60px;
+             background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#f8faf9), color-stop(100%,#d1d2d5));
+background: -webkit-linear-gradient(top, #f8faf9 0%,#d1d2d5 100%);
+background: -o-linear-gradient(top, #f8faf9 0%,#d1d2d5 100%);
+background: -ms-linear-gradient(top, #f8faf9 0%,#d1d2d5 100%);
+background: linear-gradient(top, #f8faf9 0%,#d1d2d5 100%);
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f8faf9', endColorstr='#d1d2d5',GradientType=0 );
+border: 1px solid #CCC;
+            
+            }
+        
+        </style>
+        <style>
+
+#datefilter table{ border-collapse:collapse;}
+
+#datefilter table tr td { padding:5px;}
+#labeltext{font-weight: 100;
+font-family: 'Cuprum', Arial, sans-serif;
+font-size: 15px;
+color: #247dba;
+text-shadow: 0 1px 1px rgba(0,0,0,.25);}
+</style>
+   
+    <div id="datefilter" style="width:60%; float:left;margin-top: 10px;margin-bottom: -5px;">
+    
+    <table width="100%" border="0">
+  <tr>
+    <td id="labeltext">From Date:</td>
+    <td width="30%"><apex:inputField value="{!EventDates.Start_Date__c}" style="width:150px;"/></td>
+    <td id="labeltext" >To Date:</td>
+    <td width="30%" id="labeltext"><apex:inputField value="{!EventDates.End_Date__c}" style="width:150px;"/></td>
+    <td style="padding-left:0px;"><apex:commandButton value="Go" action="{!displayAttendees}" styleClass="button-a blue"/></td>
+    <td align="right">   
+    <apex:commandButton action="{!exportAttendees}" image="{!URLFOR($Resource.Export)}" style="width:25px;height:25px;" />
+        
+    </td>
+     <td align="right">
+         <apex:commandLink action="{!printAttendees}" target="_blank">
+         <apex:commandButton action="{!printAttendees}" image="{!URLFOR($Resource.Print)}" style="width:25px;height:25px;" />
+         </apex:commandLink>
+    </td>
+  </tr>
+</table>
+    
+    </div>
+     <div style="clear:both;"></div>   
+        
+        <div style=" width:99%; margin:0px auto; margin-top:10px;">   
+        <div id="tablemenubar" style="">
+        
+          <!--actions_icon--->
+            
+            <!--end of actions_icon-->
+        
+        
+        
+        
+        </div><!--close of tablemenubar-->
+        <style type="text/css" class="init">
+
+.display th, td { white-space: nowrap; }
+    div.dataTables_wrapper {
+        width: 100%;
+        margin: 0 auto;
+    }
+
+    </style>
+    <div>
+      <table id="example" class="display" cellspacing="0"  border="0" bordercolor="#F7F7F7" width="100%">
+                <thead>
+                    <tr>
+                        <th>First Name</th>
+                        <th>Last Name</th>
+                        <th>Company</th>                        
+                        <th>Designation</th>                        
+                        <th>Email Id</th>
+                        <th>Phone Number</th>
+                        <th>Ticket Name</th>
+                        <th>Tag Name</th>                       
+                    </tr>
+                </thead>
+
+    <tbody> 
+  
+     <apex:repeat value="{!listOfListTickets}" var="tickets">
+         <apex:repeat value="{!tickets}" var="ticket">
+            <tr>
+                <td>{!ticket.Client_GN_User__r.First_Name__c}</td>
+                <td>{!ticket.Client_GN_User__r.Last_Name__c}</td>
+                <td>{!ticket.Client_GN_User__r.Company_Name__c}</td>
+                <td>{!ticket.Client_GN_User__r.Title__c}</td>
+                <td>{!ticket.Client_GN_User__r.Email__c}</td>
+                <td>{!ticket.Client_GN_User__r.Phone__c}</td>
+                <td>{!ticket.item__r.item_name__c}</td>
+                <td>{!ticket.Badge_Label__c}</td>
+            </tr>
+         </apex:repeat>
+     </apex:repeat>                          
+    
+                </tbody>
+            </table>
+            
+
+  
+
+
+            </div>
+</div>
+       
+       
+         
+        
+      </div>
+      <!-- #content--> 
+    </div>
+    <!-- #container-->
+  
+  </div>
+  </section>
+  <!-- #sideLeft --> 
+  <!-- #container main-->
+  
+        <!--
+          From :<apex:inputField value="{!EventDates.Start_Date__c}" style="width:150px;"/> 
+            To :<apex:inputField value="{!EventDates.End_Date__c}" style="width:150px;"/> 
+            <apex:commandButton value="Go" action="{!displayAttendees}"/>
+            Search :
+            <apex:inputText value="{!SearchString}" style="width:150px;">
+            <apex:actionSupport event="onkeyup" action="{!displayAttendees}"/>
+            </apex:inputText>
+            <apex:commandButton value="Export" action="{!exportAttendees}"/>
+            <apex:commandButton value="Print" action="{!printAttendees}"/>
+            <apex:pageBlock >
+            <apex:pageBlockTable value="{!listOfListTickets}" var="tickets">
+            <apex:column >
+                <apex:pageBlockTable value="{!tickets}" var="ticket" border="1">
+                    <apex:column value="{!ticket.Client_GN_User__r.First_Name__c}" headerValue="First Name"/>
+                    <apex:column value="{!ticket.Client_GN_User__r.Last_Name__c}" headerValue="Last Name"/>
+                    <apex:column value="{!ticket.Client_GN_User__r.Company_Name__c}" headerValue="Company Name"/>
+                    <apex:column value="{!ticket.Client_GN_User__r.Title__c}" headerValue="Designation"/>                    
+                    <apex:column value="{!ticket.Client_GN_User__r.Company_Name__c}" headerValue="Company Name"/>
+                    <apex:column value="{!ticket.Client_GN_User__r.Email__c}" headerValue="Email"/>                      
+                    <apex:column value="{!ticket.item__r.item_name__c}" headerValue="Ticket Name"/>                                          
+                    <apex:column value="{!ticket.Badge_Label__c}" headerValue="Tag Name"/>                                      
+                </apex:pageBlockTable>
+            </apex:column>
+            </apex:pageBlockTable>
+            
+            
+            </apex:pageBlock>
+            
+            -->
+            
+            
+         </apex:form>    
+  </c:myComponentForTable>
+</apex:page>

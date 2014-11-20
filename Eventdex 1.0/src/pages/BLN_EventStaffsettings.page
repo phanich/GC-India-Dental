@@ -1,0 +1,341 @@
+<apex:page controller="BLN_EventstaffsettingsCon" standardStylesheets="false" sidebar="false" showHeader="false">
+   <apex:stylesheet value="{!URLFOR($Resource.Promocodes, 'promocodes/css/style.css')}"/> 
+      <apex:stylesheet value="{!URLFOR($Resource.Promocodes, 'promocodes/css/style-button.css')}"/>
+      <apex:stylesheet value="{!URLFOR($Resource.Promocodes, 'promocodes/css/nwbuttons.css')}"/>
+      <apex:stylesheet value="{!URLFOR($Resource.Promocodes, 'promocodes/css/tables.css')}"/>
+      <apex:stylesheet value="{!URLFOR($Resource.Promocodes, 'promocodes/css/chosen.css')}"/>
+      <apex:stylesheet value="{!URLFOR($Resource.Promocodes, 'promocodes/css/responsive.css')}"/> 
+       <script type="text/javascript" src="{!URLFOR($Resource.Promocodes, 'promocodes/js/jquery.min.js')}"></script>
+       <script type="text/javascript" src="{!URLFOR($Resource.Promocodes, 'promocodes/js/jquery-ui-1.8.16.custom.min.js')}"></script>
+       <script type="text/javascript" src="{!URLFOR($Resource.Promocodes, 'promocodes/js/functions.js')}"></script>
+      <!---<script type="text/javascript" src="{!URLFOR($Resource.draganddropjs, 'tablednd.js')}"></script>--->
+     <c:myComponent BLN_UtillDisplayLinks="{!Eventstaffsettings}">
+    <style>
+    
+
+     .selected {
+       font-weight:bold;
+       font-size:12px;
+       background:url({!URLFOR($Resource.create_eventimages,'eventstaffsettings/onclickarrow.png')}) no-repeat 0% 50%;
+       text-shadow:none;
+       text-decoration:none;
+      }
+    .selected { background-color: #E0EFF7; } 
+    </style>
+     <body>
+     <!------------------------------------------for checking read automatically when ceate is checked------------------>
+   <script>
+   function createfun(){
+   
+       var individualticketsCountcr = document.getElementsByClassName('chkbxcr');
+       var individualticketsCountRead = document.getElementsByClassName('chkbxread');
+       var individualticketsCountedit = document.getElementsByClassName('chkbxupdt');
+       var individualticketsCountdel = document.getElementsByClassName('chkbxdel');
+       //alert('hhhhhhhhhhhh'+individualticketsCountcr );
+       //alert('hhhhhhhhhhhh'+individualticketsCountRead);
+       for(var i = 0; i < individualticketsCountcr.length; i++){
+       if(individualticketsCountcr[i].checked == true || individualticketsCountedit[i].checked == true || individualticketsCountdel[i].checked == true){
+       //alert(individualticketsCountcr[i].checked );
+       individualticketsCountRead[i].checked = true;
+        //alert(individualticketsCountRead[i].checked );
+       }
+       
+       }
+      
+   }
+   
+   function ReadbasedFun(){
+    var Readval = document.getElementsByClassName('chkbxread');
+     var Creatval = document.getElementsByClassName('chkbxcr');
+      var editval = document.getElementsByClassName('chkbxupdt');
+       var Delval = document.getElementsByClassName('chkbxdel');
+             for(var i = 0; i < Readval.length; i++){
+               if(Readval[i].checked == false){
+               editval[i].checked = false;
+               Creatval[i].checked = false;
+               Delval[i].checked = false;
+                
+       }
+       
+       }
+      
+   
+   }
+   </script
+   <!---------------------------------------------------------------------------------------------------------------------->
+       <!--accordian-->
+             <style type="text/css">
+  dl.Zebra_Accordion { width: 100%; font-family: Arial, sans-serif;  }
+dl.Zebra_Accordion dt { background: #A3A8A8;cursor:pointer; font-size: 13px; border-bottom:1px #ccc dotted; color: #FFF; font-weight: bold; padding: 5px }
+dl.Zebra_Accordion dd { background: #EFEFEF; height:auto; padding: 15px; margin: 1px 0;  }
+
+dl.Zebra_Accordion dt.Zebra_Accordion_Expanded { background:#bdc3c7;}
+#titleheadings{width:100%; margin-bottom:5px; height:30px; font-size:22px;text-shadow: 0 1px 1px rgba(0,0,0,.25); color:#247dba; font-family:cuprum; border-bottom:1px solid #E4E4E4; }
+#attendee-settings-box{width:99%; background-color:#F7F7F7;margin:0px auto;margin-top:5px;}
+#leftpanel-td{width:23%;background: transparent url(registrationsettings/leftdivshadow.png)repeat-y;}
+#tickets-left{ margin-top:5px;}  
+#ticketssettings-right{}
+#ticketsname{ border-collapse:collapse; margin-top:0px;}
+#ticketsname tr{ cursor:pointer;}
+#ticketsname td{ padding:10px;border-bottom:0px solid #E4E4E4;/*  background: url({!URLFOR($Resource.create_eventimages,'eventstaffsettings/onclickarrow.png')}) no-repeat 100% 50% ;*/ text-indent:3.5%;text-shadow: 0 1px 1px rgba(0,0,0,.25); font-size:15px; font-family: Arial, Helvetica, sans-serif;color:#247dba; text-decoration:underline;}
+#line{width:94%; height:1px; border-bottom:1px solid #E4E4E4;}  
+  </style>
+
+  <!----------------------------------------------------->
+  <!------script for ticket menu arrow active------>
+  <script>
+
+       function background(chgs,chgs1,chgs2,chgs3,chgs4,chgs5)
+       {
+         if (document.getElementById(chgs)==document.getElementById("t2")){
+            /*alert("checkedall");*/
+            <!--script for select all permissions when role is full admin--->
+             var chkbx = document.getElementsByClassName('chkbx');
+             var len=chkbx.length;
+              for (var i=0; i<len; i++)
+              chkbx[i].checked=true;
+            
+            
+             }
+        else if (document.getElementById(chgs)==document.getElementById("t3")){
+            <!--script for unselect all permissions when role is onsitestaff--->
+             var chkbx = document.getElementsByClassName('chkbx');
+              var len=chkbx.length;
+              for (var i=0; i<len; i++)
+              chkbx[i].checked=false;
+             }
+             
+            else  if (document.getElementById(chgs)==document.getElementById("t4")){
+            <!--script for unselect all permissions when role is registrationuser--->
+             var chkbx = document.getElementsByClassName('chkbx');
+             var len=chkbx.length;
+              for (var i=0; i<len; i++)
+              chkbx[i].checked=false;
+             
+
+             
+             }  
+                /*else  if (document.getElementById(chgs)==document.getElementById("t5")){
+            
+             var chkbx = document.getElementsByClassName('chkbx');
+              for (var i=0; i<chkbx.length; i++)
+              chkbx[i].checked=false;
+             }  */
+             
+            /* else  if (document.getElementById(chgs)==document.getElementById("t6")){
+             var chkbx = document.getElementsByClassName('chkbx');
+              for (var i=0; i<chkbx.length; i++)
+              chkbx[i].checked=false;
+            
+             }  */
+             else  if (document.getElementById(chgs)==document.getElementById("t1")){
+             var chkbx = document.getElementsByClassName('chkbx');
+              for (var i=0; i<chkbx.length; i++)
+              chkbx[i].checked=false;
+                
+             
+             
+             /*  var chkbx2 = document.getElementsByClassName('chkbx2');
+              for (var i=0; i<chkbx2.length; i++)
+              chkbx2[i].checked=true;*/
+            
+             }   
+           
+    document.getElementById("t1").style.color="#fff"
+     document.getElementById(chgs).style.background="url ({!URLFOR($Resource.create_eventimages,'eventstaffsettings/onclickarrow.png')}) no-repeat 0% 50%";
+     document.getElementById(chgs).style.color="#fff"
+      document.getElementById(chgs).style.textDecoration="none"
+     
+     document.getElementById(chgs1).style.background="none";
+     document.getElementById(chgs1).style.textDecoration="underline"
+      document.getElementById(chgs1).style.color="#247dba";
+     document.getElementById(chgs2).style.background="none";
+     document.getElementById(chgs2).style.color="#247dba";
+     document.getElementById(chgs2).style.textDecoration="underline"
+     document.getElementById(chgs3).style.background="none";
+     document.getElementById(chgs3).style.color="#247dba";
+     document.getElementById(chgs3).style.textDecoration="underline"
+     document.getElementById(chgs4).style.background="none";
+     document.getElementById(chgs4).style.color="#247dba";
+     document.getElementById(chgs4).style.textDecoration="underline"
+     document.getElementById(chgs5).style.background="none";
+     document.getElementById(chgs5).style.color="#247dba";
+     document.getElementById(chgs5).style.textDecoration="underline"
+    
+
+    }
+      </script>
+      
+
+        
+        <!--Statistic-->
+       
+     <apex:form > 
+       <div id="attendee-settings-box"><!--start of attendee-settings-box-->
+      
+         <table width="100%" border="0">  <!--start of settings tabel inside box-->
+ 
+<tr>
+    <td id="leftpanel-td" valign="top" style="">
+         <div id="titleheadings" style=" width:95.2%;">
+         <span style="margin-left:3.5%;">Event Staff Role</span>
+         </div><!--close of titleheadings-->  
+           
+           <!--start of attendee-settings-left--> 
+         <div id="tickets-left">
+        <!-- <div style="width:100%; height:30px; background: url(registrationsettings/onclickarrow.png) no-repeat 100% 50% ;"><p style="font-size:15px; margin-left:30%; padding-top:5px; color:#FFF;">My Tickets</p></div>-->
+   <table id="ticketsname" width="100%" border="0"> 
+ 
+   <!--<apex:selectRadio value="{!selectedrole}" style="margin-right:0%;" layout="pageDirection"     styleClass="{!IF(selectedrole != null,'RoleToDisp',false)}" onClick="background('t1','t2','t3','t4','t5','t6')"><br/>
+     </apex:selectRadio>
+   <apex:selectOptions value="{!roles}" id="RoleToDisp"/> 
+   <apex:actionSupport action="{!getsettings}" event="onclick" />-->
+   
+   <apex:repeat value="{!roleslist}" var="RL">
+    <tr style="color:#247dba;" class="{!IF(RL == selectedRole, 'selected', '')}"><td></td> <td style="padding-left:30px;">
+   <apex:commandLink value="{!RL}" action="{!getsettings}"  onfocus="RoleToDisp">
+    <apex:param value="{!RL}" name="abcd" assignTo="{!selectedRole}" />
+   </apex:commandLink>  
+   </td></tr>
+   <tr>
+   <td style="padding:0px;">
+   <div id="line" ></div>
+   </td>
+   </tr>
+   </apex:repeat>
+   
+</table>
+
+
+         </div><!--close ofattendee-settings-left--> 
+        </td>
+        
+       <!--start of tickets-settings-left--> 
+        <td style=" width:75.5%;" >
+       <!-- <script>
+        function chgcolor1(){
+            document.getElementById("t2").style.color="#e54d26";
+            document.getElementById("t3").style.color="#e54d26";
+            document.getElementById("t4").style.color="#f00";
+            document.getElementById("t5").style.color="#f00";
+            document.getElementById("t6").style.color="#f00";
+            
+            
+            }
+        </script>-->
+        
+        
+        
+         <table width="100%" border="0">
+         <tr>
+         <td width="20%">
+          <div id="titleheadings" style="">
+         Event Staff Settings</div><!--close of titleheadings-->
+         </td>
+        
+       
+         </tr>
+         </table>
+        
+            
+       <!--    <span style="margin-left:1%;"><input type="radio" name="1"/></span><span style="font-size:15px; margin-left:0%;">Do not collect Attendee info
+</span>-->  
+
+         
+         <div id="ticketssettings-right" style="" >
+         <dl class="Zebra_Accordion">
+             <!--start of business information-->
+    <dt><span style="margin-right:5px;"></span>Permissions</dt>
+      <dd style="padding-bottom:20px;">
+      <style>
+      #businessinformation tr td{ padding:5px; font-size:13px;text-align:center;}
+     
+      #addressinformation tr td{ padding:5px; font-size:13px; text-align:center;}
+     #highlight{ background-color:#F7F7F7;}
+      </style>
+      
+         <table id="businessinformation" width="100%"  style=" border:3px solid #F7F7F7;  border-collapse:collapse;">
+
+ 
+ <tr>
+    <td width="32%">&nbsp;</td>
+    <td style="color:#338dcb; font-size:14px; font-weight:700;">Create</td>
+    <td style="color:#338dcb;font-size:14px; font-weight:700;" >Read</td>
+     <td class="os" style="color:#338dcb;font-size:14px; font-weight:700; ">Edit</td>
+    <td class="os"   style="color:#338dcb;font-size:14px; font-weight:700; ">Delete</td>
+   <!--  <td>Buyer Only</td>
+      <td>Each Ticket Holder</td>-->
+  </tr>
+    <apex:repeat value="{!RegSettings}" var="RS">
+    <tr id="highlight">
+    <td style="text-align:left;">{!RS.Label_Name__c}</td>
+    <td style="text-align:center;"><apex:inputField value="{!RS.Create_Access__c}" Styleclass="chkbxcr" style="outline:none;" onclick="createfun();"/></td>
+   <td><apex:inputField value="{!RS.Read_Access__c}" Styleclass="chkbxread" style="outline:none;" onclick="ReadbasedFun();"/></td>
+    <td class="os" style="text-align:center; "><apex:inputField value="{!RS.Update_Access__c}" Styleclass="chkbxupdt" style="outline:none;"  onclick="createfun();"/></td>
+   <td class="os"><apex:inputField value="{!RS.Delete_Access__c}" Styleclass="chkbxdel" style="outline:none;"  onclick="createfun();"/></td>
+   
+   </tr>
+  
+   
+  <tr height="20px">
+    <td colspan="5" style="text-align:left;"></td>
+    <!-- <td><input type="checkbox" checked style="outline:none;"  ></td>
+   <td><input type="checkbox" checked style="outline:none;"  ></td>
+    <td class="os"><input type="checkbox"  style="outline:none;"  ></td>
+   <td class="os"><input type="checkbox"  style="outline:none;"  ></td>-->
+   
+  </tr>
+   </apex:repeat>
+  
+</table>
+
+      </dd>
+      <!--end of business information-->
+      
+    </dl>
+
+      
+    
+      
+      
+
+         
+      
+      
+
+      
+    
+      
+     
+        
+        
+         
+         </div><!--close of attendee-settings-left--> 
+         
+  </td>
+  </tr>
+</table><!--close of settings tabel inside box-->
+      
+       
+</div><!--close of attendee-settings-box-->
+     
+            
+          <!--------------------------------------------------------------------------------->
+
+    <div class="clear"></div>
+         
+     <div class="grid-1" style="border:0px solid #4f91cd; margin-top:8px; margin-left:1.3%; padding-bottom:30px; ">
+        <div class="content-gird"  style="background-color:#EFEFEF; padding:0px; border:none;  width:90.4%; margin:0px auto; text-align:left; ">
+          <div style=" width:25%;  height:32px;  float:right; margin-top:10px;">
+           
+            <apex:commandButton value="Save" action="{!Savesettings}" styleClass="button-a blue" style="width:55%;height:32px;"/>
+            &nbsp;&nbsp;
+            <button class="button-a dark-blue" style="width:35%; height:32px; "  >Cancel</button>
+          </div>
+        </div>
+      </div>
+        
+   </apex:form>
+     </body>
+     </c:myComponent>
+</apex:page>

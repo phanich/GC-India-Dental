@@ -1,0 +1,88 @@
+<apex:page sidebar="false" standardStylesheets="false" showHeader="false" controller="BLN_EventsListCon">
+<apex:form >
+<script type="text/javascript" src="{!URLFOR($Resource.SliderJSCSS, 'js1/jquery.js')}"></script>
+
+
+<div id="mainwrapper">
+  <table width="100%" border="0" align="center" cellpadding="5" cellspacing="0" class="table">
+    <tr>
+      <td align="center" bgcolor="#FFFFFF"><table width="100%" border="0" cellpadding="0" cellspacing="0">
+          <tr>
+            <td width="50%" align="center" valign="middle" bgcolor="#f3f3f3">
+              <h2 style="padding:0px; margin:0px;font-family: Verdana, Arial, Helvetica, sans-serif;font-size: 1.5em;font-weight: normal; color:#0079b2;">
+              <span onclick="window.open('https://blnew-boothleads.cs14.force.com/apex/BLN_EventDexUpcomingEvents','popUpWindow','height=500,width=700,left=50,top=50,resizable=yes,scrollbars=yes,toolbar=yes,menubar=no,location=no,directories=no, status=yes');">Upcoming Events</span></h2>
+            </td>
+            <td width="50%" align="center" valign="middle" bgcolor="#F3F3F3">
+              <h2 style="padding:0px; margin:0px;font-family: Verdana, Arial, Helvetica, sans-serif;font-size: 1.5em;font-weight: normal; color:#0079b2;">Past Events</h2>
+            </td>
+          </tr>
+          <tr>
+            <td align="center" valign="top" bgcolor="#f1f1f1" style="border-right:2px solid #f3f3f3;">
+              <div style="width:100%; height:300px; background-color:#FFF;">
+                <div id="slides" style="display:none;"> 
+                 <apex:repeat value="{!upcomingEvents}" var="uEvs">
+                    <a href="https://blnew-boothleads.cs14.force.com/apex/BLN_Registration?id={!uEvs.Id}" target="_blank" style="text-decoration: none;">
+                      <apex:image value="{!If(uEvs.Logo_URL__c != NULL, "/servlet/servlet.ImageServer?id="+uEvs.Logo_URL__c+"&oid="+$Organization.Id, $Resource.NoLogo)}"  width="300px" height="200px" style="padding:7px" /><br />                    
+                      <span style="font-size:22px; font-family: Verdana, Arial, Helvetica, sans-serif; color:#29abdd;">{!uEvs.Name}</span><br />
+                      <span style="font-size:13px; font-family: Verdana, Arial, Helvetica, sans-serif; color:#000000;">
+                      <apex:outputText value="{0, date,EEEE MMMM d','  yyyy}"><apex:param value="{!uEvs.Start_Date__c}" /></apex:outputText>
+                      &nbsp;-&nbsp;<apex:outputText value="{0, date,EEEE MMMM d','  yyyy}"><apex:param value="{!uEvs.End_Date__c}" /></apex:outputText>                     
+                     </span>
+                    </a>
+                  </apex:repeat>                  
+                </div>
+              </div>
+            </td>
+            <td align="center" valign="middle" bgcolor="#F1F1F1">
+              <div style="width:100%; height:300px; background-color:#FFFFFF; vertical-align:middle;">
+                <div id="slides1" style="display:none;"> 
+                  <apex:repeat value="{!pastEvents}" var="pEvs">
+                    <a href="https://blnew-boothleads.cs14.force.com/apex/BLN_Registration?id={!pEvs.Id}" target="_blank" style="text-decoration: none;">
+                      <apex:image value="{!If(pEvs.Logo_URL__c != NULL, "/servlet/servlet.ImageServer?id="+pEvs.Logo_URL__c+"&oid="+$Organization.Id, $Resource.NoLogo)}"  width="300px" height="200px" style="padding:7px" /><br />     
+                      <span style="font-size:22px; font-family: Verdana, Arial, Helvetica, sans-serif; color:#29abdd;">{!pEvs.Name}</span><br />
+                      <span style="font-size:13px; font-family: Verdana, Arial, Helvetica, sans-serif; color:#000000;">
+                      <apex:outputText value="{0, date,EEEE MMMM d','  yyyy}"><apex:param value="{!pEvs.Start_Date__c}" /></apex:outputText>
+                      &nbsp;-&nbsp;<apex:outputText value="{0, date,EEEE MMMM d','  yyyy}"><apex:param value="{!pEvs.End_Date__c}" /></apex:outputText>
+                      </span>
+                    </a>
+                  </apex:repeat>
+                </div>
+              </div></td>
+          </tr>
+          
+        </table></td>
+    </tr>
+  </table>
+</div>
+
+<script type="text/javascript" src="{!URLFOR($Resource.SliderJSCSS, 'js/jquery.slides.min.js')}"></script>
+<script>
+    $(function() {
+      $('#slides').slidesjs({
+        play: {
+          active: true,
+          auto: true,
+          interval: 4000,
+          swap: true
+        }
+      });
+    });
+  </script> 
+<!--  for past events--> 
+<script>
+    $(function() {
+      $('#slides1').slidesjs({
+       play: {
+          active: true,
+          auto: true,
+          interval: 3000,
+          swap: true,
+        }
+      });
+    });
+  </script>
+  <!-- End Default Content REMOVE THIS -->
+  
+  
+  </apex:form>
+</apex:page>

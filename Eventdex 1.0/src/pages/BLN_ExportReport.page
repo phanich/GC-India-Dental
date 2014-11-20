@@ -1,0 +1,7 @@
+<apex:page contentType="text/csv#AttendeeDetails.csv" controller="BLN_EventAdmin_Reportscon" cache="true" language="en-US" sidebar="false" >Name,Company,Email,Phone,Geography/State,Registered Date
+<apex:repeat value="{!exportgeo}" var="rep1">
+<apex:repeat value="{!rep1}" var="eg">
+{!eg.Client_GN_User__r.First_Name__c}{!eg.Client_GN_User__r.Last_Name__c},{!eg.Client_Company__r.Name},{!eg.Client_GN_User__r.Email__c},{!eg.Client_GN_User__r.Phone__c},{!eg.Client_GN_User__r.User__r.States__c},{!eg.Client_GN_User__r.CreatedDate},
+</apex:repeat>
+</apex:repeat>
+</apex:page>

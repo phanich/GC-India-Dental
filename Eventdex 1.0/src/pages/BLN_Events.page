@@ -1,0 +1,452 @@
+<apex:page sidebar="false" standardController="BLN_Event__c" extensions="BLN_EventsCon">
+    
+   <apex:form id="eventAddpage">
+       <apex:outputPanel >
+       <table border="1">
+           <tr>
+               <td>
+                   <apex:outputText value="Event Name"> </apex:outputText>
+               </td><td>
+                   <apex:inputField value="{!selectedEvent.Name}"/>
+              </td>
+           </tr>     
+           <tr>
+               <td>
+                   <apex:outputText value="Start Date"> </apex:outputText>
+               </td><td>
+                   <apex:inputField value="{!selectedEvent.Start_Date__c}"/>
+              </td>
+           </tr> 
+           <tr>
+               <td>
+                   <apex:outputText value="End Date"> </apex:outputText>
+               </td><td>
+                   <apex:inputField value="{!selectedEvent.End_Date__c}"/>
+              </td>
+           </tr> 
+           <tr>
+               <td>
+                   <apex:outputText value="Venue"> </apex:outputText>
+               </td><td>
+                   <apex:inputField value="{!selectedEvent.Venue_Name__c}"/>
+              </td>
+           </tr> 
+           <tr>
+               <td>
+                   <apex:outputText value="Event Type"> </apex:outputText>
+               </td><td>
+                   <apex:inputField value="{!selectedEvent.Event_Type__c}"/>
+              </td>
+           </tr> 
+           <tr>
+               <td>
+                   <apex:outputText value="Event Options"> </apex:outputText>
+               </td><td>
+                   TTTTTTTTTTTTTTTTTTTTTTTTTTTT
+              </td>
+           </tr> 
+           <tr>
+               <td >
+                    <apex:commandLink value="More info" action="{!eventmoreOptions}"/>
+              </td>
+              <td text-align="right">
+                    <apex:commandLink value="create Package" action="{!Packages}" reRender="PackageForm"/>   
+              </td>
+           </tr>     
+         </table>  
+       
+       </apex:outputPanel>
+       
+       <apex:outputPanel id="eventTicketPannel">
+           <table border="2">
+               <tr>
+                   <td>
+                       Ticket Name
+                  </td><td>
+                       Ticket pay Type
+                  </td><td>
+                       Quantity
+                   </td><td>
+                       Price
+                   </td><td>
+                       Ticket Category
+                   </td><td>
+                       More Info
+                   </td>
+                   
+                   
+               </tr>      
+            <!--   <apex:outputPanel id="repeatTickets">  ---->
+                   <apex:repeat value="{!insertTickets}" var="itt"> 
+                     <tr>
+                         <td>
+                               <apex:inputField value="{!itt.itemPool.Item_Pool_Name__c}"/> 
+                          </td><td>
+                                <apex:inputField value="{!itt.items.Payment__c}"/>
+                          </td><td>
+                               <apex:inputField value="{!itt.itemPool.Item_Count__c}"/>
+                           </td><td>
+                                <apex:inputField value="{!itt.items.price__c}" rendered="{!itt.itemsList.size = 1}"/>
+                                <apex:outputText >
+                                    
+                                    <apex:outputText value="Multiple Prices" rendered="{!itt.itemsList.size >= 2}"> </apex:outputText>
+                                </apex:outputText>
+                           </td><td>
+                               <apex:selectList value="{!itt.itemPool.Item_Type__c}" multiselect="false" size="1" required="true" id="eventAddpage">
+                                    <apex:selectOptions value="{!ItemTypesOptions}"/>
+                               </apex:selectList>
+                           </td><td>
+                                   <apex:commandLink value="more options...." action="{!ticketMoreOptions}"  reRender="ticketMoreOptions"> <!--- ---->
+                                       <apex:param value="{!itt.count}" name="moreTic"/>
+                                   </apex:commandLink> 
+                                   &nbsp;&nbsp;
+                                   <apex:commandLink value="Delete" action="{!deleteTicket}"  reRender="eventTicketPannel" onclick="confirm('Are you Sure Delete Item');">
+                                       <apex:param value="{!itt.count}" name="delTic"/>
+                                   </apex:commandLink>     
+                           </td>  
+                     </tr>          
+                   </apex:repeat>
+        <!----   </apex:outputPanel>  ---->
+           <tr>
+               <td> &nbsp; </td>
+               <td> &nbsp; </td>
+               <td> &nbsp; </td>
+               <td> &nbsp; </td>
+               <td> &nbsp; </td>
+               <td>  <apex:commandLink value="Add One More....." action="{!addOnemoreTicket}" reRender="eventAddpage" immediate="true"/> </td>
+           </tr>    
+        </table>   
+    </apex:outputPanel>
+    <apex:commandButton value="Save Event" action="{!saveEvent}" />
+     
+   </apex:form>
+   
+   <apex:form id="eventMoreOptionsForm" rendered="{!eventMoreOptionBool}">
+         <table>
+             <tr>
+                <td>  
+                   <table>
+                       <tr>
+                           <td> Event Organisation Email Address: </td>
+                           <td> <apex:inputField value="{!eventMoreOptionEvents.City__c }"/> </td>
+                       </tr>    
+                       <tr>
+                           <td> Title: </td>
+                           <td> <apex:inputField value="{!eventMoreOptionEvents.Name }"/> </td>
+                       </tr> 
+                       <tr>
+                           <td> Hosting Time Zone: </td>
+                           <td> <apex:inputField value="{!eventMoreOptionEvents.Time_Zone__c }"/> </td>
+                       </tr>    
+                       <tr>
+                           <td> Start Date:</td>
+                           <td> <apex:inputField value="{!eventMoreOptionEvents.Start_Date__c }"/> </td>
+                       </tr> 
+                       <tr>
+                           <td> End Date: </td>
+                           <td> <apex:inputField value="{!eventMoreOptionEvents.End_Date__c }"/> </td>
+                       </tr>    
+                       <tr>
+                           <td> Phone Number: </td>
+                           <td> <apex:inputField value="{!eventMoreOptionEvents.Phone_Number__c }"/> </td>
+                       </tr> 
+                       <tr>
+                           <td> Website Url:</td>
+                           <td> <apex:inputField value="{!eventMoreOptionEvents.Website_Url__c }"/> </td>
+                       </tr>    
+                   <!-- <tr>
+                           <td> Event Category: </td>
+                           <td> <apex:inputField value="{!eventMoreOptionEvents. }"/> </td>
+                       </tr> 
+                       <tr>
+                           <td> Primary Category:</td>
+                           <td> <apex:inputField value="{!eventMoreOptionEvents. }"/> </td>
+                       </tr>    
+                       <tr>
+                           <td> Secondary Category:</td>
+                           <td> <apex:inputField value="{!eventMoreOptionEvents. }"/> </td>
+                       </tr> ------->
+                       <tr>
+                           <td> Twitter Hash Tag: </td>
+                           <td> <apex:inputField value="{!eventMoreOptionEvents.Twitter_Hash_Tag__c }"/> </td>
+                       </tr>    
+                       <tr>
+                           <td> Twitter URL: </td>
+                           <td> <apex:inputField value="{!eventMoreOptionEvents.Twitter_URL__c }"/> </td>
+                       </tr> 
+                        <tr>
+                           <td> Facebook URL: </td>
+                           <td> <apex:inputField value="{!eventMoreOptionEvents.Facebook_URL__c }"/> </td>
+                       </tr>    
+                       <tr>
+                           <td> Event Status: </td>
+                           <td> <apex:inputField value="{!eventMoreOptionEvents.Event_Status__c }"/> </td>
+                       </tr>
+                  <!--  <tr>
+                           <td> Event Logo: </td>
+                           <td> <apex:inputField value="{!eventMoreOptionEvents. }"/> </td>
+                       </tr>   ----> 
+                   </table>      
+               </td>
+               <td>
+                   <table>
+                       <tr>  ///////NEED To Update......................
+                           <td> Hosting Organization: </td>
+                           <td><!-- <apex:inputField value="{!eventMoreOptionEvents. }"/> ---></td>
+                       </tr>    
+                       <tr>
+                           <td> Hosting Location: </td>
+                           <td> <apex:inputField value="{!eventMoreOptionEvents.Hosting_Location__c }"/> </td>
+                       </tr> 
+                       <tr>
+                           <td> Hosting Address 1: </td>
+                           <td> <apex:inputField value="{!eventMoreOptionEvents.Street1__c }"/> </td>
+                       </tr>    
+                       <tr>
+                           <td> Hosting Address 2: </td>
+                           <td> <apex:inputField value="{!eventMoreOptionEvents.Street2__c }"/> </td>
+                       </tr> 
+                       <tr>
+                           <td> City: </td>
+                           <td> <apex:inputField value="{!eventMoreOptionEvents.City__c }"/> </td>
+                       </tr>    
+                       <tr>
+                           <td> State: </td>
+                           <td> <apex:inputField value="{!eventMoreOptionEvents.State__c }"/> </td>
+                       </tr> 
+                <!--   <tr>
+                           <td> Country:</td>
+                           <td> <apex:inputField value="{!eventMoreOptionEvents. }"/> </td>
+                       </tr>    ---->
+                       <tr>
+                           <td> Zip Code: </td>
+                           <td> <apex:inputField value="{!eventMoreOptionEvents.ZipCode__c }"/> </td>
+                       </tr> 
+                       <tr>
+                           <td> Po Box:</td>
+                           <td> <apex:inputField value="{!eventMoreOptionEvents.PO_Box__c }"/> </td>
+                       </tr>    
+                        <tr>
+                           <td> Attendee Registration:</td> //////Need too add
+                           <td> <!--<apex:inputField value="{!eventMoreOptionEvents. }"/>--------> </td>
+                       </tr> 
+                       <tr>
+                           <td> Event Description: </td>
+                           <td> <apex:inputField value="{!eventMoreOptionEvents.Description__c }"/> </td>
+                       </tr>   
+                       <tr>
+                           <td> <apex:commandButton action="{!savePartEvent}" value="Save"/> </td>
+                           <td> <apex:commandButton action="{!Cancel}" value="Cancel"/>  </td>
+                       </tr> 
+                          
+                   </table>   
+               </td>
+           </tr>
+       </table>
+               
+           
+   </apex:form>
+            
+     <apex:outputPanel id="ticketMoreOptions">
+       <apex:form rendered="{!moreTicketBool}" >
+          
+               <apex:repeat value="{!ticketmoreTic}" var="itt">
+                   <table>
+                     <tr>
+                       <td>
+                           <table>
+                               <tr>
+                                   <td> Ticket Name: </td>
+                                   <td> <apex:inputField value="{!itt.itemPool.Item_Pool_Name__c}"/> </td>
+                               </tr>
+                               <tr>
+                                   <td> Ticket Type: </td>
+                                   <td> <apex:inputField value="{!itt.items.Payment__c}"/> </td>
+                               </tr>
+                               <tr>
+                                   <td> Item Type: </td>
+                                   <td>  
+                                           <apex:selectList value="{!itt.items.item_type__c}" multiselect="false" size="1" required="true" id="eventAddpage">
+                                                <apex:selectOptions value="{!ItemTypesOptions}"/>
+                                           </apex:selectList>
+                                   </td>
+                               </tr>
+                       <!--    <tr>
+                                   <td> Amount: </td>
+                                   <td> <apex:inputField value="{!itt.items.price__c}"/> </td>
+                               </tr>  ---->
+                               <tr>
+                                   <td> Event Category: </td>
+                                   <td>  Event Category   </td>
+                               </tr>
+                            </table>
+                         </td>
+                         <td>
+                             <table>
+                                 <tr>
+                                    <td> Quantity Available: </td>
+                                    <td> <apex:outputText value="{!itt.itemPool.Item_Count__c}"/> </td> <!-----itt.items.item_count__c ----->
+                                 </tr>  
+                                 <tr>
+                                    <td> Ticket visibility: </td> 
+                                    <td> <apex:inputField value="{!itt.items.Visibility__c}"/> </td>
+                                 </tr>  
+                                 <tr>
+                                    <td> Ticket Description: </td> 
+                                    <td> <apex:inputField value="{!itt.items.Description__c}"/> </td>
+                                 </tr>
+                                 <tr>
+                                    <td> Ticket Image: </td> 
+                                    <td> <apex:inputField value="{!itt.items.item_name__c}"/> </td>
+                                 </tr>              
+                              </table>
+                           </td>
+                       </tr>
+                       <tr>
+                           <td colspan="2">
+                               <apex:variable value="{!0}" var="counterVar"/>
+                                
+                               
+                               <apex:dataTable value="{!itt.itemsList}" var="item">
+                                   <apex:column headerValue="Ticket Name" >  
+                                       <apex:inputField value="{!item.item_name__c}"/>
+                                   </apex:column>
+                                  <apex:column headerValue="Start Date" >
+                                       <apex:inputField value="{!item.sale_start__c}"/>
+                                   </apex:column>
+                                   <apex:column headerValue="End date" >
+                                       <apex:inputField value="{!item.sale_end__c}"/>
+                                   </apex:column>
+                                   <apex:column headerValue="Quantity" >
+                                       <apex:inputField value="{!item.item_count__c}"/>  <!---- ----->
+                                   </apex:column>
+                                   <apex:column headerValue="Price" >
+                                       <apex:inputField value="{!item.price__c}"/>
+                                   </apex:column>
+                                   <apex:column headerValue="Min Order" >
+                                       <apex:inputField value="{!item.min_per_order__c}"/>
+                                   </apex:column>
+                                   <apex:column headerValue="Max Order" >
+                                       <apex:inputField value="{!item.max_per_order__c}"/>
+                                   </apex:column>
+                                   <apex:column headerValue="Actions" >
+                                        <apex:commandLink value="AddOneMore......" action="{!addAnotherItems}"/>
+                                        <apex:commandLink value="Delete...." action="{!deleteMoreTicketItems}" rendered="{!itt.itemsList.size > 1}" onclick="confirm('Are you Sure Delete Item');">
+                                            <apex:param value="{!counterVar}" name="delItem"/>
+                                        </apex:commandLink>  
+                                          <apex:variable value="{!counterVar+1}" var="counterVar"/> 
+                                          
+                                   </apex:column> 
+                                   
+                               </apex:dataTable>
+                           </td>
+                       </tr>
+                       <tr>
+                           <td colspan="2">
+                               <apex:commandButton value="Save" action="{!updateTicket}" /> &nbsp;&nbsp;
+                               <apex:commandButton value="Cancel" action="{!Cancel}" />
+                           </td>
+                       </tr>        
+                   </table>  
+              </apex:repeat>              
+       </apex:form>
+    </apex:outputPanel>
+    
+    <!----------- Ticket More Options..............  ------------------>
+    <apex:outputPanel id="paymentOptions" rendered="{!paymentOptionsBool}">
+        <apex:form >
+            <table>
+               <tr>
+                   <td colspan="2">
+                       Service Fee Option for Event:
+                    </td>
+               </tr>
+               <tr>
+                   <td>
+                        Service Fee
+                   </td>
+                   <td>                        
+                        <apex:selectRadio value="{!payGateway.Service_Fee__c }" layout="pageDirection">
+                            <apex:selectOptions value="{!ticketServiceFee}"/>
+                        </apex:selectRadio>
+                   </td> 
+               </tr>
+                <tr>
+                   <td colspan="2">
+                       Payment Gateway Option for Event:
+                    </td>
+               </tr>
+               <tr>
+                   <td colspan="2">
+                         Paypal ----------- Stripe ----------Authorization.net
+                   </td> 
+               </tr>
+               <tr>
+                   <td colspan="2">
+                       For PayPal:
+                    </td>
+               </tr>
+               <tr>
+                   <td>
+                         Email Address
+                   </td> 
+                   <td>
+                          <apex:inputField value="{!payGateway.PG_Email_Id__c }"/>
+                   </td> 
+               </tr>
+            </table>            
+        </apex:form>
+    </apex:outputPanel>
+    
+<apex:form id="PackageForm">
+ <apex:outputPanel rendered="{!packageBool}">
+     
+         
+         <apex:dataTable value="{!createdPackages}" var="pak" rendered="{!createdPackages.size > 0}">
+                 <apex:column value="{!pak.packageItemPool.Item_Pool_Name__c}" headerValue="Package Name" />
+                 <apex:column value="{!pak.packageItems.price__c}" headerValue="Price" />
+                 <apex:column value="{!pak.packageItemPool.Item_Count__c}" headerValue="Item Count" />
+                 <apex:column value="{!pak.packageItemPool.Pool_Group__c}" headerValue="Package Category" />
+         </apex:dataTable>
+     <apex:outputPanel id="newPackages">    
+         <table>
+             <tr>
+                 <td>
+                    Package Name:- <apex:inputField value="{!newPackageItems.packageItemPool.Item_Pool_Name__c}"/>
+                    Price:- <apex:inputField value="{!newPackageItems.packageItems.price__c}"/>
+                    Count:- <apex:inputField value="{!newPackageItems.packageItemPool.Item_Count__c}"/>
+                    Flag:- <apex:inputField value="{!newPackageItems.packageItemPool.Pool_Group__c}"/>
+                 </td>
+             </tr>
+             <tr>
+                 <td> <!---------------   Display Package Line Items Entry form ------------------->
+                     <apex:variable value="{!0}" var="pakItems"/>
+                      
+                     <apex:dataTable value="{!newPackageItems.packageLineItemPool}" var="pakLine">
+                         <apex:column headerValue="Ticket Name">
+                             <apex:inputField value="{!pakLine.Item_Pool_Name__c}" />
+                         </apex:column> 
+                         <apex:column headerValue="Add On to Qty">
+                             <apex:inputField value="{!pakLine.Item_Count__c}" />
+                         </apex:column>  
+                         <apex:column headerValue="Ticket Category">
+                             <apex:inputField value="{!pakLine.Pool_Group__c}" />
+                         </apex:column> 
+                         <apex:column headerValue="Action">
+                              <apex:commandLink action="{!AddpackageLineItems}" value="Add One MOre......" reRender="PackageForm"/>
+                              <apex:commandLink value="Delete.." action="{!deletePackageLineItems}" reRender="newPackages" rendered="{!newPackageItems.packageLineItemPool.size > 1}" >
+                                  <apex:param value="{!pakItems}" name="pakDelTic"/>
+                              </apex:commandLink>    
+                         </apex:column>   
+                          
+                         <apex:variable value="{!pakItems+1}" var="pakItems"/>
+                     </apex:dataTable>
+                 </td>
+             </tr>    
+         </table>
+     </apex:outputPanel>     
+         
+     
+ </apex:outputPanel>
+ </apex:form>
+</apex:page>

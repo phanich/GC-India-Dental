@@ -1,0 +1,12 @@
+<apex:page controller="checksamplecon">
+    
+    <apex:form >
+        <apex:selectCheckboxes value="{!SelectedAnswer}">
+            <apex:selectOptions value="{!Answers}">
+            
+            </apex:selectOptions>
+        </apex:selectCheckboxes>
+        <apex:commandButton action="{!checkMethod}" value="Check"/>
+    </apex:form>
+    
+</apex:page>

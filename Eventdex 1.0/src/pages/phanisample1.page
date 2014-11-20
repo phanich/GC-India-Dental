@@ -1,0 +1,89 @@
+<apex:page standardStylesheets="false" showHeader="false"  sidebar="false" controller="phanisample1Con" >
+   
+   <c:myComponent BLN_UtillDisplayLinks="{!myticket}" id="cmp">
+     <SCRIPT type="text/javascript">
+        function searchSel() {
+          var input=document.getElementById('realtxt').value.toLowerCase();
+          
+          var output = document.getElementsByClassName('cpk');
+          for(var i=0;i<output.length;i++) {
+            if(output[i].innerHTML.toLowerCase().indexOf(input)!=-1){
+             output[i].style.display='block';
+            }else{
+             output[i].style.display='none';
+            }
+            
+          }
+         }
+        
+       
+          function display(){
+            var status = document.getElementById('maindiv');
+            if(status.style.display=='block'){
+                status.style.display='none';
+            }else{
+              status.style.display='block';
+            }
+          }   
+        
+        
+      function assignvalue(vs){
+          var dp= document.getElementById('dip');
+           dp.innerHTML=vs.innerHTML ;
+              document.getElementById('maindiv').style.display='none';
+             
+       }
+        
+     function phani(vs){
+       alert(vs.innerHTML);
+     }   
+        
+</SCRIPT>
+
+
+<style>
+.selectlist {
+
+height: 28px;
+border: 1px solid #e3e3e3;
+border-radius: 3px;
+color: #575757;
+background-color: #FFF;
+background-image: url(../images/input.png);
+outline: none;
+-webkit-border-radius: 3px;
+-moz-border-radius: 3px;
+text-align:center;
+}
+</style>
+
+
+<apex:FORM >
+
+
+  <div id="dip" onclick="display();" class="selectlist" style="position: relative;">
+     Select Options
+    </div>
+  
+  
+  <div onclick="phani(this);" id="abcdf">
+  <apex:outputText value="{0, date, MMMM d','  yyyy}">
+    <apex:param value="{!NOW()}" />
+</apex:outputText>
+  
+  </div>
+  
+ <div style="border:0px solid red;width:20%;display:none;" id="maindiv"> 
+ <div id="divaval" >
+  <input type="text" id="realtxt" onkeyup="searchSel()" /></div>
+   <div id="divaval" style=" width: 200px; height: 350px; overflow: auto;box-shadow: 0 1px 3px 0 #b5b5b5;-moz-box-shadow: 0 1px 3px 0 #b5b5b5;-webkit-box-shadow: 0 5px 5px 0 #b5b5b5;" > 
+    <apex:repeat value="{!accList}" var="acc">
+        <div id="rep" class="cpk" style="border-bottom:1px solid #CCC;line-height:25px;text-indent:5px;" onclick="assignvalue(this);">
+            {!acc.Name}
+         </div></apex:repeat>   </div>
+     <div id="vax" style="border-top:3px solid #CCC;margin-top:10px;"> 
+      <a href="" style="color:blue"> Create new</a></div>
+      </div> 
+</apex:FORM>
+  </c:myComponent>
+</apex:page>

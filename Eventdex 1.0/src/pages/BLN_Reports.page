@@ -1,0 +1,404 @@
+<apex:page showHeader="false" standardStylesheets="false" sidebar="false" controller="BLN_ReportsCon" action="{!hideEventsTab}">
+
+
+    
+    <script type="text/javascript" src="{!URLFOR($Resource.Reports, 'Reports/nwdatatable/js/jquery.js')}"></script>
+<script type="text/javascript" src="{!URLFOR($Resource.Reports, 'Reports/nwdatatable/js/jquery.dataTables.js')}"></script>
+
+         
+ <apex:stylesheet value="{!URLFOR($Resource.nwdatatable, 'nwdatatable/css/jquery.dataTables.css')}"/> 
+ <apex:stylesheet value="{!URLFOR($Resource.Reports, 'Reports/css/tables.css')}"/> 
+ 
+    <script type="text/javascript" src="{!URLFOR($Resource.Reports, 'Reports/js/jquery-ui-1.8.16.custom.min.js')}"></script>
+    <apex:stylesheet value="{!URLFOR($Resource.Reports, 'Reports/css/simplePagination.css')}"/>
+    <script type="text/javascript" src="{!URLFOR($Resource.Reports, 'Reports/js/jquery.min.expand.js')}"></script>
+           
+                     <script type="text/javascript">  
+        $(document).ready(function(){
+            /*$("#report tr:odd").addClass("odd");
+            $("#report tr:not(.odd)").hide();
+            $("#report tr:first-child").show();*/
+            
+            $("#report tr.odd td:not(:first-child ,:last-child,:nth-child(3),:nth-child(4),:nth-child(5))").click(function(){
+                        /*  (:nth-child(2))*/
+                
+                $(this).parent().next("tr").toggle();
+                $(this).parent().find(".arrow").toggleClass("up");
+               
+            });
+            $("#report").jExpand();
+            
+            
+        });
+        
+          
+    </script>  
+   
+    <script type="text/javascript" src="{!URLFOR($Resource.Reports, 'Reports/js/jquery.min.js')}"></script>    
+    <script type="text/javascript" src="{!URLFOR($Resource.Reports, 'Reports/js/jquery.simplePagination.js')}"></script>    
+
+<script>
+
+
+jQuery(function($) {
+    // consider adding an id to your table,
+    // just incase a second table ever enters the picture..?
+    var items = $("#report tbody tr:even");
+
+    var numItems = items.length;
+    var perPage = 10;
+
+    // only show the first 2 (or "first per_page") items initially
+    items.slice(perPage).hide();
+
+    // now setup your pagination
+    // you need that .pagination-page div before/after your table
+    $(".pagination-page").pagination({
+        items: numItems,
+        itemsOnPage: perPage,
+        cssStyle: "compact-theme",//dark-theme  light-theme    compact-theme
+        onPageClick: function(pageNumber) { // this is where the magic happens
+            // someone changed page, lets hide/show trs appropriately
+            var showFrom = perPage * (pageNumber - 1);
+            var showTo = showFrom + perPage;
+
+            items.hide() // first hide everything, then show for the new page
+                 .slice(showFrom, showTo).show();
+        }
+    });
+});
+
+
+   
+
+</script>     
+     
+     <!--------------------end of script-------------->
+
+
+<style type="text/css">
+input.styled {
+    display: none;
+}
+select.styled {
+    position: relative;
+    width: 190px;
+    opacity: 0;
+    filter: alpha(opacity=0);
+    z-index: 5;
+}
+.disabled {
+    opacity: 0.5;
+    filter: alpha(opacity=50);
+}
+
+<!---------------------->
+
+ #report { border-collapse:collapse; width:100%;}
+   
+      
+
+
+        #report td { background:#f2efef ; color:#000; padding:7px 15px; }
+        #report tr.odd td { background:#fff url(row_bkg.png) repeat-x scroll center left;  }
+/*        #report div.arrow { background:transparent url(arrows.png) no-repeat scroll 0px -16px; width:16px; height:16px; display:block;}*/
+               #report div.arrow {  background:transparent url(arrows.png) no-repeat scroll 0px -16px; width:100%; text-align:right; height:auto; display:block; color:#247dba; font-weight:700; margin-top:5px;}
+       
+        #report div.up { background-position:0px 0px;}
+<!---------------------->
+</style>
+         <c:myComponentForTable BLN_UtillDisplayLinks="{!myticket}">        
+    <apex:form > 
+  <section id="middle" style=" border:0px #000000 solid;width:100%;" class="res" >
+  <div>
+    <div>
+      <div>
+        <div>
+          <div style="float:right;"> 
+              <apex:commandButton action="{!exportOrders}" image="{!URLFOR($Resource.Export)}" style="width:25px;height:25px;" />
+             <apex:commandLink action="{!printOrders}" target="_blank">
+                 <apex:commandButton action="{!printOrders}" image="{!URLFOR($Resource.Print)}" style="width:25px;height:25px;" />
+             </apex:commandLink>
+       <br/>
+          </div>
+        </div>
+        
+         <!--------------------->
+         <div id="seminartable" >
+     <script>
+     function displayblock(xyz){
+     var bbb= document.getElementById(xyz);
+     if(bbb.style.display== "none"){
+         bbb.style.display= "block";
+     }else{
+         bbb.style.display= "none";
+     }
+     }
+     </script>  
+        <!--Statistic-->
+<style>
+
+#datefilter table{ border-collapse:collapse;}
+
+#datefilter table tr td { padding:2px;}
+#labeltext{font-weight: 100;
+font-family: 'Cuprum', Arial, sans-serif;
+font-size: 15px;
+color: #247dba;
+text-shadow: 0 1px 1px rgba(0,0,0,.25);}
+</style>
+     
+  <div class="grid-1"  >
+    <div id="datefilter" style="width:60%; float:left;">
+   
+
+          
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td width="15%" id="labeltext">From Date:</td>
+    <td width="30%"><apex:inputField value="{!EventDates.Start_Date__c}" styleClass="small" style="width:60px; padding-right:5px;" /></td>
+    <td width="10%" id="labeltext" >To Date:</td>
+    <td width="30%" id="labeltext"><apex:inputField value="{!EventDates.End_Date__c}" styleClass="small" style="width:60px; padding-right:5px;" /></td>
+    <td width="10%" style="padding-left:0px;"><apex:commandButton value="Go" action="{!displayOrders}" styleClass="button-a blue" style="width:40px; height:25px;"/></td>
+  </tr>
+</table>   
+    </div>
+     
+            
+    <!------------------->
+             <div style="text-align:right; margin-bottom:8px; width:25%; margin-top:10px; margin-right:.5%;  float:right;">
+             <label style="font-weight: 100;
+font-family: 'Cuprum', Arial, sans-serif;
+font-size: 15px;
+color: #247dba;
+text-shadow: 0 1px 1px rgba(0,0,0,.25);">
+             Search:
+             </label>
+         
+             <span style="margin-left:.5%;">
+             <apex:inputText value="{!SearchString}" style="width:50%;">
+                <apex:actionSupport event="onkeyup" action="{!displayOrders}"/>
+            </apex:inputText>
+            
+                </span>
+                </div>
+                <style>
+                #statisticstbl { border-collapse:collapse;}
+                #statisticstbl tr td{ padding:5px; font-size:12px; font-weight:700;}
+                
+                </style>
+                <div style="clear:both;"></div>
+                <!-----statstics------------------------------>
+                  <div style="width:99.6%; margin-left:.1%; background-color: #F4F4F4; padding:0px 0px 5px 0px;
+box-shadow: 0 1px 3px 0 #b5b5b5;
+-moz-box-shadow: 0 1px 3px 0 #b5b5b5;
+-webkit-box-shadow: 0 2px 5px 0 #b5b5b5;">
+               <table id="statisticstbl" width="100%" border="0">
+  <tr>
+    <td  class="labeltitles" style="padding-right:0px;">Total no. of transactions:</td>
+    <td  style=" text-align:left;border-right: 1px solid #ccc;font-size:14px;" >{!TotalTransactions} </td>
+    <td class="labeltitles" style=" text-align:left; padding-right:0px;">Total no. of attendees registered:</td>
+    <td style=" text-align:left;border-right: 1px solid #ccc;font-size:14px;">{!TotalAttendeesRegistered}</td>
+    <td class="labeltitles" style=" padding-right:0px;">Check:</td>
+    <td style=" text-align:left;border-right: 1px solid #ccc; font-size:14px;">${!AmountThroughCheck}</td>
+    <td class="labeltitles" style=" padding-right:0px;">Card :</td>
+    <td style=" text-align:left;border-right: 1px solid #ccc;font-size:14px;">${!AmountThroughCredit}</td>
+    <td class="labeltitles" >Total Amount:</td>
+    <td style="font-size:14px;">${!TotalAmount}</td>      
+  </tr>
+</table>
+
+</div>
+
+           <apex:variable var="OrderNumber" value="{!0}"/> 
+            <apex:variable var="AttendeeNumber" value="{!0}"/> 
+            
+                <!----------------end of statistics-------------->
+        <table id="report" class=" sortable display">
+              <thead>
+                <tr>
+                  <th width="5%">S.No</th>
+                  <th  width="30%">Transaction Details </th>
+                 <th  width="65%"> 
+                    <table width="100%" cellsapcing="0" cellpadding="0">
+                        <tr>
+                             <th width="8%">S No</th> 
+                             <th width="20%">Attendee Name</th> 
+                             <th width="32%">Email Id</th>
+                             <th width="20%">Company</th> 
+                             <th width="20%">Ticket</th> 
+                        </tr>                        
+                    </table>
+               </th>
+                 
+                 </tr>
+              </thead>
+              <style>
+              #report{ line-height:20px;}
+              .labeltitles{ color:#247dba; font-size:14px;}
+}
+              </style>
+              <tbody>
+                
+        
+               <apex:repeat value="{!ListOfListOrders}" var="orders">
+                <apex:repeat value="{!orders}" var="order">
+              
+               <tr class="item">
+                  <td width="5%" class="subject"><apex:variable var="OrderNumber" value="{!OrderNumber+1}"/>{!OrderNumber}.</td>
+                  <td width="30%" style="cursor:pointer;" >
+                    <span class="labeltitles">Order Id:&nbsp;</span><span>{!order.Name}&nbsp;&nbsp;&nbsp;</span><br/>
+                    <span class="labeltitles">Amount Paid:&nbsp;</span><span>${!order.Amount_Paid__c}</span><br/>
+                    <span class="labeltitles">Ordered By:&nbsp;</span><span>{!order.Client_GN_User__r.Email__c}</span><br/>
+                    <span class="labeltitles">Ordered Date:&nbsp;</span>
+                    <span><apex:outputText value="{0,date,M/d/yyyy hh:mm a}">
+                                <apex:param value="{!order.CreatedDate}"/>
+                            </apex:outputText> </span>
+                  
+                    <div class="arrow" onclick="displayblock('{!order.Id}');">More Info</div>
+                  </td>
+                  <td width="65%">
+                 <table width="100%" cellsapcing="0" cellpadding="0">                        
+                  <apex:repeat value="{!order.Tickets__r}" var="attendee">
+                  <tr style="display: table-row;">
+                  <td width="8%"> <apex:variable var="AttendeeNumber" value="{!AttendeeNumber+1}"/>{!AttendeeNumber}.</td>
+                  <td width="20%">{!attendee.Client_GN_User__r.First_Name__c} {!attendee.Client_GN_User__r.Last_Name__c}</td>
+                  <td width="32%" >{!attendee.Client_GN_User__r.Email__c}</td>
+                  <td width="20%" >{!attendee.Client_GN_User__r.Company_Name__c}</td>
+                  <td width="20%" >{!attendee.Item__r.item_name__c}</td>    
+                  </tr>            
+                    </apex:repeat>   
+                   </table>
+                   </td>
+                        
+                </tr>
+                <tr>
+                 <td colspan="8" style="padding:5px;">
+                   <div id="{!order.Id}" style="width:100%; height:auto; padding-bottom:5px;display:none; ">
+                     <div id="expandleft" style="width:95%; float:left;padding-bottom:5px; padding-left:5%; background-color:#F4F4F4;border: 1px solid #CCC;">
+                       <div id="expandleftcontent" style=" width:99%; height:auto; margin:0px auto; margin-top:5px; ">
+                         <apex:repeat value="{!order.Payments__r}" var="payment">
+                           <span class="labeltitles">Payment Type:&nbsp;</span><span>{!payment.Payment_Mode__c}&nbsp;&nbsp;&nbsp;</span><br/>
+                           <span class="labeltitles">Payment Status:&nbsp;</span><span>{!order.Order_Status__c}&nbsp;&nbsp;&nbsp;</span>
+                           <apex:outputPanel rendered="{!IF(payment.Payment_Mode__c != 'Check', TRUE, FALSE)}"><span class="labeltitles">Transaction Key:&nbsp;</span><span>&nbsp;&nbsp;&nbsp;</span> </apex:outputPanel><br/>
+                         </apex:repeat>
+                       </div><!--close of expandleftcontent-->
+                     </div><!--close of expandleft--->
+                   </div><!--close of expandbox-->               
+                </td>
+              </tr>
+        </apex:repeat>  </apex:repeat>  
+              <!--------------------------------------->  
+              </tbody>
+            </table> 
+            </div><!--close of seminartable-->
+           <div class="pagination-page" style="float:right; margin-top:40px; margin-right:2%;"></div>
+          <!--------------------------------------------------------------------------------->
+          
+    <div class="clear"></div>
+         
+        </div>
+        
+      </div>
+      <!-- #content--> 
+    </div>
+    <!-- #container-->
+    
+     
+  </div>
+  <!-- #sideLeft --> 
+  <!-- #container main-->
+  
+  
+</section>
+            
+        <apex:pageBlock >   
+      <!--      From : <apex:inputField value="{!EventDates.Start_Date__c}"/> 
+            To :<apex:inputField value="{!EventDates.End_Date__c}"/> 
+            <apex:commandButton value="Go" action="{!displayOrders}"/>
+            
+            <apex:inputText value="{!SearchString}">
+                <apex:actionSupport event="onkeyup" action="{!displayOrders}"/>
+            </apex:inputText>
+            <apex:variable var="OrderNumber" value="{!0}"/> 
+            <apex:variable var="AttendeeNumber" value="{!0}"/> 
+            
+            <table style="width:100%;line-height:20px;border:0px solid blue;" border="0" cellpadding="0" cellspacing="0" class="display" id="dataTable12" >
+            
+                <tr>
+                    <th style="width:3%;background-color:#2486c3;color:#FFFFFF;"  valign="top">S.No </th> 
+                    <th style="width:20%;background-color:#2486c3;color:#FFFFFF;"  valign="top">Transaction Details </th> 
+                    <th style="width:76%;background-color:#2486c3;" valign="top"> 
+                    <table style="width:100%;border:0px;line-height:20px;vertical-align:top;" cellpadding="0" cellspacing="0" border="0" >
+                        <tr>
+                             <th style="width:3%;border:0px;background-color:#2486c3;color:#FFFFFF;">S No</th> 
+                             <th style="width:22%;border:0px;background-color:#2486c3;color:#FFFFFF;">Attendee Name</th> 
+                             <th style="width:22%;border:0px;background-color:#2486c3;color:#FFFFFF;">Email Id</th>
+                             <th style="width:22%;border:0px;background-color:#2486c3;color:#FFFFFF;">Company</th> 
+                             <th style="width:22%;border:0px;background-color:#2486c3;color:#FFFFFF;">Ticket</th> 
+                        </tr>
+                        
+                    </table>
+               </th>
+
+                </tr>
+                
+                <apex:repeat value="{!ListOfListOrders}" var="orders">
+                <apex:repeat value="{!orders}" var="order">
+                    <tr>
+                        <td>
+                            <apex:variable var="OrderNumber" value="{!OrderNumber+1}"/>  
+                            {!OrderNumber}.
+                        </td>
+                        
+                        <td>
+                           Order Id : {!order.Name} Amount Paid : {!order.Amount_Paid__c}<br/>
+                           Ordered By : {!order.Client_GN_User__r.Email__c}<br/>
+                           Ordered Date:
+                            <apex:outputText value="{0,date,M/d/yyyy hh:mm a}">
+                                <apex:param value="{!order.CreatedDate}"/>
+                            </apex:outputText>   
+                            <br/>
+                            <apex:repeat value="{!order.Payments__r}" var="payment">
+                                Payment Type : {!payment.Payment_Mode__c}  <br/>       
+                                Payment Status {!order.Order_Status__c}<br/>  <br/>  
+                            </apex:repeat>                      
+                        </td>
+                            
+                        <td>
+                            <table style="width:100%;border:0px;line-height:20px;background-color:#FFFFFF" cellpadding="0" cellspacing="0" border="0" >
+                                <apex:repeat value="{!order.Tickets__r}" var="attendee">
+                                
+                                <tr style="background-color:#FFFFFF">
+                                    <td>
+                                    <apex:variable var="AttendeeNumber" value="{!AttendeeNumber+1}"/>  
+                                    {!AttendeeNumber}.
+                                    </td>
+                                    <td style="width:22%;border:0px;">{!attendee.Client_GN_User__r.First_Name__c} {!attendee.Client_GN_User__r.Last_Name__c}</td>
+                                    <td style="width:22%;border:0px;">{!attendee.Client_GN_User__r.Email__c}</td> 
+                                    <td style="width:22%;border:0px;">{!attendee.Client_GN_User__r.Company_Name__c}</td>
+                                    <td style="width:22%;border:0px;">{!attendee.Item__r.item_name__c}</td>
+                                </tr>
+                                
+                                </apex:repeat>  
+                            </table>                            
+                            
+                        </td>
+                        
+                        <td>
+                           
+                        </td>
+                    </tr>
+                   
+                </apex:repeat> 
+            
+            </apex:repeat>
+            </table>           
+  -->
+        </apex:pageBlock>
+        
+       
+    </apex:form>
+    
+    </c:myComponentForTable>
+</apex:page>

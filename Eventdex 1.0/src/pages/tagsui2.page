@@ -1,0 +1,54 @@
+<apex:page showHeader="false"  standardController="BLN_Event__c" extensions="sampleeventscon"  standardStylesheets="true" id="thePage" >
+  <apex:form >
+ 
+  <apex:repeat value="{!ticketmoreTic}" var="tic">     
+                
+                <apex:variable value="{!0}" var="hashTagVariable"/>
+                <table style="width:100%; border=2px; ">    
+                    <tr>
+                        <td>  Select HashTags  </td>
+                        <td>   
+                            <apex:selectCheckboxes value="{!selectedTagsFromOptions}"  style="width:80%" id="eventHashTags">
+                                 <apex:selectOptions value="{!eventHashTags}"/>
+                                 <apex:actionSupport action="{!addTagItems}" event="onchange" /> 
+                             </apex:selectCheckboxes>
+                          </td>
+                    </tr>  
+                    
+                    <tr>
+                        <td>  HashTag </td>
+                        <td>  Action    </td>
+                    </tr>
+                    <apex:repeat value="{!tic.hashTagsForPool}" var="hashtag">
+                        <tr>
+                            <td> <apex:outputText value="{! hashtag.Tag_Text__c }" />  </td>
+                            <td> <apex:commandLink value="Delete" action="{!deleteHashTags}"> 
+                                    <apex:param value="{!hashTagVariable}" name="toDeletehashTags"/>
+                                 </apex:commandLink>
+                                 
+                                 <apex:variable value="{!(hashTagVariable+1)}" var="hashTagVariable"/>
+                            </td>
+                        </tr>
+                    </apex:repeat>  
+                    <!--<apex:outputText rendered="{!IF(tic.hashTagsForPool.size = 0, TRUE, FALSE)}">-->
+                        <tr> <td colspan="2">
+                                    No Tags Found, Please add First tag.
+                             </td>
+                        </tr>
+                  
+                    
+                     <tr> <td  colspan="2">
+                                 &nbsp;  </td>
+                        </tr>
+                        
+                        <tr> <td  >
+                                 <apex:inputText value="{!addNewTagItems}"/> </td>
+                             <td> 
+                                 <apex:commandLink value="Update" action="{!addTagItems}"/>   </td>
+                                  
+                        </tr>
+               </table>     
+                 <apex:commandButton value="SAVE" action="{!saveTagsToTickets}"/>           
+         </apex:repeat>              
+  </apex:form>
+</apex:page>

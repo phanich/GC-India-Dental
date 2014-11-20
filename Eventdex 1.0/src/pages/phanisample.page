@@ -1,0 +1,144 @@
+<apex:page standardStylesheets="false" showHeader="false" controller="phanisamplecon">
+ 
+
+<script type="text/javascript" src="{!URLFOR($Resource.MyTickets, 'js/jquery.min.js')}"></script>
+  <script>
+ $(document).ready(function(){
+        // Load the record
+        loadWarehouse();
+    });
+    
+    function loadWarehouse() {
+        
+        warehouseId = 'Phani';
+
+        // Call the remote action to retrieve the record data
+        Visualforce.remoting.Manager.invokeAction(
+            '{!$RemoteAction.phanisamplecon.getAccount}',
+            warehouseId,
+            function(result, event){;
+                if(event.status){
+                 var x =0;
+                 for(var z=0;z<result.length;z++){
+                   x++;
+                     $('#myTable').append('<tr><td>'+result[z].Name+'</td> <td>'+result[z].Item_Type__r.Name+'</td><td>  <a href="#" id="'+result[z].Name+'" onclick="phani(this);" > '+ result[z].Client_GN_User__r.First_Name__c +'</a> </td><td> <a href="#" id="'+result[z].Name+'" onclick="phani(this);" > Edit</a> </td> </tr>');
+                   }
+                } else if (event.type === 'exception'){
+                    console.log(result);
+                } else {
+                    // unexpected problem...
+                }
+        });
+    }       
+     
+     
+    function phani(e){
+    //  alert(e.id);
+      editFrom(e.id);
+    }            
+    
+ </script>
+  <style>
+    
+   
+         #close{ font-size:22px; font-weight:bold; color:#fff; text-decoration:none; float:right; margin-right:.2%; margin-top:-22px;}
+      #close:hover{ font-size:22px; text-decoration:underline; font-weight:bold; color:#fff; float:right; margin-right:.2%; margin-top:-22px;}
+    
+    #container_box{ width:100%;  padding:5px; border:3px solid #F1F1F1; background-color: #F7F7F7;}
+    #order_left{ width:100%;  background-color: #e0e9ee; float:left;}
+    #order_right{ width:100%; background-color:#fff; float:right;}
+    #order_summary_wrapper{vertical-align:top; border:1px #FFFFFF solid; background-color:#e0e9ee;}
+    #order_summary{ border-collapse:collapse;}
+    #order_summary tr td{ padding:8px;}
+    #order_placed{ text-transform:uppercase; font-size:12px; font-weight:700; color:#828484; font-family:Arial, Helvetica, sans-serif;}
+    #order_date{ font-size:15px; font-weight:700; font-family:Arial, Helvetica, sans-serif}
+    #output_label{ color:#3d64a5; font-size:15px; font-weight:700; text-transform:none;}
+    #order_details{ border-collapse:collapse; margin-bottom:1px;}
+    #order_details tr td{padding:8px;}
+    #order_details_tr{background-color:#e0e9ee; border-bottom:1px #B5B5B5 dotted;text-align:center; font-size:13px; font-family:Arial, Helvetica, sans-serif;}
+     #order_details_tr_cancel{background-color:#e0e9ee; border-bottom:1px #B5B5B5 dotted;text-align:center; font-size:13px; font-family:Arial, Helvetica, sans-serif;}
+   
+    #order_details_tr_headers{background-color:#e0e9ee;padding:8px; border-bottom:1px #B5B5B5 dotted;text-align:center; font-size:12px; color:#000; font-family:Arial, Helvetica, sans-serif; font-weight:700;}
+    #order_details_heading {background-color:#1576a3;}
+    #ticket_details{ border-collapse:collapse; margin-bottom:0px;}
+    #ticket_details tr td{padding:8px;}
+    #table_titles{color:#ffffff; font-size:14px; font-weight:700; font-family:Arial, Helvetica, sans-serif;}
+   
+     .popupBackground{
+      opacity:.8;
+    position:fixed;
+    top:0px; 
+    left:0px;
+    background-color: #484848;
+    width:100%; 
+    z-index:999;
+    height:100%;
+
+} 
+
+   
+    
+    .custPopup{color:#000000;position: fixed;top:40px;left:0px;right:0px;z-index: 1000;width:90%;
+          padding:5px;height: auto; margin:0 auto;-moz-border-radius-bottomleft:6px; -webkit-border-bottom-left-radius:6px; 
+          -moz-border-radius-bottomright:6px; -webkit-border-bottom-right-radius:6px; border-radius:0 0 6px 6px; 
+          font: 12px/24px "Lucida Grande",Arial,sans-serif;
+         -moz-border-radius-bottomleft:6px; -webkit-border-bottom-left-radius:6px; -moz-border-radius-bottomright:6px;
+         -webkit-border-bottom-right-radius:6px; border-radius:6px 0 6px 6px;
+        
+        }
+        
+ .custPopup2{color:#000000;position: fixed;top:40px;left:0px;right:0px;z-index: 1001;width:90%;
+          padding:10px;height: auto; margin:0 auto;-moz-border-radius-bottomleft:6px; -webkit-border-bottom-left-radius:6px; 
+          -moz-border-radius-bottomright:6px; -webkit-border-bottom-right-radius:6px; border-radius:0 0 6px 6px; 
+          font: 12px/24px "Lucida Grande",Arial,sans-serif;
+         -moz-border-radius-bottomleft:6px; -webkit-border-bottom-left-radius:6px; -moz-border-radius-bottomright:6px;
+         -webkit-border-bottom-right-radius:6px; border-radius:6px 0 6px 6px;
+        
+        }
+        
+        
+        .popupBackground2{
+        
+        position:fixed;
+        top:0px; 
+        left:0px;
+        background-color: #484848;
+        width:100%; 
+        z-index:1001;
+        height:100%;
+     } 
+    
+        
+.btn{background-image:none;}
+ table{border:0px;} 
+ 
+table td{border:0px;}   
+.rightcontent{border:0px}
+</style>
+ 
+ 
+ <table id="myTable" style="width:100%;"></table>
+ 
+ 
+ <apex:form id="frm" >
+   <apex:actionFunction action="{!edit}" name="editFrom" >
+     <apex:param value="" assignTo="{!stringSelected}"/>
+   </apex:actionFunction>
+   
+  
+   
+  </apex:form>
+ 
+ 
+ <apex:form id="frm2" >
+  <apex:outputPanel styleClass="popupBackground2" layout="block" rendered="{!displyAddGuest}" id="Popup3"/>
+   <apex:outputPanel styleClass="custPopup2" layout="block" rendered="{!displyAddGuest}" style="width:80%" id="guestForm">
+      <apex:inputField value="{!ticket.Tag_No__c}"/><br />
+       
+      <apex:commandButton value="save" action="{!Save}"/>
+      
+   </apex:outputPanel>
+ 
+ 
+</apex:form>
+</apex:page>

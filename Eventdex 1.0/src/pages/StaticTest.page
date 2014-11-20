@@ -1,0 +1,10 @@
+<apex:page controller="StaticTestCon">
+   {!showProof}
+   
+   <br/>
+  <apex:form >
+   <apex:commandButton value="Update" action="{!addOneMore}"/>
+  </apex:form> 
+   
+   
+</apex:page>

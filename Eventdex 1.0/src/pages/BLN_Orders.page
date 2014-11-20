@@ -1,0 +1,834 @@
+<apex:page showHeader="false" controller="BLN_MyticketsCon" standardStylesheets="false" action="{!displayPermissions}">
+  <c:myComponentForTable BLN_UtillDisplayLinks="{!myticket}" >
+  
+ <script type="text/javascript" language="javascript" class="init">
+    $(document).ready(function() {
+        $('#example').dataTable( {
+            "pagingType": "full_numbers",
+            /**default orderid in asc sorting**/
+             "order": [[ 1, "asc" ]],
+            /**sorting coloumn disable**/
+            "aoColumnDefs": [
+          { 'bSortable': false, 'aTargets': [ 0 ] },
+         
+       ]
+            
+        } );
+    } );
+
+    </script>
+    
+    <style>
+    
+   
+         #close{ font-size:22px; font-weight:bold; color:#fff; text-decoration:none; float:right; margin-right:.2%; margin-top:-22px;}
+      #close:hover{ font-size:22px; text-decoration:underline; font-weight:bold; color:#fff; float:right; margin-right:.2%; margin-top:-22px;}
+    
+    #container_box{ width:100%;  padding:5px; border:3px solid #F1F1F1; background-color: #F7F7F7;}
+    #order_left{ width:100%;  background-color: #e0e9ee; float:left;}
+    #order_right{ width:100%; background-color:#fff; float:right;}
+    #order_summary_wrapper{vertical-align:top; border:1px #FFFFFF solid; background-color:#e0e9ee;}
+    #order_summary{ border-collapse:collapse;}
+    #order_summary tr td{ padding:3px;}
+    #order_placed{ text-transform:uppercase; font-size:12px; font-weight:700; color:#828484; font-family:Arial, Helvetica, sans-serif;}
+    #order_date{ font-size:15px; font-weight:700; font-family:Arial, Helvetica, sans-serif}
+    #output_label{ color:#3d64a5; font-size:15px; font-weight:700; text-transform:none;}
+    #order_details{ border-collapse:collapse; margin-bottom:1px;}
+    #order_details tr td{padding:8px;}
+    #order_details_tr{background-color:#e0e9ee; border-bottom:1px #B5B5B5 dotted;text-align:center; font-size:13px; font-family:Arial, Helvetica, sans-serif;}
+     #order_details_tr_cancel{background-color:#e0e9ee; border-bottom:1px #B5B5B5 dotted;text-align:center; font-size:13px; font-family:Arial, Helvetica, sans-serif;}
+   
+    #order_details_tr_headers{background-color:#e0e9ee;padding:8px; border-bottom:1px #B5B5B5 dotted;text-align:center; font-size:12px; color:#000; font-family:Arial, Helvetica, sans-serif; font-weight:700;}
+    #order_details_heading {background-color:#1576a3;}
+    #ticket_details{ border-collapse:collapse; margin-bottom:0px;}
+    #ticket_details tr td{padding:8px;}
+    #table_titles{color:#ffffff; font-size:14px; font-weight:700; font-family:Arial, Helvetica, sans-serif;}
+   
+     .popupBackground{
+      opacity:.8;
+    position:fixed;
+    top:0px; 
+    left:0px;
+    background-color: #484848;
+    width:100%; 
+    z-index:999;
+    height:100%;
+
+} 
+
+   
+    
+    .custPopup{
+      color:#000000;
+        position:fixed;
+        top:0px;left:0px;right:0px;z-index: 1000;width:90%;
+          padding:5px;height: auto; margin:0 auto;-moz-border-radius-bottomleft:6px; -webkit-border-bottom-left-radius:6px; 
+          -moz-border-radius-bottomright:6px; -webkit-border-bottom-right-radius:6px; border-radius:0 0 6px 6px; 
+          font: 12px/24px "Lucida Grande",Arial,sans-serif;
+         -moz-border-radius-bottomleft:6px; -webkit-border-bottom-left-radius:6px; -moz-border-radius-bottomright:6px;
+         -webkit-border-bottom-right-radius:6px; border-radius:6px 0 6px 6px;
+        
+        
+
+        }
+        
+ .custPopup2{color:#000000;position: fixed;top:40px;left:0px;right:0px;z-index: 1001;width:90%;
+          padding:10px;height: auto; margin:0 auto;-moz-border-radius-bottomleft:6px; -webkit-border-bottom-left-radius:6px; 
+          -moz-border-radius-bottomright:6px; -webkit-border-bottom-right-radius:6px; border-radius:0 0 6px 6px; 
+          font: 12px/24px "Lucida Grande",Arial,sans-serif;
+         -moz-border-radius-bottomleft:6px; -webkit-border-bottom-left-radius:6px; -moz-border-radius-bottomright:6px;
+         -webkit-border-bottom-right-radius:6px; border-radius:6px 0 6px 6px;
+        
+        }
+        
+        
+        .popupBackground2{
+        
+        position:fixed;
+        top:0px; 
+        left:0px;
+        background-color: #484848;
+        width:100%; 
+        z-index:1001;
+        height:100%;
+     } 
+    
+        
+.btn{background-image:none;}
+ table{border:0px;} 
+ 
+table td{border:0px;}   
+.rightcontent{border:0px}
+</style>
+   
+ <!-- -------------------------------------------------------- apex functions ------------------------------------------ -->
+  <script>
+  function canceltickets(orderItemId,itemQuan){
+      if(itemQuan >= 1){
+       var r=confirm("Do you want to delete "+ itemQuan  +" tickets?");
+        if (r == true) {
+         candirectTic(orderItemId);
+         }
+     }
+ }
+
+
+function  displayordeItem(ordItem,ststus){
+ renderDetail(ordItem);
+}
+
+function  displayordeItem(ordItem){
+ detailsOforder(ordItem);
+}
+
+   
+    
+ function cancelTotalOrder(ordId){
+  var r=confirm("Are you sure, you want cancel order?");
+        if (r == true) {
+           canord(ordId);
+           return true;
+        } else {
+        
+         return false;
+        }
+ }
+    function canIndividualtickest(tcid){
+       var r=confirm("Are you sure, you want cancel ticket?");
+        if (r == true) {
+            cavticIndividual(tcid);
+           return true;
+        } else {
+        
+         return false;
+        }
+    }
+
+
+ 
+
+</script>
+<style>
+     
+.selected { background-color: #E0EFF7; } 
+        
+        </style>
+                
+ <script>
+    var person = new Array();
+    var isAllchecked =false;
+ </script> 
+ 
+       
+ <script>
+ 
+ function editOrder()
+{
+
+   if(person.length>1){
+     alert('Please select only one record at a time');
+   }else{
+    if(person.length==0){
+      alert('Please select record to edit');
+   }else{
+     var d =person[0];
+      Editordform(d);
+   }
+  } 
+}
+
+
+ function refundpayment()
+{
+   if(person.length>1){
+     alert('Please select only one record at a time');
+   }else{
+    if(person.length==0){
+      alert('Please select record to refund');
+   }
+  } 
+}
+
+
+
+ function cancelOrder()
+{
+   if(person.length>1){
+     alert('Please select only one record at a time');
+   }else{
+    if(person.length==0){
+      alert('Please select record to cancel');
+   }else{
+      cancelTotalOrder(person[0]);  
+   }
+  } 
+}
+
+
+ function exporder(){
+ //alert('DDDDDDDD '+isAllchecked);
+   if(person.length==0){
+      alert('Please select at least one record to export');
+   }else{
+     if(isAllchecked){
+        
+        var r=confirm("Do you want to export all pages?");
+        if (r == true) {
+           exportOrder();
+          } else {
+           constructstr();
+           
+        }
+     }else{
+        constructstr();
+         }
+
+     } 
+    
+  } 
+  
+  
+ 
+ function constructstr(){
+   individualexport();
+ }
+ 
+ </script>   
+    
+    
+      <apex:stylesheet value="{!URLFOR($Resource.nwdatatable, 'nwdatatable/css/jquery.dataTables.css')}"/> 
+      <script type="text/javascript" src="{!URLFOR($Resource.nwdatatable, 'nwdatatable/js/jquery.dataTables.js')}"></script>
+ 
+ 
+ <apex:form id="firstfrm">
+    
+ 
+  <script>                 
+    /* Highlight Row */
+    function highlight(id, currentClass, checkboxId){
+       var checkbox_element = document.getElementsByClassName(id);
+       var row_element = document.getElementsByClassName(id);
+       if(checkbox_element[0].checked){
+          person.push(checkboxId);
+       }else{
+       var index  = person.indexOf(checkboxId);
+       if (index > -1) {
+        person.splice(index, 1);
+      }
+    }
+     row_element.className = checkbox_element[0].checked ? 'selected' : currentClass;
+  }
+
+  function check_uncheck_all(){
+  //alert('hi  '+document.getElementById('selector_check').checked);
+ 
+      if ( document.getElementById('selector_check').checked == true){
+        check_all();
+       }
+        else{
+          uncheck_all();
+        }    
+    }
+            /* Check All */
+            function check_all(){
+            var num_checkboxes = document.forms[1].elements.length;
+            //alert('hi  '+document.getElementById('selector_check').checked);
+               for(i = 0; i < num_checkboxes; i++){
+                  if(document.forms[1].elements[i].type == 'checkbox'){
+                     document.forms[1].elements[i].checked = true;
+                      person.push(document.forms[1].elements[i].id);
+                     
+                  }
+               }
+               isAllchecked = true;
+               highlight_all(num_checkboxes);
+             }
+            
+            /* Uncheck All */
+            
+            function uncheck_all(){
+            var num_checkboxes = document.forms[1].elements.length;
+             for(i = 0; i < num_checkboxes; i++){
+                  if(document.forms[1].elements[i].type == 'checkbox'){
+                     document.forms[1].elements[i].checked = false;
+                     var index  = person.indexOf(document.forms[1].elements[i].id);
+                       if (index > -1) {
+                        person.splice(index, 1);
+                      }
+                 }
+              } 
+               isAllchecked =false;
+               remove_highlight_for_all(num_checkboxes);
+            }
+            
+            /* Highlight All Rows (this happens when 'check_all' is triggered */
+            
+            function highlight_all(num){
+               for(i = 1; i <= num; i++){
+                  document.getElementById('tr' + i).className = 'selected';
+               }
+            }
+            
+            
+            
+            /* Remove highlight for all Rows (this happens when 'uncheck_all' is triggered */
+            
+            function remove_highlight_for_all(num){
+               for(i = 1; i <= num; i++){
+                  var initial_class = (i % 2) ? 'even' : 'odd';
+                  document.getElementById('tr' + i).className = initial_class;
+                  }
+            }
+            
+            
+             </script>
+
+                   <apex:actionFunction action="{!exportOrders}" name="exportOrder" />
+                   <apex:actionFunction action="{!userSelectPerticularToExport}" name="individualexport" />
+                   
+                   
+                      <apex:actionFunction action="{!displayorderEditform}" name="Editordform" reRender="secfrm">
+                       <apex:param value="" name="edform"/>
+                     </apex:actionFunction>
+                
+                     <apex:actionFunction action="{!cancelDirectTicket}" name="candirectTic" reRender="firstfrm,frm2">
+                       <apex:param value="" name="canordItemId"/>
+                     </apex:actionFunction>
+                
+                     <apex:actionFunction action="{!cancelPerticularGuestsTic}" name="cavticIndividual" reRender="firstfrm,frm2">
+                       <apex:param value="" name="canticId"/>
+                     </apex:actionFunction>
+                   
+                      <apex:actionFunction action="{!renderDetails}" name="renderDetail" reRender="firstfrm">
+                       <apex:param value="" name="guestindex"/>
+                      </apex:actionFunction>
+                
+                
+                     <apex:actionFunction action="{!cancelTotalorder}" name="canord" reRender="firstfrm">
+                      <apex:param value="" name="guestindex12"/>
+                    </apex:actionFunction>
+                  
+                  <apex:actionFunction action="{!renderDetailsfororder}" name="detailsOforder" reRender="frm2">
+                      <apex:param value="" name="selectedordId"/>
+                    </apex:actionFunction>
+                  
+                  
+                       <!-- ---------------------------------------- Main grid ------------------------------------------------ -->
+  <!--<apex:outputPanel rendered="{!IF(inncurrentTickets.size>0,true,false)}">                    
+    </apex:outputPanel> -->
+   
+   <!-- <apex:outputPanel rendered="{!IF(inncurrentTickets.size>0,false,true)}">
+      <span style="font-size:20px;font-weight:bold;color:#ccc;"> You dont&#39;t have any orders</span>
+   </apex:outputPanel> -->
+   
+
+      <style>
+        #tablemenubar{
+          width:99.8%; height:50px;
+             background-color:#ccc; 
+            padding-top:10px;
+             
+          margin-bottom:-60px;
+             background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#f8faf9), color-stop(100%,#d1d2d5));
+background: -webkit-linear-gradient(top, #f8faf9 0%,#d1d2d5 100%);
+background: -o-linear-gradient(top, #f8faf9 0%,#d1d2d5 100%);
+background: -ms-linear-gradient(top, #f8faf9 0%,#d1d2d5 100%);
+background: linear-gradient(top, #f8faf9 0%,#d1d2d5 100%);
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f8faf9', endColorstr='#d1d2d5',GradientType=0 );
+border: 1px solid #CCC;    
+            }
+       
+        </style>
+   
+   
+   <div id="promocodetable" style="width:100%;">  
+   
+   <div id="tablemenubar" style="">
+        
+         
+          <!--actions_icon--->
+            <div id="actions_icon" style=" margin-left:18%; margin-top:-5px;">
+                     <apex:image url="{!URLFOR($Resource.DataTable, 'datatable/images/edit.png')}" onclick="editOrder();" width="25" height="25" title="Edit" style="margin-top:3px; margin-right:2%; cursor:pointer;"/>
+                    <apex:image url="{!URLFOR($Resource.DataTable, 'datatable/images/printer.png')}"  width="35" height="30" title="Print" style="margin-top:-3px; margin-right:2%; cursor:pointer;"/>
+                    <apex:image url="{!URLFOR($Resource.DataTable, 'datatable/images/refund.png')}"  onclick="refundpayment();" width="40" height="30" title="Refund" style="margin-top:-3px; margin-right:2%; cursor:pointer;"/>
+                    <apex:image url="{!URLFOR($Resource.DataTable, 'datatable/images/cancel.png')}" onclick="cancelOrder();" width="25" height="25" title="Cancel Order" style="margin-top:3px; margin-right:2%; cursor:pointer;"/>
+                    <apex:image url="{!URLFOR($Resource.DataTable, 'datatable/images/export.png')}" onclick="exporder();" width="30" height="30" title="Export" style="margin-top:3px; margin-right:2%; cursor:pointer;"/>
+                
+            </div>
+            <!--end of actions_icon-->
+        
+        
+        </div><!--close of tablemenubar-->
+   
+   
+   
+      <table id="example" class="display" cellspacing="0"  border="1" bordercolor="#F7F7F7" width="100%">
+                <thead>
+                    <tr>
+                        <td id="checkbox1" width="2%"><input id="selector_check" type="checkbox" onClick="JavaScript: check_uncheck_all();"/></td>
+            <th width="8%">Order No</th>
+            <th width="14%">Order By</th>
+            <th width="15%">Email</th>
+            <!-- <th width="10%">Phone</th>-->
+            <th width="15%">Company</th>
+            <th width="12%">Order Date</th>
+            <th width="8%">Pay Type</th>
+            <th width="8%">Status</th>
+            <th width="8%">Amount</th>                          
+                    </tr>
+                </thead>
+          <tbody>
+          
+      <apex:repeat value="{!listOfListOrders}" var="listofListOrders">   
+         <apex:repeat value="{!listofListOrders}" var="current" > 
+            <tr>
+                <td><apex:inputCheckbox value="{!current.selectCheckBox}" id="chk" onClick="JavaScript: highlight('{!current.orderInn.id}', 'even', '{!current.orderInn.id}');"  styleclass="{!current.orderInn.id}" /></td>
+                <td><a href="" onclick="displayordeItem('{!current.orderInn.id}')" id="ancor" style="color:blue;cursor:pointer;">
+                {!current.orderInn.Name} </a></td>
+                
+                <td>{!current.orderInn.Client_GN_User__r.First_Name__c} {!current.orderInn.Client_GN_User__r.Last_Name__c}</td>
+                <td>{!current.orderInn.Client_GN_User__r.Email__c}</td>
+               <!-- <td>{!current.orderInn.Client_GN_User__r.user__r.MobilePhone}</td> -->
+                <td>
+                    <apex:outputText value="{!IF(current.orderInn.Client_Company__r.isPersonAccount__c == TRUE,'', current.orderInn.Client_Company__r.Name)}"/>
+                </td>
+                <td>
+                    <apex:outputText value="{0, date, MMMM d','  yyyy hh:mm a}">
+                        <apex:param value="{!current.orderInn.createdDate}" /> 
+                    </apex:outputText>
+                </td>
+                <td>{!current.paymentInn.Payment_Mode__c}</td>
+                <td>{!current.orderInn.Order_Status__c}</td>
+                <td>${!current.orderPrice}</td> 
+            </tr>
+       </apex:repeat>
+        </apex:repeat>  
+        
+                </tbody>
+            </table>
+     </div> 
+    
+   </apex:form>
+             
+          <apex:form id="frm2">
+          
+        
+          
+          
+           <apex:outputPanel styleClass="popupBackground" layout="block" rendered="{!orddetailbool}" id="Popup3"/>
+      
+           
+            <apex:outputPanel styleClass="custPopup" layout="block" rendered="{!orddetailbool}"  id="guestForm">
+            <div id="divid" style="height: 600px;overflow: auto;">
+            <div style="float:right;right:-2px;color:#FFF;background-color:#FFF;">
+              <apex:commandButton action="{!cancelOrdDetail}" value="Close" id="close" image="{!$Resource.PopUpClose}" title="Close" style="width:26px;height:26px; color:#FFF;font-size:16; font-weight:bold;" reRender="frm2"  immediate="true"/>
+            </div>
+     <apex:repeat value="{!ValuesOfseletedorder}" var="current" > 
+       <table id="container_box"><tr>
+        <td id="order_summary_wrapper" width="19.5%">
+        <div id="order_left" >
+         <table id="order_summary" width="100%" border="0">
+          <tr>
+            <td id="order_placed">Order #<span id="output_label"> {!current.orderInn.Name} </span></td>
+          </tr>
+          <tr>
+            <td id="order_date" style="text-indent:0px;">
+                <apex:outputText value="{0, date, MMMM d','  yyyy hh:mm a}">
+                   <apex:param value="{!current.orderInn.createdDate}" /> 
+                 </apex:outputText></td>
+          </tr>
+          
+           <tr>
+               <td id="order_placed">Order By<span id="output_label"> {!current.orderInn.Client_GN_User__r.First_Name__c} {!current.orderInn.Client_GN_User__r.Last_Name__c}</span></td>
+           </tr>
+           <tr>
+           <td id="order_placed">Company
+               <span id="output_label" style="color:#952f3e">
+                   <apex:outputText value="{!IF(current.orderInn.Client_Company__r.isPersonAccount__c == TRUE,'', current.orderInn.Client_Company__r.Name)}"/>
+               </span>
+           </td>
+          </tr>
+          
+          
+          <tr>
+           <td id="order_placed">Email 
+               <span id="output_label" style="color:#952f3e">
+                {!current.orderInn.Client_GN_User__r.Email__c}
+               </span>
+           </td>
+          </tr>
+          
+          <tr>
+           <td id="order_placed">Phone
+               <span id="output_label" style="color:#952f3e">
+                {!current.orderInn.Client_GN_User__r.user__r.MobilePhone}
+               </span>
+           </td>
+          </tr>
+          
+          <tr>
+           <td id="order_placed">TRANSACTION ID 
+               <span id="output_label" style="color:#952f3e">
+              {!current.paymentInn.Payment_Ref_Number__c}
+               </span>
+           </td>
+          </tr>
+          
+          <tr>
+               <td id="order_placed">Fee&nbsp;<span id="output_label" style="color:#952f3e">${!current.orderInn.Fee_Amount__c}</span></td>
+           </tr>
+           <tr>
+               <td id="order_placed">Tax&nbsp;<span id="output_label" style="color:#952f3e">${!current.orderInn.Order_Taxes__c}</span></td>
+           </tr>
+          
+          
+           <tr>
+               <td id="order_placed">Actual Amount&nbsp;<span id="output_label" style="color:#952f3e">${!current.orderInn.Order_Sub_Total__c}</span></td>
+           </tr>
+           
+           <tr>
+               <td id="order_placed">
+                            
+                 <apex:outputText rendered="{!if(current.orderInn.owner.id==se.owner.id,true,false)}">
+                 override Amount</apex:outputText>
+              
+               <apex:outputText rendered="{!if(current.orderInn.owner.id==se.owner.id,false,true)}">
+                 paid Amount</apex:outputText>
+               &nbsp;<span id="output_label" style="color:#952f3e">${!current.orderInn.Amount_Paid__c}</span></td>
+           </tr>
+           
+           <tr>
+               <td id="order_placed">Note &nbsp;<span id="output_label" style="color:#952f3e;font-size:12px;">{!current.orderInn.EVent_Admin_Comments__c}</span></td>
+           </tr>
+           
+           <tr>
+               <td id="order_placed">Payment Type&nbsp;<span id="output_label"> {!current.paymentInn.Payment_Mode__c}</span></td>
+           </tr>
+           <tr>
+               <td id="order_placed">Payment Status&nbsp;<span id="output_label" style="color:#952f3e"> {!current.orderInn.Order_Status__c}</span></td>
+           </tr>
+        </table>
+
+
+    </div><!--close of order_left-->
+    </td>
+    
+    
+    <td width="81%" style="vertical-align:top; background-color:#e0e9ee;">
+    <div id="order_right" >
+    <!--start of order details-->
+    
+    <apex:outputPanel id="orderDetailpop">
+     <table id="order_details"  width="100%" border="0">
+      <tr id="order_details_heading" >
+       <td id="table_titles" colspan="7">Order Details</td>
+        
+      </tr>
+      <tr id="order_details_tr_headers">
+        <td>Ticket Type</td>
+        <td>Ticket Qty</td>
+        <td>Ticket Price</td>
+        <td>Total Price</td>
+        <td>Promo Code</td>
+        <td>Final sale price</td>
+          <td>Action</td>
+      </tr>
+      <apex:repeat value="{!current.orderItemInn}" var="cus" >
+                    
+      <tr id="order_details_tr">
+        <td>{!cus.item__r.item_name__c}</td>
+        <td>{!cus.Item_Quantity__c} </td>
+        <td>${!cus.Each_Ticket_Price__c}</td>
+        <td>${!cus.Item_Total__c}</td>
+        <td>{!cus.Promotion__r.Name}</td>
+        <td>${!cus.Item_Total__c}</td>
+         <td>
+                   <apex:outputPanel rendered="{!IF((( cus.Item_Quantity__c >= current.orderItemsMapWithTc[cus.id] ) && (current.orderInn.Order_Status__c!='Cancelled')),true,false)}">
+                       <div  title="Cancel" style="cursor:pointer; margin-left:35%;">
+                          <apex:outputPanel >
+                              <a href="" onclick="canceltickets('{!cus}','{!cus.Item_Quantity__c}');" style="color:blue;cursor:pointer;">
+                               <apex:image url="{!URLFOR($Resource.DataTable, 'datatable/images/cancelicoblack.png')}" width="16" height="16" style="margin-top:2px; margin-left:1.5px;"/> </a>
+                          </apex:outputPanel>
+                       </div></apex:outputPanel>
+       </td>
+      </tr>
+      </apex:repeat>
+     
+    </table>
+    <!---end of order details table-->
+    <!---start of ticket and Guest Details-->
+     <apex:outputPanel rendered="{!IF(current.ticketsInn.size>0,true,false)}">
+   
+    <div id="" style="overflow:auto; height:250px;background-color:#e0e9ee;">
+    <table id="ticket_details" width="100%" border="0">
+      <tr id="order_details_heading" >
+        <td id="table_titles" colspan="8">Ticket Details</td>
+       
+      </tr>
+      <tr id="order_details_tr_headers" >
+      
+        <td>Ticket ID</td>
+        <td>Ticket Type</td>
+        <td>Name</td>
+        
+        <td>Email Address</td>
+        <td>Phone</td>
+        <td>Company</td>
+        <td>Badge Label</td>
+          <td>Action</td>
+      </tr>
+      
+     
+      
+     <apex:repeat value="{!current.ticketsInn}" var="cust" >
+    
+       
+                    
+      <tr id="order_details_tr" style="display:{!If(cust.Item_Pool__r.Item_Type__r.Name=='Package','none','')}">
+        <td>{!cust.Name}</td>
+        <td>
+       <!--  {!cust.item__r.item_name__c} -->
+       <apex:outputText rendered="{!If(cust.item__r.Item_Type__r.Name!='Package',true,false)}">
+            {!cust.item__r.item_name__c}</apex:outputText> 
+        
+        
+      <apex:outputText rendered="{!If(cust.item__r.Item_Type__r.Name=='Package',true,false)}">
+        {!cust.Item_Pool__r.Item_Pool_Name__c}</apex:outputText>
+        
+        
+        </td>
+        <td>{!cust.First_Name__c}  {!cust.Client_GN_User__r.Last_Name__c}</td>
+        <td>{!cust.Email__c}</td>
+        <td>{!cust.Client_GN_User__r.user__r.MobilePhone}</td>
+        <td>
+            <!-- <apex:outputText value="{!IF(cust.Client_Company__r.isPersonAccount__c == TRUE,'', cust.Client_Company__r.Name)}"/> -->
+            <apex:outputText value="{!cust.Company__c}"/>
+            
+        </td>
+        <td>{!cust.Badge_Label__c}</td>
+        <td>
+                         <apex:commandLink action="{!editTicket}" title="Edit" reRender="secfrm">
+                            <apex:image url="{!URLFOR($Resource.DataTable, 'datatable/images/editico.png')}"  />
+                             <apex:param value="{!cust.id}" name="TicketIdparam"/>
+                          </apex:commandLink> 
+                     
+      <!--  <apex:image url="{!URLFOR($Resource.DataTable, 'datatable/images/editico.png')}"  title="Edit" style="cursor:pointer;"/>-->
+       <apex:image url="{!URLFOR($Resource.DataTable, 'datatable/images/printconfirmblack.png')}" title="Print" style="margin-left:5px; cursor:pointer;"/>
+       
+          <a href="" onclick="canIndividualtickest('{!cust.id}');" style="color:blue;cursor:pointer;">
+          <apex:image url="{!URLFOR($Resource.DataTable, 'datatable/images/cancelicoblack.png')}" width="16" height="16" style="margin-top:2px; margin-left:1.5px;"/>
+           </a>
+                          
+       </td>
+      </tr>
+    
+     </apex:repeat> 
+    </table></div>
+    </apex:outputPanel>
+      </apex:outputPanel> 
+      
+     <apex:outputPanel rendered="{!if(current.cancelledTickets.size>0,true,false)}"  id="canid"> 
+               
+     <table id="ticket_details" width="100%" border="0">
+      <tr id="order_details_heading" >
+        <td id="table_titles" colspan="8">Cancelled Tickets</td>
+       
+      </tr>
+      <tr id="order_details_tr_headers" >
+      
+        <td>Ticket ID</td>
+        <td>Ticket Type</td>
+        <td>Name</td>
+        
+        <td>Email Address</td>
+        <td>Phone</td>
+        <td>Company</td>
+        <td>Badge Label</td>
+          <td>Price</td>
+      </tr>
+       <apex:repeat value="{!current.cancelledTickets}" var="custcan" >
+                      
+      <tr id="order_details_tr_cancel">
+        <td>{!custcan.Name}</td>
+        <td>{!custcan.item__r.item_name__c}</td>
+        <td>{!custcan.Client_GN_User__r.First_Name__c}  {!custcan.Client_GN_User__r.Last_Name__c}</td>
+        <td>{!custcan.Client_GN_User__r.Email__c}</td>
+        <td>{!custcan.Client_GN_User__r.user__r.MobilePhone}</td>
+        <td>
+            <apex:outputText value="{!IF(custcan.Client_Company__r.isPersonAccount__c == TRUE,'', custcan.Client_Company__r.Name)}"/>
+        </td>
+        <td>{!custcan.Badge_Label__c} </td>
+         <td>${!custcan.Order_Item__r.Each_Ticket_Price__c}</td>
+        
+      </tr>
+     </apex:repeat>
+    </table>
+    </apex:outputPanel>  
+ <!-----------end of ticket and guest Details---------------------------->
+
+</div><!--close of order_right-->
+</td>
+</tr>
+</table><!--close of container-->
+</apex:repeat>
+</div>
+             
+        </apex:outputPanel>
+  </apex:form> 
+             
+  <apex:form id="secfrm">
+  
+  <apex:outputPanel styleClass="popupBackground2" layout="block" rendered="{!displyAddGuest}" id="Popup3"/>
+   <apex:outputPanel styleClass="custPopup2" layout="block" rendered="{!displyAddGuest}" style="width:80%" id="guestForm">
+     <div style="float:right;position: absolute;top:1px;right:-2px;">
+       <apex:commandButton action="{!CloseGuests}" value="Close" title="Close" style="width:26px;height:26px; color:#000000;font-size:16; font-weight:bold;" rendered="secfrm" immediate="true"/>
+        </div>
+        
+     <div style="height:280px;">
+      <div>
+        <div class="grid-1" style="text-align:left">
+        <div class="title-grid">Add Guest Information</div>
+        <div class="content-gird">
+        <div class="form" style="margin-top:5px;">
+        
+        <apex:outputPanel id="guest">
+            <table class="display dynatable" width="100%">
+            <tr>
+           
+            <th width="18%" style="padding:3px 0px 3px 2px;" >Name </th>
+            <th width="18%" style="padding:3px 0px 3px 2px;" >Last Name </th>
+            <th width="25%" style="padding:3px 0px 3px 2px;" >Email</th>
+            <th width="25%" style="padding:3px 0px 3px 2px;" >Company</th>
+           
+             </tr>
+            </table>
+            </apex:outputPanel>
+            
+           <apex:outputPanel id="addPanel">
+              
+               <table class="display dynatable" width="100%">
+            <tr>
+            <th width="16%" style="padding:3px 0px 3px 2px;" >
+            <apex:inputField value="{!gnUser.First_Name__c}" /></th>
+            <th width="16%" style="padding:3px 0px 3px 2px;" ><apex:inputField value="{!gnUser.Last_Name__c}"/></th>
+            <th width="25%" style="padding:3px 0px 3px 2px;" ><apex:inputField value="{!gnUser.Email__c}"/></th>
+            <th width="25%" style="padding:3px 0px 3px 2px;" ><apex:inputtext value="{!companyName }"/></th>
+            
+             </tr>
+            </table>
+              
+            <div style="float:right;margin-right:2%;">
+            <apex:commandButton value="Save" action="{!SaveGuests}" styleClass="button-a blue" style="color:#fff;padding:5px;" reRender="secfrm"/>&nbsp;&nbsp;
+            <apex:commandButton value="Cancel" action="{!CloseGuests}" styleClass="button-a blue" style="color:#fff;padding:5px;" immediate="true" reRender="secfrm"/>
+            </div>
+           </apex:outputPanel>
+        
+        <div class="clear"> </div>
+         </div>
+
+        <div class="clear"> </div>
+          </div>
+          </div>
+          </div>
+        </div>
+</apex:outputPanel>
+
+ 
+  <apex:outputPanel styleClass="popupBackground2" layout="block" rendered="{!isOrderEdit}" id="Popup4"/>
+   <apex:outputPanel styleClass="custPopup2" layout="block" rendered="{!isOrderEdit}" style="width:80%" id="guestForm4">
+     <div style="float:right;position: absolute;top:1px;right:-2px;">
+       <apex:commandButton action="{!CloseGuests}" value="Close" image="{!$Resource.PopUpClose}" title="Close" style="width:26px;height:26px; color:#000000;font-size:16; font-weight:bold;" rendered="secfrm" immediate="true"/>
+        </div>
+        
+     <div style="height:280px;">
+      <div>
+        <div class="grid-1" style="text-align:left">
+        <div class="title-grid">Edit Order Information</div>
+        <div class="content-gird">
+        <div class="form" style="margin-top:5px;">
+        
+        <apex:outputPanel id="guest1">
+            <table class="display dynatable" width="100%">
+            <tr>
+           
+            <th width="18%" style="padding:3px 0px 3px 2px;" >First Name </th>
+            <th width="18%" style="padding:3px 0px 3px 2px;" >Last Name </th>
+            <th width="25%" style="padding:3px 0px 3px 2px;" >Email</th>
+            <th width="25%" style="padding:3px 0px 3px 2px;" >Company</th>
+           
+             </tr>
+            </table>
+            </apex:outputPanel>
+            
+           <apex:outputPanel id="addPanel1">
+              
+               <table class="display dynatable" width="100%">
+            <tr>
+            <th width="16%" style="padding:3px 0px 3px 2px;" >
+            <apex:inputText value="{!gnUser.First_Name__c}" /></th>
+            <th width="16%" style="padding:3px 0px 3px 2px;" ><apex:inputText value="{!gnUser.Last_Name__c}"/></th>
+            <th width="25%" style="padding:3px 0px 3px 2px;" ><apex:inputText value="{!gnUser.Email__c}"/></th>
+            <th width="25%" style="padding:3px 0px 3px 2px;" ><apex:inputtext value="{!companyName }"/></th>
+            
+             </tr>
+            </table>
+              
+            <div style="float:right;margin-right:2%;">
+            <apex:commandButton value="Save" action="{!Saveord}" styleClass="button-a blue" style="color:#fff;padding:5px;" />&nbsp;&nbsp;
+            <apex:commandButton value="Cancel" action="{!CloseGuests}" styleClass="button-a blue" style="color:#fff;padding:5px;" immediate="true" reRender="secfrm"/>
+            </div>
+           </apex:outputPanel> 
+        
+        <div class="clear"> </div>
+         </div>
+
+        <div class="clear"> </div>
+          </div>
+          </div>
+          </div>
+        </div>
+</apex:outputPanel>
+ </apex:form>     
+ 
+ </c:myComponentForTable>
+ </apex:page>

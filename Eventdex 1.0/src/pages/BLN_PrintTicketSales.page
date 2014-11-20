@@ -1,0 +1,85 @@
+<apex:page showHeader="false" standardStylesheets="false" sidebar="false" controller="BLN_TicketSalesReportCon" renderAs="pdf">
+ 
+ 
+<apex:stylesheet value="{!URLFOR($Resource.pdfstyles, 'pdfstyles.css')}"/>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
+</head>
+<!--header-->
+
+<div class="header" style="text-align:center;padding:0px; margin:0px;font-family: Arial,Helvetica,sans-serif;color:#04408c;">
+<h3> Ticket Sales Report</h3>
+         
+<table width="100%" cellspacing="0" cellpadding="5" style="border:1px solid #CCCCCC;">
+                                                                                                                                                                                                               
+        <tr>
+            <th class="tableHeader" style="width:14%;font-family: Arial,Helvetica,sans-serif;font-size:9px;color:#04408c;background-color:#d6e3f2;border-bottom: 1px solid #CCCCCC;border-left: 1px solid #CCCCCC;border-top: 1px solid #CCCCCC;"><b>Ticket Name</b></th>
+            <th class="tableHeader" style="width:14%;font-family: Arial,Helvetica,sans-serif;font-size:9px;color:#04408c;background-color:#d6e3f2;border-bottom: 1px solid #CCCCCC;border-left: 1px solid #CCCCCC;border-top: 1px solid #CCCCCC;"><b>Tag </b></th>
+            <th class="tableHeader" style="width:14%;font-family: Arial,Helvetica,sans-serif;font-size:9px;color:#04408c;background-color:#d6e3f2;border-bottom: 1px solid #CCCCCC;border-left: 1px solid #CCCCCC;border-top: 1px solid #CCCCCC;"><b>Payment Type</b></th>
+            <th class="tableHeader" style="width:14%;font-family: Arial,Helvetica,sans-serif;font-size:9px;color:#04408c;background-color:#d6e3f2;border-bottom: 1px solid #CCCCCC;border-left: 1px solid #CCCCCC;border-top: 1px solid #CCCCCC;"><b>Quantity</b></th>
+            <th class="tableHeader" style="width:14%;font-family: Arial,Helvetica,sans-serif;font-size:9px;color:#04408c;background-color:#d6e3f2;border-bottom: 1px solid #CCCCCC;border-left: 1px solid #CCCCCC;border-top: 1px solid #CCCCCC;"><b>Price</b></th>
+            <th class="tableHeader" style="width:14%;font-family: Arial,Helvetica,sans-serif;font-size:9px;color:#04408c;background-color:#d6e3f2;border-bottom: 1px solid #CCCCCC;border-left: 1px solid #CCCCCC;border-top: 1px solid #CCCCCC;"><b>Discount</b></th> 
+            <th class="tableHeader" style="width:14%;font-family: Arial,Helvetica,sans-serif;font-size:9px;color:#04408c;background-color:#d6e3f2;border-bottom: 1px solid #CCCCCC;border-left: 1px solid #CCCCCC;border-top: 1px solid #CCCCCC;"><b>Amount</b></th>          
+              
+        </tr>
+        </table>
+</div>  
+<!-- header -->
+
+<!--table-->
+<body>
+<div style="padding-top:10px;">
+
+<table width="100%" cellspacing="0" cellpadding="5" border="1px">
+    <TBODY>  
+          <apex:repeat value="{!TicketsInnerList}" var="ticket">    
+            <tr style="border-top:1px solid #000000;page-break-after:auto;">
+              <td class="tableContent" style="width:14%;font-family: Arial,Helvetica,sans-serif;font-size:10px;text-align:left;">{!ticket.ticketData.item_name__c}</td>
+              <td class="tableContent" style="width:14%;font-family: Arial,Helvetica,sans-serif;font-size:10px;">{!ticket.ticketData.item_name__c}</td>             
+              <td class="tableContent" style="width:14%;font-family: Arial,Helvetica,sans-serif;font-size:10px;"></td>             
+              <td class="tableContent" style="width:14%;font-family: Arial,Helvetica,sans-serif;font-size:10px;text-align:right;">{!ticket.usedTickets}</td>                    
+              <td class="tableContent" style="width:14%;font-family: Arial,Helvetica,sans-serif;font-size:10px;text-align:right;">${!ticket.ticketData.price__c}</td>              
+              <td class="tableContent" style="width:14%;font-family: Arial,Helvetica,sans-serif;font-size:10px;text-align:right;">${!ticket.totalDiscount}</td>              
+              <td class="tableContent" style="width:14%;font-family: Arial,Helvetica,sans-serif;font-size:10px;text-align:right;">${!ticket.totalAmount}</td>              
+           </tr>
+           
+            <tr style="border-top:1px solid #000000;page-break-after:auto;">
+              <td class="tableContent" style="width:14%;font-family: Arial,Helvetica,sans-serif;font-size:10px;"></td>
+              <td class="tableContent" style="width:14%;font-family: Arial,Helvetica,sans-serif;font-size:10px;"></td>             
+              <td class="tableContent" style="width:14%;font-family: Arial,Helvetica,sans-serif;font-size:10px;">Credit</td>             
+              <td class="tableContent" style="width:14%;font-family: Arial,Helvetica,sans-serif;font-size:10px;text-align:right;">{!ticket.creditCardTicketCount}</td>                    
+              <td class="tableContent" style="width:14%;font-family: Arial,Helvetica,sans-serif;font-size:10px;"></td>              
+              <td class="tableContent" style="width:14%;font-family: Arial,Helvetica,sans-serif;font-size:10px;text-align:right;">${!ticket.creditCardDiscountAmount}</td>              
+              <td class="tableContent" style="width:14%;font-family: Arial,Helvetica,sans-serif;font-size:10px;text-align:right;">${!ticket.creditCardTotalAmount}</td>              
+           </tr>
+           
+            <tr style="border-top:1px solid #000000;page-break-after:auto;">
+              <td class="tableContent" style="width:14%;font-family: Arial,Helvetica,sans-serif;font-size:10px;"></td>
+              <td class="tableContent" style="width:14%;font-family: Arial,Helvetica,sans-serif;font-size:10px;"></td>             
+              <td class="tableContent" style="width:14%;font-family: Arial,Helvetica,sans-serif;font-size:10px;">Check</td>             
+              <td class="tableContent" style="width:14%;font-family: Arial,Helvetica,sans-serif;font-size:10px;text-align:right;">{!ticket.checkTicketCount}</td>                    
+              <td class="tableContent" style="width:14%;font-family: Arial,Helvetica,sans-serif;font-size:10px;"></td>              
+              <td class="tableContent" style="width:14%;font-family: Arial,Helvetica,sans-serif;font-size:10px;text-align:right;">${!ticket.checkDiscountAmount}</td>              
+              <td class="tableContent" style="width:14%;font-family: Arial,Helvetica,sans-serif;font-size:10px;text-align:right;">${!ticket.checkTotalAmount}</td>              
+           </tr>
+           
+           
+        </apex:repeat>
+
+    </TBODY>
+    <TFOOT>
+      <tr>      
+          <td colspan="11" style="font-family: Arial,Helvetica,sans-serif;font-size:9px;color:#04408c;background-color:#d6e3f2;border-bottom: 1px solid #CCCCCC;border-left: 1px solid #CCCCCC;border-top: 1px solid #CCCCCC;text-align:right;">
+         
+          </td>
+      </tr>
+    </TFOOT>
+    
+</table> 
+</div>
+</body>
+
+</html>
+
+</apex:page>

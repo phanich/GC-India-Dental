@@ -1,0 +1,8 @@
+<apex:page standardStylesheets="false" showHeader="false"  sidebar="false" controller="phanisample1Con" contentType="application/vnd.ms-excel#phani.xls" ><apex:form ><apex:pageBlock >  
+           <apex:pageBlockTable value="{!accList}" var="a" > 
+            <apex:column headerValue="Order Name"> {!a.Name}
+            phani </apex:column>
+           </apex:pageBlockTable>
+        </apex:pageBlock>  
+   </apex:form>      
+</apex:page>

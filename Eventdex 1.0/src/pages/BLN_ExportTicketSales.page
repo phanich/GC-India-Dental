@@ -1,0 +1,51 @@
+<apex:page showHeader="false" standardStylesheets="false" sidebar="false" controller="BLN_TicketSalesReportCon" contentType="application/vnd.ms-excel#TicketSales.xls"><apex:pageBlock > 
+ 
+<table border="1">
+  <tr>
+    <th>Ticket Name</th>
+    <th>Tag</th>
+    <th>Payment Type</th>
+    <th>Quantity</th>
+    <th>Price</th>
+    <th>Discount</th>
+    <th>Amount</th>
+  </tr>
+  <apex:repeat value="{!TicketsInnerList}" var="ticket">
+  <tr>
+    <td>{!ticket.ticketData.item_name__c}</td>
+    <td>{!ticket.ticketData.item_name__c}</td>
+    <td></td>
+    <td>{!ticket.usedTickets}</td>
+    <td>${!ticket.ticketData.price__c}</td>
+    <td>${!ticket.totalDiscount}</td>
+    <td>${!ticket.totalAmount}</td>
+    
+  </tr>
+  <tr>
+    <td></td>
+    <td></td>
+    <td>Credit</td>
+    <td>{!ticket.creditCardTicketCount}</td>
+    <td></td>
+    <td>${!ticket.creditCardDiscountAmount}</td>
+    <td>${!ticket.creditCardTotalAmount}</td>
+    
+  </tr>
+
+<tr>
+    <td></td>
+    <td></td>
+    <td>Check</td>
+    <td>{!ticket.checkTicketCount}</td>
+    <td></td>
+    <td>${!ticket.checkDiscountAmount}</td>
+    <td>${!ticket.checkTotalAmount}</td>
+    
+  </tr>
+
+</apex:repeat>
+</table>
+
+ 
+  </apex:pageBlock>
+</apex:page>

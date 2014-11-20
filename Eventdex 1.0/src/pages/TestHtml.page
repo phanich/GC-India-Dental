@@ -1,0 +1,25 @@
+<apex:page controller="TestHtml">
+<script src="https://code.jquery.com/jquery-1.8.2.js"></script>
+  <script type="text/javascript">
+  var j$ = jQuery.noConflict();
+      function setHidden() {
+       j$("[id*='theHiddenInput']").val(j$("[id*='apiName']").val());
+        
+      }
+    </script>
+
+  <apex:form >
+      <apex:pageBlock >
+          <apex:pageBlockButtons location="top">
+              <apex:commandButton value="Save" action="{!save}" onclick="setHidden();"/>
+          </apex:pageBlockButtons>
+
+          <apex:pageblockSection >    
+          <apex:inputtext value="{!abc}"/>
+                <input id="apiName"/>
+                <apex:inputHidden value="{!hiddenValue}" id="theHiddenInput"/>
+          </apex:pageblockSection> 
+
+      </apex:pageBlock>
+  </apex:form>
+</apex:page>
