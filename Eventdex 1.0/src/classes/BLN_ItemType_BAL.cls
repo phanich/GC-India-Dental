@@ -12,13 +12,13 @@ public with sharing class BLN_ItemType_BAL {
 **************************************************************************************************/
     
     
-    public static LIST<SelectOption> itemTypeSelectOptions(LIST<Item_Type__c> itemTypes){
+    public static LIST<SelectOption> itemTypeSelectOptions(LIST<Event_Price__c> itemTypes){
         
         LIST<SelectOption> ItemTypesOptions = new LIST<SelectOption>();
         
-        for(Item_Type__c itt : itemTypes ){
+        for(Event_Price__c itt : itemTypes ){
 
-            ItemTypesOptions.add(new SelectOption(itt.id, itt.Name));
+            ItemTypesOptions.add(new SelectOption(itt.item_type__r.id, itt.item_type__r.Name));
         }
         
         return ItemTypesOptions;
@@ -74,7 +74,8 @@ public with sharing class BLN_ItemType_BAL {
         system.debug('LLLLLLLLLLLLLLLLLL KKKKKKKKKKKKKKKKKKKKKKKKK '+event);
         BLN_EventOptions_DAO togetEventOptions = new BLN_EventOptions_DAO();
         MAP<id, Event_Price__c> eventOptionsPrice = new MAP<id, Event_Price__c>();
-         eventOptionsPrice = togetEventOptions.queryEventOptions();
+        //commented
+         eventOptionsPrice = togetEventOptions.queryEventOptions(event.id);
          
          
         for(Item_Type__c itp: itemTypes){

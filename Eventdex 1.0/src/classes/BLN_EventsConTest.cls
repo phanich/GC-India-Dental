@@ -136,36 +136,7 @@ global with sharing class BLN_EventsConTest {
     itemdefaultmaxqty=(String)BLN_Item__c.max_per_order__c.getDescribe().getDefaultValueFormula();
     itemdefaultminqty=(String)BLN_Item__c.min_per_order__c.getDescribe().getDefaultValueFormula();
     }catch(Exception e){}
-        eventOptions = new LIST<Event_Price__c>();
-        String eventid='a0sc0000001oHmc';
-        
-         eventOptions.addAll(BLN_ItemType_DAO.eventOptionItemTypes(BLN_Event_UtilityCon.displayEventOptions(),eventid )); 
-         eventSelectOptions = new LIST<eventOptionsWrapper>();
-         
-         for(Event_Price__c itp: eventOptions){
-                eventSelectOptions.add(new eventOptionsWrapper(FALSE, itp ));
-         }
-         
-         //geting individual ticket standard item types
-          individualTicketsSelectOptions = new LIST<selectOption>();
-         SET<String> eventOptionsItemTypes = new SET<String>();
-        BLN_Event_UtilityCon eventUtility = new BLN_Event_UtilityCon();
-         eventOptionsItemTypes.addAll(eventUtility.allMainItemType());
-        LIST<Item_Type__c> individualTicketsItemTypess = new LIST<Item_Type__c>();
-        individualTicketsItemTypess = BLN_ItemType_DAO.itemTypesforIndividualTickets(eventOptionsItemTypes);
-        
-         individualTicketsSelectOptions = BLN_ItemType_BAL.itemTypeSelectOptions(individualTicketsItemTypess);
-         //Adding event option types
-         for(Item_Type__c itemtpe:[select id,name,Item_Type_Number__c from Item_Type__c where Item_Type_Number__c='IT-000010' or Item_Type_Number__c='IT-000004' or Item_Type_Number__c='IT-000003' order by Order__c])
-         individualTicketsSelectOptions.add(new SelectOption(itemtpe.id,itemtpe.name));
-         //
-         //get all the Add On item types
-         getAddOnItemTypes();
-         //
-         
-         //get package item type
-         getPackageItemTypes();
-         //
+       
          
          //get payment types for Item
          paymentSelectOptions=getPaymentType();
@@ -394,14 +365,14 @@ global with sharing class BLN_EventsConTest {
      public static LIST<Item_Type__c> ItemTypes{get; set;}
    
   @RemoteAction
-    global static List<TicketCreateInfo> getTickets(String ittypenumber,String id) {
+    global static List<TicketCreateInfo> getTickets(String ittypenumber,String id,String eventid) {
     
     //if(TicketsDisplayInEventsPageBasedOnItemTypes.get(ittypenumber))
     //{
     system.debug(id+'  TICKET NUMBER  '+ittypenumber);
     TicketsDisplayInEventsPageBasedOnItemTypes = BLN_Event_UtilityCon.itemTypesDisplayInEventsPage();
      BLN_EventOptions_DAO evo = new BLN_EventOptions_DAO();
-         EventOptionsMAP = evo.queryEventOptions();
+         EventOptionsMAP = evo.queryEventOptions(eventid);
          Event_Price__c ep = new Event_Price__c();
          ep = EventOptionsMAP.get(id);
          
@@ -426,6 +397,7 @@ global with sharing class BLN_EventsConTest {
         tcinfo1.ticketName=itemType.Name;
         tcinfo1.ticketId=itemType.id;
         tcinfo1.ticketPrice=y;
+        tcinfo1.ticketPercentage=String.valueOf(ep.BL_Fee_Percentage__c);
         tcinfo1.show=true;//TicketsDisplayInEventsPageBasedOnItemTypes.get(ittypenumber);
         
         List<TicketCreateInfo> tcinfo=new List<TicketCreateInfo>();
@@ -434,11 +406,12 @@ global with sharing class BLN_EventsConTest {
         if(ittypenumber=='IT-000003')
         {
           itemType = ItemTypeMap.get('IT-000004');
-          ep = EventOptionsMAP.get(itemType.id);
+          ep = EventOptionsMAP.get([select id,name from Event_Price__c where Event__c=:eventid and Item_type__r.Item_Type_Number__c='IT-000004'].id);
           TicketCreateInfo tcinfo2=new TicketCreateInfo();
         tcinfo2.ticketName=itemType.Name;
         tcinfo2.ticketId=itemType.id;
         tcinfo2.ticketPrice=String.valueOf(ep.BL_Fee_Amount__c);
+        tcinfo2.ticketPercentage=String.valueOf(ep.BL_Fee_Percentage__c);
         tcinfo2.show=TicketsDisplayInEventsPageBasedOnItemTypes.get('IT-000004');
         
          tcinfo.add(tcinfo2);
@@ -450,6 +423,7 @@ global with sharing class BLN_EventsConTest {
     {
      public String ticketName{get;set;}
      public String ticketPrice{get;set;}
+     public String ticketPercentage{get;set;}
      public String ticketId{get;set;}
      public boolean show{get;set;}
        
@@ -986,7 +960,7 @@ class tags {
     delete htag;
     }
     
-    private static boolean firstRun = true;
+    public static boolean firstRun = true;
 
     public static boolean isFirstRun() {
         return firstRun;
@@ -1070,9 +1044,9 @@ class tags {
     public PageReference refreshAF()
     {
        
-       
+       System.debug('eventids '+ApexPages.currentPage().getParaMeters().get('eventids'));
        eventOptions = new LIST<Event_Price__c>();
-        String eventid='a0sc0000001oHmc';
+       
         
          eventOptions.addAll(BLN_ItemType_DAO.eventOptionItemTypes(BLN_Event_UtilityCon.displayEventOptions(),ApexPages.currentPage().getParaMeters().get('eventids'))); 
          eventSelectOptions = new LIST<eventOptionsWrapper>();
@@ -1080,6 +1054,28 @@ class tags {
          for(Event_Price__c itp: eventOptions){
                 eventSelectOptions.add(new eventOptionsWrapper(FALSE, itp ));
          }
+         
+         
+         //geting individual ticket standard item types
+          individualTicketsSelectOptions = new LIST<selectOption>();
+         SET<String> eventOptionsItemTypes = new SET<String>();
+        BLN_Event_UtilityCon eventUtility = new BLN_Event_UtilityCon();
+         eventOptionsItemTypes.addAll(eventUtility.allMainItemType());
+        LIST<Event_Price__c> individualTicketsItemTypess = new LIST<Event_Price__c>();
+        individualTicketsItemTypess = BLN_ItemType_DAO.itemTypesforIndividualTickets(eventOptionsItemTypes,ApexPages.currentPage().getParaMeters().get('eventids'));
+        
+         individualTicketsSelectOptions = BLN_ItemType_BAL.itemTypeSelectOptions(individualTicketsItemTypess);
+         //Adding event option types
+         for(Event_Price__c itemtpe:[select item_type__r.id,item_type__r.name,item_type__r.Item_Type_Number__c from Event_Price__c where (item_type__r.Item_Type_Number__c='IT-000010' or item_type__r.Item_Type_Number__c='IT-000004' or item_type__r.Item_Type_Number__c='IT-000003') and Active_Flag__c=true and Event__c=:ApexPages.currentPage().getParaMeters().get('eventids') order by item_type__r.Order__c])
+         individualTicketsSelectOptions.add(new SelectOption(itemtpe.item_type__r.id,itemtpe.item_type__r.name));
+         //
+          //get all the Add On item types
+         getAddOnItemTypes();
+         //
+         
+         //get package item type
+         getPackageItemTypes();
+         //
        return null;
     }
     

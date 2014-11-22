@@ -1042,7 +1042,7 @@ document.getElementById("earlybirdbuttons1").style.outline="none";*/
     
               </div><!--close of createpackagebutton-->
                 <!----------------------------------------->
-              <div id="boothleadsprodcontents" style="display:none; margin-bottom:10px;">
+             <!-- <div id="boothleadsprodcontents" style="display:none; margin-bottom:10px;">
               <table width="75%" border="0" >
   <tr style=" background-color:#EFEFEF;">
   <apex:variable var="i" value="{!1}"/>
@@ -1058,7 +1058,7 @@ document.getElementById("earlybirdbuttons1").style.outline="none";*/
 </table>
 
               
-              </div><!--close of boothleadsproductscontent-->
+              </div>--><!--close of boothleadsproductscontent-->
               
               <!----------------------------------------------------------------->
          

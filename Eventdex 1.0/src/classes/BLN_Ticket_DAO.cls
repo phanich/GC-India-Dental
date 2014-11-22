@@ -25,7 +25,7 @@ public without sharing class BLN_Ticket_DAO{
 
     // This method return user booked tickets
     public List<Ticket__c> userOrderAndTickets(string str){
-        string query1 = 'Select item_pool__c,badgeparentid__c,(select id,name,item__r.item_Name__c from badgeparentids__r),order__r.id,item__r.item_Name__c,Badge_Label__c,Badge_ID__c,Badge_ID__r.name,(select id,name,Badge_Label__c from badges__r where cancel_time__c=null and Exp_time__c=null limit 1),order__r.Name,Client_Company__r.Name,Name,Item_Type__r.Name ,Client_GN_User__c,Client_GN_User__r.user__r.MobilePhone,Client_GN_User__r.First_Name__c,Client_GN_User__r.Last_Name__c,Client_GN_User__r.Email__c,Order_Item__c,event__c,Parent_ID__c   From Ticket__c t '+ str;
+        string query1 = 'Select First_Name__c,Last_Name__c,Company__c,item_pool__c,badgeparentid__c,(select id,name,item__r.item_Name__c from badgeparentids__r),order__r.id,item__r.item_Name__c,Badge_Label__c,Badge_ID__c,Badge_ID__r.name,(select id,name,Badge_Label__c from badges__r where cancel_time__c=null and Exp_time__c=null limit 1),order__r.Name,Client_Company__r.Name,Name,Item_Type__r.Name ,Client_GN_User__c,Client_GN_User__r.user__r.MobilePhone,Client_GN_User__r.First_Name__c,Client_GN_User__r.Last_Name__c,Client_GN_User__r.Email__c,Order_Item__c,event__c,Parent_ID__c   From Ticket__c t '+ str;
        
       //List<Ticket__c> ticketsbooked1 = [Select order__r.id,order__r.Name,Client_Company__r.Name,Name,Item_Type__r.Name,Client_GN_User__r.user__r.MobilePhone,Client_GN_User__r.First_Name__c,Client_GN_User__r.Last_Name__c,Client_GN_User__r.Email__c,Client_GN_User__c,event__c,Parent_ID__c   From Ticket__c t ]; 
        

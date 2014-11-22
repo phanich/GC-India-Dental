@@ -47,11 +47,11 @@ top: 0px;
 left: 0px;
 background-color: #484848;
 width: 100%;
-z-index: 50;
+z-index: 200;
 height: 100%;
 opacity: .9;    
     }   
-#dialogbox6{position: fixed;top:0px;left:0px;right:0px;z-index:75;overflow:auto; width:36%; 
+#dialogbox6{position: fixed;top:0px;left:0px;right:0px;z-index:201;overflow:auto; width:36%; 
           padding:1px; margin:0 auto;-moz-border-radius-bottomleft:6px; -webkit-border-bottom-left-radius:6px; 
           -moz-border-radius-bottomright:6px; -webkit-border-bottom-right-radius:6px; border-radius:0 0 6px 6px; 
           font: 12px/24px "Lucida Grande",Arial,sans-serif;
@@ -415,7 +415,7 @@ margin-top:-9px;}
                document.getElementById("dialogbox6").style.display="block";*/
                document.getElementById("emailbody").innerHTML= '';
             document.getElementById("emailupdatebody").innerHTML = '';
-            document.getElementById("emailbody").innerHTML=$('iframe').contents().find('body').html();
+            document.getElementById("emailbody").innerHTML = $('iframe').contents().find('body').html();
             document.getElementById("emailupdatebody").innerHTML = document.getElementById("emailbody").innerHTML;
    
            }
@@ -553,10 +553,72 @@ margin-top:-9px;}
  
    
 </script> 
-  
+ <!-----------------------------styles for delete campaign--------------------->
+ <style>
+         .cancelcampaign{
+    width:6%; float:right; height:18px; background-color:#F8F8F8; margin-bottom:-20px;
+    box-shadow: 0 1px 3px 0 #b5b5b5;
+    -moz-box-shadow: 0 1px 3px 0 #b5b5b5;
+    -webkit-box-shadow: 0 5px 5px 0 #b5b5b5;
+    
+    }
+    
+    .cancelcampaign:hover{
+    
+    box-shadow: 0 0x 1px 0 #b5b5b5;
+    -moz-box-shadow: 0 0px 1px 0 #b5b5b5;
+    -webkit-box-shadow: 0 0px 1px 0 #b5b5b5;
+    cursor:pointer;
+    }
+    
+    .notscheduledicon{box-shadow: 0 1px 3px 0 #b5b5b5;
+    -moz-box-shadow: 0 1px 3px 0 #b5b5b5;
+    -webkit-box-shadow: 0 5px 5px 0 #b5b5b5;
+    width: 88%;
+    /* margin-left: 0%; */
+    /* text-align: center; */
+    /* margin-right: -14%; */
+    float: right;
+    height: 25px;
+    background-color: #F8F8F8;
+    }
+    
+    .notscheduledicon:hover{box-shadow: 0 0x 1px 0 #b5b5b5;
+    -moz-box-shadow: 0 0px 1px 0 #b5b5b5;
+    -webkit-box-shadow: 0 0px 1px 0 #b5b5b5;
+    cursor:pointer;
+    }
+    
+ 
+ </style>
+ 
+ <!---------------------------------------------------------------------------->
 
 <apex:form id="displayformid" >
-
+<script> 
+  function confirmation() 
+  { 
+  var r= confirm('Are you sure want to cancel the schedule');
+    if (r==true){
+    return true;
+    }else{
+    return false;
+    }
+   
+ 
+  } 
+  function confirmationcamp() 
+  { 
+  var x= confirm('Are you sure want to delete the campaign');
+    if (x==true){
+    return true;
+    }else{
+    return false;
+    }
+   
+ 
+  } 
+  </script>
 <apex:outputPanel rendered="{!emailalert}">
     <script>
         alert('Email(s) have been sent!');
@@ -622,26 +684,34 @@ margin-top:-9px;}
        <!-----------1st------------------------->
        <apex:repeat value="{!anouncecmaplist}" var="anou" id="anounid">
        <div id="announcement-tile">
+       <apex:outputPanel rendered="{!if(anou.Template_Type__c == 'Standard',false,true)}">
+       <div class="cancelcampaign" style="">
+    <apex:commandLink action="{!deleteremcamp}" title="Delete"  onclick="return confirmationcamp();">
+    <apex:image value="{!$Resource.cancelcampaign}" style="height:18px;width:18px;"/>
+    <apex:param value="{!anou.id}" name="remid" />
+    </apex:commandLink>
+    </div>
+    </apex:outputPanel>
        <table width="100%" height="100%" border="0">
   <tr style="border-bottom:1px solid #F4F4F4;">
-    <td id="camp-title" colspan="4">
+    <td id="camp-title" colspan="3">
   <!-- 
     onClick="editcampaign('{!anou.id}' , '{!selectedeventid}');"
      <a onClick="editcampaign('{!anou.id}' , '{!selectedeventid}');"  style="color:#59b15d; cursor:pointer; text-decoration:underline;" > {!anou.Name}</a>     ---> 
   <apex:commandLink value="{!anou.Name}" onClick="editcampaign('{!anou.id}' , '{!selectedeventid}');"   style="color:#59b15d; cursor:pointer; text-decoration:underline;"  reRender="displayboolid" >  
+    
+    
     <!--    <apex:param value="{!anou.id}" name="editcamid"/>
      <apex:param value="{!selectedeventid}" name="eventid"/>--->
      </apex:commandLink>
     
        </td>
+       <td width="2%" id="camp-title"></td>
   </tr>
   <tr style="border-bottom:1px solid #F4F4F4;">
     <td colspan="3" style="text-align:left; text-indent:5px; color:#396FA3 ;">Template:<span style="color:#000; margin-left:3%;"><apex:outputText value="{!anou.Template_Type__c}"/></span></td>
     <td style="text-align:right;">
-    <apex:commandLink action="{!deleteremcamp}" title="Delete"  immediate="true" reRender="displayformid" status="refreshAmount" rendered="{!if(anou.Template_Type__c == 'Standard',false,true)}">
-    <apex:image value="{!$Resource.deleteIcon}" style="margin-right:8%;height:30px;"/>
-    <apex:param value="{!anou.id}" name="remid" />
-    </apex:commandLink>
+    
     </td>
   </tr>
   <tr id="duedate" style="">
@@ -651,20 +721,29 @@ margin-top:-9px;}
  </tr>
  <tr id="duedate" style="">
  <apex:outputPanel rendered="{!if(anou.Email_Send_Date__c == null,true,false)}">
-    <td colspan="5" style="">Status:<span style="color:#000; margin-left:3%;">Not Scheduled</span>
-    &nbsp;&nbsp;&nbsp;&nbsp;<apex:commandLink value="Cancel" action="{!CancelAction}">
-    <apex:param value="{!anou.id}" name="cancelid"/>
-    </apex:commandLink>
-    </td>
-  </apex:outputPanel>
-  <apex:outputPanel rendered="{!if(anou.Email_Send_Date__c != null,true,false)}">
-    <td colspan="5" style="">Status:<span style="color:#000; margin-left:3%;">Scheduled on <apex:outputText value="{0, date, MMMM d',' yyyy}"><apex:param value="{!anou.Email_Send_Date__c}"/> </apex:outputText></span>
-    &nbsp;&nbsp;&nbsp;&nbsp;<apex:commandLink value="Cancel" action="{!CancelAction}">
-     <apex:param value="{!anou.id}" name="cancelid"/>
-    </apex:commandLink>
+    <td colspan="3" style="">Status:</td>
+    
+    <td style="width:1%;">
+    
     </td>
   </apex:outputPanel>
   
+  
+  
+  <apex:outputPanel rendered="{!if(anou.Email_Send_Date__c != null,true,false)}">
+    <td colspan="3" style="">Status:<span style="color:#000; margin-left:3%;font-size:15px;">Scheduled on <apex:outputText value="{0, date, MMMM d',' yyyy}"><apex:param value="{!anou.Email_Send_Date__c}"/> </apex:outputText></span>
+    </td>
+    
+    <td style="width:1%;">
+    <div id="unschedimg" class="notscheduledicon" onclick="Alertunschedcamp.render()" >
+    <apex:commandLink action="{!CancelAction}" onclick="return confirmation();">
+     <img src="{!$Resource.cancelschedule}" title="Not Scheduled" width="23px" height="23px" style="margin-right:6px;"/>
+     <apex:param value="{!anou.id}" name="cancelid"/>
+    </apex:commandLink>
+    </div>
+    </td>
+  </apex:outputPanel>
+ 
   </tr>
   <tr>
      <td colspan="4" valign="middle">
@@ -702,11 +781,18 @@ margin-top:-9px;}
  <apex:repeat value="{!remaindermaplist}" var="remainvar" id="remainvar">
        <!-----------1st------------------------->
        <div id="announcement-tile"  >
-       
+       <apex:outputPanel rendered="{!if(remainvar.Template_Type__c == 'Standard',false,true)}">
+       <div class="cancelcampaign"  style="">
+    <apex:commandLink action="{!deleteremcamp}" title="Delete"  onclick="return confirmationcamp();">
+    <apex:image value="{!$Resource.cancelcampaign}" style="height:18px;width:18px;"/>
+    <apex:param value="{!remainvar.id}" name="remid" />
+    </apex:commandLink>
+    </div>
+    </apex:outputPanel>
        <table width="100%" height="100%" border="0">   
   <tr  style="border-bottom:1px solid #F4F4F4;">
   
-    <td id="camp-title" colspan="6" style="color:#338dcb;cursor:pointer; text-decoration:underline;">
+    <td id="camp-title" colspan="5" style="color:#338dcb;cursor:pointer; text-decoration:underline;">
    <!--- <a onClick="Alertedit.render()"  style="color:#e97d32;cursor:pointer; text-decoration:underline;">Event Registration Confirmed</a> --->
    <apex:commandLink value="{!remainvar.Name}"  onClick="editcampaign('{!remainvar.id}' , '{!selectedeventid}');"  style="color:#338dcb;cursor:pointer; text-decoration:underline;"  reRender="displayboolid" >  
      <!--- <apex:param value="{!remainvar.id}" name="editcamid"/>
@@ -716,16 +802,14 @@ margin-top:-9px;}
     
     
     </td>
+    <td width="2%" id="camp-title"></td>
     
   </tr>
 
  <tr style="border-bottom:1px solid #F4F4F4;">
     <td colspan="5" style="text-align:left; text-indent:5px; color:#396FA3 ;">Template:<span style="color:#000; margin-left:3%;"><apex:outputText value="{!remainvar.Template_Type__c}"/></span></td>
     <td style="text-align:right;">
-    <apex:commandLink action="{!deleteremcamp}" title="Delete"  immediate="true" reRender="displayformid" status="refreshAmount" rendered="{!if(remainvar.Template_Type__c == 'Standard',false,true)}">
-    <apex:image value="{!$Resource.deleteIcon}" style="margin-right:8%;height:30px;"/>
-    <apex:param value="{!remainvar.id}" name="remid" />
-    </apex:commandLink>
+    
     </td>
   </tr>
   <tr id="duedate" style="">
@@ -735,19 +819,20 @@ margin-top:-9px;}
   </tr>
    <tr id="duedate" style="">
     <apex:outputPanel rendered="{!if(remainvar.Email_Send_Date__c == null,true,false)}">
-    <td colspan="6" style="">Status:<span style="color:#000; margin-left:3%;">Not Scheduled</span>
-     &nbsp;&nbsp;&nbsp;&nbsp;<apex:commandLink value="Cancel" action="{!CancelAction}">
-    <apex:param value="{!remainvar.id}" name="cancelid"/>
-    </apex:commandLink>
-    
+    <td colspan="5" style="">Status:</td>
+     <td style="width:1%;">
     </td>
   </apex:outputPanel>
   <apex:outputPanel rendered="{!if(remainvar.Email_Send_Date__c != null,true,false)}">
-    <td colspan="6" style="">Status:<span style="color:#000; margin-left:3%;">Scheduled on <apex:outputText value="{0, date, MMMM d',' yyyy}"><apex:param value="{!remainvar.Email_Send_Date__c}"/> </apex:outputText></span>
-     &nbsp;&nbsp;&nbsp;&nbsp;<apex:commandLink value="Cancel" action="{!CancelAction}">
+    <td colspan="5" style="">Status:<span style="color:#000; margin-left:3%;font-size:15px;">Scheduled on <apex:outputText value="{0, date, MMMM d',' yyyy}"><apex:param value="{!remainvar.Email_Send_Date__c}"/> </apex:outputText></span>
+     </td>
+     <td style="width:1%;">
+     <div id="unschedimg" class="notscheduledicon" >
+     <apex:commandLink action="{!CancelAction}" onclick="return confirmation();">
+     <img src="{!$Resource.cancelschedule}" title="Not Scheduled" width="23px" height="23px" style="margin-right:6px;"/>
     <apex:param value="{!remainvar.id}" name="cancelid"/>
     </apex:commandLink>
-    
+    </div>
     </td>
   </apex:outputPanel>
   </tr>
@@ -788,10 +873,18 @@ margin-top:-9px;}
          <apex:repeat value="{!registermaplist}" var="remain" id="remainid">
        <!-----------1st------------------------->
        <div id="announcement-tile"  >
-       
+       <apex:outputPanel rendered="{!if(remain.Template_Type__c == 'Standard',false,true)}">
+       <div class="cancelcampaign"  style="">
+    <apex:commandLink action="{!deleteremcamp}" title="Delete"   onclick="return confirmationcamp();">
+    <apex:image value="{!$Resource.cancelcampaign}" style="height:18px;width:18px;"/>
+    <apex:param value="{!remain.id}" name="remid" />
+    </apex:commandLink>
+    </div>
+    </apex:outputPanel>
+  
        <table width="100%" height="100%" border="0">
   <tr style="border-bottom:1px solid #F4F4F4;height:42px;">
-    <td id="camp-title" colspan="4" style=" padding:5px;color:#338dcb;">
+    <td id="camp-title" colspan="3" style=" padding:5px;color:#338dcb;">
    <!--- <a onClick="Alertedit.render()"  style="color:#e97d32;cursor:pointer; text-decoration:underline;">Event Registration Confirmed</a> --->
    <apex:commandLink value="{!remain.Name}" onClick="editcampaign('{!remain.id}' , '{!selectedeventid}');"   style="color:#e97d32;cursor:pointer; text-decoration:underline;" reRender="displayboolid" >  
     <!---   <apex:param value="{!remain.id}" name="editcamid"/>
@@ -800,7 +893,7 @@ margin-top:-9px;}
     
    
     </td>
-    
+    <td width="2%" id="camp-title"></td>
   </tr>
  
  <tr style="border-bottom:1px solid #F4F4F4;">
@@ -828,12 +921,8 @@ margin-top:-9px;}
   
   <tr height="1px" style="border-bottom:3px solid #e97d32;">
     <td colspan="4" >
-    <apex:commandLink action="{!deleteremcamp}" title="Delete"  immediate="true" reRender="displayformid" status="refreshAmount" rendered="{!if(remain.Template_Type__c == 'Standard',false,true)}">
-    <apex:image value="{!$Resource.deleteIcon}" style="margin-right:8%;height:30px;"/>
-    <apex:param value="{!remain.id}" name="remid" />
-    </apex:commandLink>
-    </td>
-   
+    
+   </td>
   </tr>
   
 
@@ -1256,9 +1345,11 @@ var editor = new TINY.editor.edit('editor', {
 <script type="text/javascript">
 function CustomAlert(){
     this.render =function(dialog){
+    
+    alert('::::::;;dialog overlay::::::::;'+document.getElementById('dialogoverlay3'));
         var winW = window.innerWidth;
         var winH = window.innerHeight;
-        var dialogoverlay =document.getElementById('dialogoverlay3');
+        var dialogoverlay = document.getElementById('dialogoverlay3');
         var dialogbox = document.getElementById('dialogbox6');
         dialogoverlay.style.display="block";
         /*dialogoverlay.style.height = winH +"px";
@@ -1281,8 +1372,8 @@ function CustomAlert(){
     var Alert6 = new CustomAlert(); 
    function showelements(){
    //alert(':rahil::::::;');
-   document.getElementById('editor-edit').style.display="";
-document.getElementById('emailbodytxt').style.display="";
+    document.getElementById('editor-edit').style.display="";
+    document.getElementById('emailbodytxt').style.display="";
    }
 </script>   
 
@@ -1290,7 +1381,7 @@ document.getElementById('emailbodytxt').style.display="";
 
 <div id="" style="width:100%; text-align:right;margin-top:5px; text-align:">
 
- <apex:commandButton value="Save" onclick="showelements();showpackage('emailbody-wrapper','email-edit','save');Alert6.render(); document.getElementById('editor-edit').style.display='block';" styleclass="button-a blue" reRender="aaa" />
+ <apex:commandButton value="Save" onclick="('emailbody-wrapper','email-edit','save');updatetemplatename();document.getElementById('editor-edit').style.display='block';" styleclass="button-a blue" reRender="aaa" />
  <apex:commandButton value="Cancel"  style="margin-left:3%;"  onclick="showelements();showpackage('emailbody-wrapper','email-edit')"  styleclass="button-a blue" reRender="aaa"/>
 </div>
 </div><!--close of emailedit-->
@@ -1446,7 +1537,7 @@ sdsfsfds
  </td>
  <td width="21%" style="text-align:right;">
 
- <apex:commandButton value="Save" onclick="saveastemplate();" reRender="aaa"  styleclass="button-a blue" rendered="{!existingtype}"/>
+ <apex:commandButton value="Save" onclick="saveastemplate();" reRender="aaa"  styleclass="button-a blue" style="margin-right:5%;" rendered="{!existingtype}"/>
  <apex:commandButton value="Save As" onclick="updatetemplate();" reRender="aaa"  styleclass="button-a blue" rendered="{!existingtype}" />
  <apex:commandButton value="Save" onclick="savetemplate();" reRender="aaa"  styleclass="button-a blue" rendered="{!newtype}"/>
   </td>
@@ -1480,8 +1571,30 @@ function updatetemplate(){
     
      var updatestandardtemp = document.getElementById("emailupdatebody").innerHTML;
      //alert(updatestandardtemp);
+     alert(tempname);
      
-     updatetempl(campname,frmname,reciepients,updatestandardtemp);
+     updatetempl(campname,frmname,reciepients,updatestandardtemp,tempname);
+      
+
+}
+function updatetemplatename(){
+
+      //var campname =  document.getElementById('campname').value;
+      //alert(campname); 
+     //var frmname =   document.getElementById('frmname').value;
+     //var reciepients = document.getElementById('{!$Component.pageid.comid.commoncomponent.form1id.semailreceipients}').innerHTML;
+
+    
+     var updatestandardtemp = document.getElementById("emailupdatebody").innerHTML;
+     alert(updatestandardtemp);
+     if(document.getElementById("emailbody").innerHTML == $('iframe').contents().find('body').html()){
+     alert('NO CHANGE');
+     document.getElementById("emailbody-wrapper").style.display="";
+     document.getElementById("email-edit").style.display="none";
+     }else{
+      Alert6.render();
+      }
+     
       
 
 }
@@ -1510,7 +1623,8 @@ function saveastemplate(){
     
      var updatestandardtemp = document.getElementById("emailupdatebody").innerHTML;
      alert(updatestandardtemp);
-     saveastemp1(campname,frmname,reciepients,updatestandardtemp);
+     alert(tempname);
+     saveastemp1(campname,frmname,reciepients,updatestandardtemp,tempname);
       
 
 }
@@ -1523,6 +1637,7 @@ function saveastemplate(){
                   <apex:param value="" name="frmname"/>
                   <apex:param value="" name="reciepients"/>
                     <apex:param value="" name="updatestandardtemp"/>
+                   <apex:param value="" name="tempnamenew"/>
 </apex:actionFunction>
 <apex:actionFunction action="{!savenewcampaign}" name="savetempl"  reRender="displayformid,form1id,savedd">
                    <apex:param value="" name="campname"/>
@@ -1538,9 +1653,9 @@ function saveastemplate(){
 </apex:actionFunction>
 </apex:outputPanel>
 
-<!---------------form1id,------------------------------,displayformid,form1id------------->
-     <!----popup for dialogbox on click of save
-     <apex:outputPanel rendered="{!newtype}">
+<!---------------custom popup for template name<apex:outputPanel rendered="{!newtype}">------------->
+   popup for dialogbox on click of save
+     
    <div id="dialogoverlay3" style="display:none"></div>
    <div id="dialogbox6" style="display:none">
    <a href="" id="close" title="cancel" onclick="return Cancel();">×</a>
@@ -1552,74 +1667,44 @@ function saveastemplate(){
   <tr>
     <td>Template Name</td>
     <td style="text-align:left;">
-    <input type="text" id="savecustomtemp" name="nw-customizetemp"/>
+    <input type="text" id="savecustomtemptxt" name="nw-customizetemp"/>
     </td>
   </tr>
   <tr >
     <td colspan="2" style=" padding:5px;text-align:center;">
     
-    <button  id="customsave" class="button-a blue" >Save</button></td>
-
+    <button  id="customsave" class="button-a blue" onclick=" return customsavetemp();showelement">Save</button></td>
+    <apex:inputHidden value="{!tempnamenew}" id="newname"/>
   </tr>
 </table>
+<script>
+    var tempname;
+    function customsavetemp(){
+     
+    alert('::::::::::::;Custom save:::::::;;;;;');
+    document.getElementById('dialogbox6').style.display ="none";
+    document.getElementById('dialogoverlay3').style.display ="none";
+            
+    document.getElementById("emailbody-wrapper").style.display="";
+     document.getElementById("email-edit").style.display="none"; 
+     tempname = document.getElementById("savecustomtemptxt").value;
+     //document.getElementById("newname").value = tempname;
+     //document.getElementById('{!$Component.pageid.comid.commoncomponent.form1id.newname}').value = tempname ; 
+           alert(tempname );
+                return false;
+    
+    }
 
+
+</script>
     
     </div>
     </div>
   
   </div>
- </apex:outputPanel>
- -------->
-<script>
- $(window).load(function(){
-    
-     $(function() {
-        
-        $('#customsave').click(function() {
-        
-        
-            var name  = $('input[name="nw-customizetemp"]').val()
-            if(name !==''){
-                alert("notnull");
-                 $('#customizetempbox').append('<table class="results" style="width:100%;text-align:left;">'
-                 +'<tr>' 
-                          +'<td style="width:1%;padding-left:25px;">'+'<input type="radio" name="temp" checked/>'+'</td>'
-                            +'<td>'+name+'</td>'
-                            
-                           +'</tr>'
-                       + '</table>');
-                       
-                    $('#savecustomtemp').val(''); //clearing textbox value
-                    Alert6.Cancel();
-                    appendtext1();
-                }
-            
-            
-            }) 
-         
-         })
-     
-     
-     })
-     function appendtext(){
-    var divtext=document.getElementById("emailbody-temp").innerHTML;
-    
-    $('iframe').contents().find('body').append(divtext);
-    document.getElementById("editor-edit").style.display="none";
-    var i=document.getElementById("emailbody-temp").innerHTML;
-    document.getElementById("emailbody-temp").innerHTML='';
-    document.getElementById("emailbodytxt").style.display="none";
-    console.log("i");
-    alert("edit");
-    }
-    
-    
-    function appendtext1(){
-        document.getElementById("emailbody-temp").innerHTML=$('iframe').contents().find('body').html();
-        $('iframe').contents().find('body').empty();
-            /*alert("saved");*/
-        }
- </script>
+
+
+
  
  <!---------------------------------------------------------->
 <script>
@@ -1821,7 +1906,7 @@ updatelist();
 </div><!--close of recipient1-form-->
 <div id="" style="width:100%; text-align:right;margin-top:5px; text-align:">
 <!--<button  class="button-a blue" onclick="Alert2.Cancel()"   >Send</button>-->
-<apex:commandButton value="Save" styleClass="button-a blue" action="{!addingschedule}" onclick="fordate();"/>
+<apex:commandButton value="Save" styleClass="button-a blue" action="{!addingschedule}" onclick="fordate();" style="margin-right:1%;"/>
 <apex:commandButton value="Cancel" action="{!cancelmethod}" styleClass="button-a blue"/>
 <!--<button  class="button-a blue" onclick="Alert2.Cancel()"   >Cancel</button>-->
 </div>

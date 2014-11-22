@@ -75,6 +75,7 @@ public without sharing class globalForTestClass{
         insertItemPool.Item_Count__c= 12;
         insertItemPool.Addon_Parent__c= itemPoolId;
         insertItemPool.Track__c= trackId;
+        insertItemPool.Addon_Count__c= 4;
         insert insertItemPool;
         
         return insertItemPool;

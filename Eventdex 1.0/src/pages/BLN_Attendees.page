@@ -129,6 +129,8 @@ table td{border:0px;}
               <apex:actionFunction name="mergeBadge" action="{!mergeBadge}"  rerender="frm2" status="AjaxLoader"/>
               <apex:actionFunction name="cancelBadge" action="{!cancelBadge}"  rerender="frm2" status="AjaxLoader"/>
               <apex:actionFunction name="splitpackage" action="{!splitpackage}"  rerender="frm2" status="AjaxLoader"/>
+              <apex:actionFunction name="previewpackage" action="{!previewpackage}"  rerender="previewblock" status="AjaxLoader"/>
+              
               
  <apex:actionFunction name="getTicketToMergeList" action="{!getTicketToMergeList}" rerender="tickettomergesection" status="AjaxLoader"/>
  <apex:actionFunction name="getMergeList" action="{!getMergeList}" rerender="ticketmergelistsection" status="AjaxLoader"/>
@@ -411,12 +413,14 @@ function CustomAlert(){
  <div id="dialogoverlay"></div><!--close of dialogoverlay-->
 <div id="dialogbox">
 <a href="#" id="close" onclick="Alert.Cancel()" >×</a>
-<div class="grid-1" style=" width:98%;margin-left:1%; padding-right:0px;">
+<div class="grid-1" style=" width:100%;margin-left:1%; padding-right:0px;">
     <div class="title-grid">Merge Badge</div>
     <div class="content-gird" >
     <table width="100%" border="0">
      <tr>
-    <td style="padding:5px; font-size:14px; text-align:right;">Ticket to Merge with:</td>
+    <td style="padding:5px; font-size:14px; text-align:left;">Ticket to Merge with:</td>
+    </tr>
+    <tr>
     <td>
     <apex:outputpanel id="tickettomergesection">
         <apex:selectList value="{!selectedtickets}" size="1">
@@ -646,7 +650,7 @@ function CustomAlert(){
         dialogoverlay.style.display="block";
         /*dialogoverlay.style.height = winH +"px";
         dialogbox.style.left=(winW/2) -(550*.5)+"px";*/
-        dialogbox.style.top="250px";
+        dialogbox.style.top="100px";
         dialogbox.style.display="block";
        
     }
@@ -698,15 +702,30 @@ function CustomAlert(){
     
     </td>
   </tr>
+  <tr>
+  
+  <apex:outputpanel id="previewblock">
+  <apex:variable var="i" value="{!1}"/>
+  <apex:repeat value="{!pbs}" var="p">
+  <td>{!i})Ticket:</td><td>{!p.Ticket}<br/></td>
+  <td>Line Items:</td><td>{!p.LineItems}<br/><br/></td>
+   <apex:variable var="i" value="{!i+1}"/>
+  </apex:repeat>
+  </apex:outputpanel>
+  
+  </tr>
     <tr>
     <td colspan="2" style="padding:5px; padding-top:10px; text-align:center;">
     <button class="button-a blue" onclick="splitpackage();return false;" >Split</button>
+     <button class="button-a blue" onclick="previewpackage();return false;" >Preview</button>
                         &nbsp;&nbsp;
      <button class="button-a dark-blue" onclick="Alert3.Cancel()" >Cancel</button>
     </td>
 
   </tr>
-</table>   
+</table> 
+
+  
     
     
     
@@ -953,10 +972,10 @@ function CustomAlert(){
       <tr id="order_details_tr">
         <td>{!cust.Name}</td>
         <td>{!cust.item__r.item_name__c}</td>
-        <td>{!cust.Client_GN_User__r.First_Name__c}  {!cust.Client_GN_User__r.Last_Name__c}</td>
+        <td>{!cust.First_Name__c}  {!cust.Last_Name__c}</td>
         <td>{!cust.Client_GN_User__r.Email__c}</td>
          <td>{!cust.Client_GN_User__r.user__r.MobilePhone}</td>
-        <td>{!cust.Client_Company__r.Name}</td>
+        <td>{!cust.Company__c}</td>
         <td>{!cust.Badge_Label__c}</td>
         <td>
               {!cust.Ticket_Status__c}        

@@ -72,7 +72,7 @@ public with sharing class BLN_AttendeesController {
           if(k!=null){
           selectedEvent = k.getValue();
           }
-          //selectedEvent  = 'a0sc00000030GkU';
+          //selectedEvent  = 'a0sc00000030MCNAA2';
            system.debug('WWWWWWWWWWWWWWWWWWWWW 22222222222222222'+selectedEvent );
       mapidWithOrders = new MAP<id,order__c>();
      if(selectedEvent !=null && selectedEvent !=''){ 
@@ -354,7 +354,7 @@ List<String> packageids=new List<String>();
       idInClause  = idInClause.substring(0,idInClause.length()-2);
          idInClause += ')';
          
-        String q = 'Select order__r.id,item__r.item_Name__c,(select id,name,item__r.item_Name__c,Item_type__r.name,Item_pool__r.Item_Pool_Name__c from badgeparentids__r),Badge_Label__c,Badge_ID__c,Badge_ID__r.name,(select id,name,Badge_Label__c from badges__r where cancel_time__c=null and Exp_time__c=null limit 1),order__r.Name,Client_Company__r.Name,Name,Item_Type__r.Name ,Client_GN_User__c,Client_GN_User__r.user__r.MobilePhone,Client_GN_User__r.First_Name__c,Client_GN_User__r.Last_Name__c,Client_GN_User__r.Email__c,Order_Item__c,event__c,Parent_ID__c   From Ticket__c where id in ' + idInClause+' and badgeparentid__c=null';
+        String q = 'Select First_Name__c,Last_Name__c,Company__c,order__r.id,item__r.item_Name__c,(select id,name,item__r.item_Name__c,Item_type__r.name,Item_pool__r.Item_Pool_Name__c from badgeparentids__r),Badge_Label__c,Badge_ID__c,Badge_ID__r.name,(select id,name,Badge_Label__c from badges__r where cancel_time__c=null and Exp_time__c=null limit 1),order__r.Name,Client_Company__r.Name,Name,Item_Type__r.Name ,Client_GN_User__c,Client_GN_User__r.user__r.MobilePhone,Client_GN_User__r.First_Name__c,Client_GN_User__r.Last_Name__c,Client_GN_User__r.Email__c,Order_Item__c,event__c,Parent_ID__c   From Ticket__c where id in ' + idInClause+' and badgeparentid__c=null';
         printtickets=Database.query(q); 
        
   btstyle=[select BadgeName__c,Event__c,FirstRowElement__c,SecondElement__c,ThirdElement__c,FourthElement__c,FifthElement__c,SixthElement__c,SeventhElement__c,EightthElement__c,ninthelement__c from BadgeTemplate_Styles__c where Event__c=:selectedEvent and name=:selectedbdtemname  limit 1];
@@ -449,7 +449,7 @@ public PageReference findtemplate() {
           {
               if(tc.selectCheckBox==true)
               { 
-               mergeticketlist.add(new selectoption(tc.ticket.Id,tc.ticket.Name));
+               mergeticketlist.add(new selectoption(tc.ticket.Id,'[Ticket Id: '+tc.ticket.Name+'] [Ticket Name: '+tc.ticket.item__r.item_Name__c+']'));
                
 
            }}}
@@ -581,7 +581,7 @@ public PageReference findtemplate() {
           {
               if(tc.ticket.Item_Type__r.name=='Package')
               { 
-               packagelist.add(new selectoption(tc.ticket.Id+';'+tc.ticket.item_pool__c,tc.ticket.Name));
+               packagelist.add(new selectoption(tc.ticket.Id+';'+tc.ticket.item_pool__c,'[Ticket Id: '+tc.ticket.Name+'] [Ticket Name: '+tc.ticket.item__r.item_Name__c+']'));
                
 
            }}}
@@ -630,6 +630,61 @@ public PageReference findtemplate() {
         return null;
     }
 
-
+class packagebreak
+{
+  public String Ticket{get;set;}
+   public List<String> LineItems{get;set;}
+   
+} 
+ public List<packagebreak> pbs{get;set;}
+ public PageReference previewpackage()
+ {
+ BLN_Quick_Registration_BAL qb=new BLN_Quick_Registration_BAL();
+ pbs=new List<packagebreak>();
+            
+    LIST<string> ticketidandpoolid= selectedpackagetickets.split(';');
+    String ticketid=ticketidandpoolid[0];
+    String poolid=ticketidandpoolid[1];
+   
+    //Get all the admission tickets
+    List<Ticket__c> admticket=[select id,name,item__r.item_Name__c,Badge_Label__c,Item_Pool__c,Item_Pool__r.Item_type__r.name,Parent_ID__c from Ticket__c where Parent_ID__c=:ticketidandpoolid[0] and Item_Pool__r.Item_type__r.name='Admissions'];
+   for(integer i=0;i<admticket.size();i++)
+           {
+              packagebreak p=new packagebreak();
+              p.Ticket=admticket[i].Item_Pool__r.Item_type__r.name;
+              p.LineItems=new List<String>();
+               pbs.add(p);
+               }
+               
+     //Get all the line items pool except admission
+    List<Item_Pool__c> otherpool=[select id,name,Addon_Parent__c,Item_Count__c,Item_type__r.name from Item_Pool__c where Addon_Parent__c=:ticketidandpoolid[1] and Item_type__r.name!='Admissions'];
+    
+    for(integer i=0;i<otherpool.size();i++)
+           {
+                //get addontickets for that pool
+                List<Ticket__c> child=[select id,name,badgeparentid__c,Parent_ID__c,Item_Pool__c,Item_Pool__r.Item_Pool_Name__c from Ticket__c where Parent_ID__c=:ticketidandpoolid[0] and Item_Pool__c=:otherpool[i].id];
+                Integer j=0;
+                for(;j<child.size();j++)
+                {
+                    if(j==admticket.size())
+                    break;
+                   child[j].badgeparentid__c=admticket[j].id;
+                  
+                   pbs[j].LineItems.add(child[j].Item_Pool__r.Item_Pool_Name__c);
+                  
+                   
+                }
+                for(Integer rem=j;rem<child.size();rem++)
+                {
+                   child[rem].badgeparentid__c=admticket[admticket.size()-1].id;
+                   pbs[admticket.size()-1].LineItems.add(child[rem].Item_Pool__r.Item_Pool_Name__c);
+                }
+                
+               
+               }
+    
+    System.debug('pbs '+pbs);
+    return null;
+   }
     
 }

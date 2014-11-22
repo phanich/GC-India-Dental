@@ -92,13 +92,16 @@ public with sharing class BLN_ItemType_DAO {
         
     }
      
-     public static LIST<Item_Type__c> itemTypesforIndividualTickets(SET<String> eventOptionsItemTypes){
+     public static LIST<Event_Price__c> itemTypesforIndividualTickets(SET<String> eventOptionsItemTypes,String eventid){
         
-        LIST<Item_Type__c> itemTypes = new LIST<Item_Type__c>();
+        LIST<Event_Price__c> itemTypes = new LIST<Event_Price__c>();
         
-        itemTypes = [SELECT ID, NAME, Add_On__c, BL_Fee_Amt_per_res__c, BL_Fee_Pct_per_res__c, Invoice_Seq__c,Item_Type_Number__c, Unlimited__c, 
+        /*itemTypes = [SELECT ID, NAME, Add_On__c, BL_Fee_Amt_per_res__c, BL_Fee_Pct_per_res__c, Invoice_Seq__c,Item_Type_Number__c, Unlimited__c, 
                             Event_Option_Desc__c , Event_Option_Sort_Order__c, Event_Options_Image_URL__c
-                            FROM Item_Type__c WHERE Item_Type_Number__c =: eventOptionsItemTypes  ORDER BY Order__c];
+                            FROM Item_Type__c WHERE Item_Type_Number__c =: eventOptionsItemTypes  ORDER BY Order__c];*/
+        itemTypes = [SELECT ID, NAME,Event__c,Active_Flag__c,BL_Fee_Amount__c, Item_type__r.Add_On__c,Item_type__r.Event_Option_Sort_Order__c,Item_type__r.Event_Options_Image_URL__c,
+                          Item_type__r.Id,Item_type__r.Name,Item_type__r.Event_Option_Desc__c,Item_type__r.Item_Type_Number__c
+                            FROM Event_Price__c WHERE Item_type__r.Item_Type_Number__c IN: eventOptionsItemTypes and Active_Flag__c=true and Event__c=:eventid ORDER BY Item_type__r.Order__c];                    
         //
         return itemTypes;
         

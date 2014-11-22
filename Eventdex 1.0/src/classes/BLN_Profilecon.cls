@@ -195,15 +195,16 @@ public without sharing class BLN_Profilecon {
     public void updatedetails(){    
      if (UserImage != NULL && (UserImageName != '' || UserImageName != NULL)) {    
              if (UserImage.size() != null) {
-                 if (UserImage.size() <= 1024000) {
+                if (UserImage.size() <= 1024000) {
                      mydoc = new document();
                      mydoc.body = UserImage;
-                     //if(folderList.size()>0){
+                   //  if(folderList.size()>0){
                        mydoc.folderid ='00lF0000001VI7Y';
-                       //}
+                    //  }
                      mydoc.ispublic = true;
                      mydoc.Name = UserImageName;
                      insert mydoc;
+                    UserImage = null; 
                      GNUSER.User_Pic__c = mydoc.id;
                  } else {
                      
@@ -219,7 +220,7 @@ public without sharing class BLN_Profilecon {
                      mydoc.body = companyImage ;
                      //if(folderList.size()>0){
                        mydoc.folderid ='00lF0000001VI7Y';
-                       //}
+                    // }
                      mydoc.ispublic = true;
                      mydoc.Name = companyImageName;
                      insert mydoc;

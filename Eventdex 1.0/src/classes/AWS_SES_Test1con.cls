@@ -901,7 +901,7 @@ global without sharing class AWS_SES_Test1con {
              emailalert = true;
          }  
      }else{*/
-        emailids.add('rajeshc+1@globalnest.com');
+        /*emailids.add('rajeshc+1@globalnest.com');
 emailids.add('rajeshc+2@globalnest.com');
 emailids.add('rajeshc+3@globalnest.com');
 emailids.add('rajeshc+4@globalnest.com');
@@ -1079,8 +1079,8 @@ emailids.add('rajeshc+175@globalnest.com');
 emailids.add('rajeshc+176@globalnest.com');
 emailids.add('rajeshc+177@globalnest.com');
 emailids.add('rajeshc+178@globalnest.com');
-emailids.add('rajeshc+179@globalnest.com');
-emailids.add('rajeshc+180@globalnest.com');
+emailids.add('rajeshc+179@globalnest.com');*/
+emailids.add('rajeshc@globalnest.com');
 
 
 

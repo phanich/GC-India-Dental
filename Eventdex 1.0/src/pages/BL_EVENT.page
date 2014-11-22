@@ -643,6 +643,8 @@ var select = document.getElementById('mcountry');
    document.getElementById('meventcat').value='';
    
    document.getElementById('eventpage:searchform:searchValue').value='{!$user.companyName}';
+   if(document.getElementById('eventpage:searchform:searchValue').value=='')
+   document.getElementById('eventpage:searchform:searchValue').value='{!$user.FirstName}'+' '+'{!$user.LastName}';
    document.getElementById('mhosttime').value='America/New_York';
    document.getElementById('mlangset').value='en_US';
    //document.getElementById('mhosttime').value=new Date().toString().match(/\(([A-Za-z\s].*)\)/)[1];
@@ -676,7 +678,7 @@ var eventlogourl='';
       <apex:actionfunction name="saveEventLogo" action="{!saveEventLogo}" rerender="reRenderedPanelToSetVariable" oncomplete="saveEvent()">
       <apex:param name="imageData" value="" assignTo="{!imageData}"/>
 </apex:actionfunction>
-<apex:actionFunction name="refreshAF" action="{!refreshAF}" rerender="theBlock">
+<apex:actionFunction name="refreshAF" action="{!refreshAF}" rerender="theBlock,itemtypeblock,pkitemtypeblock,showpackageblock,adddeletelineblock,ticketmoreinfoblock">
 <apex:param name="eventids" value="" assignTo="{!eventids}"/>
 </apex:actionFunction>
 </apex:form>
@@ -1108,7 +1110,7 @@ var ticketlist=[{tname:"",tpaytype:"",tqty:"",tprice:"",tvisib:"",tdesc:"",tcket
              if(ticketlist[arrindex].ispackage=="true")
              ticketlist[arrindex].itemtype=$("#pkitemtype option:first").val();
              else{
-             if(ticketlist[arrindex].itemtype=='')
+             if(ticketlist[arrindex].itemtype==''||ticketlist[arrindex].itemtype==undefined)
              ticketlist[arrindex].itemtype=$("#itemtype option:first").val();
              }
              
@@ -1577,12 +1579,15 @@ Date.prototype.today = function () {
 </script>
 <!------------------------------------------------------------------------------------->
 <!-----------------------popupscript for ticket moreinfo-------------------------------->
-
 <script type="text/javascript">
 var parentrowindex;
  var flag;
  var earlybudname,earlybudqty,earlybudprice;
  var isnewpackage;
+</script>
+<apex:outputpanel id="ticketmoreinfoblock">
+<script type="text/javascript">
+
  
 function CustomAlert(){
     this.render =function(rowindex,tname,tpaytype,tqty,tprice){
@@ -1795,6 +1800,7 @@ row.cells[3].children[0].disabled=false;
    
 
 </script>
+</apex:outputpanel>
 <!------------------------------------------------------------------------------------->
 
 
@@ -2336,11 +2342,13 @@ border-radius:1px;
                         <div class="elem">
                         <label>Ticket Type:</label>
                         <div class="indent">
+                        <apex:outputpanel id="itemtypeblock">
                          <select id="itemtype" style="width:76%" class="selectlist" onchange="editticketbadgelabel(this)">
                            <apex:repeat value="{!individualTicketsSelectOptions}" var="indittype">
                             <option value="{!indittype.value}">{!indittype.label}</option>
                             </apex:repeat>                            
                           </select>
+                          </apex:outputpanel>
                         </div>
                       </div>
                       
@@ -2348,6 +2356,7 @@ border-radius:1px;
                      <script>
                          function editticketbadgelabel(titemtype)
                          {
+                              try{
                              if(titemtype.options[titemtype.selectedIndex].text!='Staff Admission'&&titemtype.options[titemtype.selectedIndex].text!='Seats'&&titemtype.options[titemtype.selectedIndex].text!='Seminars'&&titemtype.options[titemtype.selectedIndex].text!='MatchLeads Seller'&&titemtype.options[titemtype.selectedIndex].text!='Admissions'&&titemtype.options[titemtype.selectedIndex].text!='MatchLeads Buyer')
                             {
                                 document.getElementById('tbdglabel').value="";
@@ -2355,6 +2364,7 @@ border-radius:1px;
                              }
                            else
                              document.getElementById('tbdglabel').disabled=false; 
+                             }catch(e){}
                          }   
                       </script>
                     
@@ -2837,12 +2847,13 @@ var tmtable = document.getElementById("mytab1");
                             
                             
                             
-function lrrow(chkid,ittypenumber,id){
+function lrrow(chkid,eventpriceid,ittypenumber,id){
 if (document.getElementById(chkid).checked==true){
 Visualforce.remoting.Manager.invokeAction(
             '{!$RemoteAction.BLN_EventsConTest.getTickets}',
             ittypenumber,
-            id, 
+            eventpriceid,
+            eventmand.EventID, 
             function(result, event){
              
  $.each(result, function(i, resulteach){
@@ -2859,9 +2870,10 @@ Visualforce.remoting.Manager.invokeAction(
            }
            }
       
-      boothleadproduct.push({tname:"",tprice:"",tqty:"",ttypeid:""});
+      boothleadproduct.push({tname:"",tprice:"",tqty:"",ttypeid:"",ticketPercentage:""});
       boothleadproduct[bpindex].tname=resulteach.ticketName;
       boothleadproduct[bpindex].tprice=resulteach.ticketPrice;
+      boothleadproduct[bpindex].ticketPercentage=resulteach.ticketPercentage;
       boothleadproduct[bpindex].ttypeid=resulteach.ticketId;
       bpindex++;
       }
@@ -3025,7 +3037,8 @@ overflow:hidden;
                      <div class="elem">
                         <label>Ticket Type:</label>
                         <div class="indent">
-                          <select class="selectlist" style=" width:76%;" id="pkitemtype">
+                        <apex:outputpanel id="pkitemtypeblock">
+                          <select class="selectlist" style=" width:76%;" id="pkitemtype" >
                           
                             <apex:repeat value="{!itemtypespackage}" var="ittype">
                             <option value="{!ittype.value}">{!ittype.label}
@@ -3034,6 +3047,7 @@ overflow:hidden;
                             
                             
                           </select>
+                          </apex:outputpanel>
                         </div>
                       </div>
                       
@@ -3657,6 +3671,7 @@ cursor:pointer;
        <div id="mask1overlay" style=" display:none; width:88%; height:100%; background-color:#000; opacity:0.2; position:absolute; top:0; left:5%;"></div>
       </div><!--close of stepss1-->
                     <!---script for show package div --->
+                    <apex:outputpanel id="showpackageblock">
                  <script>
                  
                  
@@ -3708,7 +3723,7 @@ row.cells[3].children[0].disabled=false;
 
      </script>   
      
-        
+    </apex:outputpanel>    
           
           <!------------------------------------------------->      
      
@@ -3748,10 +3763,10 @@ row.cells[3].children[0].disabled=false;
               <div id="boothleadsprodcontents" style="display:none; margin-bottom:10px;">
               <table width="75%" border="0" >
   <tr style=" background-color:#EFEFEF;">
-  <apex:outputpanel layout="none" id="theBlock">
+  <apex:outputpanel id="theBlock">
   <apex:variable var="i" value="{!1}"/>
   <apex:repeat value="{!eventSelectOptions}" var="eveOpt">
-    <td width="2%"><input type="checkbox" id="chk{!i}" onClick="lrrow(this.id,'{!eveOpt.eventOptionItemType.Item_type__r.Item_Type_Number__c}','{!eveOpt.eventOptionItemType.Item_type__r.Id}')" /></td>
+    <td width="2%"><input type="checkbox" id="chk{!i}" onClick="lrrow(this.id,'{!eveOpt.eventOptionItemType.Id}','{!eveOpt.eventOptionItemType.Item_type__r.Item_Type_Number__c}','{!eveOpt.eventOptionItemType.Item_type__r.Id}')" /></td>
       <td width="3%"><span><img src="/servlet/servlet.ImageServer?id={!eveOpt.eventOptionItemType.Item_type__r.Event_Options_Image_URL__c}&oid={!$Organization.Id}"/></span></td>
     <td  width="15%"><h1 style="color: #55585d; font-size:16px; "> {!eveOpt.eventOptionItemType.Item_type__r.Event_Option_Desc__c}</h1></td>
         <apex:variable var="i" value="{!i+1}"/>
@@ -4356,6 +4371,7 @@ var appendTxt = "<tr><td><input type='text' id='one' class='tickfield' name='inp
   
 </table>
 <!--------------------------------------------------------------------------> 
+
           <table class="display dynamic2" id="packagetable" style="width:100%; margin:0px auto; margin-top:0px;" >
             <thead>
               <tr>
@@ -4374,6 +4390,7 @@ var appendTxt = "<tr><td><input type='text' id='one' class='tickfield' name='inp
             <tbody></tbody>
             
           </table>
+         
           <!-------------------------------->   
            <div style="margin-top:10px; margin-bottom:5px; text-align:right;">
    
@@ -4472,8 +4489,9 @@ for(i=0;i<ticketlist.length;i++)
     if(ticketlist[i].itemtype==boothleadproduct[j].ttypeid){
     blflag=1;
     boothleadproduct[j].tqty=ticketlist[i].tqty;
-    appendtxt+="<tr><td>"+boothleadproduct[j].tname+"<\/td><td>"+boothleadproduct[j].tqty+"<\/td><td>$ "+(boothleadproduct[j].tprice*boothleadproduct[j].tqty)+"<\/td><\/tr>";
-    totalblprice+=(boothleadproduct[j].tprice*boothleadproduct[j].tqty);
+    var amount=(boothleadproduct[j].tprice*boothleadproduct[j].tqty)+(ticketlist[i].tprice*boothleadproduct[j].ticketPercentage/100);
+    appendtxt+="<tr><td>"+boothleadproduct[j].tname+"<\/td><td>"+boothleadproduct[j].tqty+"<\/td><td>$ "+amount+"<\/td><\/tr>";
+    totalblprice+=amount;
     break;
     }
    
@@ -4852,22 +4870,26 @@ var flagexp=0;
 <!-----------end of dynamic table js---------------------->
 
 <!-----------dynamic Add or delete rows for package----------------->
-
 <script type="text/javascript">
-            $(document).ready(function(){       
-                
-                $('.del1').live('click',function(){
+        $(".add1").live("click",function(){
+                   add1();
+                        
+                });
+        
+        $('.del1').live('click',function(){
                     $(this).parent().parent().remove();
                         
                 });
-                
-                $('.add1').live('click',function(){
+        </script>
+<apex:outputpanel id="adddeletelineblock">
+<script type="text/javascript">
+        function add1(){
                     
                     var appendTxt = "<tr><td><input type='text' id='one' class='pkglineitmfield' name='input_box_one[]' /></td> <td><input type='text' class='pkglineitmfield' id='three' name='input_box_three[]' /></td><td><select class='selectlist'  style='outline:none;' onchange='checkbadgelabeledit(this);'><apex:repeat value="{!itemtypesaddon}" var="ittype"><option value='{!ittype.value}'>{!ittype.label}</option></apex:repeat></select></td><td><input type='text' id='one'   name='input_box_one[]' style='width: 85%;' /></td><td><input type='button' class='del1' value='' /></td></tr>";
                     $(".dynamic2 tbody").append(appendTxt);            
-                });        
-            });
+                }
         </script>
+        </apex:outputpanel>
 <!-----------end of dynamic table js---------------------->
 
 

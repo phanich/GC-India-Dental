@@ -258,6 +258,11 @@ function showhide(){
 <!-- -------------------------------------- Header End  ------------------------------------------------------ -->
 
 
+
+
+
+
+
 <script type="text/javascript">
        
     function sendNaicsCodeBack(){
@@ -301,7 +306,7 @@ function showhide(){
             var filesize= obj.files[0].size;
             if(filesize > 102400){
              obj.value = null;
-             window.alert("Image size cannot be greater than 100kb!");
+            window.alert("Image size cannot be greater than 100kb!");
              return false;
             }
             }
@@ -349,7 +354,7 @@ function showhide(){
 <td width="20%" style="text-align:right;">Prefix :</td>
 <td width="30%"><apex:inputField value="{!GNUSER.Prefix__c}" style="width:84%;" id="selectlist" styleClass="selectlist"/></td>
 <td width="20%" style="text-align:right;">Mobile Number :</td>
-<td><apex:inputField value="{!GNUSER.Mobile__c}" style="width:84%;"/></td>
+<td><apex:inputField value="{!GNUSER.Mobile__c}" onchange="validMobile()" style="width:84%;"/></td>
 </tr>
 <tr>
 <td style="text-align:right;">First Name :</td>
@@ -536,7 +541,7 @@ function showhide(){
 </tr>
 <tr>
     <td style="text-align:right;">Work Phone Number :</td>
-    <td><apex:inputField value="{!comextnew.Work_Phone__c}" style="width:84%;" /></td>
+    <td><apex:inputField value="{!comextnew.Work_Phone__c}" onchange="validphone()" style="width:84%;" /></td>
     <td width="20%" style="text-align:right;">Business Revenue :</td>
     <td><apex:inputField value="{!comextnew.Revenue__c}" style="width:84%;" /></td>
 </tr>
@@ -598,7 +603,7 @@ function showhide(){
                                  </apex:selectList> 
     </td>
     <td width="20%" style="text-align:right;">Zip Code :</td>
-    <td><apex:inputField value="{!comextnew.Business_Zipcode__c}" style="width:84%;" /></td>
+    <td><apex:inputField onchange="isValidZip()" value="{!comextnew.Business_Zipcode__c}" style="width:84%;"   /></td>
 </tr>
 
 
@@ -686,7 +691,7 @@ function showhide(){
 </div><!--close of TabbedPanelsTabGroup-->
 <hr/>
 <div style="margin-bottom:50px;float:right; margin-right:2%;">
-<apex:commandButton value="Save" action="{!updatedetails}" styleclass="linkbutton blue" style="color:#FFFFFF;border:none;" onclick="selectedvals();" />
+<apex:commandButton value="Save" action="{!updatedetails}" styleclass="linkbutton blue" style="color:#FFFFFF;border:none;" onclick="selectedvals();"  />
 
 &nbsp;&nbsp;
 <apex:commandButton value="Cancel" styleclass="linkbutton blue" style="color:#FFFFFF;border:none;"  action="{!cancel}"/>
@@ -697,10 +702,10 @@ function showhide(){
     <!--Statistic-->
     
  
-            
-          <!--------------------------------------------------------------------------------->
+       
+          
   
-    
+    <!---------------------------------------------------------------------->
         
     </div>
          </div>
@@ -713,6 +718,79 @@ function showhide(){
       
       
       </script>     
+     
+     
+     <!----------------ZIP code Validation-----------  -->
+            <script type="text/javascript"> 
+            function isValidZip() {
+            
+               var q =    document.getElementById("pageid:myForm:j_id142").value;
+            
+            zipme=/^\d{5}(-\d{4})?$/;
+           if(q.match(zipme))
+         {
+           return true;  
+         }
+       else
+         {
+           alert("enter valid zip code");
+           return false;
+     }
+            
+          
+            }
+
+        </script>
+        
+        
+    
+     
+  <!--------------------------------------------------->   
+  
+  
+  <!------------------------Phone No Validation------------------------------------->
+   <script type="text/javascript"> 
+  function validphone(){
+var p = document.getElementById('pageid:myForm:j_id103').value;
+
+var phoneno = /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/;
+  if(p.match(phoneno))
+     {
+       return true;  
+     }
+   else
+     {
+       alert("Enter valid Phone Number");
+       return false;
+     }
+}
+</script>
+
+
+<!---------------------------Mobile No Validation------------------>
+
+
+ <script type="text/javascript"> 
+  function validMobile(){
+var p = document.getElementById('pageid:myForm:j_id30').value;
+
+var phoneno = /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/;
+  if(p.match(phoneno))
+     {
+       return true;  
+     }
+   else
+     {
+       alert("Enter valid Mobile Number");
+       return false;
+     }
+}
+</script>
+  
+  
+  
+  <!------------------------------------------------------------->
+     
      
 </apex:form>
       <script type="text/javascript">

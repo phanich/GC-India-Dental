@@ -411,10 +411,12 @@ global without sharing class  BLN_Email_Dashboardscon {
     }   
      
      
+     public string tempnamenew {get ; set ;}
      Public Void updatetemp(){
             
             
             system.debug('iiiiiiiiiiiiiiiiiiiiiii'+inputValue);
+            system.debug('iiiiiiiiiiiiiiiiiiiiiii'+tempnamenew);
            editbool = false;
            displaybool = true;   
            savebool = true;
@@ -426,7 +428,8 @@ global without sharing class  BLN_Email_Dashboardscon {
             string  frmname = Apexpages.Currentpage().getparameters().get('frmname');
             string  reciepients = Apexpages.Currentpage().getparameters().get('reciepients');
             string  updatetempbody = Apexpages.Currentpage().getparameters().get('updatestandardtemp');
-
+            string  templateName = Apexpages.Currentpage().getparameters().get('tempnamenew');
+            system.debug('::::::::::::::;;Temp Name::::::::::::;'+templateName );
             system.debug('232342343223 ' +updatetempbody);
                         system.debug('43546467457' +frmname);
                                     system.debug('tuytutyu43' +reciepients );
@@ -440,7 +443,7 @@ global without sharing class  BLN_Email_Dashboardscon {
           //if(emailcamp.Template_Type__c == 'Standard'){
           
            
-             //if(updatetempbody !=''){
+            // if(updatetempbody !=''){
                      
               String devname =  emailcamp.id+'_'+emailcamplist.size();         
               
@@ -453,7 +456,7 @@ global without sharing class  BLN_Email_Dashboardscon {
              EmailTemplate custemailtemp =new EmailTemplate();
              custemailtemp = emailtemp[0].clone();
              custemailtemp.DeveloperName = devname.trim();
-             custemailtemp.Name = campname;
+             custemailtemp.Name = templateName ;
              custemailtemp.HtmlValue= updatetempbody;
              custemailtemp.IsActive = true;
              custemailtemp.FolderId = '00lF0000001Izb7';
@@ -482,7 +485,7 @@ global without sharing class  BLN_Email_Dashboardscon {
         // } 
           
           
-         /** else{
+        /** else{
           system.debug('24235435' + emailcamp.ToList__c );
           if(emailcamp.ToList__c == null){
            emailcamp.ToList__c ='';
@@ -509,7 +512,7 @@ global without sharing class  BLN_Email_Dashboardscon {
              EmailTemplate custemailtemp =new EmailTemplate();
              custemailtemp = emailtemp[0].clone();
              custemailtemp.DeveloperName = devname.trim();
-             custemailtemp.Name = campname;
+             custemailtemp.Name = templateName ;
              //custemailtemp.HtmlValue= updatetempbody;
              custemailtemp.IsActive = true;
              custemailtemp.FolderId = '00lF0000001Izb7';
@@ -604,7 +607,7 @@ global without sharing class  BLN_Email_Dashboardscon {
              EmailTemplate custemailtemp =new EmailTemplate();
              custemailtemp = emailtemp[0].clone();
              custemailtemp.DeveloperName = devname.trim();
-             custemailtemp.Name = campname;
+             custemailtemp.Name = templateName ;
              custemailtemp.HtmlValue= emailtemp[0].HtmlValue;
              custemailtemp.IsActive = true;
              custemailtemp.FolderId = '00lF0000001Izb7';
@@ -625,7 +628,7 @@ global without sharing class  BLN_Email_Dashboardscon {
              EmailTemplate custemailtemp =new EmailTemplate();
              custemailtemp = emailtemp[0].clone();
              custemailtemp.DeveloperName = devname.trim();
-             custemailtemp.Name = campname;
+             custemailtemp.Name = templateName ;
              custemailtemp.HtmlValue= updatetempbody;
              custemailtemp.IsActive = true;
              custemailtemp.FolderId = '00lF0000001Izb7';
