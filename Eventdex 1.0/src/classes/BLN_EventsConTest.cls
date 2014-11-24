@@ -364,6 +364,26 @@ global with sharing class BLN_EventsConTest {
      public static MAP<String,  Item_Type__c> itemTypeMap{get; set;}  
      public static LIST<Item_Type__c> ItemTypes{get; set;}
    
+   
+   @RemoteAction
+    global static List<TicketCreateInfo> getAllBLProduct(String eventid) {
+    List<TicketCreateInfo> tcinfo=new List<TicketCreateInfo>();
+       
+      for(Event_Price__c ep:[select id,name,Active_Flag__c,Item_Type__r.Name,Item_Type__r.Id,BL_Fee_Amount__c from Event_Price__c where Event__c=:eventid and Item_type__r.Item_Type_Number__c in('IT-000003','IT-000004','IT-000007','IT-000010','IT-000008','IT-000009') and Active_Flag__c=true])
+      {
+          TicketCreateInfo tcinfo1=new TicketCreateInfo();
+        tcinfo1.ticketName=ep.Item_Type__r.Name;
+        tcinfo1.ticketId=ep.Item_Type__r.Id;
+        tcinfo1.ticketPrice=String.valueOf(ep.BL_Fee_Amount__c);
+         tcinfo.add(tcinfo1);
+        }
+        
+    return tcinfo;
+    }
+   
+   
+   
+   
   @RemoteAction
     global static List<TicketCreateInfo> getTickets(String ittypenumber,String id,String eventid) {
     
@@ -397,7 +417,7 @@ global with sharing class BLN_EventsConTest {
         tcinfo1.ticketName=itemType.Name;
         tcinfo1.ticketId=itemType.id;
         tcinfo1.ticketPrice=y;
-        tcinfo1.ticketPercentage=String.valueOf(ep.BL_Fee_Percentage__c);
+        
         tcinfo1.show=true;//TicketsDisplayInEventsPageBasedOnItemTypes.get(ittypenumber);
         
         List<TicketCreateInfo> tcinfo=new List<TicketCreateInfo>();
@@ -411,7 +431,7 @@ global with sharing class BLN_EventsConTest {
         tcinfo2.ticketName=itemType.Name;
         tcinfo2.ticketId=itemType.id;
         tcinfo2.ticketPrice=String.valueOf(ep.BL_Fee_Amount__c);
-        tcinfo2.ticketPercentage=String.valueOf(ep.BL_Fee_Percentage__c);
+        
         tcinfo2.show=TicketsDisplayInEventsPageBasedOnItemTypes.get('IT-000004');
         
          tcinfo.add(tcinfo2);
@@ -423,9 +443,11 @@ global with sharing class BLN_EventsConTest {
     {
      public String ticketName{get;set;}
      public String ticketPrice{get;set;}
-     public String ticketPercentage{get;set;}
+     public String ticketQty{get;set;}
      public String ticketId{get;set;}
+     public String itemId{get;set;}
      public boolean show{get;set;}
+    
        
     } 
   
@@ -443,7 +465,7 @@ global with sharing class BLN_EventsConTest {
     delete delhashtags;
     }
   @RemoteAction
-    global static void savesTicketInfo(String tcktjsonInput,String eventID,String EventEDate) {
+    global static void savesTicketInfo(String tcktjsonInput,String eventID,String currentdate,String EventEDate) {
     System.debug('========>1'+tcktjsonInput);
     System.debug('========>2'+eventID);
     System.debug('========>3'+EventEDate);
@@ -572,7 +594,7 @@ global with sharing class BLN_EventsConTest {
            item.add(new BLN_Item__c());
         item[k].item_name__c=tcinfo[i].tname;
         item[k].item_count__c=Integer.valueOf(tcinfo[i].tqty);
-        item[k].sale_start__c=Date.parse((System.now()).date().format());
+        item[k].sale_start__c=DateTime.parse(currentdate);
         item[k].sale_end__c=DateTime.parse(EventEDate);
        item[k].price__c=tcinfo[i].tprice==''?0:Integer.valueOf(tcinfo[i].tprice);
         item[k].min_per_order__c=Integer.valueOf(itemdefaultminqty);
@@ -708,13 +730,72 @@ class tags {
 
 
  @RemoteAction
-    global static String savesFinalEvent(String regtemp,String evestat,String eventid,String totalblprice,String cardnumber,String cardmonth,String cardyear,String cardcvv) {
+    global static String savesFinalEvent(String regtemp,String evestat,String eventid,String totalblprice,String cardnumber,String cardmonth,String cardyear,String cardcvv,String tcktjsonInput,String currencyid,String companyName) {
     BLN_Event__c ble=new BLN_Event__c(id=eventid,Event_Status__c=evestat,Registration_Template__c=regtemp);
     try{
     if(evestat=='Live'&&totalblprice!='0'){
     BLN_Payments_BAL pbal=new BLN_Payments_BAL();
     String g=pbal.stripePayments(eventid,cardnumber,cardmonth,cardyear,cardcvv,Decimal.valueOf(totalblprice),0,true);
     if(g!='Error'){
+      //parseblproduct
+      List<TicketCreateInfo> tcinfo;
+   
+    // Parse entire JSON response for event mandatory fields.
+    JSONParser parser = JSON.createParser(tcktjsonInput);
+    while (parser.nextToken() != null) {
+        
+                    tcinfo= (List<TicketCreateInfo>)parser.readValueAs(List<TicketCreateInfo>.class);
+                   
+
+       } 
+       
+       //get gnuser
+       BLN_Gnuser_DAO gndao = new BLN_Gnuser_DAO ();
+              
+                     string uid = userInfo.getUserId();
+                     string gnuid=null;
+                     Company__c companyId=null;
+                     try{
+                     GN_User__c  GN = gndao.gettinggnuser(uid);
+                    gnuid =GN.id;
+                    }catch(Exception e){}
+                    
+        //get companyname
+        BLN_Company_DAO company = new BLN_Company_DAO();
+           try{
+        
+        
+        companyId = company.queryCompanyId(companyName);
+        }catch(Exception e){}
+        
+        //Insert Order
+         Order__c ord=new Order__c();
+         ord.Order_Total__c=Decimal.valueOf(totalblprice);
+         ord.Amount_Paid__c=Decimal.valueOf(totalblprice); 
+         ord.Client_GN_User__c=gnuid ;
+         ord.Client_Company__c=companyId.id ;
+         ord.Currency_Code__c=currencyid;
+         ord.Events__c=eventid;
+         ord.Transaction_Status__c='Completed';
+         ord.order_type__c='EVENT PRODUCER'; 
+          ord.Order_Status__c='Fully Paid'; 
+         insert ord;
+         //Insert orderItem
+         List<Order_Item__c> orditems=new List<Order_Item__c>();
+         for(integer l=0;l<tcinfo.size();l++)
+         {
+            Order_Item__c orditem=new Order_Item__c();
+            orditem.Order__c=ord.id;
+            orditem.Currency__c=currencyid;
+            orditem.Item_Quantity__c=Integer.valueOf(tcinfo[l].ticketQty);
+            orditem.Item_Total__c=Decimal.valueOf(tcinfo[l].ticketPrice);
+            orditem.Item_Price__c=Decimal.valueOf(tcinfo[l].ticketPrice);
+            orditem.Item_Type__c=tcinfo[l].ticketId;
+            orditem.Item__c=tcinfo[l].itemId;
+            orditems.add(orditem);
+         } 
+         insert orditems;     
+       
      upsert ble;
      return 'success';
      }
@@ -1079,5 +1160,26 @@ class tags {
        return null;
     }
     
+    //Get Ticket Data On Load
+    @RemoteAction
+    global static List<Item_Pool__c> getSavedTickets(String eventID) {
+    return [select Id,Name,Item_Pool_Name__c,Item_Count__c,Package_Flag__c,Item_Type__c,Badge_Label__c,Addon_Parent__c from  Item_Pool__c where Event__c=:eventID and Addon_Parent__c=null order by createddate];
+    }
     
+    @RemoteAction
+    global static List<BLN_Item__c> getItemsBasedOnPool(String poolId) {
+    return [select Id,item_name__c,Payment__c,Visibility__c,Available_Tickets__c,Description__c,min_per_order__c,max_per_order__c,item_count__c,sale_start__c,sale_end__c,price__c,Item_Pool__c,item_type__c,image_url__c from  BLN_Item__c where Item_Pool__c=:poolId order by createddate];
+    }
+   
+    @RemoteAction
+    global static List<Item_Pool__c> getAddonPool(String poolId) {
+    return [select Id,Name,Item_Pool_Name__c,Addon_Count__c,Addon_Parent__c,Package_Flag__c,Item_Type__c,Badge_Label__c from  Item_Pool__c where Addon_Parent__c=:poolId order by createddate];
+    }
+    //Get Tag Data On Load
+    @RemoteAction
+    global static List<ItemPool_Tag_Junction__c> getSavedTags(String eventID) {
+    //return [select Id,Event__c,Tag_Text__c,Table_Name__c,RowId__c from  Hash_Tag__c where Event__c=:eventID];
+    return [select Id,Pool_Id__c,Tag_Id__c,Tag_Id__r.Event__c from ItemPool_Tag_Junction__c where Tag_Id__r.Event__c=:eventID order by lastmodifieddate];
+    
+    } 
 }

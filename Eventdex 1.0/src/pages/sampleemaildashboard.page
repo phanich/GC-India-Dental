@@ -57,6 +57,14 @@ opacity: .9;
           font: 12px/24px "Lucida Grande",Arial,sans-serif;
          -moz-border-radius-bottomleft:6px; -webkit-border-bottom-left-radius:6px; -moz-border-radius-bottomright:6px;
          -webkit-border-bottom-right-radius:6px; border-radius:6px 0 6px 6px; margin-left:32.5%;} 
+
+#dialogbox7{position: fixed;top:0px;left:0px;right:0px;z-index:201;overflow:auto; width:36%; 
+          padding:1px; margin:0 auto;-moz-border-radius-bottomleft:6px; -webkit-border-bottom-left-radius:6px; 
+          -moz-border-radius-bottomright:6px; -webkit-border-bottom-right-radius:6px; border-radius:0 0 6px 6px; 
+          font: 12px/24px "Lucida Grande",Arial,sans-serif;
+         -moz-border-radius-bottomleft:6px; -webkit-border-bottom-left-radius:6px; -moz-border-radius-bottomright:6px;
+         -webkit-border-bottom-right-radius:6px; border-radius:6px 0 6px 6px; margin-left:32.5%;} 
+
 </style>
  
     
@@ -840,12 +848,12 @@ margin-top:-9px;}
      <td colspan="6" valign="middle">
      <tr>
      <td colspan="6" valign="middle">
-      <apex:commandLink value="Send Now" styleClass="btn-blue" action="{!sendnow}" style="text-decoration:none;font-size:13px;font-family: Helvetica, Arial, sans-serif;" rendered="{!if(remainvar.Name != 'Reminder for Event' ,true,false)}">
+      <apex:commandLink value="Send Now" styleClass="btn-blue" action="{!sendnow}" style="text-decoration:none;font-size:13px;font-family: Helvetica, Arial, sans-serif;">
          <apex:param value="{!remainvar.id}" name="editcamid"/>
          <apex:param value="{!selectedeventid}" name="eventid"/>
       </apex:commandLink>
      <span style=" margin-left:3%;">
-         <apex:commandLink value="Auto Schedule" action="{!autoschedule}" styleClass="btn-blue" style="text-decoration:none;font-size:13px;font-family: Helvetica, Arial, sans-serif;" rendered="{!if(remainvar.Name != 'Remainder before the event' ,true,false)}">
+         <apex:commandLink value="Auto Schedule" action="{!autoschedule}" styleClass="btn-blue" style="text-decoration:none;font-size:13px;font-family: Helvetica, Arial, sans-serif;">
         
          <apex:param value="{!remainvar.id}" name="editcamid"/>
          <apex:param value="{!selectedeventid}" name="eventid"/>
@@ -1368,8 +1376,33 @@ function CustomAlert(){
         }
     
     }
+    function CustomAlert1(){
+    this.render =function(dialog){
     
+    alert('::::::;;dialog overlay::::::::;'+document.getElementById('dialogoverlay3'));
+        var winW = window.innerWidth;
+        var winH = window.innerHeight;
+        var dialogoverlay = document.getElementById('dialogoverlay3');
+        var dialogbox = document.getElementById('dialogbox7');
+        dialogoverlay.style.display="block";
+        /*dialogoverlay.style.height = winH +"px";
+        dialogbox.style.left=(winW/2) -(905*.5)+"px";*/
+        dialogbox.style.top="10px";
+        dialogbox.style.display="block";
+        
+    }
+    this.Cancel = function(){
+        document.getElementById('dialogbox6').style.display ="none";
+                document.getElementById('dialogoverlay3').style.display ="none";
+            
+                
+                return false;
+        
+        }
+    
+    }
     var Alert6 = new CustomAlert(); 
+    var Alert7 = new CustomAlert1(); 
    function showelements(){
    //alert(':rahil::::::;');
     document.getElementById('editor-edit').style.display="";
@@ -1538,7 +1571,7 @@ sdsfsfds
  <td width="21%" style="text-align:right;">
 
  <apex:commandButton value="Save" onclick="saveastemplate();" reRender="aaa"  styleclass="button-a blue" style="margin-right:5%;" rendered="{!if(emailcamp.Template_Type__c == 'Custom',true,false)}"/>
- <apex:commandButton value="Save As" onclick="updatetemplate();" reRender="aaa"  styleclass="button-a blue" rendered="{!existingtype}" />
+ <apex:commandButton value="Save As" onclick="updatecampname();" reRender="aaa"  styleclass="button-a blue" rendered="{!existingtype}" />
  <apex:commandButton value="Save" onclick="savetemplate();" reRender="aaa"  styleclass="button-a blue" rendered="{!newtype}"/>
   </td>
  </tr></table>
@@ -1563,17 +1596,17 @@ sdsfsfds
 
 function updatetemplate(){
 
-      var campname =  document.getElementById('campname').value;
-      alert(campname); 
-     var frmname =   document.getElementById('frmname').value;
-     var reciepients = document.getElementById('{!$Component.pageid.comid.commoncomponent.form1id.semailreceipients}').innerHTML;
+      //var campname =  document.getElementById('campname').value;
+      //alert(campname); 
+     //var frmname =   document.getElementById('frmname').value;
+     //var reciepients = document.getElementById('{!$Component.pageid.comid.commoncomponent.form1id.semailreceipients}').innerHTML;
 
     
-     var updatestandardtemp = document.getElementById("emailupdatebody").innerHTML;
+     //var updatestandardtemp = document.getElementById("emailupdatebody").innerHTML;
      //alert(updatestandardtemp);
-     alert(tempname);
+     //alert(tempname);
      
-     updatetempl(campname,frmname,reciepients,updatestandardtemp,tempname);
+     //updatetempl(campname,frmname,reciepients,updatestandardtemp,tempname);
       
 
 }
@@ -1600,6 +1633,10 @@ function updatetemplatename(){
      
       
 
+}
+function updatecampname(){
+     alert(':::::::::::::camp::::::;;;;;;;');
+      Alert7.render();
 }
 function savetemplate(){
 
@@ -1692,10 +1729,70 @@ function saveastemplate(){
     document.getElementById("emailbody-wrapper").style.display="";
      document.getElementById("email-edit").style.display="none"; 
      tempname = document.getElementById("savecustomtemptxt").value;
-     //document.getElementById("newname").value = tempname;
-     //document.getElementById('{!$Component.pageid.comid.commoncomponent.form1id.newname}').value = tempname ; 
-           alert(tempname );
+    
                 return false;
+    
+    }
+
+
+</script>
+    
+    </div>
+    </div>
+  
+  </div>
+
+
+
+ 
+ <!---------------------------------------------------------->
+ <!---------------custom popup for template name<apex:outputPanel rendered="{!newtype}">-  popup for dialogbox on click of save------------>
+  
+     
+   <div id="dialogoverlay3" style="display:none"></div>
+   <div id="dialogbox7" style="display:none">
+   <a href="" id="close" title="cancel" onclick="return Cancel();">×</a>
+  
+  <div class="grid-1" style=" width:98%;margin-left:1%; padding-right:0px;">
+    <div class="title-grid" style="text-align:left;">Save</div>
+    <div class="content-gird" style="padding:8px 5px;" >
+    <table width="100%" border="0">
+  <tr>
+    <td>Campaign Name</td>
+    <td style="text-align:left;">
+    <input type="text" id="savecustomtemptxt1" name="nw-customizetemp1"/>
+    </td>
+  </tr>
+  <tr >
+    <td colspan="2" style=" padding:5px;text-align:center;">
+    
+    <button  id="customsave1" class="button-a blue" onclick="customsavetemp1();">Save</button></td>
+    
+  </tr>
+</table>
+<script>
+    var campname;
+    function customsavetemp1(){
+     
+    alert('::::::::::::;Custom save:::::::;;;;;');
+    document.getElementById('dialogbox7').style.display ="none";
+    document.getElementById('dialogoverlay3').style.display ="none";
+            
+    
+     campname = document.getElementById("savecustomtemptxt1").value;
+    
+     //var campname =  document.getElementById('campname').value;
+      alert(campname); 
+     var frmname =   document.getElementById('frmname').value;
+     var reciepients = document.getElementById('{!$Component.pageid.comid.commoncomponent.form1id.semailreceipients}').innerHTML;
+
+    
+     var updatestandardtemp = document.getElementById("emailupdatebody").innerHTML;
+     //alert(updatestandardtemp);
+     
+     
+     updatetempl(campname,frmname,reciepients,updatestandardtemp,tempname);
+     //return false;
     
     }
 

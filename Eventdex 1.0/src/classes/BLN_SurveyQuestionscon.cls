@@ -59,15 +59,16 @@ Public without sharing class  BLN_SurveyQuestionscon {
      if(k!=null){
      selectedeventid = k.getValue();
      }
-   
+     
+     
      try{
      eventslist  = geteventdetails();
      }catch(exception e){}
    
-    SYSTEM.DEBUG('EVENTID:' + selectedeventid );
+    SYSTEM.DEBUG(selectedeventid +'  EVENTID:  ' + eventslist);
          
          mysurveyque = new BLN_UtillDisplayLinks();
-         mysurveyque .issurveyPage='active';
+         mysurveyque.issurveyPage='active';
          mysurveyque.isTicketsPageExpand='expand';
          mysurveyque.tablabel='Survey Questions';
          try{
@@ -75,7 +76,7 @@ Public without sharing class  BLN_SurveyQuestionscon {
          }catch(exception e){}
          mysurveyque.EventId= selectedeventid;
          mysurveyque.userPermissions(userInfo.getUserId(),selectedeventid);
-         
+         system.debug('  MY SURVEY QUESTIONS '+mysurveyque);
     }
    
     public BLN_SurveyQuestionscon(){
@@ -135,13 +136,15 @@ Public without sharing class  BLN_SurveyQuestionscon {
      maxscale.add(new Selectoption('9', '9')); 
      maxscale.add(new Selectoption('10', '10')); 
      
-      try{
-     eventslist  = geteventdetails();
-     }catch(exception e){}
+     system.debug('  SELECTED EVENT ID '+selectedeventid);
+     // try{
+     eventslist= new BLN_Event__c();
+     eventslist= geteventdetails();
+     //}catch(exception e){}
      
-     try{
+     //try{
      getquestionslist();
-     }catch(exception e){}
+     //}catch(exception e){}
      
      
        
@@ -419,7 +422,7 @@ Public without sharing class  BLN_SurveyQuestionscon {
        
        SYSTEM.DEBUG('CheckedTicketids' + itemid);
        SYSTEM.DEBUG('CheckedReqTicketids' + requiredid );
-       
+        SYSTEM.DEBUG('WWWWWWWWWWWWWW  ' + Itemquelist );
         
        
         failuremessageset = new set<String>(); 
@@ -705,12 +708,6 @@ Public without sharing class  BLN_SurveyQuestionscon {
   
      
      System.debug('useranswersMAP:' + useranswersMAP);
-     
-     
-       
-           
-
-       
    
    }
     

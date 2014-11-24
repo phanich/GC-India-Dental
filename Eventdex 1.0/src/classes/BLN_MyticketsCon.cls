@@ -346,7 +346,7 @@ public without sharing class BLN_MyticketsCon {
               newu.companyName = gnUser.First_Name__c+''+gnUser.Last_Name__c;
             }
        
-        system.debug('YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY '+addGuest);
+        system.debug(newu+'    YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY '+addGuest);
          saveLogic(newu,addGuest,new order__c(),gnUser); // In this method user Insertion,company insertion and user role will be done
           
          if(isAttendeesPAge!='Attendee'){

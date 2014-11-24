@@ -271,7 +271,7 @@
                             <tbody>
                                 <tr>
                                     <td >
-                                        <h1 id="event-title" style="margin-left:5%; font-size:30px;">{!registrationEvent.Name}</h1>
+                                        <h1 id="event-title" style="margin-left:5%; font-size:30px;color:#a0f4f6;">{!registrationEvent.Name}</h1>
                                     </td>
                                 </tr>
                             </tbody>
@@ -471,9 +471,7 @@ window.onload=function(){
 
 
             <div id="TabbedPanels1" class="TabbedPanels" >
-                
-                    
-                        <ul class="TabbedPanelsTabGroup">
+              <ul class="TabbedPanelsTabGroup">
                         <apex:repeat value="{!RegItemList}" var="ril" >
                         <apex:outputPanel rendered="true" layout="none">
                             <li class="TabbedPanelsTab" tabindex="0" style="outline:none; focus:none;color: #555; font-weight:300;"  id="{!ril.TabLabel}{!ril.tabOrder}">
@@ -571,9 +569,20 @@ window.onload=function(){
                                                     </apex:outputPanel>
                                                     <apex:outputPanel rendered="{!IF(ds.Column_Name__c == 'Fee' && ds.Included__c == TRUE, TRUE, FALSE)}" layout="none">
                                                         <td>
-                                                            <apex:outputText value="{0, number,$###,##0.00}" rendered="{!IF(ite.items.Payment__c != 'Free' && ite.items.Item_Type__r.Name != 'Package',TRUE,FALSE)}">
+                                                          <!--  <apex:outputText value="{0, number,$###,##0.00}" rendered="{!IF(ite.items.Payment__c != 'Free' && ite.items.Item_Type__r.Name != 'Package',TRUE,FALSE)}">
                                                                 <apex:param value="{!IF(ite.items.Item_Type__r.BL_Fee_Amt_per_res__c != NULL, ite.items.Item_Type__r.BL_Fee_Amt_per_res__c, FLOOR(ite.items.price__c*(ite.items.Item_Type__r.BL_Fee_Pct_per_res__c/100)))}"/>
-                                                            </apex:outputText>
+                                                            </apex:outputText> -->
+                                                            
+                                                            <apex:outputText value="{0, number,$###,##0.00}" rendered="{!IF(ite.items.Payment__c != 'Free' && ite.items.Item_Type__r.Name != 'Package',TRUE,FALSE)}">
+                                                               <!-- <apex:param value="{!IF(ite.items.Item_Type__r.BL_Fee_Amt_per_res__c != NULL, ite.items.Item_Type__r.BL_Fee_Amt_per_res__c, FLOOR(ite.items.price__c*(ite.items.Item_Type__r.BL_Fee_Pct_per_res__c/100)))}"/> -->
+                                                                <apex:param value="{!IF(mapItemWithPrice[ite.items.Item_Type__r.id].BL_Fee_Amount__c!=null ,mapItemWithPrice[ite.items.Item_Type__r.id].BL_Fee_Amount__c, 0.0 )}"/> 
+                                                              </apex:outputText>
+                                                              <apex:outputText rendered="{!IF(mapItemWithPrice[ite.items.Item_Type__r.id].BL_Fee_Percentage__c>0,true,false)}">
+                                                                <apex:outputText value="{0, number,+###,##0}" rendered="{!IF(ite.items.Payment__c != 'Free' && ite.items.Item_Type__r.Name != 'Package',TRUE,FALSE)}">
+                                                                <apex:param value="{!mapItemWithPrice[ite.items.Item_Type__r.id].BL_Fee_Percentage__c}"/>
+                                                              </apex:outputText>%
+                                                              </apex:outputText>
+                                                            
                                                             
                                                             <apex:outputText value="$0.00" rendered="{!IF(ite.items.Payment__c == 'Free' && ite.items.Item_Type__r.Name != 'Package',TRUE,FALSE)}"/>
                                                             <apex:outputText value="$0.00" rendered="{!IF(ite.items.Payment__c == 'Free' && ite.items.Item_Type__r.Name == 'Package',TRUE,FALSE)}"/>
@@ -911,7 +920,7 @@ window.onload=function(){
                              <apex:outputPanel rendered="{!IF(ds.Column_Name__c == 'Sub Total' && ds.Included__c == TRUE, TRUE, FALSE)}">
                                  <td>  
                                     <apex:outputText value="{0, number,$###,##0.00}" rendered="{!IF(item.items.Payment__c != 'Free' && item.items.Item_Type__r.Name != 'Package',TRUE,FALSE)}" id="qty1">
-                                        <apex:param value="{!IF(item.items.Item_Type__r.BL_Fee_Amt_per_res__c != NULL, (VALUE(item.selectedItemQuantity) * item.items.price__c) + (VALUE(item.selectedItemQuantity) * item.items.Item_Type__r.BL_Fee_Amt_per_res__c), (VALUE(item.selectedItemQuantity) * item.items.price__c) + (VALUE(item.selectedItemQuantity) *FLOOR(item.items.price__c*(item.items.Item_Type__r.BL_Fee_Pct_per_res__c/100))))}"/>
+                                        <apex:param value="{!IF(mapItemWithPrice[item.items.Item_Type__r.id].BL_Fee_Amount__c!= NULL, (VALUE(item.selectedItemQuantity) * item.items.price__c) + (VALUE(item.selectedItemQuantity) * mapItemWithPrice[item.items.Item_Type__r.id].BL_Fee_Amount__c), (VALUE(item.selectedItemQuantity) * item.items.price__c) + (VALUE(item.selectedItemQuantity) *FLOOR(item.items.price__c*(mapItemWithPrice[item.items.Item_Type__r.id].BL_Fee_Percentage__c/100))))}"/>
                                     </apex:outputText>
                                     
                                     
@@ -1661,7 +1670,7 @@ window.onload=function(){
                 
                                                  <tr>
                                                     <td width="38%" style=" text-align:right;  font-size:13px; font-family:Arial, Helvetica, sans-serif;">
-                                                     Prefix: <span id="mandatory">*</span>   
+                                                     Prefix:   
                                                     </td>
                                                     <td><apex:inputField id="Prefix" value="{!GNUserforbuyer.Prefix__c}" styleClass="PrefixTicket " style="width:100%"/></td>
                                                 </tr>
@@ -1690,7 +1699,7 @@ window.onload=function(){
                                               </table>
 
 
-
+                                     
                                    
                                     <apex:repeat value="{!settingsForbuyer}" var="rs">
                                        <table id="field box" class="fields" width="80%" border="0" style="margin:0px auto; border-collapse:collapse;border: 0px Solid Red;" cellpadding="10">

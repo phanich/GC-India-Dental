@@ -628,7 +628,8 @@ function saveEventAllState() {
 }
 var preeventimageurl='';
 var boothleadproduct=[];
-var bpindex=0;
+var epproduct=[];
+var bpindex=0,epindex=0;
 // run the above functions when the web page is loaded
 window.onload = function () {
 noneradio();
@@ -644,12 +645,43 @@ var select = document.getElementById('mcountry');
    //document.getElementById('eventpageedit:searchform:searchValue').value='{!$user.companyName}';
    document.getElementById('mhosttime').value=new Date().toString().match(/\(([A-Za-z\s].*)\)/)[1];
  //end  
- if(sessionStorage.getItem('blproduct')!=null){
-                            var temp = sessionStorage.getItem('blproduct');
-                             boothleadproduct= $.parseJSON(temp);
-                             bpindex=boothleadproduct.length;
-                            }
- 
+ //Load all eventproducer orderitems for blproduct
+ epproduct=[];
+ Visualforce.remoting.Manager.invokeAction(
+            '{!$RemoteAction.BLN_EventsEditCon.getEventproducerpaiditems}',
+            '{!$CurrentPage.parameters.id}', 
+            function(result, event){
+             
+ $.each(result, function(i, resulteach){
+                 epproduct.push({itemId:"",tqty:"",itemtype:""});
+     
+      epproduct[epindex].itemId=resulteach.itemId;
+      epproduct[epindex].tqty=resulteach.ticketQty;
+            epproduct[epindex].itemtype=resulteach.ticketId;
+      epindex++;
+            }
+            )
+            console.log(epproduct);
+            });
+ //Load all bl product
+ //getallboothleadproduct
+             boothleadproduct=[];
+             Visualforce.remoting.Manager.invokeAction(
+            '{!$RemoteAction.BLN_EventsEditCon.getAllBLProduct}',
+            '{!$CurrentPage.parameters.id}', 
+            function(result, event){
+             
+ $.each(result, function(i, resulteach){
+                 boothleadproduct.push({tname:"",tprice:"",tqty:"",itemtype:""});
+      boothleadproduct[bpindex].tname=resulteach.ticketName;
+      boothleadproduct[bpindex].tprice=resulteach.ticketPrice;
+      boothleadproduct[bpindex].itemtype=resulteach.ticketId;
+      boothleadproduct[bpindex].tqty=resulteach.ticketQty;
+      bpindex++;
+            }
+            )
+            console.log(boothleadproduct);
+            });
 
  
  //Load the Event data
@@ -3199,15 +3231,10 @@ Visualforce.remoting.Manager.invokeAction(
            }
            }
       
-      boothleadproduct.push({tname:"",tprice:"",tqty:"",ttypeid:"",ticketPercentage:""});
-      boothleadproduct[bpindex].tname=resulteach.ticketName;
-      boothleadproduct[bpindex].tprice=resulteach.ticketPrice;
-       boothleadproduct[bpindex].ticketPercentage=resulteach.ticketPercentage;
-      boothleadproduct[bpindex].ttypeid=resulteach.ticketId;
-      bpindex++;
+     
       }
             });
-          sessionStorage['blproduct']=JSON.stringify(boothleadproduct);   
+         
             }, 
             {escape: true}
         );
@@ -3838,7 +3865,7 @@ function destroy()
   try{
            sessionStorage.removeItem("event");
            sessionStorage.removeItem("ticket");
-           sessionStorage.removeItem("blproduct");}catch(e){}
+      }catch(e){}   
 }
 </script>
     
@@ -4854,29 +4881,88 @@ var appendTxt = "<tr><td><input type='text' id='one' class='tickfield' name='inp
      <div id="mask3overlay" style=" display:; width:87.5%; height:100%; background-color:#fff; opacity:0.9; position:absolute; top:0; left:5.6%;"></div>
       </div>
       <!-----------script for hide and show divs for publish--------------> 
-      <script >
+         <script >
       var totalblprice=0;
+      var bllist=[];
 function show(show)
 {
 document.getElementById(show).style.display="block";
-
+bllist=[];
 var appendtxt=''
 totalblprice=0;
 var blflag=0;
-for(i=0;i<ticketlist.length;i++)
-{
-    if(ticketlist[i].trowid!=''){
-    for(j=0;j<boothleadproduct.length;j++)
-    if(ticketlist[i].itemtype==boothleadproduct[j].ttypeid){
+
+var bllistindex=0;
+
+for(j=0;j<boothleadproduct.length;j++){
+    
+    for(i=0;i<ticketlist.length;i++)
+     {
+     if(ticketlist[i].trowid!=''){
+    if(ticketlist[i].itemtype==boothleadproduct[j].itemtype){
+    
+   var prevquantity=0;
+      for(p=0;p<epproduct.length;p++)
+      {
+          if(ticketlist[i].grouptickets[0].itemid==epproduct[p].itemId){
+          prevquantity+=Number(epproduct[p].tqty);
+          
+          }
+      } 
+    var amount=(boothleadproduct[j].tprice*(ticketlist[i].tqty-prevquantity));
+    if(amount==0)
+    continue;
     blflag=1;
-    boothleadproduct[j].tqty=ticketlist[i].tqty;
-    var amount=(boothleadproduct[j].tprice*boothleadproduct[j].tqty)+(ticketlist[i].tprice*boothleadproduct[j].ticketPercentage/100);
-    appendtxt+="<tr><td>"+boothleadproduct[j].tname+"<\/td><td>"+boothleadproduct[j].tqty+"<\/td><td>$ "+amount+"<\/td><\/tr>";
+    appendtxt+="<tr><td>"+boothleadproduct[j].tname+"<\/td><td>"+(ticketlist[i].tqty-prevquantity)+"<\/td><td>$ "+amount+"<\/td><\/tr>";
+    bllist.push({ticketName:"",ticketPrice:"",ticketQty:"",ticketId:"",itemId:""});
+       bllist[bllistindex].ticketName=boothleadproduct[j].tname;
+    bllist[bllistindex].ticketId=boothleadproduct[j].itemtype;
+    bllist[bllistindex].ticketQty=(ticketlist[i].tqty-prevquantity);
+    bllist[bllistindex].ticketPrice=amount;
+    bllist[bllistindex].itemId=ticketlist[i].grouptickets[0].itemid;
+    bllistindex++;
+   
     totalblprice+=amount;
-    break;
-    }
    
     }
+    //checking in package
+    if(ticketlist[i].subpackagegroup.length!=0)
+    {
+         for(k=0;k<ticketlist[i].subpackagegroup.length;k++)
+         {
+               if(ticketlist[i].subpackagegroup[k].ttype==boothleadproduct[j].itemtype){
+   
+    var prevquantity=0;
+      for(p=0;p<epproduct.length;p++)
+      {
+          if(ticketlist[i].grouptickets[0].itemid==epproduct[p].itemId&&ticketlist[i].subpackagegroup[k].ttype==epproduct[p].itemtype)
+          prevquantity+=Number(epproduct[p].tqty);
+      } 
+     
+    var amount=(boothleadproduct[j].tprice*(ticketlist[i].subpackagegroup[k].pkgitemqty-prevquantity));
+    if(amount==0)
+    continue;
+     blflag=1;
+    appendtxt+="<tr><td>"+boothleadproduct[j].tname+"<\/td><td>"+(ticketlist[i].subpackagegroup[k].pkgitemqty-prevquantity)+"<\/td><td>$ "+amount+"<\/td><\/tr>";
+    bllist.push({ticketName:"",ticketPrice:"",ticketQty:"",ticketId:"",itemId:""});
+       bllist[bllistindex].ticketName=boothleadproduct[j].tname;
+    bllist[bllistindex].ticketId=boothleadproduct[j].itemtype;
+    bllist[bllistindex].ticketQty=(ticketlist[i].subpackagegroup[k].pkgitemqty-prevquantity);
+    bllist[bllistindex].ticketPrice=amount;
+     bllist[bllistindex].itemId=ticketlist[i].grouptickets[0].itemid;
+    bllistindex++;
+    totalblprice+=amount;
+   
+    }
+         }  
+    }
+    
+    
+    
+    }
+   }
+   
+   
 }
 appendtxt+='<tr><td style="text-align:left; border-top:1px solid #9C9C9C; border-bottom:1px solid #9C9C9C;font-weight:700;">Total:</td><td style=" border-top:1px solid #9C9C9C;border-bottom:1px solid #9C9C9C;">&nbsp;</td><td style=" border-top:1px solid #9C9C9C;border-bottom:1px solid #9C9C9C;" >$ '+totalblprice+'</td></tr>';
 $(".ordersummarytable").find("tr:gt(0)").remove();
@@ -5082,6 +5168,9 @@ font-weight: normal;
             document.getElementById('cardmonth').value,
             document.getElementById('cardyear').value,
             document.getElementById('cardcvv').value,
+             JSON.stringify(bllist),
+            document.getElementById('mcurrset').value,
+            document.getElementById('eventpageedit:searchform:searchValue').value,
             function(result, event){
             if (event.status){
             //sucess code
@@ -5090,7 +5179,7 @@ font-weight: normal;
            try{
            sessionStorage.removeItem("event");
            sessionStorage.removeItem("ticket");
-           sessionStorage.removeItem("blproduct");}catch(e){}
+           }catch(e){}
            window.location.href='https://blnew-boothleads.cs14.force.com/BLN_UserEvents';
            
            }

@@ -1087,9 +1087,9 @@ emailids.add('rajeshc@globalnest.com');
     
     
           system.debug('emailids.size()---333----'+emailids.size());
-          AWS_EmailBatchCallouts ebc = new AWS_EmailBatchCallouts();
-          ebc.fetchEmails(emailids);
-          database.executeBatch(ebc,100);
+          //AWS_EmailBatchCallouts ebc = new AWS_EmailBatchCallouts();
+          //ebc.fetchEmails(emailids);
+          //database.executeBatch(ebc,100);
      
      //}
    }

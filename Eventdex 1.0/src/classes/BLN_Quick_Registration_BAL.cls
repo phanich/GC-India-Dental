@@ -281,6 +281,7 @@ public BLN_StatusMessage updateTicket(String userid,String comId,List<String> ti
         //Getting Package Tickets from Ticket DAO
         if(Item.Item_Type__r.Name == 'Package' && Item.Ticket_Settings__c == 'Collect info from All Attendees'){
            List<Ticket__c> tckt = TicketDAO.getTickets('id,name,Event__c,Item__r.item_name__c,Item_Pool__r.Item_Pool_Name__c,item__r.Ticket_Settings__c,Item_Pool__r.Ticket_Settings__c,Item_Type__r.name,Ticket_Status__c,Parent_ID__c,Item_Pool__r.Package_Flag__c,Item_Pool__r.Badge__c','Event__c=\''+item.Event__c +'\' AND Item__r.item_name__c=\''+item.item_name__c+'\' AND Ticket_Status__c=\'Available\' AND Parent_ID__c=null AND Item_Pool__r.Badge__c=\'B - Badge\' ORDER BY Name LIMIT '+ RecordCount);     
+           //AND Parent_ID__c=null 
            system.debug('Package Single Ticket: '+tckt);
            if(tckt[0].Item_Pool__r.Package_Flag__c == 'P - Package item pool'){
                PackageTickets = TicketDAO.getTickets('id,name,Event__c,Item_Pool__r.Item_Pool_Name__c,Item__r.item_name__c,Item_Pool__r.Ticket_Settings__c,Client_GN_User__c,Client_Company__c,Order__c,Order_Item__c,item__r.Ticket_Settings__c,Item_Type__r.name,Parent_ID__c,Item_Pool__r.Package_Flag__c,Item_Pool__r.Badge__c,Ticket_Status__c','Parent_ID__c=\''+tckt[0].id+'\''); 
@@ -303,10 +304,10 @@ public BLN_StatusMessage updateTicket(String userid,String comId,List<String> ti
         return EventPayGateWays;
     }
     
-    
+    public List<Ticket__c> ticketsForupdatePkg{get;set;}
     // Update Ticket Details 
     public BLN_StatusMessage updateTickets(LIST<String> UserIds,LIST<String> CompanyIds,LIST<String> TicketIds,String EventId,String OrderUserId, Decimal SubTotal, Decimal DiscountAmount, Decimal FeeAmount,Decimal TaxAmount, Decimal AmountPaid, MAP<Id,Id> PromotionIdMap,Integer PromotionCount,String PromoCode, String PayAddress, String ChargeType, String PGatewayType,String ChargeId, String PGatewayMode){
-    
+        ticketsForupdatePkg = new List<Ticket__c>();
         BLN_StatusMessage TicketUpdateMessage;
         
         //Buying Tickets
@@ -381,10 +382,10 @@ public BLN_StatusMessage updateTicket(String userid,String comId,List<String> ti
        
         // Looping through Users, Companies and Tickets  
         for(integer i=0; i< TicketIds.size();i++){
-            
+           
             //Getting Ticket Details to update
             LIST<Ticket__c> TicketsList = TicketDAO.getTickets('id,name,Client_GN_User__c,item__r.Id,item__r.Ticket_Settings__c,Client_Company__c,Order__c,Order_Item__c,Item_Pool__r.Package_Flag__c,Item__c,Item__r.price__c,Event__c,Item_Type__r.name,Ticket_Status__c','id=\''+TicketIds[i]+'\' LIMIT 1');
-            
+             system.debug('AAAAAAAAAAAAAAAAAAA '+TicketsList);
             //Insert & Update Order Item
             BLN_StatusMessage OrderItemMessage;
             Id OrderItemId;
@@ -412,8 +413,14 @@ public BLN_StatusMessage updateTicket(String userid,String comId,List<String> ti
             
                 //Get all Package Tickets
                 List<Ticket__c> PackageTicket = TicketDAO.getTickets('id,name,Client_GN_User__c,Client_Company__c,Order__c,item__r.Ticket_Settings__c,Order_Item__c,Ticket_Status__c','Parent_ID__c=\''+TicketsList[0].id+'\'');
+                List<Ticket__c> PackageTicket2 = new List<Ticket__c>(TicketDAO.getTickets('id,name,Client_GN_User__c,Client_Company__c,Order__c,item__r.Ticket_Settings__c,Order_Item__c,Ticket_Status__c','id=\''+TicketsList[0].id+'\''));
+                 for(Ticket__c tc :PackageTicket2  ){
+                   tc.Ticket_Status__c = 'Booked';
+                 }
+                
                 
                 for(integer j=0;j<PackageTicket.size();j++){
+                    ticketsForupdatePkg.add(PackageTicket[j]);
                     PackageTicket[j].Client_GN_User__c= UserIds[i];
                     try{
                     PackageTicket[j].Client_Company__c = CompanyIds[i];

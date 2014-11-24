@@ -649,11 +649,7 @@ var select = document.getElementById('mcountry');
    document.getElementById('mlangset').value='en_US';
    //document.getElementById('mhosttime').value=new Date().toString().match(/\(([A-Za-z\s].*)\)/)[1];
  //end  
- if(sessionStorage.getItem('blproduct')!=null){
-                            var temp = sessionStorage.getItem('blproduct');
-                             boothleadproduct= $.parseJSON(temp);
-                             bpindex=boothleadproduct.length;
-                            }
+ 
  if(sessionStorage.getItem('ticket')!=null)
  {
  mask1();
@@ -801,6 +797,25 @@ var eventlogourl='';
              smoothScroll(document.getElementById('stepss2')); 
              mask1();
              document.getElementById("eventloader").style.display="none";
+             //getallboothleadproduct
+             boothleadproduct=[];
+             Visualforce.remoting.Manager.invokeAction(
+            '{!$RemoteAction.BLN_EventsConTest.getAllBLProduct}',
+            eventmand.EventID, 
+            function(result, event){
+             
+ $.each(result, function(i, resulteach){
+                 boothleadproduct.push({tname:"",tprice:"",tqty:"",itemtype:""});
+      boothleadproduct[bpindex].tname=resulteach.ticketName;
+      boothleadproduct[bpindex].tprice=resulteach.ticketPrice;
+      boothleadproduct[bpindex].itemtype=resulteach.ticketId;
+      bpindex++;
+            }
+            )
+            console.log(boothleadproduct);
+            });
+            
+             
              refreshAF(eventmand.EventID);
               } 
               else if (event.type === 'exception') {
@@ -814,7 +829,7 @@ var eventlogourl='';
 
          }
          
-         
+        
          
          function getstatejs(val)
          {
@@ -1157,7 +1172,7 @@ var ticketlist=[{tname:"",tpaytype:"",tqty:"",tprice:"",tvisib:"",tdesc:"",tcket
         document.getElementById("ticketloader").style.display="none";
         return;}
    }
-  
+  var datetime =new Date().today()+" " + new Date().timeNow();
    Visualforce.remoting.Manager.invokeAction(
             '{!$RemoteAction.BLN_EventsConTest.deleteTicketInfo}',
              eventmand.EventID,
@@ -1167,12 +1182,15 @@ var ticketlist=[{tname:"",tpaytype:"",tqty:"",tprice:"",tvisib:"",tdesc:"",tcket
             '{!$RemoteAction.BLN_EventsConTest.savesTicketInfo}',
             JSON.stringify(ticketlist),
             eventmand.EventID,
+            datetime,
             eventmand.EventEDate,
             function(result, event){
             if (event.status){
             //sucess code
             smoothScroll(document.getElementById('stepss3')); 
              mask2();
+             ticketlist=[{tname:"",tpaytype:"",tqty:"",tprice:"",tvisib:"",tdesc:"",tcketlogo:"",tbdglabel:"",trowid:"",grouptickets:[],ticketcount:"",tags:[],subpackagegroup:[],ispackage:"",itemtype:""},{tname:"",tpaytype:"",tqty:"",tprice:"",tvisib:"",tdesc:"",tcketlogo:"",tbdglabel:"",trowid:"",grouptickets:[],ticketcount:"",tags:[],subpackagegroup:[],ispackage:"",itemtype:""},{tname:"",tpaytype:"",tqty:"",tprice:"",tvisib:"",tdesc:"",tcketlogo:"",tbdglabel:"",trowid:"",grouptickets:[],ticketcount:"",tags:[],subpackagegroup:[],ispackage:"",itemtype:""},{tname:"",tpaytype:"",tqty:"",tprice:"",tvisib:"",tdesc:"",tcketlogo:"",tbdglabel:"",trowid:"",grouptickets:[],ticketcount:"",tags:[],subpackagegroup:[],ispackage:"",itemtype:""},{tname:"",tpaytype:"",tqty:"",tprice:"",tvisib:"",tdesc:"",tcketlogo:"",tbdglabel:"",trowid:"",grouptickets:[],ticketcount:"",tags:[],subpackagegroup:[],ispackage:"",itemtype:""},{tname:"",tpaytype:"",tqty:"",tprice:"",tvisib:"",tdesc:"",tcketlogo:"",tbdglabel:"",trowid:"",grouptickets:[],ticketcount:"",tags:[],subpackagegroup:[],ispackage:"",itemtype:""},{tname:"",tpaytype:"",tqty:"",tprice:"",tvisib:"",tdesc:"",tcketlogo:"",tbdglabel:"",trowid:"",grouptickets:[],ticketcount:"",tags:[],subpackagegroup:[],ispackage:"",itemtype:""},{tname:"",tpaytype:"",tqty:"",tprice:"",tvisib:"",tdesc:"",tcketlogo:"",tbdglabel:"",trowid:"",grouptickets:[],ticketcount:"",tags:[],subpackagegroup:[],ispackage:"",itemtype:""},{tname:"",tpaytype:"",tqty:"",tprice:"",tvisib:"",tdesc:"",tcketlogo:"",tbdglabel:"",trowid:"",grouptickets:[],ticketcount:"",tags:[],subpackagegroup:[],ispackage:"",itemtype:""},{tname:"",tpaytype:"",tqty:"",tprice:"",tvisib:"",tdesc:"",tcketlogo:"",tbdglabel:"",trowid:"",grouptickets:[],ticketcount:"",tags:[],subpackagegroup:[],ispackage:"",itemtype:""},{tname:"",tpaytype:"",tqty:"",tprice:"",tvisib:"",tdesc:"",tcketlogo:"",tbdglabel:"",trowid:"",grouptickets:[],ticketcount:"",tags:[],subpackagegroup:[],ispackage:"",itemtype:""},{tname:"",tpaytype:"",tqty:"",tprice:"",tvisib:"",tdesc:"",tcketlogo:"",tbdglabel:"",trowid:"",grouptickets:[],ticketcount:"",tags:[],subpackagegroup:[],ispackage:"",itemtype:""},{tname:"",tpaytype:"",tqty:"",tprice:"",tvisib:"",tdesc:"",tcketlogo:"",tbdglabel:"",trowid:"",grouptickets:[],ticketcount:"",tags:[],subpackagegroup:[],ispackage:"",itemtype:""},{tname:"",tpaytype:"",tqty:"",tprice:"",tvisib:"",tdesc:"",tcketlogo:"",tbdglabel:"",trowid:"",grouptickets:[],ticketcount:"",tags:[],subpackagegroup:[],ispackage:"",itemtype:""},{tname:"",tpaytype:"",tqty:"",tprice:"",tvisib:"",tdesc:"",tcketlogo:"",tbdglabel:"",trowid:"",grouptickets:[],ticketcount:"",tags:[],subpackagegroup:[],ispackage:"",itemtype:""},{tname:"",tpaytype:"",tqty:"",tprice:"",tvisib:"",tdesc:"",tcketlogo:"",tbdglabel:"",trowid:"",grouptickets:[],ticketcount:"",tags:[],subpackagegroup:[],ispackage:"",itemtype:""},{tname:"",tpaytype:"",tqty:"",tprice:"",tvisib:"",tdesc:"",tcketlogo:"",tbdglabel:"",trowid:"",grouptickets:[],ticketcount:"",tags:[],subpackagegroup:[],ispackage:"",itemtype:""},{tname:"",tpaytype:"",tqty:"",tprice:"",tvisib:"",tdesc:"",tcketlogo:"",tbdglabel:"",trowid:"",grouptickets:[],ticketcount:"",tags:[],subpackagegroup:[],ispackage:"",itemtype:""},{tname:"",tpaytype:"",tqty:"",tprice:"",tvisib:"",tdesc:"",tcketlogo:"",tbdglabel:"",trowid:"",grouptickets:[],ticketcount:"",tags:[],subpackagegroup:[],ispackage:"",itemtype:""},{tname:"",tpaytype:"",tqty:"",tprice:"",tvisib:"",tdesc:"",tcketlogo:"",tbdglabel:"",trowid:"",grouptickets:[],ticketcount:"",tags:[],subpackagegroup:[],ispackage:"",itemtype:""},{tname:"",tpaytype:"",tqty:"",tprice:"",tvisib:"",tdesc:"",tcketlogo:"",tbdglabel:"",trowid:"",grouptickets:[],ticketcount:"",tags:[],subpackagegroup:[],ispackage:"",itemtype:""},{tname:"",tpaytype:"",tqty:"",tprice:"",tvisib:"",tdesc:"",tcketlogo:"",tbdglabel:"",trowid:"",grouptickets:[],ticketcount:"",tags:[],subpackagegroup:[],ispackage:"",itemtype:""},{tname:"",tpaytype:"",tqty:"",tprice:"",tvisib:"",tdesc:"",tcketlogo:"",tbdglabel:"",trowid:"",grouptickets:[],ticketcount:"",tags:[],subpackagegroup:[],ispackage:"",itemtype:""},{tname:"",tpaytype:"",tqty:"",tprice:"",tvisib:"",tdesc:"",tcketlogo:"",tbdglabel:"",trowid:"",grouptickets:[],ticketcount:"",tags:[],subpackagegroup:[],ispackage:"",itemtype:""},{tname:"",tpaytype:"",tqty:"",tprice:"",tvisib:"",tdesc:"",tcketlogo:"",tbdglabel:"",trowid:"",grouptickets:[],ticketcount:"",tags:[],subpackagegroup:[],ispackage:"",itemtype:""},{tname:"",tpaytype:"",tqty:"",tprice:"",tvisib:"",tdesc:"",tcketlogo:"",tbdglabel:"",trowid:"",grouptickets:[],ticketcount:"",tags:[],subpackagegroup:[],ispackage:"",itemtype:""},{tname:"",tpaytype:"",tqty:"",tprice:"",tvisib:"",tdesc:"",tcketlogo:"",tbdglabel:"",trowid:"",grouptickets:[],ticketcount:"",tags:[],subpackagegroup:[],ispackage:"",itemtype:""},{tname:"",tpaytype:"",tqty:"",tprice:"",tvisib:"",tdesc:"",tcketlogo:"",tbdglabel:"",trowid:"",grouptickets:[],ticketcount:"",tags:[],subpackagegroup:[],ispackage:"",itemtype:""},{tname:"",tpaytype:"",tqty:"",tprice:"",tvisib:"",tdesc:"",tcketlogo:"",tbdglabel:"",trowid:"",grouptickets:[],ticketcount:"",tags:[],subpackagegroup:[],ispackage:"",itemtype:""},{tname:"",tpaytype:"",tqty:"",tprice:"",tvisib:"",tdesc:"",tcketlogo:"",tbdglabel:"",trowid:"",grouptickets:[],ticketcount:"",tags:[],subpackagegroup:[],ispackage:"",itemtype:""},{tname:"",tpaytype:"",tqty:"",tprice:"",tvisib:"",tdesc:"",tcketlogo:"",tbdglabel:"",trowid:"",grouptickets:[],ticketcount:"",tags:[],subpackagegroup:[],ispackage:"",itemtype:""},{tname:"",tpaytype:"",tqty:"",tprice:"",tvisib:"",tdesc:"",tcketlogo:"",tbdglabel:"",trowid:"",grouptickets:[],ticketcount:"",tags:[],subpackagegroup:[],ispackage:"",itemtype:""},{tname:"",tpaytype:"",tqty:"",tprice:"",tvisib:"",tdesc:"",tcketlogo:"",tbdglabel:"",trowid:"",grouptickets:[],ticketcount:"",tags:[],subpackagegroup:[],ispackage:"",itemtype:""},{tname:"",tpaytype:"",tqty:"",tprice:"",tvisib:"",tdesc:"",tcketlogo:"",tbdglabel:"",trowid:"",grouptickets:[],ticketcount:"",tags:[],subpackagegroup:[],ispackage:"",itemtype:""},{tname:"",tpaytype:"",tqty:"",tprice:"",tvisib:"",tdesc:"",tcketlogo:"",tbdglabel:"",trowid:"",grouptickets:[],ticketcount:"",tags:[],subpackagegroup:[],ispackage:"",itemtype:""},{tname:"",tpaytype:"",tqty:"",tprice:"",tvisib:"",tdesc:"",tcketlogo:"",tbdglabel:"",trowid:"",grouptickets:[],ticketcount:"",tags:[],subpackagegroup:[],ispackage:"",itemtype:""},{tname:"",tpaytype:"",tqty:"",tprice:"",tvisib:"",tdesc:"",tcketlogo:"",tbdglabel:"",trowid:"",grouptickets:[],ticketcount:"",tags:[],subpackagegroup:[],ispackage:"",itemtype:""},{tname:"",tpaytype:"",tqty:"",tprice:"",tvisib:"",tdesc:"",tcketlogo:"",tbdglabel:"",trowid:"",grouptickets:[],ticketcount:"",tags:[],subpackagegroup:[],ispackage:"",itemtype:""},{tname:"",tpaytype:"",tqty:"",tprice:"",tvisib:"",tdesc:"",tcketlogo:"",tbdglabel:"",trowid:"",grouptickets:[],ticketcount:"",tags:[],subpackagegroup:[],ispackage:"",itemtype:""},{tname:"",tpaytype:"",tqty:"",tprice:"",tvisib:"",tdesc:"",tcketlogo:"",tbdglabel:"",trowid:"",grouptickets:[],ticketcount:"",tags:[],subpackagegroup:[],ispackage:"",itemtype:""},{tname:"",tpaytype:"",tqty:"",tprice:"",tvisib:"",tdesc:"",tcketlogo:"",tbdglabel:"",trowid:"",grouptickets:[],ticketcount:"",tags:[],subpackagegroup:[],ispackage:"",itemtype:""},{tname:"",tpaytype:"",tqty:"",tprice:"",tvisib:"",tdesc:"",tcketlogo:"",tbdglabel:"",trowid:"",grouptickets:[],ticketcount:"",tags:[],subpackagegroup:[],ispackage:"",itemtype:""},{tname:"",tpaytype:"",tqty:"",tprice:"",tvisib:"",tdesc:"",tcketlogo:"",tbdglabel:"",trowid:"",grouptickets:[],ticketcount:"",tags:[],subpackagegroup:[],ispackage:"",itemtype:""},{tname:"",tpaytype:"",tqty:"",tprice:"",tvisib:"",tdesc:"",tcketlogo:"",tbdglabel:"",trowid:"",grouptickets:[],ticketcount:"",tags:[],subpackagegroup:[],ispackage:"",itemtype:""},{tname:"",tpaytype:"",tqty:"",tprice:"",tvisib:"",tdesc:"",tcketlogo:"",tbdglabel:"",trowid:"",grouptickets:[],ticketcount:"",tags:[],subpackagegroup:[],ispackage:"",itemtype:""},{tname:"",tpaytype:"",tqty:"",tprice:"",tvisib:"",tdesc:"",tcketlogo:"",tbdglabel:"",trowid:"",grouptickets:[],ticketcount:"",tags:[],subpackagegroup:[],ispackage:"",itemtype:""},{tname:"",tpaytype:"",tqty:"",tprice:"",tvisib:"",tdesc:"",tcketlogo:"",tbdglabel:"",trowid:"",grouptickets:[],ticketcount:"",tags:[],subpackagegroup:[],ispackage:"",itemtype:""},{tname:"",tpaytype:"",tqty:"",tprice:"",tvisib:"",tdesc:"",tcketlogo:"",tbdglabel:"",trowid:"",grouptickets:[],ticketcount:"",tags:[],subpackagegroup:[],ispackage:"",itemtype:""},{tname:"",tpaytype:"",tqty:"",tprice:"",tvisib:"",tdesc:"",tcketlogo:"",tbdglabel:"",trowid:"",grouptickets:[],ticketcount:"",tags:[],subpackagegroup:[],ispackage:"",itemtype:""},{tname:"",tpaytype:"",tqty:"",tprice:"",tvisib:"",tdesc:"",tcketlogo:"",tbdglabel:"",trowid:"",grouptickets:[],ticketcount:"",tags:[],subpackagegroup:[],ispackage:"",itemtype:""}];
+            getticketitems();
             document.getElementById("ticketloader").style.display="none";
              } 
              else if (event.type === 'exception') {
@@ -1255,6 +1273,202 @@ var ticketlist=[{tname:"",tpaytype:"",tqty:"",tprice:"",tvisib:"",tdesc:"",tcket
         );
         
         }
+        
+        
+        
+     function getticketitems(){
+      
+        //Get all available item pools
+        var itpoolid=[];
+        var itpoolname=[];
+Visualforce.remoting.Manager.invokeAction(
+            '{!$RemoteAction.BLN_EventsConTest.getSavedTickets}',
+            eventmand.EventID,
+           function(result, event){
+           var j = 1,arrindex=0;
+          $.each(result, function(i, resulteach){
+               
+                ticketlist[arrindex].tname=resulteach.Item_Pool_Name__c;
+                itpoolid[arrindex]=resulteach.Id;
+                itpoolname[arrindex]=resulteach.Name;
+                ticketlist[arrindex].tqty=resulteach.Item_Count__c;
+                if(resulteach.Package_Flag__c=='I - Individual Item pool')
+                ticketlist[arrindex].ispackage='false';
+                else
+                ticketlist[arrindex].ispackage='true';
+                ticketlist[arrindex].itemtype=resulteach.Item_Type__c;
+                ticketlist[arrindex].tbdglabel=resulteach.Badge_Label__c==undefined?'':resulteach.Badge_Label__c;
+                ticketlist[arrindex].trowid=j;
+               arrindex++;
+                j++;
+                
+                console.log(resulteach);
+                });
+              
+         //Get Items
+           for(k=0;k<itpoolid.length;k++)
+           {
+              //Get Items/Group Tickets
+                Visualforce.remoting.Manager.invokeAction(
+            '{!$RemoteAction.BLN_EventsConTest.getItemsBasedOnPool}',
+            itpoolid[k],
+           function(result1, event1){
+           var ik=0,totqty=0,totprice=0;
+           
+           $.each(result1, function(i1, resulteach1){
+           for(l=0;l<itpoolid.length;l++){
+           if(resulteach1.Item_Pool__c==itpoolid[l]){
+           ticketlist[l].grouptickets.push({itemid:"",tname:"",sdate:"",edate:"",qty:"",minqty:"",maxqty:"",tprice:""});
+           ticketlist[l].tcketlogo=resulteach1.image_url__c;
+           
+           ticketlist[l].grouptickets[ik].itemid=resulteach1.Id;
+           ticketlist[l].grouptickets[ik].tname=resulteach1.item_name__c;
+           
+           ticketlist[l].grouptickets[ik].sdate=normalizeDateTimeExtended(resulteach1.sale_start__c);
+          
+           ticketlist[l].grouptickets[ik].edate=normalizeDateTimeExtended(resulteach1.sale_end__c);
+           ticketlist[l].grouptickets[ik].qty=resulteach1.item_count__c;
+           ticketlist[l].grouptickets[ik].minqty=resulteach1.min_per_order__c;
+           ticketlist[l].grouptickets[ik].maxqty=resulteach1.max_per_order__c;
+           totqty+=resulteach1.item_count__c;
+           totprice+=resulteach1.price__c;
+           
+           ticketlist[l].grouptickets[ik].tprice=resulteach1.price__c;
+           ik++;
+           ticketlist[l].ticketcount=ik;
+           
+           ticketlist[l].tprice=totprice;
+             if(ik>1)
+             ticketlist[l].tprice='Group Tickets';
+             ticketlist[l].tpaytype=resulteach1.Payment__c;
+             ticketlist[l].tvisib=resulteach1.Visibility__c;
+             ticketlist[l].tdesc=resulteach1.Description__c==undefined?'':resulteach1.Description__c;
+               }
+           }
+           });
+           
+          
+           sessionStorage['ticket']=JSON.stringify(ticketlist);
+           getTicketState();
+           });  
+           
+            //Get Addon Item Pools
+           Visualforce.remoting.Manager.invokeAction(
+            '{!$RemoteAction.BLN_EventsConTest.getAddonPool}',
+            itpoolid[k],
+           function(result2, event2){
+           
+           console.log(result2);
+           var ik1=0;
+           //,m=0;
+           //ticketlist[m].subpackagegroup=[];
+           $.each(result2, function(i2, resulteach2){
+           for(m=0;m<itpoolid.length;m++){
+           if(resulteach2.Addon_Parent__c==itpoolid[m]){
+           
+           ticketlist[m].subpackagegroup.push({pkgitemname:"",pkgitemqty:"",ttype:"",badgelabel:""});
+           
+           ticketlist[m].subpackagegroup[ik1].pkgitemname=resulteach2.Item_Pool_Name__c;
+           
+           ticketlist[m].subpackagegroup[ik1].pkgitemqty=resulteach2.Addon_Count__c;
+           ticketlist[m].subpackagegroup[ik1].ttype=resulteach2.Item_Type__c;
+           ticketlist[m].subpackagegroup[ik1].badgelabel=resulteach2.Badge_Label__c==undefined?'':resulteach2.Badge_Label__c;
+           ik1++;
+               }
+           }
+           });
+           
+          
+           sessionStorage['ticket']=JSON.stringify(ticketlist);
+           getTicketState();
+           });  
+           //End Of Get Addon Item Pools   
+           }//end of itpoolid loop
+           
+            Visualforce.remoting.Manager.invokeAction(
+            '{!$RemoteAction.BLN_EventsConTest.getSavedTags}',
+            eventmand.EventID,
+           function(result3, event3){
+           
+           var set = [];
+          $.each(result3, function(i3, resulteach3){
+          var setflag=0;
+          for(seti=0;seti<set.length;seti++)
+          {
+             if(resulteach3.Tag_Id__c==set[seti])
+             setflag=1;
+          }
+          
+            if (setflag==0) { 
+                 set.push(resulteach3.Tag_Id__c);
+               }
+              
+                          
+                          for(mt=0;mt<itpoolid.length;mt++){
+                          if(resulteach3.Pool_Id__c==itpoolid[mt]){
+                          ticketlist[mt].tags.push({tagname:resulteach3.Tag_Id__c});
+                          
+                                  }
+                          }
+            });
+            
+            sessionStorage['ticket']=JSON.stringify(ticketlist);
+           getTicketState();
+            });
+           
+            }, 
+            {escape: true}
+        );
+sessionStorage['ticket']=JSON.stringify(ticketlist); 
+        // }end of session checking
+        //  
+           
+        getTicketState();
+        
+        }
+        
+        
+        function normalizeDateTimeExtended(mydate){
+ 
+    var now= new Date(mydate-(3600000*12)),
+    ampm= 'AM', 
+    h= now.getUTCHours(), 
+    m= now.getUTCMinutes(), 
+    s= now.getUTCSeconds();
+    
+  
+    var d = now.getDate();  
+   var mo = now.getMonth()+1;  
+   var y = now.getFullYear(); 
+    if(h>= 12){
+        if(h>12) h -= 12;
+        ampm= 'PM';
+    }
+
+    if(m<10) m= '0'+m;
+    if(s<10) s= '0'+s;
+    return ''+ (mo<=9?'0'+mo:mo) +'/' + (d<=9?'0'+d:d)+'/' + y+ ' ' +addHours(h + ':' + m + ' ' + ampm, -4)+' '+ampm ;
+   //return ''+ (m<=9?'0'+m:m) +'/' + (d<=9?'0'+d:d)+'/' + y+' '+mydate.toLocaleString().replace(/:\d+ /, ' ');  
+ }
+ 
+ // Assumes timeString is hh:mm am/pm
+function addHours(timeString, h) {
+  var t = timeString.match(/\d+/g);
+  var am = /am$/.test(timeString);
+  var d = new Date();
+  d.setHours(+t[0] + (am? 0 : 12) + +h, +t[1]);
+  return formatTime(d.getHours() + ':' + d.getMinutes());
+}
+function formatTime(t) {
+  function addZ(n) {
+    return n<10? '0'+n : ''+n;
+  }
+
+  var t = t.split(':');
+  
+
+  return addZ(t[0]%12 || t[0]) + ':' + addZ(t[1]) ;
+}
 
 </script>
 
@@ -2751,14 +2965,14 @@ var tmtable = document.getElementById("mytab1");
                              if(ticketlist[pi].trowid==parentrowindex)
                              {
                                   //set the grouptickets array to null
-                                 
+                                 if(ticketlist[pi].grouptickets.length==0)
                                    ticketlist[pi].grouptickets=[];
                                    
                                  //Get the inner table values
                                  var table = document.getElementById("mytab1");
                                  for (var i = 1, row,nhiderow=0,totqty=0,totprice=0; row = table.rows[i]; i++) {
                                  if(row.style.display!='none'){
-                       
+                       if(ticketlist[pi].grouptickets[nhiderow]==undefined)
                         ticketlist[pi].grouptickets.push({tname:"",sdate:"",edate:"",qty:"",minqty:"",maxqty:"",tprice:""});
                         ticketlist[pi].grouptickets[nhiderow].tname=row.cells[0].children[0].value;
                         ticketlist[pi].grouptickets[nhiderow].sdate=row.cells[1].children[0].value;
@@ -2870,15 +3084,10 @@ Visualforce.remoting.Manager.invokeAction(
            }
            }
       
-      boothleadproduct.push({tname:"",tprice:"",tqty:"",ttypeid:"",ticketPercentage:""});
-      boothleadproduct[bpindex].tname=resulteach.ticketName;
-      boothleadproduct[bpindex].tprice=resulteach.ticketPrice;
-      boothleadproduct[bpindex].ticketPercentage=resulteach.ticketPercentage;
-      boothleadproduct[bpindex].ttypeid=resulteach.ticketId;
-      bpindex++;
+     
       }
             });
-          sessionStorage['blproduct']=JSON.stringify(boothleadproduct);   
+           
             }, 
             {escape: true}
         );
@@ -3485,7 +3694,8 @@ function destroy()
   try{
            sessionStorage.removeItem("event");
            sessionStorage.removeItem("ticket");
-           sessionStorage.removeItem("blproduct");}catch(e){}
+          
+           }catch(e){}
 }
 </script>
     <!-- Navigation -->
@@ -4253,11 +4463,13 @@ function savepackageinfo()
        //
       
        //store the package more ingo group
+        if(ticketlist[rowindex].grouptickets.length==0)
         ticketlist[rowindex].grouptickets=[];
        var table = document.getElementById("packagemoreinfotable");
        for (var i = 1, row,nhiderow=0; row = table.rows[i]; i++) {
        
         if(row.style.display!='none'){
+              if(ticketlist[rowindex].grouptickets[nhiderow]==undefined)
               ticketlist[rowindex].grouptickets.push({tname:"",sdate:"",edate:"",qty:"",minqty:"",maxqty:"",tprice:""});
               ticketlist[rowindex].grouptickets[nhiderow].tname=row.cells[0].children[0].value;
               ticketlist[rowindex].grouptickets[nhiderow].sdate=row.cells[1].children[0].value;
@@ -4475,27 +4687,68 @@ var appendTxt = "<tr><td><input type='text' id='one' class='tickfield' name='inp
       <!-----------script for hide and show divs for publish--------------> 
       <script >
       var totalblprice=0;
+      var bllist=[];
 function show(show)
 {
 document.getElementById(show).style.display="block";
-
+bllist=[];
 var appendtxt=''
 totalblprice=0;
 var blflag=0;
-for(i=0;i<ticketlist.length;i++)
-{
-    if(ticketlist[i].trowid!=''){
-    for(j=0;j<boothleadproduct.length;j++)
-    if(ticketlist[i].itemtype==boothleadproduct[j].ttypeid){
+
+var bllistindex=0;
+
+for(j=0;j<boothleadproduct.length;j++){
+    
+    for(i=0;i<ticketlist.length;i++)
+     {
+     if(ticketlist[i].trowid!=''){
+    if(ticketlist[i].itemtype==boothleadproduct[j].itemtype){
     blflag=1;
-    boothleadproduct[j].tqty=ticketlist[i].tqty;
-    var amount=(boothleadproduct[j].tprice*boothleadproduct[j].tqty)+(ticketlist[i].tprice*boothleadproduct[j].ticketPercentage/100);
-    appendtxt+="<tr><td>"+boothleadproduct[j].tname+"<\/td><td>"+boothleadproduct[j].tqty+"<\/td><td>$ "+amount+"<\/td><\/tr>";
+   
+    
+    var amount=(boothleadproduct[j].tprice*ticketlist[i].tqty);
+    appendtxt+="<tr><td>"+boothleadproduct[j].tname+"<\/td><td>"+ticketlist[i].tqty+"<\/td><td>$ "+amount+"<\/td><\/tr>";
+    bllist.push({ticketName:"",ticketPrice:"",ticketQty:"",ticketId:"",itemId:""});
+       bllist[bllistindex].ticketName=boothleadproduct[j].tname;
+    bllist[bllistindex].ticketId=boothleadproduct[j].itemtype;
+    bllist[bllistindex].ticketQty=ticketlist[i].tqty;
+    bllist[bllistindex].ticketPrice=amount;
+    bllist[bllistindex].itemId=ticketlist[i].grouptickets[0].itemid;
+    bllistindex++;
+   
     totalblprice+=amount;
-    break;
-    }
    
     }
+    //checking in package
+    if(ticketlist[i].subpackagegroup.length!=0)
+    {
+         for(k=0;k<ticketlist[i].subpackagegroup.length;k++)
+         {
+               if(ticketlist[i].subpackagegroup[k].ttype==boothleadproduct[j].itemtype){
+    blflag=1;
+    
+    var amount=(boothleadproduct[j].tprice*ticketlist[i].subpackagegroup[k].pkgitemqty);
+    appendtxt+="<tr><td>"+boothleadproduct[j].tname+"<\/td><td>"+ticketlist[i].subpackagegroup[k].pkgitemqty+"<\/td><td>$ "+amount+"<\/td><\/tr>";
+    bllist.push({ticketName:"",ticketPrice:"",ticketQty:"",ticketId:"",itemId:""});
+       bllist[bllistindex].ticketName=boothleadproduct[j].tname;
+    bllist[bllistindex].ticketId=boothleadproduct[j].itemtype;
+    bllist[bllistindex].ticketQty=ticketlist[i].subpackagegroup[k].pkgitemqty;
+    bllist[bllistindex].ticketPrice=amount;
+     bllist[bllistindex].itemId=ticketlist[i].grouptickets[0].itemid;
+    bllistindex++;
+    totalblprice+=amount;
+   
+    }
+         }  
+    }
+    
+    
+    
+    }
+   }
+   
+   
 }
 appendtxt+='<tr><td style="text-align:left; border-top:1px solid #9C9C9C; border-bottom:1px solid #9C9C9C;font-weight:700;">Total:</td><td style=" border-top:1px solid #9C9C9C;border-bottom:1px solid #9C9C9C;">&nbsp;</td><td style=" border-top:1px solid #9C9C9C;border-bottom:1px solid #9C9C9C;" >$ '+totalblprice+'</td></tr>';
 $(".ordersummarytable").find("tr:gt(0)").remove();
@@ -4704,6 +4957,9 @@ font-weight: normal;
             document.getElementById('cardmonth').value,
             document.getElementById('cardyear').value,
             document.getElementById('cardcvv').value,
+            JSON.stringify(bllist),
+            document.getElementById('mcurrset').value,
+            document.getElementById('eventpage:searchform:searchValue').value,
             function(result, event){
             if (event.status){
             //sucess code
@@ -4712,7 +4968,8 @@ font-weight: normal;
            try{
            sessionStorage.removeItem("event");
            sessionStorage.removeItem("ticket");
-           sessionStorage.removeItem("blproduct");}catch(e){}
+         
+           }catch(e){}
            window.location.href='https://blnew-boothleads.cs14.force.com/BLN_UserEvents';
            
            }

@@ -272,7 +272,7 @@ Public  Item_Question__c Itemquerecord {get;set;}
        
        // Creating Item Question.
            List<String> itemques = new List<String>();
-          if(itemques.size()>0)
+          if(itemques.size()<=0)
               itemques = itemid.split('-');          
           
            List<String> itemSETreqques = new List<String>();
@@ -443,12 +443,11 @@ Public  Item_Question__c Itemquerecord {get;set;}
                     if(!s.isSuccess()){
                         Database.Error error = s.getErrors().get(0);
                         String failedDML =Error.getMessage();             
-                        failuremessageset.add(failedDML);
-                  
+                        failuremessageset.add(failedDML);                  
                     }
           
                  }
-                 
+              system.debug('  STATUS OF QUESTIONS   ' +failuremessageset);    
              if(failuremessageset.size()==0)
                  {
                        
@@ -501,7 +500,7 @@ Public  Item_Question__c Itemquerecord {get;set;}
                                  system.debug('dupItemquelistdupItemquelistdupItemquelist' + dupItemquelist);            
                                     BLN_Item_Question_DAO blnitmquedao= NEW BLN_Item_Question_DAO();
                                     List<Database.upsertResult> saveitemque = blnitmquedao.UpsertItemQuestion(dupItemquelist);
-                                     system.debug('========STATUS MESSAGE= ===============' +saveitemque );
+                                     system.debug('  ITEM QUESTION STATUS  ' +saveitemque );
                                        failuremessageset = new SET<STRING>();
                                        for(Database.UpsertResult s : saveitemque){
                                             if(!s.isSuccess()){

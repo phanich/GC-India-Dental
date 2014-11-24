@@ -1,41 +1,43 @@
-global class AWS_EmailBatchCallouts implements Database.Batchable<String>, Database.AllowsCallouts{
+global class AWS_EmailBatchCallouts implements Database.Batchable<Messaging.SingleEmailMessage>, Database.AllowsCallouts{
 
     //global GN_User__c[] UsersToSendEmails;
-    global LIST<String> Ueids;
+    global LIST<Messaging.SingleEmailMessage> Ueids;
 
-    global void fetchEmails(LIST<String> setOfatts){   
+    global void fetchEmails(LIST<Messaging.SingleEmailMessage> setOfatts){   
         //UsersToSendEmails = [SELECT ID, Name, First_Name__c, Last_Name__c, Email__c, Company_Name__c FROM GN_User__c WHERE ID IN: setOfatts]; 
         Ueids = setOfatts;
     }
     
-    global Iterable<String> start(database.batchablecontext BC){
+    global Iterable<Messaging.SingleEmailMessage> start(database.batchablecontext BC){
         //return (UsersToSendEmails); 
         return (Ueids); 
     }
     
-    global void execute(Database.BatchableContext BC, List<String> scope){
+    global void execute(Database.BatchableContext BC, List<Messaging.SingleEmailMessage> scope){
         try{ 
                         
             BLN_AWSKeys awsKey = BLN_AWSKeys.getInstance('AES Credentials');
             BLN_AWS_SES sesEmail = new BLN_AWS_SES(awsKey.key,awsKey.secret, awsKey.endpoint );
                         
-            EmailTemplate E = new EmailTemplate();    
+            /*EmailTemplate E = new EmailTemplate();    
             E = [SELECT Body,Subject,HtmlValue,Markup FROM EmailTemplate WHERE Id = '00XF0000001CeUH'];
             
             String ReplaceHtml = E.HtmlValue;
-            String ReplaceSubject = E.Subject;
+            String ReplaceSubject = E.Subject;*/
             String ReplacedHtml;
             String ReplacedSubject;
-            
-            for(String use : scope){
-                String sender;
+            String sender;
+            sender = 'rajeshc@globalnest.com';
+            for(Messaging.SingleEmailMessage use : scope){
                 
-                sender = 'rajeshc@globalnest.com';
                 
+                
+                LIST<String> emailist = new LIST<String>();
+                //emailist.add()
                 LIST<String> rlist = new LIST<String>();
-                rlist.add(use);
-                ReplacedHtml = ReplaceHtml.Replace('{!Name}','Rajesh kumar');                
-                ReplacedSubject = ReplaceSubject.Replace('{!EventName}','Test');
+                rlist.addAll(use.getToAddresses());
+                ReplacedHtml = use.getHtmlBody();                
+                ReplacedSubject = use.getSubject();
                 sesEmail.sendEmail(rlist,sender,ReplacedSubject,ReplacedHtml);
             }
         } 

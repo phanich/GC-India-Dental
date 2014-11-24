@@ -124,6 +124,7 @@ public boolean istestmethod{get;set;}
 public string Mainmessage{get;set;}
  public Decimal eventadminChangedAmount{get;set;}
  public string CommnetsByEventadmin{get;set;}
+ public MAP<id,Event_Price__c> mapItemWithPrice {get;set;}
 //------------------------------------------------------------------------ Variables Declaration End ------------------------------------------------------------------------------------- 
 
 //---------------------------------------------------------------------------------- Constructor Start ----------------------------------------------------------------------------------- 
@@ -177,7 +178,13 @@ public BLN_RegistrationnewCon(){
     if(EventId != NULL){ 
         // Getting Event Details from Event DAO
         registrationEvent = QuickRegBAL.getEventDetails(EventId);   
-
+        
+        mapItemWithPrice = new MAP<id,Event_Price__c>();       
+        List<Event_Price__c> listOfeventprices = [SELECT id,Active_Flag__c,BL_Fee_Amount__c,BL_Fee_Level__c,BL_Fee_Percentage__c,Item_Count__c,Item_type__c,Event__c from Event_Price__c where Event__c=:EventId ];
+         for(Event_Price__c evp :listOfeventprices  ){
+          mapItemWithPrice.put(evp.Item_type__c,evp); 
+         }
+        
         // Getting List of items selected from Item DAO  
         EventItems = QuickRegBAL.getEventItems(EventId); 
         EventDaysRemaining = date.today().daysBetween(registrationEvent.End_Date__c);   
@@ -376,10 +383,8 @@ public BLN_RegistrationnewCon(){
                                 ItemInnerList=new List<ItemInnerClass>();
                                     ItemInnerList.add(iic);
                                     RegistrationItemList.put(RegSetting.Table_Name__c,ItemInnerList);
-                                     
                                     RegItemList.add(new RegItemInnerClass(RegSetting.Table_Name__c,RegSetting.Order__c,ItemInnerList));
-                                    
-                                }
+                                   }
                             }
                             // If there are no registration tabs available for the tag, it will be added to Other Tab.
                             else{
@@ -394,45 +399,25 @@ public BLN_RegistrationnewCon(){
                                     chkfrdup=1;
                                 }
                                      if(chkfrdup==0){
-                                      
-                                    //ItemInnerList.add(iic);
-                                    
-                                    otherList.add(iic);
-                            System.debug('otherList '+otherList);
-                           
-                            System.debug('otherList Size '+otherList.size());
-                            
-                               }    
-                                    
+                                     otherList.add(iic);
+                              }    
                                     //RegItemList.add(new RegItemInnerClass('Other',1,ItemInnerList)); 
-                                    
-                                 
                                allList.add(iic);      
-                                   
                             }  
                             //i++; 
-                            
-                        } 
-                       
+                         } 
+                        }
                     }
-                    
-                    
-                }
                 // If there are no tags available for the item, it will be added to Other Tab.
                 else{
                     ItemInnerList.add(iic);
-                   
                     RegItemList.add(new RegItemInnerClass('Other',RegItemList.size()+1,ItemInnerList)); 
                 }
-                
-                System.debug('RegItemList '+RegItemList);
-               
-            }
-            
-             if(remainingFlag==1&&otherList.size()!=0)
-                    RegItemList.add(new RegItemInnerClass('Other',RegItemList.size()+1,otherList));
-               
-        }
+                 System.debug('RegItemList '+RegItemList);
+               }
+              if(remainingFlag==1&&otherList.size()!=0)
+                  RegItemList.add(new RegItemInnerClass('Other',RegItemList.size()+1,otherList));
+             }
         // If there are no registration tabs available for the event
         else{
             RegItemList.add(new RegItemInnerClass('All',0,ItemList)); 
@@ -775,41 +760,31 @@ public MAP<id,ItemInnerClass> napIdwithObj{get;set;}
                            TotalAmount = DiscountAmount;
                            
                            if(iic.items.service_fee__c == 'Add Booth Leads fee on top of the total ticket price'){
-                               if(iic.items.Item_Type__r.BL_Fee_Amt_per_res__c != NULL){
-                                   if(iic.items.Item_Type__r.Name == 'Package'){
+                             if(mapItemWithPrice.get(iic.items.Item_Type__r.id).BL_Fee_Amount__c != NULL || mapItemWithPrice.get(iic.items.Item_Type__r.id).BL_Fee_Percentage__c!= NULL) {
+                                if(iic.items.Item_Type__r.Name == 'Package'){
                                        FeeAmount += iic.PackageFee;
                                    }else{
                                      if(iic.items.Payment__c != 'Free'){
-                                       FeeAmount += Integer.ValueOf(iic.selectedItemQuantity) * iic.items.Item_Type__r.BL_Fee_Amt_per_res__c;
-                                     }
+                                         FeeAmount += (Integer.ValueOf(iic.selectedItemQuantity) * mapItemWithPrice.get(iic.items.Item_Type__r.id).BL_Fee_Amount__c) + (Integer.ValueOf(iic.selectedItemQuantity) * (iic.items.price__c*(mapItemWithPrice.get(iic.items.Item_Type__r.id).BL_Fee_Percentage__c)));
+                                      }
                                    }
                                    if(iic.items.Payment__c != 'Free'){
                                        TotalAmount += FeeAmount;
                                    }
                                    system.debug('Fee1 '+ TotalAmount + ' For Item'+iic.items.item_name__c);
-                               }else if(iic.items.Item_Type__r.BL_Fee_Pct_per_res__c!= NULL){
-                                   if(iic.items.Item_Type__r.Name == 'Package'){
-                                       FeeAmount += iic.PackageFee;
-                                   }else{
-                                      if(iic.items.Payment__c != 'Free'){
-                                         FeeAmount += Integer.ValueOf(iic.selectedItemQuantity) * (iic.items.price__c*(iic.items.Item_Type__r.BL_Fee_Pct_per_res__c/100));
-                                       }
-                                   }
-                                   
-                                       TotalAmount += FeeAmount;
-                                   
-                                   system.debug('Fee2 '+TotalAmount );
                                }
                            }
                            system.debug('Total Amount with Promo Codes: '+TotalAmount );
                        }
                        else{
-                               if(iic.items.Item_Type__r.BL_Fee_Amt_per_res__c!= NULL){
-                                   if(iic.items.Payment__c != 'Free' && iic.items.service_fee__c == 'Add Booth Leads fee on top of the total ticket price'){
+                             
+                           if(mapItemWithPrice.get(iic.items.Item_Type__r.id).BL_Fee_Amount__c!= NULL || mapItemWithPrice.get(iic.items.Item_Type__r.id).BL_Fee_Percentage__c!= NULL){
+                            
+                                   if(iic.items.Payment__c != 'Free' && (iic.items.service_fee__c == 'Add Booth Leads fee on top of the total ticket price')){
                                         if(iic.items.Item_Type__r.Name == 'Package'){
                                             TotalAmount += Integer.ValueOf(iic.selectedItemQuantity) * (iic.items.price__c+iic.PackageFee); 
                                         }else{
-                                            TotalAmount += Integer.ValueOf(iic.selectedItemQuantity) * (iic.items.price__c+iic.items.Item_Type__r.BL_Fee_Amt_per_res__c);  
+                                            TotalAmount += (Integer.ValueOf(iic.selectedItemQuantity) * (iic.items.price__c+mapItemWithPrice.get(iic.items.Item_Type__r.id).BL_Fee_Amount__c))+(Integer.ValueOf(iic.selectedItemQuantity) * (iic.items.price__c*(mapItemWithPrice.get(iic.items.Item_Type__r.id).BL_Fee_Percentage__c/100)));  
                                         }
                                         system.debug('1st Looop');
                                    }
@@ -823,34 +798,13 @@ public MAP<id,ItemInnerClass> napIdwithObj{get;set;}
                                            FeeAmount += iic.PackageFee;
                                        }else{
                                           if(iic.items.Payment__c != 'Free'){
-                                            FeeAmount += Integer.ValueOf(iic.selectedItemQuantity) * iic.items.Item_Type__r.BL_Fee_Amt_per_res__c;
+                                            FeeAmount += (Integer.ValueOf(iic.selectedItemQuantity) * mapItemWithPrice.get(iic.items.Item_Type__r.id).BL_Fee_Amount__c)+(Integer.ValueOf(iic.selectedItemQuantity) * (iic.items.price__c*(mapItemWithPrice.get(iic.items.Item_Type__r.id).BL_Fee_Percentage__c/100))) ;
                                           }
                                        }
                                    }
                                    
-                               }else if(iic.items.Item_Type__r.BL_Fee_Pct_per_res__c!= NULL){
-                                   
-                                   if(iic.items.Payment__c != 'Free' && iic.items.service_fee__c == 'Add Booth Leads fee on top of the total ticket price'){
-                                        if(iic.items.Item_Type__r.Name == 'Package'){
-                                            TotalAmount += Integer.ValueOf(iic.selectedItemQuantity) * (iic.items.price__c+iic.PackageFee);  
-                                        }else{
-                                            TotalAmount += Integer.ValueOf(iic.selectedItemQuantity) * (iic.items.price__c+(iic.items.price__c*(iic.items.Item_Type__r.BL_Fee_Pct_per_res__c/100)));
-                                        }          
-                                   }
-                                   else{
-                                       TotalAmount += Integer.ValueOf(iic.selectedItemQuantity) * iic.items.price__c;
-                                   }
-                                   
-                                   if(iic.items.service_fee__c == 'Add Booth Leads fee on top of the total ticket price'){     
-                                       if(iic.items.Item_Type__r.Name == 'Package'){
-                                           FeeAmount += iic.PackageFee;
-                                       }else{
-                                           if(iic.items.Payment__c != 'Free'){
-                                           FeeAmount += Integer.ValueOf(iic.selectedItemQuantity) * (iic.items.price__c*(iic.items.Item_Type__r.BL_Fee_Pct_per_res__c/100));
-                                         }
-                                       }
-                                   }
-                               }
+                               }   
+                             
                                system.debug('Total Amount without Promo Codes: '+FeeAmount );
                        }
                        if(registrationEvent.Accept_Tax_Rate__c == TRUE && registrationEvent.Tax_Rate__c != NULL){
@@ -972,29 +926,29 @@ public Company_Ext__c GNbuyerCompanyDetails{get;set;}
       GNUserextforbuyer = new user_Ext__c ();
       BillingAddressForbuyer = new Pay_Address__c();
          
+      SET<string>   regstable = new SET<string>(); 
+      SET<string>   regscolumn = new SET<string>();
     // Written By Phani, This is for summarise the settings for buyer    
         for(Reg_Setting__c regBuyer :RegistrationSettingsForBuyer){
-           Reg_Setting__c regSet = new Reg_Setting__c();
-           for(Reg_Setting__c regBuyerin :RegistrationSettingsForBuyer){
-              if((regBuyer.Table_Name__c== regBuyerin.Table_Name__c) && (regBuyer.Column_Name__c == regBuyerin.Column_Name__c)){
-                 regSet.Label_Name__c= regBuyerin.Label_Name__c; 
-                 regSet.Group_Name__c = regBuyerin.Group_Name__c;
-                 regSet.Table_Name__c = regBuyerin.Table_Name__c;
-                 regSet.Column_Name__c =regBuyerin.Column_Name__c;
-                 
-                 if(regBuyerin.Required__c!=false){
-                   regSet.Required__c = true;
-                }
-                if(regBuyerin.Included__c!=false){
-                 regSet.Included__c = true;
-                }  
-              }
-               
-           } 
+         Reg_Setting__c regSet = new Reg_Setting__c();
+          if(regstable.contains(regBuyer.Table_Name__c) && regscolumn.contains(regBuyer.Column_Name__c)){
+            
+          }else{
+               system.debug('XXXXXXXXXXXXXXXX '+regBuyer);
+                regSet.Included__c = regBuyer.Included__c;
+                regSet.Required__c = regBuyer.Required__c;
+                regSet.Label_Name__c= regBuyer.Label_Name__c; 
+                 regSet.Group_Name__c = regBuyer.Group_Name__c;
+                 regSet.Table_Name__c = regBuyer.Table_Name__c;
+                 regSet.Column_Name__c =regBuyer.Column_Name__c;
+                 regstable.add(regSet.Table_Name__c); regscolumn.add(regSet.Column_Name__c);
+          }
+           
            if(regSet.Included__c!=false || regSet.Required__c!=false){ 
+           
                groupNames.add(regBuyer.Group_Name__c);
-              settingsForbuyer.add(regSet);
-           }
+                settingsForbuyer.add(regSet);
+            }
         }
         
         //Fetching Event Level Survey Questions
@@ -1531,7 +1485,7 @@ public void toalDiscountAfterallApp(){
         BLN_User_DAO UserDAO = new BLN_User_DAO();
         system.debug('Event Level Answers:'+UserEventAnswer);
         system.debug('Buyer Information '+OrderFirstName+OrderLastName+OrderEmail);
-        
+        boolean isCompanyProvide =false;
         
         
         
@@ -1555,7 +1509,6 @@ public void toalDiscountAfterallApp(){
                 GNUser.Company_name__c = LoggedinUser.CompanyName;
             }else{
              GNCompany.Name = LoggedinUser.FirstName + LoggedinUser.LastName;
-              
                 GNCompany.isPersonAccount__c = TRUE;
                 GNUser.Company_name__c = LoggedinUser.FirstName + LoggedinUser.LastName;
             }  
@@ -1567,17 +1520,59 @@ public void toalDiscountAfterallApp(){
             if(GNUserforbuyer.companyName!='' && GNUserforbuyer.companyName!=null){
                 GNUser.Company_name__c =GNUserforbuyer.companyName;
                 GNCompany.Name = GNUserforbuyer.CompanyName;
-           } 
+                isCompanyProvide =true;
+           }
         }
          string uid;
 
         //OrderUserMsg = RegistrationBAL.insertGNUser(GNUser);
              if(RegistrationBAL.checkUserEmail(GNUser.Email__c)!=null){
-                OrderUserId = [select id,email__c,First_Name__c,Last_Name__c from GN_User__c where user__c =:RegistrationBAL.checkUserEmail(GNUser.Email__c) limit 1].id;
-               }else{
-                 OrderUserMsg = RegistrationBAL.insertGNUser(GNUser);
+               // OrderUserId = [select id,email__c,First_Name__c,Last_Name__c from GN_User__c where user__c =:RegistrationBAL.checkUserEmail(GNUser.Email__c) limit 1].id;
+                   for(GN_User__c gnup : [select id,First_Name__c,Last_Name__c,Email__c,Company_Name__c from GN_User__c where user__c =:RegistrationBAL.checkUserEmail(GNUser.Email__c) limit 1]){
+                         OrderUserId = gnup.id;
+                          if(GNUserextforbuyer.Address1__c!=null){
+                             gnup.Address1__c = GNUserextforbuyer.Address1__c;
+                            }
+                            if(GNUserextforbuyer.Address2__c!=null){ 
+                             gnup.Address2__c =  GNUserextforbuyer.Address2__c;
+                            } 
+                            if(GNUserextforbuyer.City__c!=null){
+                             gnup.City__c = GNUserextforbuyer.City__c;
+                            }
+                            if(GNUserextforbuyer.State__c!=null){
+                             gnup.State__c =GNUserextforbuyer.State__c;
+                            }
+                            if(GNUserextforbuyer.Country__c!=null){
+                                gnup.Country__c  = GNUserextforbuyer.Country__c;
+                            } 
+                             if(GNUserextforbuyer.Zip_Code__c!=null){ 
+                              gnup.Zip_Code__c = GNUserextforbuyer.Zip_Code__c;
+                             }   
+                       dataBase.update(gnup,false);
+                      }      
              
-             if(OrderUserMsg.successBool){
+               }else{
+                          if(GNUserextforbuyer.Address1__c!=null){
+                             GNUser.Address1__c = GNUserextforbuyer.Address1__c;
+                            }
+                            if(GNUserextforbuyer.Address2__c!=null){ 
+                             GNUser.Address2__c =  GNUserextforbuyer.Address2__c;
+                            } 
+                            if(GNUserextforbuyer.City__c!=null){
+                             GNUser.City__c = GNUserextforbuyer.City__c;
+                            }
+                            if(GNUserextforbuyer.State__c!=null){
+                             GNUser.State__c =GNUserextforbuyer.State__c;
+                            }
+                            if(GNUserextforbuyer.Country__c!=null){
+                                GNUser.Country__c  = GNUserextforbuyer.Country__c;
+                            } 
+                             if(GNUserextforbuyer.Zip_Code__c!=null){ 
+                              GNUser.Zip_Code__c = GNUserextforbuyer.Zip_Code__c;
+                             }   
+                
+                 OrderUserMsg = RegistrationBAL.insertGNUser(GNUser);
+              if(OrderUserMsg.successBool){
                  OrderUserId = OrderUserMsg.successId; 
               try{
                  uid = [select id,User__c from GN_User__c where id =:OrderUserId limit 1].User__c ;
@@ -1614,20 +1609,35 @@ public void toalDiscountAfterallApp(){
          String OrderCompanyId =''; 
          BLN_StatusMessage PayAddressMessage = new BLN_StatusMessage ();
             
-     if(GNUserforbuyer.companyName!=null && GNUserforbuyer.companyName!=''){          
+     //if(GNUserforbuyer.companyName!=null && GNUserforbuyer.companyName!=''){          
         //Inserting Company for OrderUser  
         
-        OrderCompanyId =  checkCompany(GNCompany.Name,GNUserforbuyer.email);
-        
+       if(GNUserforbuyer.companyName!=null && GNUserforbuyer.companyName!=''){ 
+            OrderCompanyId =  checkCompany(GNCompany.Name,GNUserforbuyer.email);
+           if(OrderCompanyId != null && OrderCompanyId !='' ){      
+            OrderUCRoleMsg = RegistrationBAL.insertUCRole(OrderUserId,OrderCompanyId,registrationEvent.Id,'Company Staff');   
+           }   
+       }else{
+          OrderCompanyId = checkPersonalAccount(GNUserforbuyer.email);
+          if(OrderCompanyId != null && OrderCompanyId !=''){
+              OrderUCRoleMsg = RegistrationBAL.insertUCRole(OrderUserId,OrderCompanyId,registrationEvent.Id,'Company Admin');
+          }
+       }
        
-        if(OrderCompanyId != null && OrderCompanyId !=''){
-            OrderUCRoleMsg = RegistrationBAL.insertUCRole(OrderUserId,OrderCompanyId,registrationEvent.Id,'Company Staff');
+       
+       if(OrderCompanyId != null && OrderCompanyId !=''){
+           
         }else{
+            GNCompany.Name = GNUserforbuyer.CompanyName;
+            if(!isCompanyProvide){
+                GNCompany.isPersonAccount__c = TRUE;
+            }
             OrderCompanyMsg = RegistrationBAL.insertCompany(GNCompany,GNbuyerCompanyDetails);
               if(OrderCompanyMsg.successBool){
                 OrderCompanyId = OrderCompanyMsg.successId;
             }
              OrderUCRoleMsg = RegistrationBAL.insertUCRole(OrderUserId,OrderCompanyId,registrationEvent.Id,'Company Admin');
+             // account type need to put
         }
         
      /*   //Inserting UCRole by mapping User, Company and Event
@@ -1644,11 +1654,11 @@ public void toalDiscountAfterallApp(){
         PayAddress.GN_User__c = OrderUserId;
         PayAddressMessage = PayAddressDAO.insertPayAddress(PayAddress);
         
-      }  
+     // }  
         
         // --------------------------------------------------------------------- For Inserting Buyer Information End---------------------------------------------------------
-        List<Ticket__c> tickesListForupdate = new List<Ticket__c>();
-
+        SET<Ticket__c> tickesListForupdate = new SET<Ticket__c>();
+        SEt<id> setOftcids = new SEt<id>();
 
 
         //-------------- Inserting User, Company, UCRole and Update Tickets ------------------------------
@@ -1690,20 +1700,33 @@ public void toalDiscountAfterallApp(){
                 }
                 else{
                   system.debug('Ticket loop iterate times    '+tic);
-                if(tic.selectedQuantity >= 1){
+                    if(tic.selectedQuantity >= 1){
+                    
                       for(Ticket__c t: RegistrationBAL.getTicketDetail(tic.BLNItem,tic.selectedQuantity)){
+                           if(tic.EachUser.First_Name__c!=null && tic.EachUser.First_Name__c!=''){
                             t.First_Name__c =  GNUserforbuyer.firstName;
+                           } 
+                           if(tic.EachUser.Last_Name__c!=null && tic.EachUser.Last_Name__c!=''){
                             t.Last_Name__c =  GNUserforbuyer.lastName;
+                            }
+                            if(tic.EachUser.Email__c !=null && tic.EachUser.Email__c !=''){
                             t.Email__c =  GNUserforbuyer.email;
-                            t.Company__c = GNUserforbuyer.companyname;
+                            }
+                            
+                            if(isCompanyProvide){
+                              t.Company__c = GNUserforbuyer.companyname;
+                            }
                             t.Ticket_Status__c='Booked';
-                              system.debug('========>STATUS:'+t.Ticket_Status__c);  
+                              system.debug('========>STATUS:'+t.id);  
                                UserIds.add(OrderUserId);// Updating User Ids
                               if(OrderCompanyId!=''){
                                CompanyIds.add(OrderCompanyId); // Updating Company Ids
                               }
                                TicketIds.add(t.id); // Updating Ticket Ids
-                               tickesListForupdate.add(t); 
+                               if(!setOftcids.contains(t.id)){
+                                 tickesListForupdate.add(t); 
+                                 setOftcids.add(t.id);
+                              } 
                          }
                  
                      } 
@@ -1716,27 +1739,67 @@ public void toalDiscountAfterallApp(){
                 tic.Ticket.Last_Name__c = tic.EachUser.Last_Name__c;
                 tic.Ticket.Email__c = tic.EachUser.email__c;
                 tic.Ticket.Company__c = tic.EachUser.Company_Name__c;
-                 //Assigning Inner Class Company to Company Object Instance
-                if(tic.EachUser.Company_Name__c !=null && tic.EachUser.Company_Name__c !=''){
-                    comp.Name = tic.EachUser.Company_Name__c ;
-                    comp.isPersonAccount__c = FALSE;
-                }  
-               system.debug('111111111111 '+tic.Ticket.First_Name__c  +'2222222222222 '+tic.EachUser.First_Name__c); 
                 
-                // Assigning Inner Class User to User Object Instance
+                if(tic.EachUserExt.Address1__c!=null){
+                 tic.EachUser.Address1__c = tic.EachUserExt.Address1__c;
+                }
+                if(tic.EachUserExt.Address2__c!=null){ 
+                 tic.EachUser.Address2__c =  tic.EachUserExt.Address2__c;
+                } 
+                if(tic.EachUserExt.City__c!=null){
+                 tic.EachUser.City__c = tic.EachUserExt.City__c;
+                }
+                if(tic.EachUserExt.State__c!=null){
+                 tic.EachUser.State__c =tic.EachUserExt.State__c;
+                }
+                if(tic.EachUserExt.Country__c!=null){
+                    tic.EachUser.Country__c  = tic.EachUserExt.Country__c;
+                } 
+                 if(tic.EachUserExt.Zip_Code__c!=null){ 
+                   tic.EachUser.Zip_Code__c = tic.EachUserExt.Zip_Code__c;
+                 }   
+                // Address1__c, Address2__c, City__c, State__r.Long_Name__c, Country__r.Long_Name__c, Zip_Code__c 
+                
+                //Assigning Inner Class Company to Company Object Instance
+                if(tic.EachUser.Company_Name__c !=null && tic.EachUser.Company_Name__c !=''){
+                  comp.Name = tic.EachUser.Company_Name__c ;
+                  comp.isPersonAccount__c = FALSE;
+                }  
+               // Assigning Inner Class User to User Object Instance
                 IndUser = tic.EachUser;
                //Inserting User
                // userMsg = RegistrationBAL.insertGNUser(IndUser);
-              
-               if(tic.EachUser.email__c!=GNUserforbuyer.email ){
-                  if(RegistrationBAL.checkUserEmail(tic.EachUser.email__c)!=null){
-                        UserId =[select id from GN_User__c where user__c =:RegistrationBAL.checkUserEmail(GNUser.Email__c) limit 1].id;
-                        
+                 if(tic.EachUser.email__c!=GNUserforbuyer.email ){
+                   if(RegistrationBAL.checkUserEmail(tic.EachUser.email__c)!=null){
+                       // UserId =[select id from GN_User__c where user__c =:RegistrationBAL.checkUserEmail(GNUser.Email__c) limit 1].id;
+                       for(GN_User__c gnup : [select id,First_Name__c,Last_Name__c,Email__c,Company_Name__c from GN_User__c where user__c =:RegistrationBAL.checkUserEmail(GNUser.Email__c) limit 1]){
+                         UserId = gnup.id;
+                         if(tic.EachUserExt.Address1__c!=null){
+                             gnup.Address1__c = tic.EachUserExt.Address1__c;
+                            }
+                            if(tic.EachUserExt.Address2__c!=null){ 
+                             gnup.Address2__c =  tic.EachUserExt.Address2__c;
+                            } 
+                            if(tic.EachUserExt.City__c!=null){
+                             gnup.City__c = tic.EachUserExt.City__c;
+                            }
+                            if(tic.EachUserExt.State__c!=null){
+                             gnup.State__c =tic.EachUserExt.State__c;
+                            }
+                            if(tic.EachUserExt.Country__c!=null){
+                                gnup.Country__c  = tic.EachUserExt.Country__c;
+                            } 
+                             if(tic.EachUserExt.Zip_Code__c!=null){ 
+                              gnup.Zip_Code__c = tic.EachUserExt.Zip_Code__c;
+                             }   
+                       dataBase.update(gnup,false);
+                      }
+                 
                    }else{
-                      userMsg = RegistrationBAL.insertGNUser(tic.EachUser);
-                       if(userMsg.successBool){
+                       userMsg = RegistrationBAL.insertGNUser(tic.EachUser);
+                      if(userMsg.successBool){
                          UserId = userMsg.successId; 
-                      }  
+                     }  
                  }
               }else{
                  UserId =OrderUserId ;
@@ -1744,8 +1807,7 @@ public void toalDiscountAfterallApp(){
                 
            if(tic.EachUser.Company_Name__c!='' && tic.EachUser.Company_Name__c!=null){
               // If attendee chooses buyer company 
-               if(tic.EachUser.Company_Name__c!= GNUserforbuyer.CompanyName  ){
-                 //Inserting Company for User  
+              //Inserting Company for User  
                  CompanyId = checkCompany(tic.EachUser.Company_Name__c,tic.EachUser.Email__c);
                  if(CompanyId != null && CompanyId != ''){
                      //Inserting UCRole by mapping User, Company and Event
@@ -1760,24 +1822,40 @@ public void toalDiscountAfterallApp(){
                             UCRoleMsg = RegistrationBAL.insertUCRole(UserId,CompanyId,registrationEvent.Id,'Company Admin');
                            }
                         
-                       } else{
-                        CompanyId = checkCompany(gnuser.Company_Name__c,gnuser.Email__c);
-                        UCRoleMsg = RegistrationBAL.insertUCRole(UserId,CompanyId,registrationEvent.Id,'Company Staff');
-                   }    
+                       }else{
+                          if(gnuser.Company_Name__c!=null && gnuser.Company_Name__c!=''){
+                              CompanyId = checkCompany(gnuser.Company_Name__c,gnuser.Email__c);
+                              UCRoleMsg = RegistrationBAL.insertUCRole(UserId,CompanyId,registrationEvent.Id,'Company Staff');
+                          }else{
+                             CompanyId = checkPersonalAccount(tic.EachUser.email__c);    
+                             if(CompanyId!=''){
+                                  UCRoleMsg = RegistrationBAL.insertUCRole(UserId,CompanyId,registrationEvent.Id,'Company Admin');                              
+                             }else{
+                                comp.name = tic.EachUser.First_Name__c+tic.EachUser.Last_Name__c;
+                                CompanyMsg = RegistrationBAL.insertCompany(comp,companydetails);
+                                CompanyId = CompanyMsg.successId;
+                                 system.debug('@@@@@@@ '+UserId+'  @############ '+CompanyId+'   %%%%%%%%%% '+registrationEvent.Id);
+                                if( CompanyId  != '' ){
+                                  system.debug('@@@@@@@ '+UserId+'  @############ '+CompanyId+'   %%%%%%%%%% '+registrationEvent.Id);
+                                   UCRoleMsg = RegistrationBAL.insertUCRole(UserId,CompanyId,registrationEvent.Id,'Company Admin');
+                               } 
+                             }                                      
+                           }
+                        }    
                     if(UCRoleMsg.successBool){
                         ucRoleId = UCRoleMsg.successId;
                         system.debug('Inserted UC Role Id: '+ucRoleId);
                     }
-            }      
+                
                 // Inserting Survey Questions  
                 for(UserAnswerInnerClass UAnswer : tic.UserAnswer){
                     Id ItemQuestionId = SQBal.getItemQuestion(tic.BLNItem.Id,UAnswer.Question.id);
                     if(UAnswer.Question.Answer_Type__c=='Checkboxes'){
                          for(String s: UAnswer.SelectedAnswerCheck){
-                             BLN_StatusMessage UAMsg = SQBal.insertUserAnswer(UserId,s,ItemQuestionId );    
+                           BLN_StatusMessage UAMsg = SQBal.insertUserAnswer(UserId,s,ItemQuestionId );    
                          }    
                     }else{
-                        BLN_StatusMessage UAMsg = SQBal.insertUserAnswer(UserId,UAnswer.SelectedAnswer,ItemQuestionId );        
+                      BLN_StatusMessage UAMsg = SQBal.insertUserAnswer(UserId,UAnswer.SelectedAnswer,ItemQuestionId );        
                     }
                 }
 
@@ -1786,7 +1864,10 @@ public void toalDiscountAfterallApp(){
                   CompanyIds.add(CompanyId); // Updating Company Ids
                 } 
                 TicketIds.add(tic.Ticket.id); // Updating Ticket Ids  
-                tickesListForupdate.add(tic.Ticket);
+                  if(!setOftcids.contains(tic.Ticket.id)){
+                    tickesListForupdate.add(tic.Ticket);
+                  setOftcids.add(tic.Ticket.id);
+                } 
             }    
         }
         
@@ -1809,23 +1890,35 @@ public void toalDiscountAfterallApp(){
         else{
             TotalAmountDue = TotalAmount;
         }
-        
-        
-
-          system.debug('EWWWWWWWWWWWWWWWWWWWWWWWWWWW '+TicketIds.size());
+         system.debug('EWWWWWWWWWWWWWWWWWWWWWWWWWWW '+TicketIds.size());
         if(promocode != NULL || promocode!=''){
-        
-             Response = RegistrationBAL.updateTickets(UserIds,CompanyIds,TicketIds,registrationEvent.Id,OrderUserId,TotalAmountDue + DiscountedAmount,DiscountedAmount,FeeAmount,TaxAmount,TotalAmountDue,PromotionIdMap,PromotionCount,promocode,PayAddressMessage.SuccessId,SelectedCardType,SelectedPaymentGateway,ChargeId,PayGatewayMode);
+          Response = RegistrationBAL.updateTickets(UserIds,CompanyIds,TicketIds,registrationEvent.Id,OrderUserId,TotalAmountDue + DiscountedAmount,DiscountedAmount,FeeAmount,TaxAmount,TotalAmountDue,PromotionIdMap,PromotionCount,promocode,PayAddressMessage.SuccessId,SelectedCardType,SelectedPaymentGateway,ChargeId,PayGatewayMode);
         }
         else{
-       
-             Response = RegistrationBAL.updateTickets(UserIds,CompanyIds,TicketIds,registrationEvent.Id,OrderUserId,TotalAmountDue + DiscountedAmount,DiscountedAmount,FeeAmount,TaxAmount,TotalAmountDue,PromotionIdMap,PromotionCount,'',PayAddressMessage.SuccessId,SelectedCardType,SelectedPaymentGateway,ChargeId,PayGatewayMode);
+          Response = RegistrationBAL.updateTickets(UserIds,CompanyIds,TicketIds,registrationEvent.Id,OrderUserId,TotalAmountDue + DiscountedAmount,DiscountedAmount,FeeAmount,TaxAmount,TotalAmountDue,PromotionIdMap,PromotionCount,'',PayAddressMessage.SuccessId,SelectedCardType,SelectedPaymentGateway,ChargeId,PayGatewayMode);
         }
         
-        dataBase.update(tickesListForupdate,false); 
+        List<ticket__c> tlistUpdate = new List<Ticket__c>();
+        for(ticket__c tr :tickesListForupdate){
+           system.debug('QQQQQQQQQQQQQ QQQQQQQ'+tr);
+        }
+        tlistUpdate.addAll(tickesListForupdate);
+        dataBase.update(tlistUpdate,false); 
+        List<ticket__c> tlist = new List<Ticket__c>();
         
-
-      
+        tlist.addAll(RegistrationBAL.ticketsForupdatePkg);
+         for(Ticket__c tic :tlist ){
+            tic.First_Name__c  =GNUserforbuyer.firstName;
+            tic.Last_Name__c  =GNUserforbuyer.lastName;
+            tic.Email__c =GNUserforbuyer.email;
+           if(!isCompanyProvide){   
+            tic.company__c=GNUserforbuyer.companyName;
+           }
+         }  
+        dataBase.update(tlist,false);   
+            
+            
+            
         system.debug('11111111111111111111 '+RegistrationBAL.orderId);
         if(CommnetsByEventadmin !=''){
            BLN_Order_DAO ord = new BLN_Order_DAO();
@@ -2037,5 +2130,13 @@ public void toalDiscountAfterallApp(){
               }
         
             }
-   
-}
+      public string checkPersonalAccount(string uEmail){
+            LIST<UC_Role__c> UCRoleList = [SELECT id,Company__c,Company__r.id FROM UC_Role__c WHERE GN_User__r.Email__c =:uEmail and User_Type__c='Personal'];
+            if(UCRoleList.size()>0){
+                return UCRoleList[0].Company__r.id;
+              }else{
+                 return '';
+              }
+          }      
+    
+   }

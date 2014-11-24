@@ -118,15 +118,15 @@ global without sharing class  BLN_Email_Dashboardscon {
                 if(email.CampType__c == 'Announcement')
                 {
                   if(email.Template_Type__c == 'Standard'){
-                      if(Leadretrieval == true && Matchleads == true){
+                      if((Leadretrieval == true && Matchleads == true) || email.Name == 'Invitation'){
                            anouncecmaplist.add(email);  
                           }
-                          if(Leadretrieval == true && Matchleads == false){
+                          if((Leadretrieval == true && Matchleads == false) || email.Name == 'Invitation' ){
                                if(email.Product_Type__c == 'Lead Retrieval'){
                                    anouncecmaplist.add(email); 
                                }
                           }
-                          if(Matchleads == true && Leadretrieval == false){
+                          if((Matchleads == true && Leadretrieval == false) || email.Name == 'Invitation' ){
                                if(email.Product_Type__c == 'MatchLeads'){
                                    anouncecmaplist.add(email); 
                                }
@@ -139,15 +139,15 @@ global without sharing class  BLN_Email_Dashboardscon {
                   if(email.CampType__c == 'Reminder')
                 {
                   if(email.Template_Type__c == 'Standard'){
-                      if(Leadretrieval == true && Matchleads == true){
+                      if((Leadretrieval == true && Matchleads == true) || email.Name == 'Remainder before the event'){
                            remaindermaplist.add(email);  
                           }
-                          if(Leadretrieval == true && Matchleads == false){
+                          if((Leadretrieval == true && Matchleads == false) || email.Name == 'Remainder before the event'){
                                if(email.Product_Type__c == 'Lead Retrieval'){
                                    remaindermaplist.add(email); 
                                }
                           }
-                          if(Matchleads == true && Leadretrieval == false){
+                          if((Matchleads == true && Leadretrieval == false) || email.Name == 'Remainder before the event'){
                                if(email.Product_Type__c == 'MatchLeads'){
                                   remaindermaplist.add(email); 
                                }
@@ -254,6 +254,9 @@ global without sharing class  BLN_Email_Dashboardscon {
     campaigntypelist.add(new selectoption ('Ticket Confirmation','Ticket Confirmation'));
          emailcamp = new EmailCampaign__c();
          emailcamp = [SELECT NAME,CampEmailTemplate__c,System_Template_Type__c,CampFromEmailId__c,Template_Body__c,CampFromName__c,Template_Type__c,Owner.Name,CampSubject__c,createdDate,CampType__c,Event__c,ToList__c,ToListType__c FROM EmailCampaign__c WHERE Event__c=:selectedeventid AND id=:editcamid];
+         string tempid = emailcamp.CampEmailTemplate__c;
+         Emailtemplate etemp  = [SELECT id,Body,BrandTemplateId,Description,DeveloperName,Encoding,FolderId,HtmlValue,IsActive,LastUsedDate,Markup,Name,NamespacePrefix,OwnerId,Subject,TemplateStyle,TemplateType,TimesUsed FROM EmailTemplate WHERE IsActive=:true AND ID=: tempid ]; 
+             
              if(emailcamp.CampType__c == 'Announcement ' || emailcamp.CampType__c == 'Reminder' ){
                   system.debug('dddddddddddd'+emailcamp.CampType__c);
                   selectedcamptype = emailcamp.CampType__c;
@@ -280,7 +283,7 @@ global without sharing class  BLN_Email_Dashboardscon {
 
             Tempnames = new List<SelectOption>();
             try{
-            Tempnames.add(new SelectOption(emailcamp.CampEmailTemplate__c,emailcamp.NAME));
+            Tempnames.add(new SelectOption(emailcamp.CampEmailTemplate__c,etemp.NAME));
             }catch(Exception e){}
 
      
@@ -298,7 +301,7 @@ global without sharing class  BLN_Email_Dashboardscon {
           system.debug('123222222222' +reciepientslist);
       
       emailcamplist = new  List<EmailCampaign__c>();
-     emailcamplist = [SELECT NAME,CampEmailTemplate__c,Product_Type__c,Available_to_Use__c,Email_Send_Date__c,CampFromEmailId__c,CampFromName__c,Template_Type__c,CreatedDate,Owner.Name,CampSubject__c,CampType__c,Event__c,ToList__c,ToListType__c FROM EmailCampaign__c WHERE Event__c=:selectedeventid ORDER BY Template_Type__c];
+     /**emailcamplist = [SELECT NAME,CampEmailTemplate__c,Product_Type__c,Available_to_Use__c,Email_Send_Date__c,CampFromEmailId__c,CampFromName__c,Template_Type__c,CreatedDate,Owner.Name,CampSubject__c,CampType__c,Event__c,ToList__c,ToListType__c FROM EmailCampaign__c WHERE Event__c=:selectedeventid ORDER BY Template_Type__c];
      boolean Leadretrieval = false;
      boolean Matchleads  = false;
      LIST<BLN_Item__c> items = [SELECT id,item_type__r.Name FROM BLN_Item__c Where Event__c =: selectedeventid];
@@ -360,7 +363,8 @@ global without sharing class  BLN_Email_Dashboardscon {
    
        }    
       }      
-   
+     */
+     allcampaigns();
        savebool = false; 
        editbool = true;
        displaybool = true;
@@ -384,6 +388,7 @@ global without sharing class  BLN_Email_Dashboardscon {
             string  frmname = Apexpages.Currentpage().getparameters().get('frmname');
             string  reciepients = Apexpages.Currentpage().getparameters().get('reciepients');
             string  updatetempbody = Apexpages.Currentpage().getparameters().get('updatestandardtemp');
+            string  templateName = Apexpages.Currentpage().getparameters().get('tempnamenew');
              emailcamp.Name  = campname;
            emailcamp.CampFromName__c = frmname;
            emailcamp.ToList__c= reciepients ;
@@ -397,16 +402,20 @@ global without sharing class  BLN_Email_Dashboardscon {
            if(updatetempbody == ''){
            updatetempbody = null;
            }
-           updtcamp(tempid,updatetempbody,sub);
-    
+           updtcamp(tempid,updatetempbody,sub,templateName);
+            allcampaigns();
     }
     
     @future
-    public static void updtcamp(string tempid,string updatetempbody,string sub ){
+    public static void updtcamp(string tempid,string updatetempbody,string sub,string templateName){
     EmailTemplate emailtemp1 = [SELECT id,Body,BrandTemplateId,Description,DeveloperName,Encoding,FolderId,HtmlValue,IsActive,LastUsedDate,Markup,Name,NamespacePrefix,OwnerId,Subject,TemplateStyle,TemplateType,TimesUsed FROM EmailTemplate WHERE IsActive=:true AND ID=: tempid];
     if(updatetempbody != null){
     emailtemp1.HtmlValue= updatetempbody; }            
     emailtemp1.Subject = sub ;
+    if(templateName != null && templateName != ' '){
+    emailtemp1.Name = templateName;
+    
+    }
     database.update(emailtemp1,false);       
     }   
      
@@ -463,7 +472,7 @@ global without sharing class  BLN_Email_Dashboardscon {
              custemailtemp.Subject =  emailcamp.CampSubject__c;
              Database.SaveResult  k = Database.Insert(custemailtemp,false);
              SET<STRING> failuremessagt = new SET<STRING>();
-
+                system.debug('kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk'+k);
                     if(!k.isSuccess()){
                         Database.Error error = k.getErrors().get(0);
                         String failedDML =Error.getMessage();             
@@ -478,7 +487,7 @@ global without sharing class  BLN_Email_Dashboardscon {
                system.debug('we5r456575646' + custemailtemp.Name);
                system.debug('46556768' + reciepients);
                  
-               forinsertcampaign(custemailtemp.Name,custemailtemp.Id,emailcamp.CampFromEmailId__c,frmname,emailcamp.CampSubject__c,emailcamp.CampType__c,emailcamp.Event__c,reciepients,emailcamp.ToListType__c,selectedcamptype);   
+               forinsertcampaign(campname,custemailtemp.Id,emailcamp.CampFromEmailId__c,frmname,emailcamp.CampSubject__c,emailcamp.CampType__c,emailcamp.Event__c,reciepients,emailcamp.ToListType__c,selectedcamptype);   
   
              
 
@@ -613,8 +622,8 @@ global without sharing class  BLN_Email_Dashboardscon {
              custemailtemp.FolderId = '00lF0000001Izb7';
              custemailtemp.Subject =  emailcamp.CampSubject__c;
              Database.SaveResult  k = Database.Insert(custemailtemp,false);
-          
-                  forinsertcampaign(custemailtemp.Name,custemailtemp.Id,emailcamp.CampFromEmailId__c,frmname,emailcamp.CampSubject__c,emailcamp.CampType__c,emailcamp.Event__c,reciepients,emailcamp.ToListType__c,selectedcamptype);   
+            system.debug('kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk'+k);
+                  forinsertcampaign(campname,custemailtemp.Id,emailcamp.CampFromEmailId__c,frmname,emailcamp.CampSubject__c,emailcamp.CampType__c,emailcamp.Event__c,reciepients,emailcamp.ToListType__c,selectedcamptype);   
               }
             else{
             
@@ -634,6 +643,7 @@ global without sharing class  BLN_Email_Dashboardscon {
              custemailtemp.FolderId = '00lF0000001Izb7';
              custemailtemp.Subject =  emailcamp.CampSubject__c;
              Database.SaveResult  k = Database.Insert(custemailtemp,false);
+              system.debug('kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk'+k);
              SET<STRING> failuremessagt = new SET<STRING>();
 
                     if(!k.isSuccess()){
@@ -653,7 +663,7 @@ global without sharing class  BLN_Email_Dashboardscon {
                
            
                
-               forinsertcampaign(custemailtemp.Name,custemailtemp.Id,emailcamp.CampFromEmailId__c,frmname,emailcamp.CampSubject__c,emailcamp.CampType__c,emailcamp.Event__c,reciepients,emailcamp.ToListType__c,selectedcamptype);   
+               forinsertcampaign(campname,custemailtemp.Id,emailcamp.CampFromEmailId__c,frmname,emailcamp.CampSubject__c,emailcamp.CampType__c,emailcamp.Event__c,reciepients,emailcamp.ToListType__c,selectedcamptype);   
   
             
             }  
@@ -700,32 +710,8 @@ global without sharing class  BLN_Email_Dashboardscon {
  
   public List<EmailTemplate> emailtemps {get ; set ;}
  Public Void getemailcampslist(){
- 
      emailcamplist = new  List<EmailCampaign__c>();
-     emailcamplist = [SELECT NAME,CampEmailTemplate__c,Email_Send_Date__c,Available_to_Use__c,CampFromEmailId__c,CampFromName__c,Template_Type__c,CreatedDate,Owner.Name,CampSubject__c,CampType__c,Event__c,ToList__c,ToListType__c FROM EmailCampaign__c WHERE Event__c=:selectedeventid AND Event__c != NULL ORDER BY Template_Type__c];
-     
-
-     anouncecmaplist = new  List<EmailCampaign__c>();
-     remaindermaplist = new  List<EmailCampaign__c>();
-     registermaplist = new  List<EmailCampaign__c>();
-        
-         for(EmailCampaign__c email : emailcamplist ){
-              
-                 if(email.CampType__c == 'Registration email')
-                {
-                  registermaplist.add(email); 
-                }
-                if(email.CampType__c == 'Announcement')
-                {
-                  anouncecmaplist.add(email); 
-                }
-                 if(email.CampType__c == 'Reminder')
-                {
-                  remaindermaplist .add(email); 
-                }
- 
-    }
- 
+     allcampaigns();
  }
    
    
@@ -914,6 +900,7 @@ global without sharing class  BLN_Email_Dashboardscon {
     ecamp.auto_schedule_Type__c = selectedRadio;
     update ecamp ;
     scheduleBool = false;
+    allcampaigns();
     system.debug('pppppppppppppppppppppppppppppppppppppppppppp'+ecamp );
     }
     

@@ -1531,8 +1531,11 @@ function formatTime(t) {
              ticketlist[arrindex].tvisib=true;
              if(ticketlist[arrindex].ispackage=="true")
              ticketlist[arrindex].itemtype=$("#pkitemtype option:first").val();
-             else
+             else{
+             if(ticketlist[arrindex].itemtype==''||ticketlist[arrindex].itemtype==undefined)
              ticketlist[arrindex].itemtype=$("#itemtype option:first").val();
+             
+             }
              
              }
              for(var sub=0;sub<ticketlist[arrindex].grouptickets.length;sub++){
