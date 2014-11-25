@@ -139,15 +139,15 @@ global without sharing class  BLN_Email_Dashboardscon {
                   if(email.CampType__c == 'Reminder')
                 {
                   if(email.Template_Type__c == 'Standard'){
-                      if((Leadretrieval == true && Matchleads == true) || email.Name == 'Remainder before the event'){
+                      if((Leadretrieval == true && Matchleads == true) || email.Name == 'Reminder before the event'){
                            remaindermaplist.add(email);  
                           }
-                          if((Leadretrieval == true && Matchleads == false) || email.Name == 'Remainder before the event'){
+                          if((Leadretrieval == true && Matchleads == false) || email.Name == 'Reminder before the event'){
                                if(email.Product_Type__c == 'Lead Retrieval'){
                                    remaindermaplist.add(email); 
                                }
                           }
-                          if((Matchleads == true && Leadretrieval == false) || email.Name == 'Remainder before the event'){
+                          if((Matchleads == true && Leadretrieval == false) || email.Name == 'Reminder before the event'){
                                if(email.Product_Type__c == 'MatchLeads'){
                                   remaindermaplist.add(email); 
                                }
@@ -1044,7 +1044,7 @@ global without sharing class  BLN_Email_Dashboardscon {
            displaybool = true;   
            savebool = true;
            emailalert = false;
-               
+               allcampaigns();
    }
    public void creatingnewtemplate(){
    string  newtemp = Apexpages.Currentpage().getparameters().get('newtemp');

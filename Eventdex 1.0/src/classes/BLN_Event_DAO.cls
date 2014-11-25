@@ -10,7 +10,7 @@ public without sharing class BLN_Event_DAO{
                                         Facebook_URL__c, Event_Type__c, Event_Topic__c, Event_Status__c, Event_Privacy__c, End_Time__c, End_Date__c, Registration_Template__c,
                                         Description__c, Country__c, City__c ,CreatedBy.Name ,BLN_State__c,BLN_State__r.Long_Name__c,BLN_State__r.Short_Name__c,
                                         BLN_State__r.Country__c,BLN_State__r.Country__r.Long_Name__c,BLN_State__r.Country__r.Short_Name__c,Show_Terms_Checkbox__c,BLN_Country__r.Short_Name__c,
-                                        Tax_Rate__c,Accept_Tax_Rate__c,Terms_Conditions__c,Accept_Terms_Conditions__c,Accept_Refund_Policy__c,Refund_Policy__c, LinkedIn_URL__c, Language_Settings__c,Event_Blog_URL__c,owner.userName 
+                                        Tax_Rate__c,Accept_Tax_Rate__c,Terms_Conditions__c,Accept_Terms_Conditions__c,Accept_Refund_Policy__c,Refund_Policy__c, LinkedIn_URL__c, Language_Settings__c,Event_Blog_URL__c,owner.userName,(select Pay_Gateway__r.PGateway_Type__r.Name,Pay_Gateway__r.PG_Email_Id__c,Pay_Gateway__r.PG_Pass_Secret__c,Pay_Gateway__r.PG_Signature__c,Pay_Gateway__r.PG_User_Key__c from Event_Pay_Gateway__r) 
                                       FROM BLN_Event__c 
                                       WHERE id =: eventId];    
     return eventdetails;

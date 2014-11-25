@@ -913,7 +913,7 @@ class tags {
     }
     
     @RemoteAction
-    global static void savesPaymentOption(String payjsonInput,String eventID,String companyName,String cheque,String tckopt,String feeopt) {
+    global static void savesPaymentOption(String payjsonInput,String eventID,String companyName,String cheque,String cash,String tckopt,String feeopt) {
     List<Event_Pay_Gateway__c> delepg=[select id,name,Events__c from Event_Pay_Gateway__c where Events__c=:eventID];
     delete delepg;
     
@@ -980,6 +980,21 @@ class tags {
        if(cheque=='true')
        {
            pgt=[select id,name from PGateway_Type__c where name='Check'];
+       pg=new Pay_Gateway__c();
+       pg.PGateway_Type__c=pgt.id;
+           companyId = company.queryCompanyId(companyName);
+        pg.Company__c=companyId.Id ;
+       insert pg;
+      
+      epg=new Event_Pay_Gateway__c();
+      epg.Pay_Gateway__c=pg.id;
+      epg.Events__c=eventID;
+      insert epg;  
+       }
+       
+        if(cash=='true')
+       {
+           pgt=[select id,name from PGateway_Type__c where name='Cash'];
        pg=new Pay_Gateway__c();
        pg.PGateway_Type__c=pgt.id;
            companyId = company.queryCompanyId(companyName);

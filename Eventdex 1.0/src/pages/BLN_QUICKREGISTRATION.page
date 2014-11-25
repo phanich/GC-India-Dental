@@ -379,12 +379,18 @@ function remove_highlight_for_all(num)
                               </td>
                 
               </tr>
-               
+               <tr>
+                <td colspan="3"  style="text-indent:.5%"><p style=" font-size:14px;font-weight:bold; font-family:cuprum;">Payment Option</p></td>
+              </tr>
+              <tr>
+             <td><input type="radio" name="popt" value="Pay By Cash"/>Pay By Cash</td>
+                
+              </tr>
               <tr>
                 <td colspan="3" style=" padding:15px;">
                 
                 <apex:commandButton value="Print Badge" id="printbadge" title="Print" styleClass="printbadge" action="{!printupdate}" oncomplete="printPdf();" rerender="QuickRegistrationForm" Onclick="if(!move()) return false;" rendered="{!searchFlag}"/>
-                <apex:commandButton value="Add and Print Badge" id="addprintbadge" title="AddPrint" styleClass="printbadge" action="{!order}" oncomplete="printPdf();" Onclick="if(!move()) return false;" rerender="QuickRegistrationForm"   rendered="{!!searchFlag}"/>
+                <apex:commandButton value="Add and Print Badge" id="addprintbadge" title="AddPrint" styleClass="printbadge" action="{!order}" oncomplete="printPdf();is iot a old login" Onclick="if(!move()) return false;" rerender="QuickRegistrationForm"   rendered="{!!searchFlag}"/>
 <apex:commandButton value="Print All Using Zebra" id="printallbadge" title="Print All Using Zebra" styleClass="printbadge" action="{!getSelected}" oncomplete="multiprint();" rerender="QuickRegistrationForm"   rendered="{!searchFlag}"/>
 <apex:commandButton value="Print All Using Avery 5392 Badge" id="printaverybadge" title="Print Avery 5392 Badge" styleClass="printbadge" action="{!printAvery}" rendered="{!searchFlag}"/>              
 <apex:commandButton value="Merge Badge" id="mergebadge" title="Merge Badge" styleClass="printbadge" action="{!mergeBadge}" rerender="QuickRegistrationForm"   rendered="{!searchFlag}"/>

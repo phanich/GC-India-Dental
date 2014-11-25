@@ -74,10 +74,11 @@ border: 1px solid #438ac2;
           <span id="user-panel-check"></span> <span id="user-panel-title ">My Account</span> </span></span>
            <div id="login-content">
              <ul>
-                   <li><a href="editprofile.htm">
+              <li><apex:form ><apex:outputLink value="/apex/BLN_profile">
                     <apex:image url="{!URLFOR($Resource.MyTickets, 'images/setting.png')}"/> 
-                   <span>Settings</span></a></li>
+                   <span>Settings</span></apex:outputLink></apex:form></li>
                    <li><a href="upgradeacc.htm"><apex:image url="{!URLFOR($Resource.MyTickets, 'images/upgrade.png')}" width="13px" height="13px" /> <span>Upgrade Account</span></a></li>
+
                   <!-- <li><a href="login.htm">  <apex:image url="{!URLFOR($Resource.MyTickets, 'images/logout.png')}"/>  <span>Log Out</span></a></li> -->
                    <li style="width:100px:height:10px;margin-left:0px;padding-left:5px;">
                     <apex:form > 

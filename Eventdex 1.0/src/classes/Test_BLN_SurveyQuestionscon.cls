@@ -92,6 +92,10 @@ public class Test_BLN_SurveyQuestionscon{
         
         surveyQueTest.questionslist.add(new Question__c(Question_Text__c='Who are you', Answer_Type__c='Text'));
         surveyQueTest.Itemquelist.add(new Item_Question__c(Question_Level__c='Event Level',isRequired__c= True, Visibility__c= True));
+        Apexpages.Currentpage().getparameters().put('chkArray', item.Id+'-');
+        Apexpages.Currentpage().getparameters().put('chkreqArray', item.Id+'-');
+        Apexpages.Currentpage().getparameters().put('chkvisArray', item.Id+'-');
+        
         surveyQueTest.savequestion();
         
         surveyQueTest.questionslist.add(new Question__c(Question_Text__c='working', Answer_Type__c='Text'));

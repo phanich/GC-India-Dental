@@ -1615,7 +1615,7 @@ public void toalDiscountAfterallApp(){
        if(GNUserforbuyer.companyName!=null && GNUserforbuyer.companyName!=''){ 
             OrderCompanyId =  checkCompany(GNCompany.Name,GNUserforbuyer.email);
            if(OrderCompanyId != null && OrderCompanyId !='' ){      
-            OrderUCRoleMsg = RegistrationBAL.insertUCRole(OrderUserId,OrderCompanyId,registrationEvent.Id,'Company Staff');   
+            OrderUCRoleMsg = RegistrationBAL.insertUCRole(OrderUserId,OrderCompanyId,registrationEvent.Id,'Guest Attendee');   
            }   
        }else{
           OrderCompanyId = checkPersonalAccount(GNUserforbuyer.email);
@@ -1739,6 +1739,9 @@ public void toalDiscountAfterallApp(){
                 tic.Ticket.Last_Name__c = tic.EachUser.Last_Name__c;
                 tic.Ticket.Email__c = tic.EachUser.email__c;
                 tic.Ticket.Company__c = tic.EachUser.Company_Name__c;
+                Company__c  comforEchuser  = new Company__c ();
+                
+                
                 
                 if(tic.EachUserExt.Address1__c!=null){
                  tic.EachUser.Address1__c = tic.EachUserExt.Address1__c;
@@ -1762,8 +1765,8 @@ public void toalDiscountAfterallApp(){
                 
                 //Assigning Inner Class Company to Company Object Instance
                 if(tic.EachUser.Company_Name__c !=null && tic.EachUser.Company_Name__c !=''){
-                  comp.Name = tic.EachUser.Company_Name__c ;
-                  comp.isPersonAccount__c = FALSE;
+                  comforEchuser.Name = tic.EachUser.Company_Name__c ;
+                  comforEchuser.isPersonAccount__c = FALSE;
                 }  
                // Assigning Inner Class User to User Object Instance
                 IndUser = tic.EachUser;
@@ -1805,39 +1808,48 @@ public void toalDiscountAfterallApp(){
                  UserId =OrderUserId ;
               } 
                 
+                
+            system.debug('WWWWWWWWWWWWWW '+tic.EachUser.Company_Name__c); 
+                
            if(tic.EachUser.Company_Name__c!='' && tic.EachUser.Company_Name__c!=null){
               // If attendee chooses buyer company 
               //Inserting Company for User  
                  CompanyId = checkCompany(tic.EachUser.Company_Name__c,tic.EachUser.Email__c);
                  if(CompanyId != null && CompanyId != ''){
                      //Inserting UCRole by mapping User, Company and Event
-                    UCRoleMsg = RegistrationBAL.insertUCRole(UserId,CompanyId,registrationEvent.Id,'Company Staff');
+                    UCRoleMsg = RegistrationBAL.insertUCRolewithUtype(UserId,CompanyId,registrationEvent.Id,'Company Admin','Business');
 
                         }else{
-                            CompanyMsg = RegistrationBAL.insertCompany(comp,companydetails);
-                            if(CompanyMsg.successBool){
+                             
+                            CompanyMsg = RegistrationBAL.insertCompany(comforEchuser,tic.EachCompanyExt);
+                             if(CompanyMsg.successBool){
                                 CompanyId = CompanyMsg.successId;
-                            }
-                            //Inserting UCRole by mapping User, Company and Event
-                            UCRoleMsg = RegistrationBAL.insertUCRole(UserId,CompanyId,registrationEvent.Id,'Company Admin');
+                             }
+                         
+                              system.debug('PPPPPPPPPPPP '+CompanyId +'QQQQQQQQQQQQ  '+CompanyMsg);
+                            if(CompanyId !=null && CompanyId !=''){
+                               //Inserting UCRole by mapping User, Company and Event
+                               UCRoleMsg = RegistrationBAL.insertUCRolewithUtype(UserId,CompanyId,registrationEvent.Id,'Company Admin','Business');
+                              }
                            }
                         
                        }else{
                           if(gnuser.Company_Name__c!=null && gnuser.Company_Name__c!=''){
                               CompanyId = checkCompany(gnuser.Company_Name__c,gnuser.Email__c);
-                              UCRoleMsg = RegistrationBAL.insertUCRole(UserId,CompanyId,registrationEvent.Id,'Company Staff');
+                              UCRoleMsg = RegistrationBAL.insertUCRolewithUtype(UserId,CompanyId,registrationEvent.Id,'Guest Attendee','Business');
                           }else{
                              CompanyId = checkPersonalAccount(tic.EachUser.email__c);    
                              if(CompanyId!=''){
-                                  UCRoleMsg = RegistrationBAL.insertUCRole(UserId,CompanyId,registrationEvent.Id,'Company Admin');                              
+                                  UCRoleMsg = RegistrationBAL.insertUCRolewithUtype(UserId,CompanyId,registrationEvent.Id,'Company Admin','Personal');                              
                              }else{
-                                comp.name = tic.EachUser.First_Name__c+tic.EachUser.Last_Name__c;
-                                CompanyMsg = RegistrationBAL.insertCompany(comp,companydetails);
+                                comforEchuser.name = tic.EachUser.First_Name__c+tic.EachUser.Last_Name__c;
+                                //CompanyMsg = RegistrationBAL.insertCompany(comforEchuser,companydetails);
+                                CompanyMsg = RegistrationBAL.insertCompany(comforEchuser,tic.EachCompanyExt);
                                 CompanyId = CompanyMsg.successId;
                                  system.debug('@@@@@@@ '+UserId+'  @############ '+CompanyId+'   %%%%%%%%%% '+registrationEvent.Id);
                                 if( CompanyId  != '' ){
                                   system.debug('@@@@@@@ '+UserId+'  @############ '+CompanyId+'   %%%%%%%%%% '+registrationEvent.Id);
-                                   UCRoleMsg = RegistrationBAL.insertUCRole(UserId,CompanyId,registrationEvent.Id,'Company Admin');
+                                   UCRoleMsg = RegistrationBAL.insertUCRolewithUtype(UserId,CompanyId,registrationEvent.Id,'Company Admin','Personal');
                                } 
                              }                                      
                            }
@@ -1901,6 +1913,7 @@ public void toalDiscountAfterallApp(){
         List<ticket__c> tlistUpdate = new List<Ticket__c>();
         for(ticket__c tr :tickesListForupdate){
            system.debug('QQQQQQQQQQQQQ QQQQQQQ'+tr);
+           tr.Ticket_Status__c='Booked';
         }
         tlistUpdate.addAll(tickesListForupdate);
         dataBase.update(tlistUpdate,false); 
@@ -2121,7 +2134,7 @@ public void toalDiscountAfterallApp(){
    }
    
     public string checkCompany(string cname,string uEmail){
-              LIST<UC_Role__c> UCRoleList = [SELECT id,Company__c,Company__r.id FROM UC_Role__c WHERE GN_User__r.Email__c =:uEmail and Company__r.Name=:cname];
+              LIST<UC_Role__c> UCRoleList = [SELECT id,Company__c,Company__r.id FROM UC_Role__c WHERE GN_User__r.Email__c =:uEmail and Company__r.Name=:cname and RoleId__r.Name='Company Name'];
               system.debug('PPPPPPPPPPPPPp '+UCRoleList +'PPPPPPPPPPPP '+cname+'PPPPPPPPPPP '+uEmail );
               if(UCRoleList.size()>0){
                 return UCRoleList[0].Company__r.id;

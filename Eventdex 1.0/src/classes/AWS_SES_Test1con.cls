@@ -812,7 +812,7 @@ global without sharing class AWS_SES_Test1con {
    
    GNUSERS = new LIST<GN_User__c>();
    emailids = new LIST<String>();
-   /*string  editcamid = Apexpages.Currentpage().getparameters().get('editcamid');
+   string  editcamid = Apexpages.Currentpage().getparameters().get('editcamid');
    string  selectedeventid  = Apexpages.Currentpage().getparameters().get('eventid');
    //geteventdetails();
    system.debug('::::::::::::::::editcamid::::::::::::::::;'+editcamid);
@@ -842,14 +842,11 @@ global without sharing class AWS_SES_Test1con {
       }
       system.debug('emailids.size()-111------'+emailids.size());
       if(emailids.size() != 0){      
-          system.debug('emailids.size()---222----'+emailids.size());
-          AWS_EmailBatchCallouts ebc = new AWS_EmailBatchCallouts();
-          ebc.fetchEmails(emailids);
-          database.executeBatch(ebc,10);
+          
       
       
       
-    GNUSERS = [SELECT id,Email__c,First_Name__c,Last_Name__c,Company_Name__c FROM GN_User__c WHERE id IN :emailids ];
+    /*GNUSERS = [SELECT id,Email__c,First_Name__c,Last_Name__c,Company_Name__c FROM GN_User__c WHERE id IN :emailids ];
       system.debug('::::::::::::EMAIL IDS :::::::::::;;;'+emailids);
       
       //SENDING MAIL
@@ -890,8 +887,12 @@ global without sharing class AWS_SES_Test1con {
             emails.add(email);
       
        }
+       system.debug('emails list to batch apex'+emails);
+       AWS_EmailBatchCallouts ebc = new AWS_EmailBatchCallouts();
+       ebc.fetchEmails(emails);
+       database.executeBatch(ebc,100);*/
        
-    Messaging.SendEmailResult[] r = Messaging.sendEmail(emails);
+    /*Messaging.SendEmailResult[] r = Messaging.sendEmail(emails);
     system.debug('::::::::::::::;;EMAIL RESULT:::::::::;'+r);
     boolean check = true;
          for (Messaging.SendEmailResult ms: r) {
@@ -899,8 +900,8 @@ global without sharing class AWS_SES_Test1con {
          }
          if (check == true){
              emailalert = true;
-         }  
-     }else{*/
+         }*/
+     }else{
         /*emailids.add('rajeshc+1@globalnest.com');
 emailids.add('rajeshc+2@globalnest.com');
 emailids.add('rajeshc+3@globalnest.com');
@@ -1086,12 +1087,12 @@ emailids.add('rajeshc@globalnest.com');
 
     
     
-          system.debug('emailids.size()---333----'+emailids.size());
+          //system.debug('emailids.size()---333----'+emailids.size());
           //AWS_EmailBatchCallouts ebc = new AWS_EmailBatchCallouts();
           //ebc.fetchEmails(emailids);
           //database.executeBatch(ebc,100);
      
-     //}
+     }
    }
    public boolean datebool {get ; set ;}
    public boolean daysbool {get ; set ;}

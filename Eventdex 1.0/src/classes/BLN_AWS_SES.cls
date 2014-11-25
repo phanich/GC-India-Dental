@@ -8,7 +8,7 @@ public class BLN_AWS_SES extends BLN_AWS {
                 this.endpoint = endpoint;        
         }
           
-        public void sendEmail(List<String> toAddresses, String fromAddress, String subject, String body)
+        public String sendEmail(List<String> toAddresses, String fromAddress, String subject, String body)
         {        
                 String awsFormattedNow=awsFormattedDate(Datetime.now());
                 
@@ -29,5 +29,6 @@ public class BLN_AWS_SES extends BLN_AWS {
                 
                 HttpResponse response = http.send(httpReq);
                 System.debug(response.getBody());
+                return response.getBody();
         }        
 }

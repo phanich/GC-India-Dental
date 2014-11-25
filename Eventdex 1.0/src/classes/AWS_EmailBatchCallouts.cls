@@ -1,19 +1,32 @@
-global class AWS_EmailBatchCallouts implements Database.Batchable<Messaging.SingleEmailMessage>, Database.AllowsCallouts{
-
+global class AWS_EmailBatchCallouts implements Database.Batchable<String>, Database.AllowsCallouts{
+//Messaging.SingleEmailMessage
     //global GN_User__c[] UsersToSendEmails;
-    global LIST<Messaging.SingleEmailMessage> Ueids;
+    global LIST<String> Ueids;
+    //global LIST<String> emailbatch = new LIST<String>();
 
-    global void fetchEmails(LIST<Messaging.SingleEmailMessage> setOfatts){   
+    global void fetchEmails(LIST<String> setOfatts){   
         //UsersToSendEmails = [SELECT ID, Name, First_Name__c, Last_Name__c, Email__c, Company_Name__c FROM GN_User__c WHERE ID IN: setOfatts]; 
         Ueids = setOfatts;
+        system.debug('Ueids in BatchCallout======'+Ueids );
+        
+       /* for(Messaging.SingleEmailMessage es: Ueids ){
+            String se = '';
+            se = es.getToAddresses()+'###'+es.getSubject()+'###'+es.getHtmlBody();
+            system.debug('es.getToAddresses()====='+es.getToAddresses());
+            emailbatch.add(se);
+        }
+        system.debug('emailbatch================'+emailbatch);*/
+        
     }
     
-    global Iterable<Messaging.SingleEmailMessage> start(database.batchablecontext BC){
+    global List<String> start(database.batchablecontext BC){
         //return (UsersToSendEmails); 
+        system.debug('Ueids in  BatchCallout======'+Ueids );
         return (Ueids); 
     }
     
-    global void execute(Database.BatchableContext BC, List<Messaging.SingleEmailMessage> scope){
+    global void execute(Database.BatchableContext BC, List<String> scope){
+    system.debug('scope============'+scope);
         try{ 
                         
             BLN_AWSKeys awsKey = BLN_AWSKeys.getInstance('AES Credentials');
@@ -28,17 +41,18 @@ global class AWS_EmailBatchCallouts implements Database.Batchable<Messaging.Sing
             String ReplacedSubject;
             String sender;
             sender = 'rajeshc@globalnest.com';
-            for(Messaging.SingleEmailMessage use : scope){
+            for(String use : scope){ 
+            
+            String[] SliptStrng = use.split('###');
+            //system.debug('use.getToAddresses()====='+use.getToAddresses());          
                 
-                
-                
-                LIST<String> emailist = new LIST<String>();
-                //emailist.add()
                 LIST<String> rlist = new LIST<String>();
-                rlist.addAll(use.getToAddresses());
-                ReplacedHtml = use.getHtmlBody();                
-                ReplacedSubject = use.getSubject();
+                rlist.add(SliptStrng[0]);
+               
+                 ReplacedSubject = SliptStrng[1];               
+                 ReplacedHtml = SliptStrng[2];
                 sesEmail.sendEmail(rlist,sender,ReplacedSubject,ReplacedHtml);
+                //asr.add();
             }
         } 
         catch(Exception ex){

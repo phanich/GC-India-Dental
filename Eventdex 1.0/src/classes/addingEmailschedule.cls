@@ -25,13 +25,14 @@ global class addingEmailschedule implements Schedulable {
        ticmap.put(tic.Item_Pool__c,tic);
        ticmapofevent.put(tic.Client_GN_User__c,tic);
        } 
-   GNUSERS = [SELECT id,Email__c,First_Name__c FROM GN_User__c];    
+   GNUSERS = [SELECT id,Email__c,First_Name__c,Last_Name__c,Company_Name__c FROM GN_User__c];    
    MAP<id,GN_User__c>  GNUSERSMAP = new MAP<id,GN_User__c>();
          for(GN_User__c GN : GNUSERS ){
                GNUSERSMAP.put(GN.id,GN);
            } 
        
        List <Messaging.SingleEmailMessage> emails = new List <Messaging.SingleEmailMessage> ();
+       LIST<String> emailbatch = new LIST<String>();
        SET<Ticket__c> ticset = new SET<Ticket__c> ();
        for(EmailCampaign__c Ecamp : Emailcampaign){
        Emailtemplate Emtemp = new Emailtemplate ();
@@ -62,6 +63,7 @@ global class addingEmailschedule implements Schedulable {
                     system.debug('eeeeeeeeeetem:::::;;'+toaddress);
                     email.setOrgWideEmailAddressId(owea.get(0).Id);
                     email.setToAddresses(toaddress);
+                    
                     String subject = Emtemp.Subject;
                     String ReplaceContactName   = Emtemp.HtmlValue;
                     Ticket__c TT = ticmapofevent.get(GN.id);
@@ -95,20 +97,27 @@ global class addingEmailschedule implements Schedulable {
                     email.setSubject(subject);
                     email.setHtmlBody(ReplaceContactName );
                     emails.add(email);
-      
+                    
+                    String se = '';
+                    se = GN.Email__c+'###'+subject+'###'+ReplaceContactName;
+                    emailbatch.add(se);
                }      
            }
        }
+         system.debug('emails====='+emails);          
+       AWS_EmailBatchCallouts ebc = new AWS_EmailBatchCallouts();
+       ebc.fetchEmails(emailbatch);
+       database.executeBatch(ebc,100);
    
-    Messaging.SendEmailResult[] r = Messaging.sendEmail(emails,false);
-    system.debug('rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr'+r); 
+    //Messaging.SendEmailResult[] r = Messaging.sendEmail(emails,false);
+    /*system.debug('rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr'+r); 
     Map<Id,Messaging.SendEmailResult> targetToResultMap = new Map<Id,Messaging.SendEmailResult>();
     integer i=0;
     for(Messaging.SendEmailResult sendEmailResult: r){
     targetToResultMap.put(emails.get(i).getTargetObjectId(),sendEmailResult);    
     i++;
     }
-    system.debug('ddddddddddddddddddddddddddddd'+targetToResultMap);
+    system.debug('ddddddddddddddddddddddddddddd'+targetToResultMap);*/
    }
    
    }

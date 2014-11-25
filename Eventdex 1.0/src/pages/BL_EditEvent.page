@@ -381,10 +381,26 @@ document.getElementById("enlocsuccess").style.display="none";
                             }
                       }catch(e){alert(e);}
                      
-      
-         if (document.getElementById("eventname").value !=  "" && document.getElementById("eventsdate").value !="__/__/____ __:__" && document.getElementById("eventedate").value !=   "__/__/____ __:__"&&document.getElementById("eventlocation").value !=""&&startTime<=endTime){
-          /* alert("success");*/
-           //saveEvent(step2);
+          var days = ((endTime-startTime)/ 86400000 );
+          if(days>10){
+          alert("Please call Eventdex Support if your event is longer than 10 days");
+          document.getElementById("eventedate").style.border="2px solid #d43535";
+            document.getElementById("endp1error").style.display="";
+            document.getElementById("endp1success").style.display="none";
+            }
+             var datetimes =new Date(new Date().today()+" " + new Date().timeNow());
+             if(startTime<datetimes)
+             {
+          alert("Event cannot be created on past date");
+          
+           document.getElementById("eventsdate").style.border="2px solid #d43535";
+            document.getElementById("endperror").style.display="";
+            document.getElementById("endpsuccess").style.display="none";
+            }
+    
+         if (document.getElementById("eventname").value !=  "" && document.getElementById("eventsdate").value !="__/__/____ __:__" && document.getElementById("eventedate").value !=   "__/__/____ __:__"&&document.getElementById("eventlocation").value !=""&&startTime<=endTime&&days<=10&&startTime>=datetimes){
+          
+          
            document.getElementById("eventloader").style.display="";
            saveEventLogo(contents);
            
@@ -753,6 +769,11 @@ Visualforce.remoting.Manager.invokeAction(
                 if(result.Event_Pay_Gateway__r[b].Pay_Gateway__r.PGateway_Type__r.Name=='Check'){
                 
                 $('input[id="check1"][value="' +result.Event_Pay_Gateway__r[b].Pay_Gateway__r.PGateway_Type__r.Name+ '"]').attr("checked",true);
+                hidethischeck();
+                }
+                if(result.Event_Pay_Gateway__r[b].Pay_Gateway__r.PGateway_Type__r.Name=='Cash'){
+                
+                $('input[id="cash1"][value="' +result.Event_Pay_Gateway__r[b].Pay_Gateway__r.PGateway_Type__r.Name+ '"]').attr("checked",true);
                 hidethischeck();
                 }
                 
@@ -1283,7 +1304,7 @@ var ticketlist=[{poolid:"",tname:"",tpaytype:"",tqty:"",tprice:"",tvisib:"",tdes
    if(paidflag==1)
    {
        
-        if(document.querySelector('input[name="pgopt"]:checked').value=='None'&&document.getElementById('check1').checked==false){
+        if(document.querySelector('input[name="pgopt"]:checked').value=='None'&&document.getElementById('check1').checked==false&&document.getElementById('cash1').checked==false){
         alert('Please Choose a Payment Gateway/Select Cheque Option  For Paid Tickets');
         document.getElementById("ticketloader").style.display="none";
         return;}
@@ -1345,7 +1366,7 @@ var ticketlist=[{poolid:"",tname:"",tpaytype:"",tqty:"",tprice:"",tvisib:"",tdes
            paygateway.secondparam=document.getElementById('authkey').value;
         }
         
-        if(document.getElementById('check1').checked)
+        if(document.getElementById('check1').checked||document.getElementById('cash1').checked)
         {
             
             Visualforce.remoting.Manager.invokeAction(
@@ -1374,6 +1395,7 @@ var ticketlist=[{poolid:"",tname:"",tpaytype:"",tqty:"",tprice:"",tvisib:"",tdes
             eventmand.EventID,
             document.getElementById('eventpageedit:searchform:searchValue').value,
             document.getElementById('check1').checked,
+            document.getElementById('cash1').checked,
             document.querySelector('input[name="tckopt"]:checked').value,
             document.querySelector('input[name="feeopt"]:checked').value,
             function(result, event){
@@ -3209,8 +3231,8 @@ $(".dynamic3 tbody").append(appendTxt);
                             
                             
                             
-function lrrow(chkid,eventpriceid,ittypenumber,id){
-if (document.getElementById(chkid).checked==true){
+function lrrow(eventpriceid,ittypenumber,id){
+
 Visualforce.remoting.Manager.invokeAction(
             '{!$RemoteAction.BLN_EventsEditCon.getTickets}',
             ittypenumber,
@@ -3239,23 +3261,8 @@ Visualforce.remoting.Manager.invokeAction(
             {escape: true}
         );
        
-}
-else
-{
 
- for(var j=0;j<ticketlist.length;j++)
-           {
-           if(ticketlist[j].trowid==$("#"+id).index()+1){
-            ticketlist.splice(j, 1);
-            ticketlist.push({tname:"",tpaytype:"",tqty:"",tprice:"",tvisib:"",tdesc:"",tcketlogo:"",tbdglabel:"",trowid:"",grouptickets:[],ticketcount:"",tags:[],subpackagegroup:[],ispackage:"",itemtype:""});
-            }
-           
-           }
-               
 
-  $("#"+id).remove();
-  //$("#"+id).attr("id",""); 
-}
 
 
 
@@ -4138,13 +4145,14 @@ row.cells[3].children[0].disabled=false;
               </div><!--close of createpackagebutton-->
                 <!----------------------------------------->
               <div id="boothleadsprodcontents" style="display:none; margin-bottom:10px;">
-              <table width="75%" border="0" >
+              <table  border="0" >
   <tr style=" background-color:#EFEFEF;">
   <apex:variable var="i" value="{!1}"/>
   <apex:repeat value="{!eventSelectOptions}" var="eveOpt">
-    <td width="2%"><input type="checkbox" id="chk{!i}" onClick="lrrow(this.id,'{!eveOpt.eventOptionItemType.Id}','{!eveOpt.eventOptionItemType.Item_type__r.Item_Type_Number__c}','{!eveOpt.eventOptionItemType.Item_type__r.Id}')" /></td>
-      <td width="3%"><span><img src="/servlet/servlet.ImageServer?id={!eveOpt.eventOptionItemType.Item_type__r.Event_Options_Image_URL__c}&oid={!$Organization.Id}"/></span></td>
-    <td  width="15%"><h1 style="color: #55585d; font-size:16px; "> {!eveOpt.eventOptionItemType.Item_type__r.Event_Option_Desc__c}</h1></td>
+
+      <td><button onClick="lrrow('{!eveOpt.eventOptionItemType.Id}','{!eveOpt.eventOptionItemType.Item_type__r.Item_Type_Number__c}','{!eveOpt.eventOptionItemType.Item_type__r.Id}')" style="background:url('/servlet/servlet.ImageServer?id={!eveOpt.eventOptionItemType.Item_type__r.Event_Options_Image_URL__c}&oid={!$Organization.Id}') no-repeat left top;padding-left: 16px;width:200px;height:31px;">Add {!eveOpt.eventOptionItemType.Item_type__r.Event_Option_Desc__c}</button></td>
+   
+    
         <apex:variable var="i" value="{!i+1}"/>
   </apex:repeat>
     
@@ -4294,7 +4302,7 @@ document.getElementById('check1').onchange = function() {
 
 var companyextid='';
 function hidethischeck() {
-    if(document.getElementById('check1').checked){
+    if(document.getElementById('check1').checked||document.getElementById('cash1').checked){
         document.getElementById('paycheck').style.display = 'block'; 
         
         //Load the Event data
@@ -4428,8 +4436,12 @@ var packagelogourl='';
                     <div  style=" margin-top:30px; margin-left:1%;">
                      
                       
-                   <label for="check1" style="font-size:16px; color:#4f91cd; font-family:Cuprum; margin-right:1%">Pay By Check</Label>
-                 <input type="checkbox" onClick="hidethischeck()" id="check1" style="outline:none;" value="Check" />
+                  <input type="checkbox" onClick="hidethischeck()" id="check1" style="outline:none;"  value="Check"/>
+                 <label for="check1" style="font-size:16px; color:#4f91cd; font-family:Cuprum; margin-right:1%">Pay By Check</Label>
+                 
+                 
+                 <input type="checkbox" onClick="hidethischeck()" id="cash1" style="outline:none;"  value="Cash"/>
+                 <label for="cash1" style="font-size:16px; color:#4f91cd; font-family:Cuprum; margin-right:1%">Pay By Cash</Label>
                  
                  <!-- onClick="hidethischeck()"-->
                 </div>
@@ -4443,15 +4455,24 @@ var packagelogourl='';
                  
                  </style>   
                     
-                    <table id="paybycheckfields" width="65%" border="0">
+                    <table id="paybycheckfields" width="90%" border="0">
   <tr>
-    <td width="15.5%" style="text-align:right;">Address 1:</td>
-    <td><input type="text" width="20%" id="chqaddr1"/></td>
-    </tr><tr>
+    <td width="13.5%" style="text-align:right;">Address 1:</td>
+    <td><input type="text" width="80%" id="chqaddr1"/></td>
         <td style="text-align:right;" >Address 2:</td>
-   <td style="text-align:left;"><input type="text" width="20%" id="chqaddr2"/></td>
+   <td style="text-align:left;"><input type="text" width="80%" id="chqaddr2"/></td>
   </tr>
-    <tr>
+
+  <tr>
+    <td style="text-align:right;">City:</td>
+   <td><input type="text" width="80%" id="chqcity"/></td>
+      <td style="text-align:right;">State:</td>
+    <td style="text-align:left;"><select class="selectlist" id="chqstate">
+    
+    </select></td>
+  </tr>
+
+  <tr>
     <td style="text-align:right;">Country:</td>
     <td ><select class="selectlist" id="chqcountry" onchange="getchequestatejs(this.value,'');">
     <apex:repeat value="{!Country}" var="ecc">
@@ -4459,21 +4480,8 @@ var packagelogourl='';
                             </option>
     </apex:repeat>
     </select></td>
-    </tr>
-  <tr>
-      <td style="text-align:right;">State:</td>
-    <td style="text-align:left;"><select class="selectlist" id="chqstate">
-    
-    </select></td>
-  </tr>
- <tr>
-    <td style="text-align:right;">City:</td>
-   <td><input type="text" width="20%" id="chqcity"/></td>
-   </tr>
-  
-    <tr>
     <td style="text-align:right;">Zip</td>
-    <td><input type="text" width="20%" id="chqZip"/></td>
+    <td><input id="chqZip" type="text" width="20%"/></td>
   </tr>
 </table>
 

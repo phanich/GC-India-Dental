@@ -16,11 +16,11 @@
       <!-- --------------------------- SPRY MENU TABS ---------------------------------- -->
         
     <c:myComponent BLN_UtillDisplayLinks="{!myemaildashboards}" id="comid">
-      <apex:stylesheet value="{!URLFOR($Resource.datetimepicker, 'datetimepicker/jquery.datetimepicker.css')}"/>
-<apex:stylesheet value="{!URLFOR($Resource.ScanAttendee_V1, 'AttendeeScan/scanattendee/css/tables.css')}"/>
- 
-   <script type="text/javascript" src="{!URLFOR($Resource.datetimepicker, 'datetimepicker/jquery.datetimepicker.js')}"></script> 
    
+      <apex:stylesheet value="{!URLFOR($Resource.datetimepicker, 'datetimepicker/jquery.datetimepicker.css')}"/>
+      <apex:stylesheet value="{!URLFOR($Resource.ScanAttendee_V1, 'AttendeeScan/scanattendee/css/tables.css')}"/>
+      <script type="text/javascript" src="{!URLFOR($Resource.datetimepicker, 'datetimepicker/jquery.datetimepicker.js')}"></script> 
+    
     <body id="body1">
   
 
@@ -215,7 +215,42 @@ box-shadow: 0 1px 4px rgba(0,0,0,0.2);}
         </style>
 <!-----------------------********************************************************-------------------------------------------------------------->
 <!---popups-- for edit--------------------->
+ <!----------------SCript for customizetemplate popup---------------->
+    <script>
+$(window).load(function(){
 
+$(function() {
+
+$('#customsave').click(function() {
+
+alert('::::::::::custom popup:::::::::;;;');
+var name = $('input[name="nw-customizetemp"]').val()
+if(name !==''){
+alert("notnull");
+$('#customizetempbox').append('<table class="results" style="width:100%;text-align:left;">'
++'<tr>'
++'<td style="width:1%;padding-left:25px;">'+'<input type="radio" name="temp" checked/>'+'</td>'
++'<td>'+name+'</td>'
+
++'</tr>'
++ '</table>');
+
+$('#savecustomtemp').val(''); //clearing textbox value
+Alert6.Cancel();
+appendtext1();
+}
+
+
+})
+
+})
+
+
+})
+</script>
+    
+    
+    <!------------------------------------------------------------------>
 
 
 <!---------------------************************------------------------------->
@@ -1229,7 +1264,22 @@ $(document).ready(function(){
    </apex:repeat>
 
 </table>
+<!----------------------------------CUSTOMIIZE TEMPLATES FOR ADDING NEW NAME FROM TEMPLATE NAME POPUP-------->
+<div id="customizetempbox">
 
+<table class="results" style="width:100%;text-align:left;">
+<tbody><tr><td style="width:1%;padding-left:25px;">
+<input type="radio" name="temp" id="chkradio"/>
+</td><td id="tempnamenew">
+
+
+</td></tr>
+</tbody>
+</table>
+</div>
+
+
+<!--------------------------------------------------------------------------------------------------------------->
    </div><!--close of insidelefttemp-->
    
    
@@ -1271,7 +1321,7 @@ $(document).ready(function(){
 <div style=" height:auto;background-color:#EFEFEF; padding-bottom:3px;padding-top: 3px;margin-left: 1%;">
 <table>
 <tr>
-<td width="3%" style="color: #247dba;text-shadow: 0 1px 1px rgba(0,0,0,.25);font-size: 14px;">Select Field:</td>
+<td width="3%" style="color: #247dba;text-shadow: 0 1px 1px rgba(0,0,0,.25);font-size: 14px;">Insert Field:</td>
  <td width="10%"><select class="selectlist" id="selfield" onChange="forfields()" style="width:90%">
                   <option value="fname">First Name</option>
                   <option value="lname">last Name</option>
@@ -1692,11 +1742,18 @@ function saveastemplate(){
     document.getElementById("emailbody-wrapper").style.display="";
      document.getElementById("email-edit").style.display="none"; 
      tempname = document.getElementById("savecustomtemptxt").value;
+     
      //document.getElementById("newname").value = tempname;
      //document.getElementById('{!$Component.pageid.comid.commoncomponent.form1id.newname}').value = tempname ; 
            alert(tempname );
+        if(tempname != null && tempname != '')  {
+        alert(document.getElementById('tempnamenew'));
+        
+        document.getElementById('tempnamenew').innerHTML= tempname;
+        document.getElementById('chkradio').checked = true;
+ 
+        } 
                 return false;
-    
     }
 
 

@@ -13,6 +13,7 @@ Cookie k = ApexPages.currentPage().getCookies().get('counter');
 if(k!=null){
 event= k.getValue();
 }
+
 myticket = new BLN_UtillDisplayLinks();
 
 BLN_PromoCode_BAL blneventdetailbal = New BLN_PromoCode_BAL();
@@ -280,7 +281,8 @@ public List<Ticket__c> selectedTickets{get;set;}
         public  BLN_Quick_Registration_Con ()
         {
          
-          event= Apexpages.currentPage().getParameters().get('id');
+          //event= Apexpages.currentPage().getParameters().get('id');
+          event='a0sc00000030kAi';
           //displayPermissions(); 
           eventdetails =quickbal.getEventDetails(event);  
           

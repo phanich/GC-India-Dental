@@ -152,6 +152,30 @@ public BLN_StatusMessage insertUCRole(String userId,String comId,String eventId,
         return ucRoleMsg;           
 }
 
+
+//Inserting UCRole
+public BLN_StatusMessage insertUCRolewithUtype(String userId,String comId,String eventId,String role,string utype){
+        BLN_UCRole_DAO companyRole = new BLN_UCRole_DAO();    
+        system.debug('UserID in BAL:'+userId+' CompanyID in BAL:'+comId);
+        UC_Role__c uRole = new UC_Role__c();
+        uRole.Company__c = comId; 
+        uRole.GN_User__c =userId;
+        uRole.Event__c=eventId;
+        uRole.user_type__c =utype;
+        
+        BLN_User_DAO UserDAO = new BLN_User_DAO();
+        GN_User__c GU = UserDAO.getGNUser(UserId);
+        uRole.User__c = GU.User__c;
+        
+        BLN_StatusMessage ucRoleMsg = companyRole.insertUCRole(uRole, role);
+        system.debug('Inserted UC Role Id in BAL:'+ucRoleMsg);
+        return ucRoleMsg;           
+}
+
+
+
+
+
 //update ticket with Order and OrderItem
 public BLN_StatusMessage updateTicket(String userid,String comId,List<String> ticketIds,String eventId,Integer totamount)
 {
@@ -452,6 +476,8 @@ public BLN_StatusMessage updateTicket(String userid,String comId,List<String> ti
             else{
                 //Update Individual Ticket
                 system.debug('Ticket Details are : '+TicketsList[0]);  
+                TicketsList[0].Ticket_Status__c='Booked';
+                
                 TicketsList[0].Client_GN_User__c= UserIds[i];
                  try{
                   TicketsList[0].Client_Company__c = CompanyIds[i]; 
@@ -462,7 +488,7 @@ public BLN_StatusMessage updateTicket(String userid,String comId,List<String> ti
                 }else{
                     TicketsList[0].Order_Item__c = insertedOrderItem.Id;
                 }
-                TicketsList[0].Ticket_Status__c='Booked';
+                
                 TicketUpdateMessage = TicketDAO.updateTicket(TicketsList[0]);
                 system.debug('Updated Ticket Response: '+TicketUpdateMessage);  
             }

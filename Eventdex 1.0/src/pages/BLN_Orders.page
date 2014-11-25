@@ -750,11 +750,10 @@ border: 1px solid #CCC;
             <tr>
             <th width="16%" style="padding:3px 0px 3px 2px;" >
             <apex:inputField value="{!gnUser.First_Name__c}" /></th>
-            <th width="16%" style="padding:3px 0px 3px 2px;" ><apex:inputField value="{!gnUser.Last_Name__c}"/></th>
-            <th width="25%" style="padding:3px 0px 3px 2px;" ><apex:inputField value="{!gnUser.Email__c}"/></th>
-            <th width="25%" style="padding:3px 0px 3px 2px;" ><apex:inputtext value="{!companyName }"/></th>
-            
-             </tr>
+                <th width="16%" style="padding:3px 0px 3px 2px;" ><apex:inputField value="{!gnUser.Last_Name__c}"/></th>
+                <th width="25%" style="padding:3px 0px 3px 2px;" ><apex:inputField value="{!gnUser.Email__c}"/></th>
+                <th width="25%" style="padding:3px 0px 3px 2px;" ><apex:inputtext value="{!companyName}"/></th>
+                 </tr>
             </table>
               
             <div style="float:right;margin-right:2%;">
