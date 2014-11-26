@@ -72,7 +72,9 @@
 
         }
         
- .custPopup2{color:#000000;position: fixed;top:40px;left:0px;right:0px;z-index: 1001;width:90%;
+ .custPopup2{
+ color:#000000;position: absolute;
+ top:-100px;left:0px;right:0px;z-index: 1001;width:90%;
           padding:10px;height: auto; margin:0 auto;-moz-border-radius-bottomleft:6px; -webkit-border-bottom-left-radius:6px; 
           -moz-border-radius-bottomright:6px; -webkit-border-bottom-right-radius:6px; border-radius:0 0 6px 6px; 
           font: 12px/24px "Lucida Grande",Arial,sans-serif;
@@ -82,8 +84,7 @@
         }
         
         
-        .popupBackground2{
-        
+    .popupBackground2{
         position:fixed;
         top:0px; 
         left:0px;
@@ -450,15 +451,9 @@ border: 1px solid #CCC;
     
    </apex:form>
              
-          <apex:form id="frm2">
-          
-        
-          
-          
-           <apex:outputPanel styleClass="popupBackground" layout="block" rendered="{!orddetailbool}" id="Popup3"/>
-      
-           
-            <apex:outputPanel styleClass="custPopup" layout="block" rendered="{!orddetailbool}"  id="guestForm">
+       <apex:form id="frm2">
+        <apex:outputPanel styleClass="popupBackground" layout="block" rendered="{!orddetailbool}" id="Popup3"/>
+          <apex:outputPanel styleClass="custPopup" layout="block" rendered="{!orddetailbool}"  id="guestForm">
             <div id="divid" style="height: 600px;overflow: auto;">
             <div style="float:right;right:-2px;color:#FFF;background-color:#FFF;">
               <apex:commandButton action="{!cancelOrdDetail}" value="Close" id="close" image="{!$Resource.PopUpClose}" title="Close" style="width:26px;height:26px; color:#FFF;font-size:16; font-weight:bold;" reRender="frm2"  immediate="true"/>
@@ -637,7 +632,7 @@ border: 1px solid #CCC;
         
         
         </td>
-        <td>{!cust.First_Name__c}  {!cust.Client_GN_User__r.Last_Name__c}</td>
+        <td>{!cust.First_Name__c}  {!cust.Last_Name__c}</td>
         <td>{!cust.Email__c}</td>
         <td>{!cust.Client_GN_User__r.user__r.MobilePhone}</td>
         <td>
@@ -691,11 +686,11 @@ border: 1px solid #CCC;
       <tr id="order_details_tr_cancel">
         <td>{!custcan.Name}</td>
         <td>{!custcan.item__r.item_name__c}</td>
-        <td>{!custcan.Client_GN_User__r.First_Name__c}  {!custcan.Client_GN_User__r.Last_Name__c}</td>
-        <td>{!custcan.Client_GN_User__r.Email__c}</td>
+        <td>{!custcan.First_Name__c}  {!custcan.Client_GN_User__r.Last_Name__c}</td>
+        <td>{!custcan.Email__c}</td>
         <td>{!custcan.Client_GN_User__r.user__r.MobilePhone}</td>
         <td>
-            <apex:outputText value="{!IF(custcan.Client_Company__r.isPersonAccount__c == TRUE,'', custcan.Client_Company__r.Name)}"/>
+           {!custcan.Company__c}
         </td>
         <td>{!custcan.Badge_Label__c} </td>
          <td>${!custcan.Order_Item__r.Each_Ticket_Price__c}</td>
@@ -724,6 +719,18 @@ border: 1px solid #CCC;
        <apex:commandButton action="{!CloseGuests}" value="Close" title="Close" style="width:26px;height:26px; color:#000000;font-size:16; font-weight:bold;" rendered="secfrm" immediate="true"/>
         </div>
         
+        
+         <div id="timer" style="border" class="countdown_timer_notification">
+                    <center>
+                        <table id="tablew"  border="0" style="width:100%">
+                        <tr>
+                            <td style="width:100%">
+                             <apex:pageMessages ></apex:pageMessages>
+                          </td>
+                        </tr></table></center>
+               </div> 
+        
+        
      <div style="height:280px;">
       <div>
         <div class="grid-1" style="text-align:left">
@@ -731,7 +738,7 @@ border: 1px solid #CCC;
         <div class="content-gird">
         <div class="form" style="margin-top:5px;">
         
-        <apex:outputPanel id="guest">
+      <!--  <apex:outputPanel id="guest">
             <table class="display dynatable" width="100%">
             <tr>
            
@@ -742,19 +749,378 @@ border: 1px solid #CCC;
            
              </tr>
             </table>
-            </apex:outputPanel>
+            </apex:outputPanel> -->
             
-           <apex:outputPanel id="addPanel">
+            
+                                  <apex:outputPanel id="addPanel">
               
-               <table class="display dynatable" width="100%">
-            <tr>
-            <th width="16%" style="padding:3px 0px 3px 2px;" >
-            <apex:inputField value="{!gnUser.First_Name__c}" /></th>
-                <th width="16%" style="padding:3px 0px 3px 2px;" ><apex:inputField value="{!gnUser.Last_Name__c}"/></th>
-                <th width="25%" style="padding:3px 0px 3px 2px;" ><apex:inputField value="{!gnUser.Email__c}"/></th>
-                <th width="25%" style="padding:3px 0px 3px 2px;" ><apex:inputtext value="{!companyName}"/></th>
-                 </tr>
-            </table>
+                                        <apex:outputPanel >
+                                            <div id="ticketstable-subheader1" style="width:100%; height:30px;margin-top:10px; text-indent:10px; text-align:left;">
+                                                 <apex:outputText value="Basic Information" style="padding-top:5px; text-align:left;"/>
+                                            </div>
+                                        </apex:outputPanel> 
+                                        
+                                        
+                                            <table id="field box" class="fields" width="80%" border="0" style="margin:0px auto; border-collapse:collapse;border: 0px Solid Red;" cellpadding="10">
+                
+                                               <tr>
+                                                    <td width="38%" style=" text-align:right;  font-size:13px; font-family:Arial, Helvetica, sans-serif;">
+                                                     Prefix:   
+                                                    </td>
+                                                    <td><apex:inputField id="Prefix" value="{!gnUser.Prefix__c}" styleClass="PrefixTicket " style="width:100%"/></td>
+                                                </tr> 
+                                                    <tr>
+                                                    <td width="38%" style=" text-align:right;  font-size:13px; font-family:Arial, Helvetica, sans-serif;">
+                                                        First Name:<span id="mandatory">*</span> </td>
+                                                    <td><apex:inputField id="FirstName" value="{!addGuest.First_Name__c}" onchange="setCookie('apex__firstname', this.value, 3);" styleClass="FirstNameTicket "/></td>
+                                                </tr>
+                                                <tr>
+                                                    <td width="38%" style=" text-align:right;  font-size:13px; font-family:Arial, Helvetica, sans-serif;"> Last Name:<span id="mandatory">*</span>
+                                                       </td>
+                                                    <td><apex:inputField id="LastName" value="{!addGuest.Last_Name__c}" onchange="setCookie('apex__lastname', this.value, 3);" styleClass="LastNameTicket "/></td>
+                                                </tr>
+                                                  <tr>
+                                                    <td width="38%" style=" text-align:right;  font-size:13px; font-family:Arial, Helvetica, sans-serif;">
+                                                       Email: <span id="mandatory">*</span>
+                                                       </td>
+                                                    <td><apex:inputField id="Email" value="{!addGuest.Email__c}" onchange="setCookie('apex__emailaddress', this.value, 3);" styleClass="EmailTicket "/></td>
+                                                </tr>
+                                              </table>
+
+                                   <apex:repeat value="{!settingsForbuyer}" var="rs">
+                                       <table id="field box" class="fields" width="80%" border="0" style="margin:0px auto; border-collapse:collapse;border: 0px Solid Red;" cellpadding="10">
+                                          
+                                             <apex:outputPanel rendered="{!IF(rs.Table_Name__c == 'GN_User__c' && rs.Column_Name__c == 'Suffix__c' && rs.Included__c == TRUE, TRUE , FALSE)}">
+                                                <tr>
+                                                    <td width="38%" style=" text-align:right;  font-size:13px; font-family:Arial, Helvetica, sans-serif;">{!rs.Label_Name__c}:
+                                                        <apex:outputText rendered="{!IF(rs.Table_Name__c == 'GN_User__c' && rs.Column_Name__c == 'Suffix__c' && rs.Required__c == TRUE, TRUE , FALSE)}"><span id="mandatory">*</span></apex:outputText>
+                                                    </td>
+                                                    <td><apex:inputField id="Suffix"  value="{!gnUser.Suffix__c}" styleClass="SuffixTicket " style="width:100%"/></td>
+                                                </tr>
+                                            </apex:outputPanel>  
+                                             
+                                            <apex:outputPanel rendered="{!IF(rs.Table_Name__c == 'GN_User__c' && rs.Column_Name__c == 'Phone__c' && rs.Included__c == TRUE, TRUE , FALSE)}">
+                                                <tr>
+                                                    <td width="38%" style=" text-align:right;  font-size:13px; font-family:Arial, Helvetica, sans-serif;">{!rs.Label_Name__c}:
+                                                        <apex:outputText rendered="{!IF(rs.Table_Name__c == 'GN_User__c' && rs.Column_Name__c == 'Phone__c' && rs.Required__c == TRUE, TRUE , FALSE)}"><span id="mandatory">*</span></apex:outputText>
+                                                    </td>
+                                                    <td><apex:inputField id="Phone" value="{!gnUser.Mobile__c}" onchange="setCookie('apex__phone', this.value, 3);"  styleClass="PhoneTicket "/></td>
+                                                </tr>
+                                            </apex:outputPanel>   
+                                            <apex:outputPanel rendered="{!IF(rs.Table_Name__c == 'Company__c' && rs.Column_Name__c == 'Name' && rs.Included__c == TRUE, TRUE , FALSE)}"> 
+                                         
+                                                <tr>
+                                                    <td width="38%" style=" text-align:right;  font-size:13px; font-family:Arial, Helvetica, sans-serif;">{!rs.Label_Name__c}:
+                                                        <apex:outputText rendered="{!IF(rs.Table_Name__c == 'Company__c' && rs.Column_Name__c == 'Name' && rs.Required__c == TRUE, TRUE , FALSE)}"><span id="mandatory">*</span></apex:outputText>
+                                                    </td>
+                                                    <td><apex:inputField id="Company" value="{!addGuest.Company__c}" onchange="setCookie('apex__company', this.value, 3);" styleClass="CompanyTicket "/></td>
+                                                </tr>
+                                            </apex:outputPanel>
+                                            <apex:outputPanel rendered="{!IF(rs.Table_Name__c == 'GN_User__c' && rs.Column_Name__c == 'Title__c' && rs.Included__c == TRUE, TRUE , FALSE)}">
+                                                <tr>
+                                                    <td width="38%" style=" text-align:right;  font-size:13px; font-family:Arial, Helvetica, sans-serif;">{!rs.Label_Name__c}:
+                                                        <apex:outputText rendered="{!IF(rs.Table_Name__c == 'GN_User__c' && rs.Column_Name__c == 'Title__c' && rs.Required__c == TRUE, TRUE , FALSE)}"><span id="mandatory">*</span></apex:outputText>
+                                                    </td>
+                                                    <td><apex:inputField id="Title" value="{!gnUser.Title__c}" required="{!IF(rs.Table_Name__c == 'GN_User__c' && rs.Column_Name__c == 'Title__c' && rs.Required__c == TRUE, TRUE , FALSE)}"  styleClass="TitleTicket "/></td>
+                                                </tr>
+                                            </apex:outputPanel>   
+                                            <apex:outputPanel rendered="{!IF(rs.Table_Name__c == 'GN_User__c' && rs.Column_Name__c == 'Age__c' && rs.Included__c == TRUE, TRUE , FALSE)}">
+                                                <tr>
+                                                    <td width="38%" style=" text-align:right;  font-size:13px; font-family:Arial, Helvetica, sans-serif;">{!rs.Label_Name__c}:
+                                                        <apex:outputText rendered="{!IF(rs.Table_Name__c == 'GN_User__c' && rs.Column_Name__c == 'Age__c' && rs.Required__c == TRUE, TRUE , FALSE)}"><span id="mandatory">*</span></apex:outputText>
+                                                    </td>
+                                                    <td><apex:inputText id="Age" value="{!gnUser.Age__c}" styleClass="AgeTicket "/></td>
+                                                </tr>
+                                            </apex:outputPanel>  
+                                            <apex:outputPanel rendered="{!IF(rs.Table_Name__c == 'GN_User__c' && rs.Column_Name__c == 'DOB__c' && rs.Included__c == TRUE, TRUE , FALSE)}">
+                                                <tr>
+                                                    <td width="38%" style=" text-align:right;  font-size:13px; font-family:Arial, Helvetica, sans-serif;">{!rs.Label_Name__c}:
+                                                        <apex:outputText rendered="{!IF(rs.Table_Name__c == 'GN_User__c' && rs.Column_Name__c == 'DOB__c' && rs.Required__c == TRUE, TRUE , FALSE)}"><span id="mandatory">*</span></apex:outputText>
+                                                    </td>
+                                                    <td><apex:inputText id="DOB" value="{!gnUser.DOB__c}" styleClass="DOBTicket "/></td>
+                                                </tr>
+                                            </apex:outputPanel>     
+                                            <apex:outputPanel rendered="{!IF(rs.Table_Name__c == 'GN_User__c' && rs.Column_Name__c == 'Gender__c' && rs.Included__c == TRUE, TRUE , FALSE)}">
+                                                <tr>
+                                                    <td width="38%" style=" text-align:right;  font-size:13px; font-family:Arial, Helvetica, sans-serif;">{!rs.Label_Name__c}:
+                                                        <apex:outputText rendered="{!IF(rs.Table_Name__c == 'GN_User__c' && rs.Column_Name__c == 'Gender__c' && rs.Required__c == TRUE, TRUE , FALSE)}"><span id="mandatory">*</span></apex:outputText>
+                                                    </td>
+                                                    <td><apex:inputField id="Gender" value="{!gnUser.Gender__c}" styleClass="GenderTicket " style="width:100%"/></td>
+                                                </tr>
+                                            </apex:outputPanel>       
+                                            <apex:outputPanel rendered="{!IF(rs.Table_Name__c == 'Company_Ext__c' && rs.Column_Name__c == 'Work_Phone__c' && rs.Included__c == TRUE, TRUE , FALSE)}">
+                                                <tr>
+                                                    <td width="38%" style=" text-align:right;  font-size:13px; font-family:Arial, Helvetica, sans-serif;">{!rs.Label_Name__c}:
+                                                        <apex:outputText rendered="{!IF(rs.Table_Name__c == 'Company__c' && rs.Column_Name__c == 'Work_Phone__c' && rs.Required__c == TRUE, TRUE , FALSE)}"><span id="mandatory">*</span></apex:outputText>
+                                                    </td>
+                                                    <td><apex:inputField id="WorkPhone" value="{!compext.Work_Phone__c}" styleClass="WorkPhoneTicket "/></td>
+                                                </tr>
+                                            </apex:outputPanel>  
+                                            <apex:outputPanel rendered="{!IF(rs.Table_Name__c == 'GN_User__c' && rs.Column_Name__c == 'Home_Phone__c' && rs.Included__c == TRUE, TRUE , FALSE)}">
+                                                <tr>
+                                                    <td width="38%" style=" text-align:right;  font-size:13px; font-family:Arial, Helvetica, sans-serif;">{!rs.Label_Name__c}:
+                                                        <apex:outputText rendered="{!IF(rs.Table_Name__c == 'GN_User__c' && rs.Column_Name__c == 'Home_Phone__c' && rs.Required__c == TRUE, TRUE , FALSE)}"><span id="mandatory">*</span></apex:outputText>
+                                                    </td>
+                                                    <td><apex:inputText id="HomePhone" value="{!gnUser.Home_Phone__c}" styleClass="HomePhoneTicket "/></td>
+                                                </tr>
+                                            </apex:outputPanel>   
+
+                                        </table>
+                                       <!-------------------------------------------------------------------------------------  Basic Information Group End ---------------------------------------------------------------------------------------->
+                                   
+                                   <!-------------------------------------------------------------------------------------  Address Information Group Start ---------------------------------------------------------------------------------------->
+                                         <apex:outputPanel rendered="{!IF(rs.Group_Name__c == 'Address Information' , TRUE , FALSE)}">
+                                            <div id="ticketstable-subheader1" style="width:100%; height:30px;margin-top:10px; text-indent:10px; text-align:left;">
+                                               <apex:outputText value="{!rs.Column_Name__c}" style="padding-top:5px; text-align:left;"/>
+                                            </div>
+                                        </apex:outputPanel>  
+                                            <table id="field box" class="fields" width="80%" border="0" style="margin:0px auto; border-collapse:collapse;" cellpadding="10">
+
+                                                <apex:outputPanel rendered="{!IF(rs.Table_Name__c == 'User_Ext__c' && rs.Column_Name__c == 'Home Address' && rs.Included__c == TRUE, TRUE , FALSE)}">
+                                                <tr>
+                                                    <td width="38%" style=" text-align:right;  font-size:13px; font-family:Arial, Helvetica, sans-serif;">Home Address1:
+                                                        <apex:outputText rendered="{!IF(rs.Table_Name__c == 'User_Ext__c' && rs.Column_Name__c == 'Home Address' && rs.Required__c == TRUE, TRUE , FALSE)}"><span id="mandatory">*</span></apex:outputText>
+                                                    </td>
+                                                    <td><apex:inputText id="HomeAddress1" value="{!gnUser.Address1__c}" styleClass="HomeAddress1Ticket "/></td>
+                                                </tr>
+                                                <tr>
+                                                    <td width="38%" style=" text-align:right;  font-size:13px; font-family:Arial, Helvetica, sans-serif;">Home Address2:
+                                                        <apex:outputText rendered="{!IF(rs.Table_Name__c == 'User_Ext__c' && rs.Column_Name__c == 'Home Address' && rs.Required__c == TRUE, TRUE , FALSE)}"><span id="mandatory">*</span></apex:outputText>
+                                                    </td>
+                                                    <td><apex:inputText id="HomeAddress2" value="{!gnUser.Address2__c}"  styleClass="HomeAddress2Ticket "/></td>
+                                                </tr>
+                                                 <tr>
+                                                    <td width="38%" style=" text-align:right;  font-size:13px; font-family:Arial, Helvetica, sans-serif;">Home City:
+                                                        <apex:outputText rendered="{!IF(rs.Table_Name__c == 'User_Ext__c' && rs.Column_Name__c == 'Home Address' && rs.Required__c == TRUE, TRUE , FALSE)}"><span id="mandatory">*</span></apex:outputText>
+                                                    </td>
+                                                    <td><apex:inputText id="HomeCity" value="{!gnUser.City__c}" styleClass="HomeCityTicket "/></td>
+                                                </tr>
+                                                <tr>
+                                                    <td width="38%" style=" text-align:right;  font-size:13px; font-family:Arial, Helvetica, sans-serif;">Home Country:
+                                                    
+                                                        <apex:outputText rendered="{!IF(rs.Table_Name__c == 'User_Ext__c' && rs.Column_Name__c == 'Home Address' && rs.Required__c == TRUE, TRUE , FALSE)}"><span id="mandatory">*</span></apex:outputText>
+                                                    </td>
+                                                    <td>                        
+                                                        <apex:selectList id="HomeCountry" value="{!gnUser.Country__c}" multiselect="false" size="1" styleClass="HomeCountryTicket " style="width:100%">
+                                                            <apex:selectOptions value="{!countryOptions}"/>
+                                                                <apex:actionSupport event="onChange" action="{!statesBasedOnCountry}" rerender="HomeStatePanel">
+                                                            </apex:actionSupport> 
+                                                        </apex:selectList>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td width="38%" style=" text-align:right;  font-size:13px; font-family:Arial, Helvetica, sans-serif;">Home State:
+                                                        <apex:outputText rendered="{!IF(rs.Table_Name__c == 'User_Ext__c' && rs.Column_Name__c == 'Home Address' && rs.Required__c == TRUE, TRUE , FALSE)}"><span id="mandatory">*</span></apex:outputText>
+                                                    </td>
+                                                    <td>
+                                                        <apex:outputPanel id="HomeStatePanel">
+                                                            <apex:selectList id="HomeState" value="{!gnUser.State__c}" multiselect="false" size="1" styleClass="HomeStateTicket " style="width:100%">
+                                                                <apex:selectOptions value="{!stateOptions}"></apex:selectOptions>
+                                                            </apex:selectList>
+                                                        </apex:outputPanel>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td width="38%" style=" text-align:right;  font-size:13px; font-family:Arial, Helvetica, sans-serif;">Home Zip Code:
+                                                        <apex:outputText rendered="{!IF(rs.Table_Name__c == 'User_Ext__c' && rs.Column_Name__c == 'Home Address' && rs.Required__c == TRUE, TRUE , FALSE)}"><span id="mandatory">*</span></apex:outputText>
+                                                    </td>
+                                                    <td><apex:inputText id="HomeZip" value="{!gnUser.Zip_Code__c}" styleClass="HomeZipTicket "/></td>
+                                                </tr>   
+                                                
+
+                                                <tr>
+                                                </tr>
+                                                </apex:outputPanel> 
+                                                
+                                                <apex:outputPanel rendered="{!IF(rs.Table_Name__c == 'Company_Ext__c' && rs.Column_Name__c == 'Work Address' && rs.Included__c == TRUE, TRUE , FALSE)}">
+                                                <tr>
+                                                    <td width="38%" style=" text-align:right;  font-size:13px; font-family:Arial, Helvetica, sans-serif;">Work Address1:
+                                                        <apex:outputText rendered="{!IF(rs.Table_Name__c == 'Company_Ext__c' && rs.Column_Name__c == 'Work Address' && rs.Required__c == TRUE, TRUE , FALSE)}"><span id="mandatory">*</span></apex:outputText>
+                                                    </td>
+                                                    <td><apex:inputText id="BusinessAddress1" value="{!compext.Business_Address1__c}" styleClass="BusinessAddress1Ticket "/></td>
+                                                </tr>
+                                                <tr>
+                                                    <td width="38%" style=" text-align:right;  font-size:13px; font-family:Arial, Helvetica, sans-serif;">Work Address2:
+                                                        <apex:outputText rendered="{!IF(rs.Table_Name__c == 'Company_Ext__c' && rs.Column_Name__c == 'Work Address' && rs.Required__c == TRUE, TRUE , FALSE)}"><span id="mandatory">*</span></apex:outputText>
+                                                    </td>
+                                                    <td><apex:inputText id="BusinessAddress2" value="{!compext.Business_Address2__c}" styleClass="BusinessAddress2Ticket "/></td>
+                                                </tr>
+                                                 <tr>
+                                                    <td width="38%" style=" text-align:right;  font-size:13px; font-family:Arial, Helvetica, sans-serif;">Work City:
+                                                        <apex:outputText rendered="{!IF(rs.Table_Name__c == 'Company_Ext__c' && rs.Column_Name__c == 'Work Address' && rs.Required__c == TRUE, TRUE , FALSE)}"><span id="mandatory">*</span></apex:outputText>
+                                                    </td>
+                                                    <td><apex:inputText id="BusinessCity" value="{!compext.Business_City__c}" styleClass="BusinessCityTicket "/></td>
+                                                </tr>
+                                                <tr>
+                                                    <td width="38%" style=" text-align:right;  font-size:13px; font-family:Arial, Helvetica, sans-serif;">Work Country:
+                                                        <apex:outputText rendered="{!IF(rs.Table_Name__c == 'Company_Ext__c' && rs.Column_Name__c == 'Work Address' && rs.Required__c == TRUE, TRUE , FALSE)}"><span id="mandatory">*</span></apex:outputText>
+                                                    </td>
+                                                    <td>
+                                                        <apex:selectList id="BusinessCountry" value="{!compext.BLN_Business_Country__c}" multiselect="false" size="1" styleClass="BusinessCountryTicket " style="width:100%">
+                                                            <apex:selectOptions value="{!countryOptions}"/>
+                                                                <apex:actionSupport event="onChange" action="{!statesBasedOnCountry}" rerender="WorkStatePanel">
+                                                            </apex:actionSupport> 
+                                                        </apex:selectList>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td width="38%" style=" text-align:right;  font-size:13px; font-family:Arial, Helvetica, sans-serif;">Work State:
+                                                        <apex:outputText rendered="{!IF(rs.Table_Name__c == 'Company_Ext__c' && rs.Column_Name__c == 'Work Address' && rs.Required__c == TRUE, TRUE , FALSE)}"><span id="mandatory">*</span></apex:outputText>
+                                                    </td>
+                                                    <td>
+                                                        <apex:outputPanel id="WorkStatePanel">
+                                                            <apex:selectList id="BusinessState"  value="{!compext.BLN_Business_State__c}" multiselect="false" size="1" styleClass="BusinessStateTicket " style="width:100%">
+                                                                <apex:selectOptions value="{!stateOptions}"></apex:selectOptions>
+                                                            </apex:selectList>
+                                                        </apex:outputPanel>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td width="38%" style=" text-align:right;  font-size:13px; font-family:Arial, Helvetica, sans-serif;">Work Zip Code:
+                                                        <apex:outputText rendered="{!IF(rs.Table_Name__c == 'Company_Ext__c' && rs.Column_Name__c == 'Work Address' && rs.Required__c == TRUE, TRUE , FALSE)}"><span id="mandatory">*</span></apex:outputText>
+                                                    </td>
+                                                    <td><apex:inputText id="BusinessZip" value="{!compext.Business_Zipcode__c}" styleClass="BusinessZipTicket "/></td>
+                                                </tr>    
+                                                </apex:outputPanel>   
+                                                </table>    
+                                            <!------------------------------------------------------------------------------------- Business Address Information Group End ---------------------------------------------------------------------------------------->
+                                            
+                                   <!-------------------------------------------------------------------------------------  Work Information Group Start ---------------------------------------------------------------------------------------->
+                                        <apex:outputPanel rendered="{!IF(rs.Group_Name__c == 'Work Information' && rs.Table_Name__c == 'Company_Ext__c' && rs.Column_Name__c == 'Primary_Business_Category__c' , TRUE , FALSE)}">
+                                            <div id="ticketstable-subheader1" style="width:100%; height:30px;margin-top:10px; text-indent:10px; text-align:left;">
+                                                 <apex:outputText value="{!rs.Group_Name__c}" style="padding-top:5px; text-align:left;"/>
+                                            </div>
+                                        </apex:outputPanel>  
+                                            <table id="field box" class="fields" width="80%" border="0" style="margin:0px auto; border-collapse:collapse;" cellpadding="10">
+                                                <apex:outputPanel rendered="{!IF(rs.Table_Name__c == 'Company_Ext__c' && rs.Column_Name__c == 'Primary_Business_Category__c' && rs.Included__c == TRUE, TRUE , FALSE)}">
+                                                <tr>
+                                                    <td width="38%" style=" text-align:right;  font-size:13px; font-family:Arial, Helvetica, sans-serif;">{!rs.Label_Name__c}:
+                                                        <apex:outputText rendered="{!IF(rs.Table_Name__c == 'Company_Ext__c' && rs.Column_Name__c == 'Primary_Business_Category__c' && rs.Required__c == TRUE, TRUE , FALSE)}"><span id="mandatory">*</span></apex:outputText>
+                                                    </td>
+                                                    <td><apex:inputField id="PrimBusCategory" value="{!compext.Primary_Business_Category__c}" styleClass="PrimBusCategoryTicket " style="width:100%"/></td>
+                                                </tr>
+                                                </apex:outputPanel>  
+                                                <apex:outputPanel rendered="{!IF(rs.Table_Name__c == 'Company_Ext__c' && rs.Column_Name__c == 'Secondary_Business_Category__c' && rs.Included__c == TRUE, TRUE , FALSE)}">
+                                                <tr>
+                                                    <td width="38%" style=" text-align:right;  font-size:13px; font-family:Arial, Helvetica, sans-serif;">{!rs.Label_Name__c}:
+                                                        <apex:outputText rendered="{!IF(rs.Table_Name__c == 'Company_Ext__c' && rs.Column_Name__c == 'Secondary_Business_Category__c' && rs.Required__c == TRUE, TRUE , FALSE)}"><span id="mandatory">*</span></apex:outputText>
+                                                    </td>
+                                                    <td><apex:inputField id="SecBusCategory" value="{!compext.Secondary_Business_Category__c}" styleClass="SecBusCategoryTicket " style="width:100%"/></td>
+                                                </tr>
+                                                </apex:outputPanel>  
+                                                <apex:outputPanel rendered="{!IF(rs.Table_Name__c == 'Company_Ext__c' && rs.Column_Name__c == 'Number_Of_Employees__c' && rs.Included__c == TRUE, TRUE , FALSE)}">
+                                                <tr>
+                                                    <td width="38%" style=" text-align:right;  font-size:13px; font-family:Arial, Helvetica, sans-serif;">{!rs.Label_Name__c}:
+                                                        <apex:outputText rendered="{!IF(rs.Table_Name__c == 'Company_Ext__c' && rs.Column_Name__c == 'Number_Of_Employees__c' && rs.Required__c == TRUE, TRUE , FALSE)}"><span id="mandatory">*</span></apex:outputText>
+                                                    </td>
+                                                    <td><apex:inputText id="NoofEmp" value="{!compext.Number_Of_Employees__c}" styleClass="NoofEmpTicket "/></td>
+                                                </tr>
+                                                </apex:outputPanel>  
+                                                <apex:outputPanel rendered="{!IF(rs.Table_Name__c == 'Company_Ext__c' && rs.Column_Name__c == 'Established_Date__c' && rs.Included__c == TRUE, TRUE , FALSE)}">
+                                                <tr>
+                                                    <td width="38%" style=" text-align:right;  font-size:13px; font-family:Arial, Helvetica, sans-serif;">{!rs.Label_Name__c}:
+                                                        <apex:outputText rendered="{!IF(rs.Table_Name__c == 'Company_Ext__c' && rs.Column_Name__c == 'Established_Date__c' && rs.Required__c == TRUE, TRUE , FALSE)}"><span id="mandatory">*</span></apex:outputText>
+                                                    </td>
+                                                    <td><apex:inputText id="EstDate" value="{!compext.Established_Date__c}" styleClass="EstDateTicket "/></td>
+                                                </tr>
+                                                </apex:outputPanel>  
+                                                <apex:outputPanel rendered="{!IF(rs.Table_Name__c == 'Company_Ext__c' && rs.Column_Name__c == 'Revenue__c' && rs.Included__c == TRUE, TRUE , FALSE)}">
+                                                <tr>
+                                                    <td width="38%" style=" text-align:right;  font-size:13px; font-family:Arial, Helvetica, sans-serif;">{!rs.Label_Name__c}:
+                                                        <apex:outputText rendered="{!IF(rs.Table_Name__c == 'Company_Ext__c' && rs.Column_Name__c == 'Revenue__c' && rs.Required__c == TRUE, TRUE , FALSE)}"><span id="mandatory">*</span></apex:outputText>
+                                                    </td>
+                                                    <td><apex:inputText id="Revenue" value="{!compext.Revenue__c}" styleClass="RevenueTicket "/></td>
+                                                </tr>
+                                                </apex:outputPanel>  
+                                                <apex:outputPanel rendered="{!IF(rs.Table_Name__c == 'Company_Ext__c' && rs.Column_Name__c == 'Tax_Id__c' && rs.Included__c == TRUE, TRUE , FALSE)}">
+                                                <tr>
+                                                    <td width="38%" style=" text-align:right;  font-size:13px; font-family:Arial, Helvetica, sans-serif;">{!rs.Label_Name__c}:
+                                                        <apex:outputText rendered="{!IF(rs.Table_Name__c == 'Company_Ext__c' && rs.Column_Name__c == 'Tax_Id__c' && rs.Required__c == TRUE, TRUE , FALSE)}"><span id="mandatory">*</span></apex:outputText>
+                                                    </td>
+                                                    <td><apex:inputText id="TaxId" value="{!compext.Tax_Id__c}" styleClass="TaxIdTicket "/></td>
+                                                </tr>
+                                                </apex:outputPanel> 
+                                                <apex:outputPanel rendered="{!IF(rs.Table_Name__c == 'Company_Ext__c' && rs.Column_Name__c == 'Duns_Number__c' && rs.Included__c == TRUE, TRUE , FALSE)}">
+                                                <tr>
+                                                    <td width="38%" style=" text-align:right;  font-size:13px; font-family:Arial, Helvetica, sans-serif;">{!rs.Label_Name__c}:
+                                                        <apex:outputText rendered="{!IF(rs.Table_Name__c == 'Company_Ext__c' && rs.Column_Name__c == 'Duns_Number__c' && rs.Required__c == TRUE, TRUE , FALSE)}"><span id="mandatory">*</span></apex:outputText>
+                                                    </td>
+                                                    <td><apex:inputText id="DunsNumber" value="{!compext.Duns_Number__c}" styleClass="DunsNumberTicket "/></td>
+                                                </tr>
+                                                </apex:outputPanel> 
+                                                <apex:outputPanel rendered="{!IF(rs.Table_Name__c == 'Company__c' && rs.Column_Name__c == 'Website_URL__c' && rs.Included__c == TRUE, TRUE , FALSE)}">
+                                                <tr>
+                                                    <td width="38%" style=" text-align:right;  font-size:13px; font-family:Arial, Helvetica, sans-serif;">{!rs.Label_Name__c}:
+                                                        <apex:outputText rendered="{!IF(rs.Table_Name__c == 'Company__c' && rs.Column_Name__c == 'Website_URL__c' && rs.Required__c == TRUE, TRUE , FALSE)}"><span id="mandatory">*</span></apex:outputText>
+                                                    </td>
+                                                    <td><apex:inputText id="WebsiteUrl" value="{!comp.Website_URL__c}" styleClass="WebsiteUrlTicket "/></td>
+                                                </tr>
+                                                </apex:outputPanel> 
+                                                <apex:outputPanel rendered="{!IF(rs.Table_Name__c == 'Company_Ext__c' && rs.Column_Name__c == 'Blog_URL__c' && rs.Included__c == TRUE, TRUE , FALSE)}">
+                                                <tr>
+                                                    <td width="38%" style=" text-align:right;  font-size:13px; font-family:Arial, Helvetica, sans-serif;">{!rs.Label_Name__c}:
+                                                        <apex:outputText rendered="{!IF(rs.Table_Name__c == 'Company_Ext__c' && rs.Column_Name__c == 'Blog_URL__c' && rs.Required__c == TRUE, TRUE , FALSE)}"><span id="mandatory">*</span></apex:outputText>
+                                                    </td>
+                                                    <td><apex:inputText id="BlogUrl" value="{!compext.Blog_URL__c}" styleClass="BlogUrlTicket "/></td>
+                                                </tr>
+                                                </apex:outputPanel>  
+                                                <apex:outputPanel rendered="{!IF(rs.Table_Name__c == 'Company__c' && rs.Column_Name__c == 'Description__c' && rs.Included__c == TRUE, TRUE , FALSE)}">
+                                                <tr>
+                                                    <td width="38%" style=" text-align:right;  font-size:13px; font-family:Arial, Helvetica, sans-serif;">{!rs.Label_Name__c}:
+                                                        <apex:outputText rendered="{!IF(rs.Table_Name__c == 'Company__c' && rs.Column_Name__c == 'Description__c' && rs.Required__c == TRUE, TRUE , FALSE)}"><span id="mandatory">*</span></apex:outputText>
+                                                    </td>
+                                                    <td><apex:inputText id="Description" value="{!comp.Description__c}" styleClass="DescriptionTicket "/></td>
+                                                </tr>
+                                                </apex:outputPanel> 
+                                            </table>
+                                        
+                                        <!-------------------------------------------------------------------------------------  Work Information Group End ---------------------------------------------------------------------------------------->
+                                     
+                                   <!-------------------------------------------------------------------------------------  NAICS Code Group Start ---------------------------------------------------------------------------------------->
+                                         <apex:outputPanel rendered="{!IF(rs.Group_Name__c == 'Naics Code Information' && rs.Table_Name__c == 'Company_Ext__c' && rs.Column_Name__c == 'NAICS Codes', TRUE , FALSE)}">
+                                            <div id="ticketstable-subheader1" style="width:100%; height:30px;margin-top:10px; text-indent:10px; text-align:left;">
+                                                 <apex:outputText value="{!rs.Group_Name__c}" style="padding-top:5px; text-align:left;"/>
+                                            </div>
+                                        </apex:outputPanel>  
+                                            <table id="field box" class="fields" width="80%" border="0" style="margin:0px auto; border-collapse:collapse;" cellpadding="10">
+                                                <apex:outputPanel rendered="{!IF(rs.Table_Name__c == 'Company_Ext__c' && rs.Column_Name__c == 'NAICS Codes' && rs.Included__c == TRUE, TRUE , FALSE)}">
+                                                <tr>
+                                                    <td width="38%" style=" text-align:right;  font-size:13px; font-family:Arial, Helvetica, sans-serif;">Primary NAICS Code:
+                                                        <apex:outputText rendered="{!IF(rs.Table_Name__c == 'Company_Ext__c' && rs.Column_Name__c == 'NAICS Codes' && rs.Required__c == TRUE, TRUE , FALSE)}"><span id="mandatory">*</span></apex:outputText>
+                                                    </td>
+                                                    <td> <apex:inputText id="PrimNaicsCode" value="{!compext.Primary_NAICS_Code__c}" styleClass="PrimNaicsCodeTicket "/> 
+                                                    <!-- 
+
+                                                        <select multiple="multiple" size="15" data-placeholder="Search NAICS Codes"  class="chzn-select medium-select select" name="SelBranch"  style="width:300px;" tabindex="17" id="PrimNaicsCode">  
+                                                        <option value=""></option>
+                                                        <apex:repeat value="{!listOfnaicscodes}" var="Lists">
+                                                        <apex:repeat value="{!Lists}" var="list">  
+                                                       
+                                                        <option value="{!list.Id}" >{!list.Name} {!list.Description__c}</option>
+                                                        
+                                                        </apex:repeat>
+                                                        </apex:repeat>
+                                                        </select>
+                                                        -->
+                                                     
+                                                    </td>
+                                                </tr>
+                                                </apex:outputPanel>  
+                                                <apex:outputPanel rendered="{!IF(rs.Table_Name__c == 'Company_Ext__c' && rs.Column_Name__c == 'NAICS Codes' && rs.Included__c == TRUE, TRUE , FALSE)}">
+                                                <tr>
+                                                    <td width="38%" style=" text-align:right;  font-size:13px; font-family:Arial, Helvetica, sans-serif;">Secondary NAICS Code:
+                                                        <apex:outputText rendered="{!IF(rs.Table_Name__c == 'Company_Ext__c' && rs.Column_Name__c == 'NAICS Codes' && rs.Required__c == TRUE, TRUE , FALSE)}"><span id="mandatory">*</span></apex:outputText>
+                                                    </td>
+                                                    <td><apex:inputText id="SecNaicsCode" value="{!compext.Secondary_NAICS_Code__c}" styleClass="SecNaicsCodeTicket "/></td>
+                                                </tr>
+                                                </apex:outputPanel>      
+                                            </table>
+                                        <!-------------------------------------------------------------------------------------  NAICS Code Group End ---------------------------------------------------------------------------------------->
+
+                                   
+                                   </apex:repeat> 
+              
+              
               
             <div style="float:right;margin-right:2%;">
             <apex:commandButton value="Save" action="{!SaveGuests}" styleClass="button-a blue" style="color:#fff;padding:5px;" reRender="secfrm"/>&nbsp;&nbsp;
@@ -801,18 +1167,16 @@ border: 1px solid #CCC;
             
            <apex:outputPanel id="addPanel1">
               
-               <table class="display dynatable" width="100%">
+            <table class="display dynatable" width="100%">
             <tr>
             <th width="16%" style="padding:3px 0px 3px 2px;" >
             <apex:inputText value="{!gnUser.First_Name__c}" /></th>
             <th width="16%" style="padding:3px 0px 3px 2px;" ><apex:inputText value="{!gnUser.Last_Name__c}"/></th>
             <th width="25%" style="padding:3px 0px 3px 2px;" ><apex:inputText value="{!gnUser.Email__c}"/></th>
-            <th width="25%" style="padding:3px 0px 3px 2px;" ><apex:inputtext value="{!companyName }"/></th>
-            
+            <th width="25%" style="padding:3px 0px 3px 2px;" ><apex:inputtext value="{!companyName}"/></th>
              </tr>
             </table>
-              
-            <div style="float:right;margin-right:2%;">
+           <div style="float:right;margin-right:2%;">
             <apex:commandButton value="Save" action="{!Saveord}" styleClass="button-a blue" style="color:#fff;padding:5px;" />&nbsp;&nbsp;
             <apex:commandButton value="Cancel" action="{!CloseGuests}" styleClass="button-a blue" style="color:#fff;padding:5px;" immediate="true" reRender="secfrm"/>
             </div>

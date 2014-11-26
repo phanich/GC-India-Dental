@@ -10,7 +10,7 @@ public with sharing class BLN_Gnuser_DAO {
 * 07/01/2014          Phani Kumar ch                    To Create Page
 **************************************************************************************************/
    public List<GN_User__c > getGnuserList(SET<id> setOfgnusers){
-      return [select id,First_Name__c,Last_Name__c,User__c,Email__c from GN_User__c where Id IN :setOfgnusers];
+      return [select id,First_Name__c,Last_Name__c,User__c,Address1__c,Address2__c,Age__c,City__c,Company_Name__c,Country__c,DOB__c,Eff_Date__c,Email__c,Gender__c,Home_Phone__c,Is_Active__c,Mobile__c,Zip_Code__c,User_Pic__c,User_Website__c,Title__c,State__c,Suffix__c,Prefix__c,Phone__c from GN_User__c where Id IN :setOfgnusers];
    }
    
    // This method is for updating gnuser

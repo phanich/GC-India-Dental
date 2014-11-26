@@ -46,8 +46,15 @@ public without sharing class BLN_MyticketsCon {
     public MAP<id,GN_User__c> mapguIdWithGNU {get;set;}
     public string urlCheck {get;set;}
     public string RecordsForExport;
-  
-  
+    public LIST<Country__c> country{get; set;}
+   public LIST<State__c> states{get; set;}
+   public LIST<SelectOption> countryOptions{get; set;}
+   public LIST<SelectOption> stateOptions{get; set;}
+   public string selectedCountry{get; set;}
+   public String selectedState{get; set;}
+
+
+
     public void displayPermissions(){
         Cookie k = ApexPages.currentPage().getCookies().get('counter');
         if(k!=null){ 
@@ -136,7 +143,7 @@ public without sharing class BLN_MyticketsCon {
         inncurrentTickets= new List<BLN_Mytickets_BAL.inncls>();
         List<Ticket__c> ticketsList = new List<Ticket__c>();
         BLN_Gnuser_DAO guDAO = new BLN_Gnuser_DAO();
-       listOfListOrders = new List<List<BLN_Mytickets_BAL.inncls>>();
+        listOfListOrders = new List<List<BLN_Mytickets_BAL.inncls>>();
        
         mapOrdIsWithInner = new MAP<id,BLN_Mytickets_BAL.inncls>();
      
@@ -163,15 +170,16 @@ public without sharing class BLN_MyticketsCon {
               k=0;
             }
            
-            
+          
             ticketsList.addAll(innTotal.ticketsInn);
              for(order_item__c orditem : innTotal.orderItemInn){
                  mapitemWithId.put(orditem.id,orditem ); // map orderItem with its id
+                
               }
         } 
         
        listOfListOrders.add(inncurrentTickets);
-               
+       
          for(Ticket__c tc :ticketsList){
            mapticWithId.put(tc.id,tc); // Map tickets with its id  
            GnuserList.add(tc.Client_GN_User__c);
@@ -319,32 +327,115 @@ public without sharing class BLN_MyticketsCon {
   // -------------------------------------------  Actions on orders page  End -----------------------------------  
  
   
+  
  // ----------------------------------------- Actions on order details popup --------------------------------------   
   public GN_User__c gnUser{get;set;}
-   
+  public Company__c comp {get;set;}
+  public Company_Ext__c compext {get;set;}
+  public MAP<id,List<Reg_Setting__c>> settingsForbuyerMAp{get;set;}
+  public  List<Reg_Setting__c> settingsForbuyer{get;set;} //To display buyer settings
+  public UC_Role__c ucrole{get;set;}
+  
     // disply edit guest  pop up
     public PageReference editTicket(){
-    gnUser = new GN_User__c();
+      gnUser = new GN_User__c();
       addGuest = new Ticket__c ();
-      addGuest=  mapticWithId.get(Apexpages.currentPage().getParameters().get('TicketIdparam'));
-      gnUser = mapguIdWithGNU.get(addGuest.Client_GN_User__c);
-      companyName = addGuest.Client_company__r.Name;    
-      displyAddGuest= true;
-      return null;
+      ucrole = new UC_Role__c();
+      
+      
+      settingsForbuyerMAp = new MAP<id,List<Reg_Setting__c>>();
+      settingsForbuyer = new List<Reg_Setting__c>();
+      
+       string ticketId = Apexpages.currentPage().getParameters().get('TicketIdparam');
+       addGuest=  mapticWithId.get(ticketId);
+       gnUser = mapguIdWithGNU.get(addGuest.Client_GN_User__c);
+       BLN_RegistrationSettings_BAL RegSettingsBAL = new BLN_RegistrationSettings_BAL();
+      
+          
+        SET<id> ticketIdsset = new SET<id>();
+        RegSettingsBAL = new BLN_RegistrationSettings_BAL();
+        ticketIdsset.add(addGuest.item__c);
+        
+      if(ticketIdsset.size() >0){  
+     
+        settingsForbuyerMAp= RegSettingsBAL.getTicketSettings(ticketIdsset,selectedEvent);
+        
+        system.debug('YYYYYYYYYYYY  '+settingsForbuyerMAp);
+          if(settingsForbuyerMap.size()>0){
+             settingsForbuyer.addAll(settingsForbuyerMap.get(addGuest.item__c));
+            }
+       }  
+       
+       
+       comp = new Company__c(); 
+       compext = new Company_Ext__c();
+       string compid = '';
+       try{
+       compid = [select id,company__c,Client_Company__c,Client_GN_User__c from Ticket__c where id=:ticketId].Client_Company__c;
+       }catch(exception ed){}
+       
+     if(compid!=''){
+       try{
+       compext  = [select id,Blog_URL__c,Business_Address1__c,Business_Address2__c,Business_City__c,BLN_Business_Country__c,BLN_Business_State__c,Business_Zipcode__c,Company__c,Duns_Number__c,
+       Established_Date__c,Keywords__c,Number_Of_Employees__c,Primary_Business_Category__c,Primary_NAICS_Code__c,Revenue__c,Secondary_Business_Category__c,Secondary_NAICS_Code__c,Tax_Id__c,Work_Phone__c from Company_Ext__c where company__c=:compid];
+       companyName = addGuest.Client_company__r.Name;    
+       }catch(exception er){}
+     }
+     
+    try{ 
+     ucrole  = [select id,Company__c,Event__c,Invited_by__c,Invited_date__c,Role__c,RoleId__c,GN_User__c,User__c,User_Type__c from UC_Role__c where company__c =:addGuest.Client_company__r.id and GN_User__c=:addGuest.Client_GN_User__c];
+     }catch(exception rt){
+        
+     }
+     
+     
+     
+       displyAddGuest= true;
+       return null;
     }
+   
+
+   // ------------------------------------------------------------------------------------- States & Countries Start ----------------------------------------------------------------------------------    
+    public void countryStates(){ 
+        country = new LIST<Country__c>();
+        countryOptions= new LIST<SelectOption>();
+        
+        for(Country__c c: [SELECT ID, NAME, Short_Name__c, Long_Name__c, Order__c FROM Country__c ORDER BY Order__c]){
+            countryOptions.add(new SelectOption(c.id, c.Long_Name__c));
+            if(c.Short_Name__c == 'US'){
+                selectedCountry = c.id;
+            }
+        }
+        stateOptions = new LIST<SelectOption> ();   
+    }
+
+    public void statesBasedOnCountry(){
+        system.debug('Selected Country '+selectedCountry);
+        stateOptions= new LIST<SelectOption> ();   
+    
+        for(State__c s: [SELECT ID, NAME, Short_Name__c,Long_Name__c, Country__c, Order__c FROM State__c WHERE Country__c =: selectedCountry]){
+            stateOptions.add(new SelectOption(s.id,s.Long_Name__c));
+        }
+    }
+// --------------------------------------------------------------------------------------- States & Countries End ----------------------------------------------------------------------------------
+    
+   
+   
+   
    
     // saving guest info after editing record
     public PageReference SaveGuests() {
-       user newu = new user();
-        newu.firstName = gnUser.First_Name__c;
-        newu.lastName = gnUser.Last_Name__c ;
-        newu.Email = gnUser.Email__c;
-        newu.userName = gnUser.Email__c;
-            if(companyName !=null){
+        user newu = new user();
+        newu.firstName = addGuest.First_Name__c;
+        newu.lastName = addGuest.Last_Name__c ;
+        newu.Email = addGuest.Email__c;
+        newu.userName = addGuest.Email__c;
+        
+        if(companyName !=null){
                newu.companyName = companyName ;
-            }else{
+         }else{
               newu.companyName = gnUser.First_Name__c+''+gnUser.Last_Name__c;
-            }
+         }
        
         system.debug(newu+'    YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY '+addGuest);
          saveLogic(newu,addGuest,new order__c(),gnUser); // In this method user Insertion,company insertion and user role will be done
@@ -431,11 +522,32 @@ public without sharing class BLN_MyticketsCon {
               if(userMsg.successBool){
                   userid=userMsg.successId;
               }
+              
+               gnUserEdit.First_Name__c= addGuest.First_Name__c;
+               gnUserEdit.Last_Name__c = addGuest.Last_Name__c ;
+               gnUserEdit.Email__c= addGuest.Email__c;
+               gnUserEdit.User__c = userid;
+               DataBase.insert(gnUserEdit,false);
+             if(ucrole!= null){
+                UC_Role__c urolenew = new UC_Role__c ();
+                urolenew = ucrole.clone(false,false,false,false);
+                urolenew.id=null;
+                urolenew.GN_User__c = gnUserEdit.id;
+                dataBase.insert(urolenew,false);
+             }  
+               
+           }else{
+             gnUserEdit.User__c = userid;
+             DataBase.update(gnUserEdit,false);
            }
-          gnUserEdit.User__c = userid; 
-           DataBase.update(gnUserEdit,false);
-           
-           
+          
+          if(!isOrderEdit){
+           addGuest.Client_GN_User__c =gnUserEdit.id;
+           system.debug('    CCCCCCCCCCCCCCCCCCCC '+addGuest); 
+           update addGuest;
+         system.debug('    DDDDDDDDDDDDDDDDDDDDD '+addGuest); 
+        }   
+     /*      
        if(userid!=null){
          company__c comp = new company__c();
          comp.Name = companyName;      
@@ -449,6 +561,8 @@ public without sharing class BLN_MyticketsCon {
                 }
               } 
         } 
+       
+        
         BLN_Mytickets_BAL mybal = new BLN_Mytickets_BAL(); 
         string EventIdvalue  = '';
           if(isOrderEdit){
@@ -469,6 +583,6 @@ public without sharing class BLN_MyticketsCon {
                  System.debug('XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX '+uptcktmsg);
              }
           }
-        } 
+        }  */
     }
 }

@@ -1,4 +1,5 @@
 trigger insertTicketsFromItems on BLN_Item__c (after delete, after insert, after undelete, after update) {
+system.debug('RRRRRRRRRRRRRRRRRRR '+BLN_EventsConTest.isFirstRun());
  if(BLN_EventsConTest.isFirstRun()){
 
          BLN_EventsConTest.setFirstRunFalse();

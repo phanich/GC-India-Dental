@@ -5,6 +5,16 @@
 ****************************************************/
 
 public without sharing class BLN_Quick_Registration_Con {
+    public String CheckNumber{get;set;}
+    public String SelectedCardType { get; set; }
+
+    public String CVVNumber { get; set; }
+
+    public String SelectedYear { get; set; }
+
+    public String SelectedMonth { get; set; }
+
+    public String CreditCardNumber { get; set; }
 public BLN_UtillDisplayLinks myticket { get; set; }
 
    
@@ -129,15 +139,27 @@ public List<Ticket__c> selectedTickets{get;set;}
        return null;
         
      }
-
+   public Decimal ticketamount{get;set;}
+   public Decimal onlyticketamount{get;set;}
+   public Decimal feeamount{get;set;}
    public String ticketid{get;set;}
    public String clientid{get;set;}
     public PageReference finditemdetail() {
         string[] ticketidandclientid =new string[]{};
         if(ticketitems.contains(';')==false){
        // changebatch();
-       Ticket__c tc=[select Item_Pool__r.Badge_Label__c from Ticket__c where id=:ticketitems];
+       Ticket__c tc=[select id,name,(select id,name from badges__r),Item_Pool__r.Badge_Label__c,Item_Type__c,Item__r.price__c from Ticket__c where id=:ticketitems];
+       Decimal fee=0;
+       try{
+       Event_Price__c ep=[select id,name,BL_Fee_Amount__c,BL_Fee_Percentage__c,Event__c,Item_type__c from Event_Price__c where Event__c=:event and Item_type__c=:tc.Item_Type__c];
+       fee= ((ep.BL_Fee_Percentage__c*tc.Item__r.price__c)/100) + ep.BL_Fee_Amount__c;
+       }catch(Exception e)
+       {}
+       ticketamount=tc.Item__r.price__c+fee;
+       onlyticketamount=tc.Item__r.price__c;
+       feeamount=fee;
        badgelabel=tc.Item_Pool__r.Badge_Label__c;
+        
         return null;
         }
          ticketidandclientid =ticketitems.split(';');
@@ -191,7 +213,33 @@ public List<Ticket__c> selectedTickets{get;set;}
     
    
     public PageReference order() {
-    GN_User__c newu=new GN_User__c();
+    String ChargeId='';
+if(paymentmethod == 'Cash')
+SelectedCardType = 'Cash';          
+if(paymentmethod == 'Check'){
+ SelectedCardType = 'Check';
+ ChargeId = CheckNumber;
+ }
+ if(paymentmethod == 'CreditCard'){
+  BLN_Payments_BAL PaymentsBAL = new BLN_Payments_BAL();
+                 
+                 String ResponseMessage = PaymentsBAL.stripePayments(event,CreditCardNumber,selectedMonth,selectedyear,CVVNumber,onlyticketamount,feeamount,true);
+                 system.debug('Stripe Response 1:'+ResponseMessage);
+                 if(ResponseMessage!='Error'){
+                   
+                    ChargeId = ResponseMessage;
+                   
+                 }
+                 else{
+                     ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.ERROR,ResponseMessage);
+                     ApexPages.addMessage(myMsg);
+                    
+                    return null;
+                 }  
+ }
+ 
+ 
+ GN_User__c newu=new GN_User__c();
     newu.First_Name__c=ASFirstName ;
     newu.Last_Name__c=ASLastName ;
     newu.Email__c=ASUserEmail;
@@ -210,6 +258,20 @@ public List<Ticket__c> selectedTickets{get;set;}
     
     BLN_StatusMessage userMsg;
     String userid;
+    
+    
+    if(quickbal.checkUserEmail(newu.Email__c)!=null){
+              
+                   for(GN_User__c gnup : [select id,First_Name__c,Last_Name__c,Email__c,Company_Name__c from GN_User__c where user__c =:quickbal.checkUserEmail(newu.Email__c) limit 1]){
+                         userid= gnup.id;
+                          
+                      }      
+             
+               }
+               else{
+    
+    
+    
     userMsg=quickbal.insertGNUser(newu);
     if(userMsg.successBool)
     {
@@ -223,7 +285,7 @@ public List<Ticket__c> selectedTickets{get;set;}
             ApexPages.addMessage(myMsg);
         return null;  
     }
-    
+    }
     //insert company process
     BLN_StatusMessage CompanyMsg;
     String companyId=quickbal.checkCompany(comp);
@@ -244,7 +306,7 @@ public List<Ticket__c> selectedTickets{get;set;}
     }
       
       }
-       BLN_StatusMessage UCRoleMsg=quickbal.insertUCRole(userId,companyId,event,'Company Admin');
+       BLN_StatusMessage UCRoleMsg=quickbal.insertUCRole(userId,companyId,event,'Guest Attendee');
        String ucRoleId;
         if(UCRoleMsg.successBool)
         {
@@ -257,14 +319,28 @@ public List<Ticket__c> selectedTickets{get;set;}
             ApexPages.addMessage(myMsg);
         return null;  
         } 
-        BLN_StatusMessage uptcktmsg=quickbal.updateTicket(userid,companyId,ticketIds,event,0);  
-       
-      
+        
+        
+        //Insert Pay Address
+        BLN_Pay_Address_DAO PayAddressDAO = new BLN_Pay_Address_DAO();
+        Pay_Address__c PayAddress = new Pay_Address__c();
+        PayAddress.Event__c = event;
+        PayAddress.Company__c = companyId;
+        PayAddress.GN_User__c = userid;
+        BLN_StatusMessage PayAddressMessage = PayAddressDAO.insertPayAddress(PayAddress);
+        
+        LIST<String> UserIds = new LIST<String>();
+        LIST<String> CompanyIds = new LIST<String>();
+        UserIds.add(userid);
+        CompanyIds.add(companyId);
+        MAP<Id,Id> PromotionIdMap = new MAP<Id,Id>();
+    quickbal.updateTickets(UserIds,CompanyIds,TicketIds,event,userid,ticketamount,0,feeamount,0,ticketamount,PromotionIdMap,0,'',PayAddressMessage.SuccessId,SelectedCardType,paymentmethod,ChargeId,paymentmethod); 
+ 
       String succesbdgMsg=quickbal.generateBadge(badgelabel,ticketitems);
       changebatch();
      
       return null;
- 
+
 
     }
 
@@ -276,7 +352,14 @@ public List<Ticket__c> selectedTickets{get;set;}
         public BLN_Event__c eventdetails {get;set;}
         
         public List<Ticket__c> eventChosenTickets{get;set;}
-        
+        public String paymentmethod{get;set;}//holds the values of the selected checkboxes
+    public list<selectOption> paymentmethoditems{get;set;}
+    
+    
+    public list<selectOption> MonthsList{get;set;}
+    public list<selectOption> YearsList{get;set;}
+    public list<selectOption> CreditCardType{get;set;}
+   
         
         public  BLN_Quick_Registration_Con ()
         {
@@ -299,11 +382,42 @@ public List<Ticket__c> selectedTickets{get;set;}
      myitems=quickbal.getAvailableTickets(items);
     searchFlag=false;
     
+    paymentmethoditems=new List<selectOption>();
+    paymentmethoditems.add(new selectOption('','Select One'));
+    for(integer i=0;i<eventdetails.Event_Pay_Gateway__r.size();i++)
+    {
+      paymentmethoditems.add(new selectOption(eventdetails.Event_Pay_Gateway__r[i].Pay_Gateway__r.PGateway_Type__r.Name,eventdetails.Event_Pay_Gateway__r[i].Pay_Gateway__r.PGateway_Type__r.Name)); 
+    }
+    
+   
+    paymentmethoditems.add(new selectOption('CreditCard','CreditCard'));
     
     //search in chosen
    // eventChosenTickets=quickbal.getBookedTickets(event);
 
+    //Getting Stripe Related Information
+        MonthsList= new LIST<SelectOption>();
+        YearsList= new LIST<SelectOption>();
+        CreditCardType= new LIST<SelectOption>();
     
+        LIST<String> monthstring = new LIST<String>{'01','02','03','04','05','06','07','08','09','10','11','12'};
+        LIST<String> yearstring = new LIST<String>{'2014','2015','2016','2017','2018','2019','2020','2021','2022','2023','2024','2025','2026','2027','2028','2029','2030'};
+        LIST<String> cardtypestring = new LIST<String>{'Visa','MasterCard','American Express','Discover'};
+        String SelectedYear= String.valueOf(system.today().year());
+        YearsList.add(new SelectOption(SelectedYear,SelectedYear));
+        String y=SelectedYear;
+        for(integer l=0; l<= 15; l++){
+            y = String.valueof(integer.valueOf(y)+1); 
+            YearsList.add(new SelectOption(y,y));           
+        }
+        
+        for(String m: monthstring){
+            MonthsList.add(new SelectOption(m,m));
+        }
+    
+        for(String c: cardtypestring){
+            CreditCardType.add(new SelectOption(c,c));
+        }
                 
          }
          

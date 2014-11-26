@@ -368,9 +368,9 @@ public BLN_StatusMessage updateTicket(String userid,String comId,List<String> ti
         BLN_Order_DAO OrderDAO =new BLN_Order_DAO();
         Order__c   Order = new Order__c();
         if(CompanyIds.size()>0){
-        Order = new Order__c(Events__c=eventId,Amount_Paid__c=AmountPaid,Client_GN_User__c=OrderUserId,Client_Company__c=CompanyIds[0],Order_Total__c=AmountPaid,Order_Sub_Total__c=SubTotal,Order_Discount__c=DiscountAmount,Order_Status__c='Fully Paid',Currency_Code__c=cur.id,Fee_Amount__c=FeeAmount,Order_Taxes__c=TaxAmount);
+        Order = new Order__c(Events__c=eventId,Amount_Paid__c=AmountPaid,Client_GN_User__c=OrderUserId,Client_Company__c=CompanyIds[0],Order_Total__c=AmountPaid,Order_Sub_Total__c=SubTotal,Order_Discount__c=DiscountAmount,Order_Status__c='Fully Paid',Currency_Code__c=cur.id,Fee_Amount__c=FeeAmount,Order_Taxes__c=TaxAmount,Transaction_Status__c='Completed');
        }else{
-          Order = new Order__c(Events__c=eventId,Amount_Paid__c=AmountPaid,Client_GN_User__c=OrderUserId,Order_Total__c=AmountPaid,Order_Sub_Total__c=SubTotal,Order_Discount__c=DiscountAmount,Order_Status__c='Fully Paid',Currency_Code__c=cur.id,Fee_Amount__c=FeeAmount,Order_Taxes__c=TaxAmount);
+          Order = new Order__c(Events__c=eventId,Amount_Paid__c=AmountPaid,Client_GN_User__c=OrderUserId,Order_Total__c=AmountPaid,Order_Sub_Total__c=SubTotal,Order_Discount__c=DiscountAmount,Order_Status__c='Fully Paid',Currency_Code__c=cur.id,Fee_Amount__c=FeeAmount,Order_Taxes__c=TaxAmount,Transaction_Status__c='Completed');
       
        }
        
@@ -525,7 +525,7 @@ public BLN_StatusMessage updateTicket(String userid,String comId,List<String> ti
     //Get Details to fill the form for update/prnt   
     public Ticket__c getItemInfoFrmTicket(String ticketId){
         BLN_Ticket_DAO tcktdao=new BLN_Ticket_DAO();
-        List<Ticket__c> tckt=tcktdao.getTickets('id,Badge_ID__c,Badge_ID__r.name,(select name from badges__r where cancel_time__c=null and Exp_time__c=null),Client_Company__c,Order__c,Order__r.id,Order_Item__c,Order_Item__r.Item__r.id,Order_Item__r.Item__r.item_name__c,Client_GN_User__c,Client_GN_User__r.First_Name__c,Client_GN_User__r.Last_Name__c,Client_GN_User__r.Email__c,Client_GN_User__r.title__c,Client_GN_User__r.phone__c,Client_Company__r.name','id=\''+ticketId+'\''); 
+        List<Ticket__c> tckt=tcktdao.getTickets('id,name,Badge_ID__c,Badge_ID__r.name,(select id,name from badges__r where cancel_time__c=null and Exp_time__c=null),Client_Company__c,Order__c,Order__r.id,Order_Item__c,Order_Item__r.Item__r.id,Order_Item__r.Item__r.item_name__c,Client_GN_User__c,Client_GN_User__r.First_Name__c,Client_GN_User__r.Last_Name__c,Client_GN_User__r.Email__c,Client_GN_User__r.title__c,Client_GN_User__r.phone__c,Client_Company__r.name','id=\''+ticketId+'\''); 
         return tckt[0];
     } 
    

@@ -297,10 +297,8 @@ function remove_highlight_for_all(num)
     <td>{!tk.tckt.Client_GN_User__r.Last_Name__c}</td>
     <td>{!tk.tckt.Client_GN_User__r.Email__c}</td>
     <td>{!tk.tckt.Client_Company__r.name}</td>
-    <td> <apex:repeat value="{!tk.tckt.badges__r}" var="badge">
-   {!badge.Name}
-    </apex:repeat>
-   {!tk.tckt.Badge_ID__r.name}
+    <td> 
+   {!tk.tckt.Badge_ID__r.Badge_Label__c}
     </td>
     <td>{!tk.tckt.Order__r.Name}</td>
     <td>{!tk.tckt.name}</td>
@@ -379,18 +377,33 @@ function remove_highlight_for_all(num)
                               </td>
                 
               </tr>
+              <tr>
+  <td colspan="3"  style="text-indent:.5%"><p style=" font-size:14px;font-weight:bold; font-family:cuprum;">Amount</p></td>
+  </tr>
+  <tr>
+  <td  style="font-size:12px;">
+ 
+  <apex:outputText value="{!ticketamount}" style="width:205.5%;"/></td>
+  </tr>
                <tr>
-                <td colspan="3"  style="text-indent:.5%"><p style=" font-size:14px;font-weight:bold; font-family:cuprum;">Payment Option</p></td>
+                <td colspan="3"  style="text-indent:.5%"><p style=" font-size:14px;font-weight:bold; font-family:cuprum;">Payment Method</p></td>
               </tr>
               <tr>
-             <td><input type="radio" name="popt" value="Pay By Cash"/>Pay By Cash</td>
-                
+              <td style="font-size:12px;">
+              <apex:selectList value="{!paymentmethod}" size="1" style="width:205.5%;" onchange="paymentmode(this.value);" >
+                 <apex:selectOptions value="{!paymentmethoditems}"/>
+                  
+                   </apex:selectList>
+              </td>
               </tr>
+              
+              
+              
               <tr>
                 <td colspan="3" style=" padding:15px;">
                 
                 <apex:commandButton value="Print Badge" id="printbadge" title="Print" styleClass="printbadge" action="{!printupdate}" oncomplete="printPdf();" rerender="QuickRegistrationForm" Onclick="if(!move()) return false;" rendered="{!searchFlag}"/>
-                <apex:commandButton value="Add and Print Badge" id="addprintbadge" title="AddPrint" styleClass="printbadge" action="{!order}" oncomplete="printPdf();is iot a old login" Onclick="if(!move()) return false;" rerender="QuickRegistrationForm"   rendered="{!!searchFlag}"/>
+                <apex:commandButton value="Add and Print Badge" id="addprintbadge" title="AddPrint" styleClass="printbadge" action="{!order}" oncomplete="printPdf();" Onclick="if(!move()) return false;" rerender="QuickRegistrationForm"   rendered="{!!searchFlag}"/>
 <apex:commandButton value="Print All Using Zebra" id="printallbadge" title="Print All Using Zebra" styleClass="printbadge" action="{!getSelected}" oncomplete="multiprint();" rerender="QuickRegistrationForm"   rendered="{!searchFlag}"/>
 <apex:commandButton value="Print All Using Avery 5392 Badge" id="printaverybadge" title="Print Avery 5392 Badge" styleClass="printbadge" action="{!printAvery}" rendered="{!searchFlag}"/>              
 <apex:commandButton value="Merge Badge" id="mergebadge" title="Merge Badge" styleClass="printbadge" action="{!mergeBadge}" rerender="QuickRegistrationForm"   rendered="{!searchFlag}"/>
@@ -504,7 +517,8 @@ function printPdf() {
           setTimeout(function(){window.location.href=window.location.href;}, 2000);
            
             //Print Page
-            window.print();
+           
+            setTimeout(function(){ window.print();}, 2000);
             
          
            
@@ -535,12 +549,12 @@ var bdgsize="{!st.badges__r.size}";
 if(bdgsize!=0){
 <apex:repeat value="{!st.badges__r}" var="badge">
     abarcode='{!badge.Id}';
-    badgelabel='{!badge.Name}';
+    badgelabel='{!badge.Badge_Label__c}';
     </apex:repeat>}
     else
     {
        abarcode='{!st.badge_id__c}';
-    badgelabel='{!st.badge_id__r.name}'; 
+    badgelabel='{!st.badge_id__r.Badge_Label__c}'; 
     }
 if(badgelabel.toUpperCase()=='EXHIBITOR')
 {
@@ -688,13 +702,130 @@ document.getElementById(show).style.display="block";
 
 <apex:actionFunction name="finditemdetail" action="{!finditemdetail}" rerender="QuickRegistrationForm" oncomplete="showpackage('search-order');"/>
               
+ <!--------start of payment hide and show------------->
+            <style>
+            #ordersummarytitles{
+                border-collapse:collapse;
+                font-size: 22px;
+color: #5283cc;
+margin-right: 10px;
+letter-spacing: .5px;
+font-family: Bebas Neue;
+font-weight: normal;
+                }
+                
+            #ordersummarytitles td{ padding:0px 5px ;}
+            #ordersummarycontent table { border-collapse:collapse;}
+            #ordersummarycontent table tr{ border-bottom:1px solid #ffffff;}
+            #ordersummarycontent table td{ padding:5px; text-align:center; font-size:14px;} 
+            #paymentwrapper{width:90%;  margin:0px auto; padding:10px; border: 4px solid #ffffff; box-shadow: 0 1px 3px 0 #b5b5b5;-moz-box-shadow: 0 1px 3px 0 #b5b5b5;-webkit-box-shadow: 0 1px 3px 0 #b5b5b5;}
+            #ordersummarytitle{ font-size:16px; font-family:cuprum; background-color:#D7D7D7;} 
+                   #stripe-line{
+          
+          overflow:hidden; 
+          height:12px; 
+          margin-top:5px; 
+           }
+ </style>
+            
+            <div id="payment" style="width:100%; padding-bottom:30px; margin-top:20px;display:none;">
+            <div id="paymentwrapper" style="">
+           <!---Start of titles----------->
+            <table id="ordersummarytitles" width="100%" border="0">
+  <tr> 
+    
+    <td width="19%" style=" text-align:left;;color:#6bbed2;">Payment Information</td>
+    <td width=""> <div id="stripe-line" style="margin-top:0px;"></div><!--close fo stripe-line--></td>
+  </tr>
+</table>
+ <!---close of titles----------->
+            <div id="paymentcontentwrapper" style="width:99%; display:inline-block; padding:5px 5px 0px 5px; margin-top:0px;">
+            <apex:selectList value="{!SelectedCardType}" size="1" multiselect="false" style="width:86%; border: 1px solid #CCCCCC;border-collapse: collapse;-webkit-border-radius: 4px;border-radius: 4px 4px 4px 4px;-moz-border-radius: 4px;height: auto;padding-top: 3px;position: relative;color: #727373;height: 35px;">
+                                <apex:selectOptions value="{!CreditCardType}"/>
+                            </apex:selectList>
+           
+            <div id="paymentdetailscontent" style="width:52%; border:1px solid #ffffff; display:inline-block; padding:5px ; margin-bottom:5px; background-color:#f8f8f7; float:left;">
+           <div  id="cardholder" style="height:220px; margin-left:13%; background :url({!URLFOR($Resource.createevents,'createevents/images/111.png')} )  no-repeat;">
+            <div style="width:83%; margin:0px auto; height:80px;"></div>
+             <div id="cardno" style="width:86%; margin:0px auto; height:44px;">
              
+             <apex:inputText value="{!CreditCardNumber}" id="CreditCardId" style="margin-left:0px;width:86%;"/>
+             
+             </div><!--close of cardno-->
+             
+             <div style="width:100%; height:35px; "></div>
+              <div style="width:34%; height:37px; margin-left:7.5%; float:left;">
+              <apex:selectList value="{!SelectedMonth}" size="1" styleclass="selectoption" style="outline:none; width:70%; margin-top:2px; height:100%; background:none;border:none;">
+           <apex:selectOptions value="{!MonthsList}" />
+                </apex:selectList>
+             
+             </div>
+             
+             <!-------------------------------------------->
+              <div style="width:21%; height:37px; margin-left:-3.5%; float:left;">
+                    <!--       <input type="date" placeholder="January (01)" style="width:99%;background:none; margin-left:3%;   font-size:9px; color:#999; border-radius:3px; margin:0px auto;height:38px; border:none"/>-->
+                    <apex:selectList value="{!SelectedYear}" size="1" styleclass="selectoption" style="outline:none;margin-top:2px; height:100%; background:none;border:none; margin-left:-20px;">
+            <apex:selectOptions value="{!YearsList}" />
+                </apex:selectList>
+               
+              </div>
+             <!-------------------------------------------->
+             <!------------------------------------------->
+             <div style="width:16%; height:39px; float:left; margin-left:-6%;">
+                    <!--       <input type="date" placeholder="January (01)" style="width:99%;background:none; margin-left:3%;   font-size:9px; color:#999; border-radius:3px; margin:0px auto;height:38px; border:none"/>-->
+                 <apex:inputText value="{!CVVNumber}" id="CVVNumberId" style="padding-left:5px; margin-left:0px;width:20%"/>
+              </div>
+             <!----------------------------------------------->
+           </div><!--close of cardholder-->
+         
+            </div><!--close of paymentetailscontent-->
+           
+            </div><!--close of paymentcontentwrapper-->
+            
+            </div><!--close of paymentwrapper-->
+            
+            
+            </div><!--close of payment-------->   
+            
+            
+            <div id="checkpayment" style="width:100%; padding-bottom:30px; margin-top:20px;display:none">
+            
+            <div  style="width:99%; display:inline-block; padding:5px 5px 0px 5px; margin-top:0px;">
+           
+            <div  style="width:52%; border:1px solid #ffffff; display:inline-block; padding:5px ; margin-bottom:5px; background-color:#f8f8f7; float:left;">
+            Enter Check Number:<apex:inputtext value="{!CheckNumber}"/>
+           </div></div>
+            
+            </div><!--close of payment-------->            
+            
+            
+                     
             </apex:form>   
              
              
              
   
-             
+             <script>
+               function paymentmode(val) {
+    if(val=='Check'){
+   
+        
+        document.getElementById("payment").style.display="none";
+        document.getElementById("checkpayment").style.display="";
+
+        }else if(val=='CreditCard'){
+       
+            document.getElementById("checkpayment").style.display="none";
+        document.getElementById("payment").style.display="";
+    }
+    else
+    {
+         document.getElementById("checkpayment").style.display="none";
+        document.getElementById("payment").style.display="none";
+    }
+};
+              
+              </script>
              
              
              

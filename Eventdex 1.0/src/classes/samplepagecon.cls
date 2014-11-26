@@ -32,6 +32,20 @@ public with sharing class samplepagecon {
           
     }
     
+    
+    
+    
+    
+    public List<SelectOption> getProductFields() {
+        List<SelectOption> options = new List<SelectOption>();
+        options.add(new SelectOption('','--None--'));
+        options.add(new SelectOption('', 'Products', true));
+        return options;
+    }
+
+    
+    
+    
     @RemoteAction
     public static List<Company__c> getCompanies(string searchstr,string emailid){
      SET<id> comids = new SEt<id>();

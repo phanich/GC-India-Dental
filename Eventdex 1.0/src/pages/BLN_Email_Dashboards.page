@@ -216,40 +216,7 @@ box-shadow: 0 1px 4px rgba(0,0,0,0.2);}
 <!-----------------------********************************************************-------------------------------------------------------------->
 <!---popups-- for edit--------------------->
  <!----------------SCript for customizetemplate popup---------------->
-    <script>
-$(window).load(function(){
 
-$(function() {
-
-$('#customsave').click(function() {
-
-alert('::::::::::custom popup:::::::::;;;');
-var name = $('input[name="nw-customizetemp"]').val()
-if(name !==''){
-alert("notnull");
-$('#customizetempbox').append('<table class="results" style="width:100%;text-align:left;">'
-+'<tr>'
-+'<td style="width:1%;padding-left:25px;">'+'<input type="radio" name="temp" checked/>'+'</td>'
-+'<td>'+name+'</td>'
-
-+'</tr>'
-+ '</table>');
-
-$('#savecustomtemp').val(''); //clearing textbox value
-Alert6.Cancel();
-appendtext1();
-}
-
-
-})
-
-})
-
-
-})
-</script>
-    
-    
     <!------------------------------------------------------------------>
 
 
@@ -367,6 +334,9 @@ margin-top:-9px;}
     
     <script>
    
+   var tempname;
+   var updatestandardtempbody;
+   
     function  editcampaign(editcamid,eventid){
        editcampaign(editcamid,eventid);
        
@@ -402,8 +372,10 @@ margin-top:-9px;}
      function showpackage(show,hide,text)
     {
        
-    
-       
+     alert('Template Name '+tempname);
+     alert('Temp Body'+updatestandardtempbody);
+      
+      
        if(show == 'confirmbox'){
        
          document.getElementById('{!$Component.pageid.comid.commoncomponent.form1id.scampname}').innerHTML =  document.getElementById('campname').value;
@@ -452,7 +424,7 @@ margin-top:-9px;}
             document.getElementById("emailupdatebody").innerHTML = '';
             document.getElementById("emailbody").innerHTML = $('iframe').contents().find('body').html();
             document.getElementById("emailupdatebody").innerHTML = document.getElementById("emailbody").innerHTML;
-   
+             newtempold =  document.getElementById("emailbody").innerHTML;
            }
        }
        
@@ -502,6 +474,22 @@ margin-top:-9px;}
        
            
     }
+    var newtempold;
+    function shownew(va){
+   // alert('HHHHHHHH '+va.id);
+    
+    tempname= va.id;
+    
+    alert(newtempold);
+     if(newtempold != null && newtempold != ' '){
+    alert(newtempold );
+     document.getElementById("emailbody").innerHTML = newtempold ;
+            document.getElementById("emailupdatebody").innerHTML = document.getElementById("emailbody").innerHTML;
+     }
+     
+    
+    }
+    
     function fordate(){
     alert('aaaaaaa'+document.getElementById('{!$Component.pageid.comid.commoncomponent.form1234.eventsdate}').value);
     var v = document.getElementById('{!$Component.pageid.comid.commoncomponent.form1234.eventsdate}').value;
@@ -1252,11 +1240,11 @@ $(document).ready(function(){
    <div id="insidelefttemp"><!--start of insidelefttemp-->
   
    <table width="100%" border="0">
- <apex:repeat value="{!Tempnames}" var="Tempnamesval" id="Tempnamesval"> 
-      <tr>
+      <apex:repeat value="{!Tempnames}" var="Tempnamesval" id="Tempnamesval"> 
+         <tr>
                 <td style="padding-left:25px;">
-                <input type="radio" name="temp"  value="{!Tempnamesval.value}" class="chkticket"  onclick="getselvalues('{!Tempnamesval.value}');savetemplate(!Tempnamesval.value);">
-               
+                <!--<input type="radio" name="temp"  value="{!Tempnamesval.value}" class="chkticket"  onclick="getselvalues('{!Tempnamesval.value}');savetemplate(!Tempnamesval.value);">-->
+                 <input type="radio" name="temp" id="{!Tempnamesval.label}"   value="{!Tempnamesval.value}" class="chkticket"  onclick="shownew(this);">
                 <span><label >{!Tempnamesval.label}</label></span></input>
                 
                  </td>
@@ -1265,11 +1253,11 @@ $(document).ready(function(){
 
 </table>
 <!----------------------------------CUSTOMIIZE TEMPLATES FOR ADDING NEW NAME FROM TEMPLATE NAME POPUP-------->
-<div id="customizetempbox">
+<div id="customizetempbox" style="display:none">
 
 <table class="results" style="width:100%;text-align:left;">
 <tbody><tr><td style="width:1%;padding-left:25px;">
-<input type="radio" name="temp" id="chkradio"/>
+<input type="radio" name="temp" id="chkradio" onChange="gettingtemp();"/>
 </td><td id="tempnamenew">
 
 
@@ -1277,7 +1265,20 @@ $(document).ready(function(){
 </tbody>
 </table>
 </div>
+<!-------------------------------for template of custom radio------------->
+<script>
+function gettingtemp(){
+    alert('temp'+tempname );
+    alert('::::::::::::;;cutom radio:::::::::::'+updatestandardtemp );
+     document.getElementById('emailbody').innerHTML='';
+     document.getElementById('emailbody').innerHTML = updatestandardtemp;
+     updatestandardtempbody =updatestandardtemp;
+//document.getElementById("emailbody-wrapper").style.display="";
+     
 
+
+}
+</script>
 
 <!--------------------------------------------------------------------------------------------------------------->
    </div><!--close of insidelefttemp-->
@@ -1431,7 +1432,8 @@ function CustomAlert(){
 
 <div id="" style="width:100%; text-align:right;margin-top:5px; text-align:">
 
- <apex:commandButton value="Save" onclick="('emailbody-wrapper','email-edit','save');updatetemplatename();document.getElementById('editor-edit').style.display='block';" styleclass="button-a blue" reRender="aaa" />
+ <apex:commandButton value="Save As" onclick="('emailbody-wrapper','email-edit','save');updatetemplatename();document.getElementById('editor-edit').style.display='block';" styleclass="button-a blue" reRender="aaa" />
+  <apex:commandButton value="Save" onclick="showpackage('emailbody-wrapper','email-edit','save');document.getElementById('editor-edit').style.display='block';" styleclass="button-a blue" reRender="aaa"/>
  <apex:commandButton value="Cancel"  style="margin-left:3%;"  onclick="showelements();showpackage('emailbody-wrapper','email-edit')"  styleclass="button-a blue" reRender="aaa"/>
 </div>
 </div><!--close of emailedit-->
@@ -1622,7 +1624,6 @@ function updatetemplate(){
      var updatestandardtemp = document.getElementById("emailupdatebody").innerHTML;
      //alert(updatestandardtemp);
      alert(tempname);
-     
      updatetempl(campname,frmname,reciepients,updatestandardtemp,tempname);
       
 
@@ -1732,9 +1733,10 @@ function saveastemplate(){
   </tr>
 </table>
 <script>
-    var tempname;
-    function customsavetemp(){
      
+   
+    function customsavetemp(){
+     document.getElementById('customizetempbox').style.display ="";
     alert('::::::::::::;Custom save:::::::;;;;;');
     document.getElementById('dialogbox6').style.display ="none";
     document.getElementById('dialogoverlay3').style.display ="none";
@@ -1751,6 +1753,8 @@ function saveastemplate(){
         
         document.getElementById('tempnamenew').innerHTML= tempname;
         document.getElementById('chkradio').checked = true;
+        updatestandardtemp = document.getElementById("emailupdatebody").innerHTML;
+       alert(updatestandardtemp);
  
         } 
                 return false;
@@ -1981,9 +1985,9 @@ updatelist();
 </apex:outputPanel>
 <!-----------------------************************************************************---------------------------------------------------------------->
 <script type="text/javascript">
-/*var TabbedPanels1 = new Spry.Widget.TabbedPanels("TabbedPanels1");
-var TabbedPanels2 = new Spry.Widget.TabbedPanels("TabbedPanels2");*/
 var TabbedPanels4 = new Spry.Widget.TabbedPanels("TabbedPanels4");
+var TabbedPanels1 = new Spry.Widget.TabbedPanels("TabbedPanels1");
+var TabbedPanels2 = new Spry.Widget.TabbedPanels("TabbedPanels2");
 var TabbedPanels3 = new Spry.Widget.TabbedPanels("TabbedPanels3");
 
 </script>

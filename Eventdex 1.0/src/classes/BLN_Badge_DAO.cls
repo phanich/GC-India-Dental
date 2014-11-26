@@ -12,7 +12,7 @@ public String getBadgeForTicket(String ticketid)
 STring badgeid;
 try
       {
-       Badge__c badge=[SELECT ticket_id__c FROM Badge__c where ticket_id__c=:ticketid and cancel_time__c=null and Exp_time__c=null];
+       Badge__c badge=[SELECT id,name,ticket_id__c FROM Badge__c where ticket_id__c=:ticketid and cancel_time__c=null and Exp_time__c=null];
        badgeid=badge.id;
        }catch(Exception e){badgeid='';}
        

@@ -3,6 +3,35 @@
 
    <c:myComponent BLN_UtillDisplayLinks="{!myticket}" >
    
+
+<!--------------------------------------------------------script for drag and drop for graphs------------------------------------------------->
+ <script>
+  $(function() {
+    $( ".column" ).sortable({
+      connectWith: ".column",
+      handle: ".portlet-header",
+      cancel: ".portlet-toggle",
+      placeholder: "portlet-placeholder ui-corner-all"
+    });
+ 
+ /*   $( ".portlet" )
+      .addClass( "ui-widget ui-widget-content ui-helper-clearfix ui-corner-all" )
+      .find( ".portlet-header" )
+        .addClass( "ui-widget-header ui-corner-all" )
+        .prepend( "<span class='ui-icon ui-icon-minusthick portlet-toggle'></span>");*/
+ 
+  /*  $( ".portlet-toggle" ).click(function() {
+      var icon = $( this );
+      icon.toggleClass( "ui-icon-minusthick ui-icon-plusthick" );
+      icon.closest( ".portlet" ).find( ".portlet-content" ).toggle();
+    });*/
+  });
+  </script>
+
+<!-------------------------------------------------------------------------------------------------------------------------------------------->
+
+
+   
 <!--------------------------------------------------------------STATISTICS--------------------->   
 
 
@@ -221,11 +250,12 @@ Total Tickets
 </apex:form>
  <!-------------------------------------------------------STATISTICS End --------------------------->  
  <!------------------------------------------------------START DASHBOARDS--------------------------->
+  <div class="column" style=" cursor:all-scroll;">  
    <!-----------------Revenue Generated Vs Payment Category report---------------------------------------------------------------->
    
-    <div class="grid-1" style="width:50%;  margin-left:0.2%;padding-right:0px; float:left">
-          <div class="title-grid">Revenue Generated Vs Payment Category</div>
-          <div class="content-gird" style=" border: 1px solid #e3e3e3;height:300px; "> 
+    <div class="grid-1 portlet" style="width:48%;  padding-right:0px; float:left">
+          <div class="title-grid  portlet-header">Revenue Generated Vs Payment Category</div>
+          <div class="content-gird portlet-content" style=" border: 1px solid #e3e3e3;height:300px; "> 
          <div id="chartContainer2" style="height: 260px; width: 100%; margin-top:0px;">
          <div style="margin-top:40px;">
            <apex:outputPanel >
@@ -250,9 +280,9 @@ Total Tickets
    
    <!--------------------------------------------------------------------------------------------------------------------------------->
    <!-----------------Revenue generated Vs Ticket types report---------------------------------------------------------------->
-      <div class="grid-1" style="width:50%; margin-left:1%;margin-right:-3%; padding-right:0px; float:left">
-          <div class="title-grid">Revenue Generated Vs Ticket Types</div>
-          <div class="content-gird"> 
+      <div class="grid-1 portlet" style="width:48%;  padding-right:0px; float:left">
+          <div class="title-grid portlet-header">Revenue Generated Vs Ticket Types</div>
+          <div class="content-gird portlet-content"> 
   <div id="chartContainer" style="height: 300px; width: 100%; margin-top:0px;">
  <apex:outputPanel rendered="{!if(ticpayinn.size != 0,true,false)}"> 
                      
@@ -285,9 +315,9 @@ Total Tickets
        
        
         <!--Sold Tickets Vs Available Tickets---------------->
-        <div class="grid-1" style="width:50%; margin-left:0.2%; padding-right:0px; float:left">
-          <div class="title-grid">Sold Tickets Vs Available Tickets</div>
-          <div class="content-gird"> 
+        <div class="grid-1 portlet" style="width:48%;  padding-right:0px; float:left">
+          <div class="title-grid portlet-header">Sold Tickets Vs Available Tickets</div>
+          <div class="content-gird portlet-content"> 
 
 
 
@@ -324,9 +354,9 @@ Total Tickets
        
        
         <!--Expected Revenue Vs Generated Revenue Tickets---------------->
-        <div class="grid-1" style="width:50%; margin-left:1%;margin-right:-3%; padding-right:0px; float:left">
-          <div class="title-grid">Expected Revenue Vs Generated Revenue</div>
-          <div class="content-gird"> 
+        <div class="grid-1 portlet" style="width:48%;  padding-right:0px; float:left">
+          <div class="title-grid portlet-header">Expected Revenue Vs Generated Revenue</div>
+          <div class="content-gird portlet-content"> 
 
 
 
@@ -355,7 +385,7 @@ Total Tickets
           </div><!--close of contentgrid-->
         </div><!--close of grid-->
         <!------------------------------------------------------>
-       
+        </div><!--close of coloumn--->
         
         
  <!--------------------------------------------END OF DASHBOARDS-------------------------------------------->      

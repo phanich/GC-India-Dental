@@ -12,5 +12,9 @@
         <members>*</members>
         <name>ApexPage</name>
     </types>
+    <types>
+        <members>*</members>
+        <name>ApexTrigger</name>
+    </types>
     <version>31.0</version>
 </Package>
