@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Report xmlns="http://soap.sforce.com/2006/04/metadata">
+    <columns>
+        <field>Account.Clinic_Name__c</field>
+    </columns>
+    <columns>
+        <field>ACCOUNT.NAME</field>
+    </columns>
+    <columns>
+        <field>Account.Qualification__c</field>
+    </columns>
+    <columns>
+        <field>PHONE1</field>
+    </columns>
+    <columns>
+        <field>Account.Phone__c</field>
+    </columns>
+    <columns>
+        <field>Account.Email__c</field>
+    </columns>
+    <columns>
+        <field>Account.Class__c</field>
+    </columns>
+    <columns>
+        <field>Account.Billing_Street__c</field>
+    </columns>
+    <columns>
+        <field>Account.Billing_City__c</field>
+    </columns>
+    <columns>
+        <field>Account.Billing_State__c</field>
+    </columns>
+    <description>List of customers owned by Kiran Shroff</description>
+    <filter>
+        <criteriaItems>
+            <column>ALIAS</column>
+            <operator>equals</operator>
+            <value>Kiran</value>
+        </criteriaItems>
+    </filter>
+    <format>Tabular</format>
+    <name>Customers of Kiran Shroff</name>
+    <params>
+        <name>co</name>
+        <value>1</value>
+    </params>
+    <reportType>AccountList</reportType>
+    <scope>organization</scope>
+    <showDetails>true</showDetails>
+    <sortColumn>Account.Class__c</sortColumn>
+    <sortOrder>Asc</sortOrder>
+    <timeFrameFilter>
+        <dateColumn>CREATED_DATE</dateColumn>
+        <interval>INTERVAL_CUSTOM</interval>
+    </timeFrameFilter>
+</Report>

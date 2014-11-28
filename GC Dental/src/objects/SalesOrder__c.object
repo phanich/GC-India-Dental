@@ -1,0 +1,294 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionOverrides>
+        <actionName>Accept</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>CancelEdit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Clone</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Delete</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Edit</actionName>
+        <content>salesOrder</content>
+        <skipRecordTypeSelect>false</skipRecordTypeSelect>
+        <type>Visualforce</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Follow</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>List</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>New</actionName>
+        <content>salesOrder</content>
+        <skipRecordTypeSelect>false</skipRecordTypeSelect>
+        <type>Visualforce</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>SaveEdit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Tab</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>View</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <compactLayoutAssignment>SYSTEM</compactLayoutAssignment>
+    <deploymentStatus>Deployed</deploymentStatus>
+    <enableActivities>true</enableActivities>
+    <enableBulkApi>true</enableBulkApi>
+    <enableEnhancedLookup>true</enableEnhancedLookup>
+    <enableFeeds>false</enableFeeds>
+    <enableHistory>true</enableHistory>
+    <enableReports>true</enableReports>
+    <enableSharing>true</enableSharing>
+    <enableStreamingApi>true</enableStreamingApi>
+    <fields>
+        <fullName>Campaign_SalesOrder__c</fullName>
+        <externalId>false</externalId>
+        <label>Campaign SalesOrder</label>
+        <summarizedField>Sales_Order_Line_Items__c.Total_Product_Amount__c</summarizedField>
+        <summaryFilterItems>
+            <field>Sales_Order_Line_Items__c.Product_From__c</field>
+            <operation>equals</operation>
+            <value>Campaign Products</value>
+        </summaryFilterItems>
+        <summaryForeignKey>Sales_Order_Line_Items__c.SalesOrder__c</summaryForeignKey>
+        <summaryOperation>sum</summaryOperation>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Summary</type>
+    </fields>
+    <fields>
+        <fullName>Campaign__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <externalId>false</externalId>
+        <label>Campaign</label>
+        <lookupFilter>
+            <active>true</active>
+            <errorMessage>Please select only active campaigns.</errorMessage>
+            <filterItems>
+                <field>Campaign__c.isActive__c</field>
+                <operation>equals</operation>
+                <value>True</value>
+            </filterItems>
+            <infoMessage>List of Active Campaigns</infoMessage>
+            <isOptional>false</isOptional>
+        </lookupFilter>
+        <referenceTo>Campaign__c</referenceTo>
+        <relationshipLabel>Sales Orders</relationshipLabel>
+        <relationshipName>Sales_Orders</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Close_Date__c</fullName>
+        <externalId>false</externalId>
+        <label>Order Date</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>Customer__c</fullName>
+        <externalId>false</externalId>
+        <label>Customer</label>
+        <referenceTo>Account</referenceTo>
+        <relationshipLabel>Sales Orders</relationshipLabel>
+        <relationshipName>SalesOrders</relationshipName>
+        <relationshipOrder>0</relationshipOrder>
+        <reparentableMasterDetail>false</reparentableMasterDetail>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>MasterDetail</type>
+        <writeRequiresMasterRead>false</writeRequiresMasterRead>
+    </fields>
+    <fields>
+        <fullName>Dealer__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <externalId>false</externalId>
+        <label>Dealer</label>
+        <referenceTo>Dealer__c</referenceTo>
+        <relationshipLabel>Sales Orders</relationshipLabel>
+        <relationshipName>SalesOrders</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Demo_Product__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <externalId>false</externalId>
+        <label>Demo Product</label>
+        <lookupFilter>
+            <active>true</active>
+            <errorMessage>Please select the active demo products.</errorMessage>
+            <filterItems>
+                <field>Demo_Product__c.is_active__c</field>
+                <operation>equals</operation>
+                <value>True</value>
+            </filterItems>
+            <infoMessage>Please select the active demo products.Please start the search with &quot;  D-  &quot;</infoMessage>
+            <isOptional>false</isOptional>
+        </lookupFilter>
+        <referenceTo>Demo_Product__c</referenceTo>
+        <relationshipLabel>Sales Orders</relationshipLabel>
+        <relationshipName>Sales_Orders</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Demo_Products_Sales_Order__c</fullName>
+        <externalId>false</externalId>
+        <label>Demo Products Sales Order</label>
+        <summarizedField>Sales_Order_Line_Items__c.Order_Quantity__c</summarizedField>
+        <summaryFilterItems>
+            <field>Sales_Order_Line_Items__c.Product_From__c</field>
+            <operation>equals</operation>
+            <value>Demo Products</value>
+        </summaryFilterItems>
+        <summaryForeignKey>Sales_Order_Line_Items__c.SalesOrder__c</summaryForeignKey>
+        <summaryOperation>sum</summaryOperation>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Summary</type>
+    </fields>
+    <fields>
+        <fullName>Only_SalesOrder_Amount__c</fullName>
+        <externalId>false</externalId>
+        <label>Only SalesOrder Amount</label>
+        <summarizedField>Sales_Order_Line_Items__c.Total_Product_Amount__c</summarizedField>
+        <summaryFilterItems>
+            <field>Sales_Order_Line_Items__c.Product_From__c</field>
+            <operation>equals</operation>
+            <value>Sales Order</value>
+        </summaryFilterItems>
+        <summaryForeignKey>Sales_Order_Line_Items__c.SalesOrder__c</summaryForeignKey>
+        <summaryOperation>sum</summaryOperation>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Summary</type>
+    </fields>
+    <fields>
+        <fullName>Order_Type__c</fullName>
+        <externalId>false</externalId>
+        <label>Order Type</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Received a call from Customer</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>I have called the Customer</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>I have visited the Customer</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>SalesOrder_Amount__c</fullName>
+        <externalId>false</externalId>
+        <label>SalesOrder Amount</label>
+        <summarizedField>Sales_Order_Line_Items__c.Total_Product_Amount__c</summarizedField>
+        <summaryForeignKey>Sales_Order_Line_Items__c.SalesOrder__c</summaryForeignKey>
+        <summaryOperation>sum</summaryOperation>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Summary</type>
+    </fields>
+    <fields>
+        <fullName>Working_with__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <externalId>false</externalId>
+        <label>Working with</label>
+        <lookupFilter>
+            <active>true</active>
+            <errorMessage>Please select active User.</errorMessage>
+            <filterItems>
+                <field>$User.IsActive</field>
+                <operation>equals</operation>
+                <value>True</value>
+            </filterItems>
+            <infoMessage>Active Users</infoMessage>
+            <isOptional>false</isOptional>
+        </lookupFilter>
+        <referenceTo>User</referenceTo>
+        <relationshipName>SalesOrders</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Lookup</type>
+    </fields>
+    <label>Sales Order</label>
+    <listViews>
+        <fullName>All</fullName>
+        <columns>NAME</columns>
+        <columns>Customer__c</columns>
+        <columns>Close_Date__c</columns>
+        <columns>Dealer__c</columns>
+        <columns>Working_with__c</columns>
+        <columns>CREATEDBY_USER</columns>
+        <filterScope>Everything</filterScope>
+        <label>All</label>
+    </listViews>
+    <listViews>
+        <fullName>This_Month</fullName>
+        <columns>NAME</columns>
+        <columns>Customer__c</columns>
+        <columns>Close_Date__c</columns>
+        <columns>Dealer__c</columns>
+        <columns>Working_with__c</columns>
+        <columns>CREATEDBY_USER</columns>
+        <filterScope>Everything</filterScope>
+        <filters>
+            <field>Close_Date__c</field>
+            <operation>equals</operation>
+            <value>THIS_MONTH</value>
+        </filters>
+        <label>This Month</label>
+    </listViews>
+    <nameField>
+        <displayFormat>SO-{00000}</displayFormat>
+        <label>Sales Order No</label>
+        <trackHistory>false</trackHistory>
+        <type>AutoNumber</type>
+    </nameField>
+    <pluralLabel>Sales Orders</pluralLabel>
+    <searchLayouts>
+        <customTabListAdditionalFields>Customer__c</customTabListAdditionalFields>
+        <customTabListAdditionalFields>Dealer__c</customTabListAdditionalFields>
+        <customTabListAdditionalFields>Close_Date__c</customTabListAdditionalFields>
+        <customTabListAdditionalFields>SalesOrder_Amount__c</customTabListAdditionalFields>
+        <customTabListAdditionalFields>Working_with__c</customTabListAdditionalFields>
+        <customTabListAdditionalFields>CREATEDBY_USER</customTabListAdditionalFields>
+    </searchLayouts>
+    <sharingModel>ControlledByParent</sharingModel>
+</CustomObject>

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Report xmlns="http://soap.sforce.com/2006/04/metadata">
+    <columns>
+        <field>ACCOUNT.NAME</field>
+    </columns>
+    <columns>
+        <field>Account.Clinic_Name__c</field>
+    </columns>
+    <columns>
+        <field>Account.Phone__c</field>
+    </columns>
+    <columns>
+        <field>Account.Email__c</field>
+    </columns>
+    <columns>
+        <field>Account.Status__c</field>
+    </columns>
+    <columns>
+        <field>Account.Billing_State__c</field>
+    </columns>
+    <columns>
+        <field>USERS.NAME</field>
+    </columns>
+    <format>Summary</format>
+    <groupingsDown>
+        <dateGranularity>Day</dateGranularity>
+        <field>Account.Class__c</field>
+        <sortOrder>Asc</sortOrder>
+    </groupingsDown>
+    <name>Customers - Class Wise Report</name>
+    <params>
+        <name>co</name>
+        <value>1</value>
+    </params>
+    <reportType>AccountList</reportType>
+    <scope>organization</scope>
+    <showDetails>true</showDetails>
+    <timeFrameFilter>
+        <dateColumn>CREATED_DATE</dateColumn>
+        <interval>INTERVAL_CURRENTQ</interval>
+    </timeFrameFilter>
+</Report>

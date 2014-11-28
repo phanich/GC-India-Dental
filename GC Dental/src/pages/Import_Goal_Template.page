@@ -1,0 +1,5 @@
+<apex:page contentType="application/csv#GoalsImportTemplate.csv" cache="true" showheader="false" language="en-US" controller="goalfileuploader">
+
+    <apex:outputText value="UserName,StartDate(DD/MM/YYYY),EndDate(DD/MM/YYYY),Product,QuantityGoal,Quantityin(Each/Box),Revenue Goal"/>
+  
+</apex:page>

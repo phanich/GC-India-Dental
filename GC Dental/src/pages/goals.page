@@ -1,0 +1,83 @@
+<apex:page standardController="Goal__c" extensions="goalCon">
+<apex:includeScript value="{!$Resource.AjaxLoaderJs}/AjaxLoader.js"/> 
+<c:AjaxLoader LoaderImage="{!$Resource.AjaxLoaderImage}"/> 
+
+<!-- Javascript -->
+<script type="text/javascript">
+function validate()
+{
+    if(document.getElementById('{!$Component.form1.pb.pbs.SelectedUser}').value == 'None')
+    {
+        alert("User name is mandatory");
+        return false;  
+    }
+    else{
+        return true;
+    } 
+}
+</script>
+<!-- Javascript -->
+
+<apex:form id="form1">   
+   <apex:pageBlock title="Goals" id="pb">
+     
+       <apex:pageBlockSection collapsible="false" columns="2" id="pbs">
+           <!-- <apex:inputField value="{!goalRecord.Sales_Executive__c}"/> -->
+            <apex:outputText >
+                <font style="padding-left:28%;color:#4A4A56;font-weight:bold;font-size:11px;"> User</font>&nbsp;&nbsp;      
+                <apex:selectList id="SelectedUser" value="{!SelectedUser}" size="1" style="width:150px;" required="true">
+                    <apex:selectOptions value="{!ChoosenUser}"/>
+                </apex:selectList>
+            </apex:outputText><br/>
+           <apex:inputField value="{!goalRecord.Start_Date__c}" required="true"/>
+           <apex:inputField value="{!goalRecord.End_Date__c}" required="true"/>
+       </apex:pageBlockSection>
+       
+         <apex:pageBlockButtons location="bottom">
+                <apex:commandButton value="Save" action="{!saveAllRecords}" status="AjaxLoader" rerender="form1" onclick="validate();"/>
+                <apex:commandButton value="Cancel" action="{!cancel}" />
+       </apex:pageBlockButtons>
+       
+       <div style="margin: 10px 10px 2px 20px;">
+           <apex:outputText value="{!errorMessage}" id="errorMessage" style="color:red;" escape="false"></apex:outputText>
+       </div>
+           
+       <apex:pageBlockSection collapsible="false" columns="1" id="glLine">
+           
+           <apex:pageBlockTable value="{!goalsLineItems}" var="gl" id="glTable">
+               <apex:column headerValue="Products">
+               <apex:outputPanel styleClass="requiredInput" layout="block" id="pwPanel" >
+               <apex:outputPanel styleClass="requiredBlock"/>
+                   <apex:selectList value="{!gl.Product__c}" multiselect="false" size="1" required="true" id="SelectedProduct">
+                            <apex:selectOptions value="{!picklistValues}"/>
+                    </apex:selectList>
+               </apex:outputPanel>    
+               </apex:column>
+               <apex:column headerValue="Quantity Goal">
+                   <apex:inputField value="{!gl.Quantity_Goal__c}" required="true"/>
+               </apex:column>    
+               <apex:column headerValue="Quantity In">
+                   <apex:inputField value="{!gl.Product_Quantity_in__c}" required="true"/>
+               </apex:column>  
+               <apex:column value="{!gl.Achieved_Quantity_Goal__c}" headerValue="Achieved Goal Quantity "/>
+               <apex:column headerValue="Revenue Goal">
+                   <apex:inputField value="{!gl.Revenue_Goal__c}" required="true"/>
+               </apex:column>    
+               <apex:column value="{!gl.Achieved_Revenue__c}" headerValue="Achieved Revenue"/>
+               <apex:column headerValue="Action">
+                   <apex:commandLink action="{!deleteGoalLine}" reRender="glLine,errorMessage" onclick="confirm('Do you want to delete the item?');">
+                       <apex:image value="{!$Resource.DeleteIcon}" title="Delete"/>
+                       <apex:param value="{!gl.UniqueName__c}" name="deletedId"/>
+                   </apex:commandLink>    
+               </apex:column>    
+           </apex:pageBlockTable>
+       </apex:pageBlockSection>
+       
+<div style="text-align:left;margin: 15px 10px 2px 10px;">       
+       <apex:commandButton value="Add Products" action="{!addMore}" reRender="glLine,errorMessage" />
+</div>
+   </apex:pageBlock>
+</apex:form>   
+   
+   
+</apex:page>

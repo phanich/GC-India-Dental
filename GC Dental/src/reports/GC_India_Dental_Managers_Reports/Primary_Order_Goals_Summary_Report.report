@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Report xmlns="http://soap.sforce.com/2006/04/metadata">
+    <aggregates>
+        <calculatedFormula>Primary_Order_Goals_Line_Items__c.Revenue_Generated__c:SUM</calculatedFormula>
+        <datatype>number</datatype>
+        <developerName>FORMULA1</developerName>
+        <isActive>true</isActive>
+        <isCrossBlock>false</isCrossBlock>
+        <masterLabel>Total Generated Revenue</masterLabel>
+        <scale>2</scale>
+    </aggregates>
+    <aggregates>
+        <calculatedFormula>Primary_Order_Goals_for_manager__c.Target_Revenue__c:SUM</calculatedFormula>
+        <datatype>number</datatype>
+        <developerName>FORMULA2</developerName>
+        <isActive>true</isActive>
+        <isCrossBlock>false</isCrossBlock>
+        <masterLabel>Target Revenue</masterLabel>
+        <scale>2</scale>
+    </aggregates>
+    <columns>
+        <field>CUST_NAME</field>
+    </columns>
+    <columns>
+        <field>FK_NAME</field>
+    </columns>
+    <columns>
+        <field>Primary_Order_Goals_for_manager__c.Start_Date__c</field>
+    </columns>
+    <columns>
+        <field>Primary_Order_Goals_for_manager__c.End_Date__c</field>
+    </columns>
+    <columns>
+        <field>Primary_Order_Goals_Line_Items__c.Revenue_Generated__c</field>
+    </columns>
+    <format>Summary</format>
+    <groupingsDown>
+        <dateGranularity>Day</dateGranularity>
+        <field>Primary_Order_Goals_for_manager__c.Sales_Manager__c</field>
+        <sortOrder>Asc</sortOrder>
+    </groupingsDown>
+    <name>Primary Order Goals Summary Report</name>
+    <params>
+        <name>co</name>
+        <value>1</value>
+    </params>
+    <reportType>CustomEntityCustomEntity$Primary_Order_Goals_for_manager__c$Primary_Order_Goals_Line_Items__c@Primary_Order_Goals_Line_Items__c.Dealer__c</reportType>
+    <scope>organization</scope>
+    <showDetails>true</showDetails>
+    <timeFrameFilter>
+        <dateColumn>CUST_CREATED_DATE</dateColumn>
+        <interval>INTERVAL_THISMONTH</interval>
+    </timeFrameFilter>
+</Report>

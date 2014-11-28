@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObjectTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <caseValues>
+        <plural>false</plural>
+        <value>Primary Order Goal</value>
+    </caseValues>
+    <caseValues>
+        <plural>true</plural>
+        <value>Primary Order Goals</value>
+    </caseValues>
+    <fields>
+        <label><!-- End Date --></label>
+        <name>End_Date__c</name>
+    </fields>
+    <fields>
+        <label><!-- Sales Manager --></label>
+        <name>Sales_Manager__c</name>
+        <relationshipLabel><!-- Primary Order Goals --></relationshipLabel>
+    </fields>
+    <fields>
+        <label><!-- Start Date --></label>
+        <name>Start_Date__c</name>
+    </fields>
+    <fields>
+        <label><!-- Target Revenue --></label>
+        <name>Target_Revenue1__c</name>
+    </fields>
+    <fields>
+        <label><!-- Target Revenue RollUp --></label>
+        <name>Target_Revenue__c</name>
+    </fields>
+    <fields>
+        <label><!-- Total Revenue Generated --></label>
+        <name>Total_Revnue__c</name>
+    </fields>
+    <layouts>
+        <layout>Primary Order Goals for manager Layout</layout>
+        <sections>
+            <label><!-- Custom Links --></label>
+            <section>Custom Links</section>
+        </sections>
+    </layouts>
+    <startsWith>Consonant</startsWith>
+</CustomObjectTranslation>

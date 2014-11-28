@@ -1,0 +1,1603 @@
+<apex:page standardStylesheets="false" showHeader="false" sidebar="true">
+<apex:form >
+<html>
+<head>
+<style>
+a:active {
+    COLOR: #139c83;
+}
+html {
+    text-decoration:none;
+    font-family:Segoe UI;
+    font-size:12px;
+    line-height:20px;
+}
+body {
+    margin:0px;
+    padding:0px;
+    background-color:#eaeaea;
+}
+</style>
+<script>
+function toggle_visibility(id) {
+    var list = document.getElementsByClassName("alist");
+    for (var i = 0; i < list.length; i++) {
+        list[i].style.display = 'none';
+    }
+    var e = document.getElementById(id);
+    if(e.style.display == 'block') {
+        e.style.display = 'none';
+    } else {
+        e.style.display = 'block';
+    }
+}
+</script>
+<script>
+function menu_toggle_visibility(id) {
+    var menulist = document.getElementsByClassName("mlist");
+    for (var i = 0; i < menulist.length; i++) {
+        menulist[i].style.display = 'none';
+    }
+    var e = document.getElementById(id);
+    if(e.style.display == 'block') {
+        e.style.display = 'none';
+    } else {
+        e.style.display = 'block';
+    }
+}
+</script>
+
+</head>
+<body style="background-color:#eaeaea; margin:0px auto;">
+<div id="header" style="background-color:#139c83;color:#FFFFFF;text-align:center; padding:10px; width:100%;">
+  <table width="100%" cellpadding="0" cellspacing="0" border="0px">
+    <tr colspan="2">
+      <td width="20%" align="left">
+      <img src="https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcQ2CGf3zucf_HooX9K5Qymc2GrNdyw5H5PY8d1h4pxDqqnutALNCA" height="60px" width="130px"/></td>
+      <td width="80%" align="center" valign="middle"><h1 style="margin-bottom:0;font-family:Segoe UI; padding:0px; margin:0px;">Salesforce CRM Help Guide</h1></td>
+    </tr>
+  </table>
+</div>
+<div style="width:98%; margin:0px auto; background-color:#eaeaea;">
+  <div id="menu" style="background-color:#eaeaea; font-size:14px; line-height:20px;height:500px;;width:20%; margin:0px auto; float:left; 
+  padding-left:35px; background-color:#eaeaea; margin-top:15px;"> 
+  
+    <a href="#" onclick="toggle_visibility('div');" style=" font-weight:bold; text-decoration:underline;">Login</a><br />
+  
+    <a href="#" onclick="toggle_visibility('div1');menu_toggle_visibility('menu-item1');"><b><u>Home</u></b></a><br />
+    
+         <div id ="menu-item1" class="mlist" style="display:none;padding-left:12px;"> 
+            <a href="#" onclick="toggle_visibility('tablist2');">Sidebar items</a><br />
+            <a href="#" onclick="toggle_visibility('tablist3');">Main Section Items</a><br />
+         </div>
+     <a href="#" onclick="toggle_visibility('div2');menu_toggle_visibility('menu-item2');"><b>Customers</b></a><br />
+    
+        <div id ="menu-item2" class="mlist" style="display:none;padding-left:12px;"> 
+            <a href="#" onclick="toggle_visibility('tablist6');">Customer View</a><br />
+            <a href="#" onclick="toggle_visibility('tablist7');"> Add Customer</a><br />
+        </div>
+        
+        
+    
+    <a href="#" onclick="toggle_visibility('div3');menu_toggle_visibility('menu-item3');"><b>Contacts</b></a><br />
+    
+    <div id ="menu-item3" class="mlist" style="display:none;padding-left:12px;"> 
+      <a href="#" onclick="toggle_visibility('tablist12');">Add Contact</a><br />
+   </div>
+    
+    <a href="#" onclick="toggle_visibility('div4');menu_toggle_visibility('menu-item4');"><b>Products</b></a><br />
+    
+    <div id ="menu-item4" class="mlist" style="display:none;padding-left:12px;"> <a href="#" onclick="toggle_visibility('tablist15');">Product View</a><br />
+    
+      <a href="#" onclick="toggle_visibility('tablist16');">Add Product</a><br />
+      
+    </div>
+    
+    <a href="#" onclick="toggle_visibility('div5');menu_toggle_visibility('menu-item5');"><b>Sales Order</b></a><br />
+    
+    <div id ="menu-item5" class="mlist" style="display:none;padding-left:12px;"> <a href="#" onclick="toggle_visibility('tablist19');">Sales Order View</a><br />
+    
+      <a href="#" onclick="toggle_visibility('tablist20');">Add Sales Order </a><br />
+      
+    </div>
+    <a href="#" onclick="toggle_visibility('div6');menu_toggle_visibility('menu-item6');"><b>Campaigns</b></a><br />
+    
+    <div id ="menu-item6" class="mlist" style="display:none;padding-left:12px;"> <a href="#" onclick="toggle_visibility('tablist23');">Campaigns View</a><br />
+    
+      <a href="#" onclick="toggle_visibility('tablist24');">Add Campaigns</a><br />
+      
+    </div>
+    
+    <a href="#" onclick="toggle_visibility('div7');menu_toggle_visibility('menu-item7');"><b>Dealers</b></a><br />
+    
+    <div id ="menu-item7" class="mlist" style="display:none;padding-left:12px;"> <a href="#" onclick="toggle_visibility('tablist27');">Dealer View</a><br />
+    
+      <a href="#" onclick="toggle_visibility('tablist28');">Add Dealer</a><br />
+      
+    </div>
+    
+    <a href="#" onclick="toggle_visibility('div8');menu_toggle_visibility('menu-item8');"><b>Demo Products</b></a><br />
+    
+    <div id ="menu-item8" class="mlist" style="display:none;padding-left:12px;"> <a href="#" onclick="toggle_visibility('tablist31');">Demo Product View</a><br />
+    
+      <a href="#" onclick="toggle_visibility('tablist32');">Add Demo Product</a><br />
+      
+    </div>
+    
+    <a href="#" onclick="toggle_visibility('div9');menu_toggle_visibility('menu-item9');"><b>Goals</b></a><br />
+    <div id ="menu-item9" class="mlist" style="display:none;padding-left:12px;"> 
+    <a href="#" onclick="toggle_visibility('tablist35');">Goal View</a><br />
+    <a href="#" onclick="toggle_visibility('tablist36');">Add Goal</a><br />
+    </div>
+    
+    <a href="#" onclick="toggle_visibility('div11');menu_toggle_visibility('menu-item11');"><b>Primary Order Goals</b></a><br />
+    <div id ="menu-item11" class="mlist" style="display:none;padding-left:12px;"> 
+    <a href="#" onclick="toggle_visibility('tablist43');">Primary Order Goal View</a><br />
+    <a href="#" onclick="toggle_visibility('tablist44');">Add Primary Order</a><br />
+    </div>
+    
+    <a href="#" onclick="toggle_visibility('div12');menu_toggle_visibility('menu-item12');"><b>Search</b></a><br />
+    
+    <a href="#" onclick="toggle_visibility('div13');menu_toggle_visibility('menu-item13');"><b>Sales Productivity for NSM {!$Profile.Name} Administrator  {!IF( $Profile.Name='System Administrator','Admin123','Non Admin')}</b></a><br />
+    <div id ="menu-item13" class="mlist" style="display:none;padding-left:12px;"> 
+    <a href="#" onclick="toggle_visibility('tablist45');">Product Wise Sales Report</a><br />
+    <a href="#" onclick="toggle_visibility('tablist46');">Manager Wise Reports</a><br />
+    <a href="#" onclick="toggle_visibility('tablist47');">Customer Wise Reports</a><br />
+    <a href="#" onclick="toggle_visibility('tablist48');">No Of Visits</a><br />
+    <a href="#" onclick="toggle_visibility('tablist49');">Goals Vs Achievements</a><br />
+    </div>
+    
+    <a href="#" onclick="toggle_visibility('div14');menu_toggle_visibility('menu-item14');"><b>Sales Productivity for SM/RSM</b></a><br />
+     <div id ="menu-item14" class="mlist" style="display:none;padding-left:12px;"> 
+     <a href="#" onclick="toggle_visibility('tablist50');">Executive Wise Reports</a><br />
+     <a href="#" onclick="toggle_visibility('tablist51');">Customer Wise Reports</a><br />
+     <a href="#" onclick="toggle_visibility('tablist52');">No Of Visits</a><br />
+     <a href="#" onclick="toggle_visibility('tablist53');">Goals Vs Achievements</a><br />
+    </div>
+    
+    <a href="#" onclick="toggle_visibility('div15');menu_toggle_visibility('menu-item15');"><b>Sales Productivity for SE</b></a><br />
+    <div id ="menu-item15" class="mlist" style="display:none;padding-left:12px;"> 
+    <a href="#" onclick="toggle_visibility('tablist54');">Customer Wise Reports</a><br />
+    <a href="#" onclick="toggle_visibility('tablist55');">No Of Visits</a><br />
+    </div>
+    
+    <a href="#"  onclick="toggle_visibility('div10');menu_toggle_visibility('menu-item10');"><b><u>Roles and Responsibilities</u></b></a><br />
+    <div id ="menu-item10" class="mlist" style="display:none;padding-left:12px;"> 
+    <a href="#" onclick="toggle_visibility('tablist37');">CEO/ COO</a><br />
+    <a href="#" onclick="toggle_visibility('tablist38');">Admin</a><br />
+    <a href="#" onclick="toggle_visibility('tablist39');">Marketing Manager</a><br />
+    <a href="#" onclick="toggle_visibility('tablist40');">National Sales Manager (NSM)</a><br />
+    <a href="#" onclick="toggle_visibility('tablist41');">Regional Manager / Sales Manager (RM/ SM)</a><br />
+    <a href="#" onclick="toggle_visibility('tablist42');">Sales Executive/ Area Manager (SE/ AM)</a> 
+    </div>
+  </div>
+  
+  <div id="div" class="alist" style="display:block; background-color:#EEEEEE; height:615px; width:73%; float:right; font-family:Segoe UI; font-size:13px; line-height:25px; overflow:scroll;">
+    <div id="homelist1" style="background-color:#139c83;color:#FFFFFF;text-align:left;padding-left:10px; margin-top:15px;">
+      <h3 style="margin-bottom:0;font-family:Segoe UI;">Login Details</h3>
+    </div>
+    <ul>
+      <li>Go to login.salesforce.com.</li>
+      <li>Enter User Name and Password.</li>
+      <li>If the user forgets password ,Click on Forgot your password.</li>
+      <li>It redirects to a page where user needs to enter the username in the Text Box to reset password.</li>
+      <li>Now, check your email and follow the instructions in the mail.</li>
+      <li>User is redirected to salesforce home page.</li>
+      <li>After logging into salesforce account a pop up will be shown if any pending Logs or events are present.</li>
+      <li>This reminds user about overdue logs.  It also reminds user about the events Scheduled.</li>
+      <li>A snooze button is also provided for setting up the reminder.</li>
+      <li><B>Dismiss </B>is the button that helps user to cancel particular reminder shown in pop up box.On clicking Dismiss button the reminder of that particular log is not shown again.</li>
+      <li>On clicking <b> Dismiss All</b> button all the reminders shown in pop up box are cancelled and are not displayed again.</li>
+    </ul>
+    <div style="width:100%">
+      <center>
+      
+      
+  
+      
+      
+      
+      </center>
+    </div>
+  </div>
+  <div id="div1" class="alist" style="display:block; background-color:#EEEEEE; height:615px; width:73%; float:right; font-family:Segoe UI; font-size:13px; line-height:25px; overflow:scroll;">
+    <div style="background-color:#139c83;color:#FFFFFF;text-align:left;padding-left:10px;">
+      <h3 style="margin-bottom:0;font-family:Segoe UI;">Home</h3>
+    </div>
+    <ul>
+      <li>
+      <b>Overview</b>:</li>
+       Home page lets user to quickly create and view dashboards,logs and events.User will also see default Dashboards and Calendar.
+      
+    </ul>
+    <ul>
+      <li><b>Advanced Search </b>(Found at the top of the page)
+        <div style="width:100%"><img src="images/advance search.png" width="300px" height="50px" align="right"/></div>
+      </li>
+      <ul>
+        <li>User can use this field to perform searches on almost any data field, such as customers,contacts,products,demoproducts,dealers,Goals,    
+          sales orders etc..</li>
+        <li>Search must contain 2 or more characters followed by * </li>
+      </ul>
+    </ul>
+    <ul>
+      <b>Home Page also consists of</b>
+      <li>Sidebar Items</li>
+      <li>Main Section Items</li>
+    </ul>
+    <div style="width:100%;">
+      <center>
+        <img src="images/home.png" width="600px" height="400px" align="center"/>
+      </center>
+    </div>
+  </div>
+  
+  <div id="div2" class="alist" style="display:block; background-color:#EEEEEE; height:615px; width:73%; float:right; font-family:Segoe UI; font-size:13px; line-height:25px; overflow:scroll;">
+    <div id="header" style="background-color:#139c83;color:#FFFFFF;text-align:left;padding-left:10px;">
+      <h3 style="margin-bottom:0;font-family:Segoe UI;">Customer</h3>
+    </div>
+    <p><b>Overview</b></p>
+    <ul>
+      <li><b>Customer is the one who is willing to give business i.e. he is ready to give an order for GC India Dental Pvt.Ltd.</b></li>
+      <li>Customers are Doctors, Institutions etc.... </li>
+      <li>User can store customer information such as name, address,phone numbers,etc. For each customer, user can also store related information such as contacts, sales order, activities, notes etc...</li>
+      <li>Marketing Manager can Create/Read/Update the Customers Information.</li>
+      <li>NSM Or RM/ SM Or SE/ AM  can Create/Read/Update the Customers Information and add multiple contacts if the Customer is Institution.</li>
+    </ul>
+    <div id="header" style="background-color:#139c83;color:#FFFFFF;text-align:left;padding-left:10px;">
+      <h3 style="margin-bottom:0;font-family:Segoe UI;">Customer Tab</h3>
+    </div>
+    <p><b>Overview</b></p>
+    <ul>
+      <li>The Customers tab displays a home page that lets user to quickly create and locate customers and also sort and filter customers using standard and custom list views. In addition, this tab lets user to view and edit detailed information on each customer to which user has access to.</li>
+      <p><b>Clicking on the Customers tab displays the Customers home page. From this page user can:</b></p>
+      <li>View a filtered list of Customers using a predefined list from View or by creating a custom view. To define own custom views click on <b>Create New View</b>. To edit or delete any view that is created, select it from the View drop-down list and click Edit.</li>
+      <li>See a list of User’s most recently viewed, created, or modified Customers in Recent Customers. The displayed fields are determined by the Customers Search Layout defined by administrator and by field-level security settings.</li>
+    </ul>
+    <div id="header" style="background-color:#139c83;color:#FFFFFF;text-align:left;padding-left:10px;">
+      <h3 style="margin-bottom:0;font-family:Segoe UI;">Customer Home</h3>
+    </div>
+    <p><b>Customer Home Page</b></p>
+    <div style="width:100%;">
+      <center>
+        <img src="images/customerhme.png" width="700px" height="400px" align="center"/>
+      </center>
+    </div>
+    <ul>
+      <li>Click on <b>Go</b> button as shown in above screen shot with an arrow mark. User is redirected to customers view page.</li>
+    </ul>
+  </div>
+  
+  <div id="div3" class="alist" style="display:block; background-color:#EEEEEE; height:615px; width:73%; float:right; font-family:Segoe UI; font-size:13px; line-height:25px; overflow:scroll;">
+    <div id="header" style="background-color:#139c83;color:#FFFFFF;text-align:left;padding-left:10px;">
+      <h3 style="margin-bottom:0;font-family:Segoe UI;">Contacts</h3>
+    </div>
+    <p><b>Overview</b></p>
+    <ul>
+      <li><b>Contacts are the people associated with Gc India Pvt Ltd business customers.</b> </li>
+      <LI>If the customer is of type institution multiple contacts exists.</LI>
+      <li>For each contact, user can store various kinds of information, such as Contact Name,phone numbers,address,etc..</li>
+      <li>NSM Or RM/ SM Or SE/ AM can add multiple contacts if the Customer is Of type Institution.</li>
+    </ul>
+  </div>
+  
+  
+  <div id="div4" class="alist" style="display:none;background-color:#EEEEEE;height:615px;width:73%;float:right;font-family:Segoe UI; font-size:13px; line-height:25px;overflow:scroll;">
+    <div id="header" style="background-color:#139c83;color:#FFFFFF;text-align:left;padding-left:10px;">
+      <h3 style="margin-bottom:0;font-family:Segoe UI;">Products</h3>
+    </div>
+    <p><b>Overview</b></p>
+    <ul>
+      <li>Products consists of product information such as product name, product family, price of the product, Quantity in each box etc….</li>
+      <li>NSM is responsible to Create/Read/Update/Delete the entire master data of Products.</li>
+      <li>Admin is also responsible to Create/Read/Update/Delete the entire master data of Products.</li>
+    </ul>
+    <div id="header" style="background-color:#139c83;color:#FFFFFF;text-align:left;padding-left:10px;">
+      <h3 style="margin-bottom:0;font-family:Segoe UI;">Product Tab</h3>
+    </div>
+    <p><b>Overview</b></p>
+    <ul>
+      <li>The Products tab displays a home page that lets user to quickly create and locate Products and also sort and filter Products using standard and custom list views. In addition, this tab lets user to view and edit detailed information on each product to which user has access to.</li>
+      <p><b>Clicking on the Products tab displays the Products home page. From this page user can:</b></p>
+      <li>View a filtered list of Products using a predefined list from View or by creating a custom view. To define own custom views click on <b>Create New View</b>. To edit or delete any view that is created, select it from the View drop-down list and click Edit.</li>
+      <li>See a list of User’s most recently viewed, created, or modified Products in Recent Products. The displayed fields are determined by the products Search Layout defined by your administrator and by your field-level security settings.</li>
+    </ul>
+    <div id="header" style="background-color:#139c83;color:#FFFFFF;text-align:left;padding-left:10px;">
+      <h3 style="margin-bottom:0;font-family:Segoe UI;">Product Home</h3>
+    </div>
+    <p><b>Products Home Page</b></p>
+    <div style="width:100%;">
+      <center>
+        <img src="images/productshme.png" width="700px" height="400px" align="center"/>
+      </center>
+    </div>
+    <ul>
+      <li>Click on <b>Go</b> button as shown in above screen shot with an arrow mark. User is redirected to Products view page.</li>
+    </ul>
+  </div>
+  
+  <div id="div5" class="alist" style="display:none;background-color:#EEEEEE;height:615px;width:73%;float:right;font-family:Segoe UI; font-size:13px; line-height:25px;overflow:scroll;">
+    <div id="header" style="background-color:#139c83;color:#FFFFFF;text-align:left;padding-left:10px;">
+      <h3 style="margin-bottom:0;font-family:Segoe UI;">Sales Order</h3>
+    </div>
+    <p><b>Overview</b></p>
+    <ul>
+      <li><b>When a Customer is interested in GC India Dental Pvt.Ltd. and ready to order products, Sales Executive/Sales Manager raises sales order to the customer</b>. By adding Sales Order, user is also building “pipeline,” which will contribute to organizations forecast. User can also link 
+        Sales Orders to campaigns and Demo Products which helps to measure the ROI of marketing programs. In addition, user can create quotes, which shows proposed prices for products and services, from a sales order.</li>
+      <li>RM/SM/SE/AM will raise Sales orders for Customers.</li>
+    </ul>
+    <div id="header" style="background-color:#139c83;color:#FFFFFF;text-align:left;padding-left:10px;">
+      <h3 style="margin-bottom:0;font-family:Segoe UI;">Sales Order Tab</h3>
+    </div>
+    <p><b>Overview</b></p>
+    <ul>
+      <li>The Sales Order tab displays a home page that lets user to quickly create and locate Sales Order and also sort and filter Sales Order using standard and custom list views. In addition, this tab lets user to view and edit detailed information on each Sales Order to which user has access to.</li>
+      <p><b>Clicking on the Sales Order tab displays the Sales Order home page. From this page user can:</b></p>
+      <li>View a filtered list of Sales Order using a predefined list from View or by creating a custom view. To define own custom views click on <b>Create New View</b>. To edit or delete any view that is created, select it from the View drop-down list and click Edit.</li>
+      <li>See a list of User’s most recently viewed, created, or modified Sales Order in Recent Sales Order. The displayed fields are determined by the Sales Order Search Layout defined by your administrator and by your field-level security settings.</li>
+    </ul>
+    <div id="header" style="background-color:#139c83;color:#FFFFFF;text-align:left;padding-left:10px;">
+      <h3 style="margin-bottom:0;font-family:Segoe UI;">Sales Order Home</h3>
+    </div>
+    <p><b>Sales Order Home Page</b></p>
+    <div style="width:100%;">
+      <center>
+        <img src="images/salesorderhme.png" width="600px" height="400px" align="center"/>
+      </center>
+    </div>
+    <ul>
+      <li>Click on <b>Go</b> button as shown in above screen shot with an arrow mark. User is redirected to Sales Order view page.</li>
+    </ul>
+  </div>
+  
+  
+  <div id="div6" class="alist" style="display:none;background-color:#EEEEEE;height:615px;width:73%;float:right;font-family:Segoe UI; font-size:13px; line-height:25px;overflow:scroll;">
+    <div id="header" style="background-color:#139c83;color:#FFFFFF;text-align:left;padding-left:10px;">
+      <h3 style="margin-bottom:0;font-family:Segoe UI;">Campaigns</h3>
+    </div>
+    <p><b>Overview</b></p>
+    <ul>
+      <li><b>A campaign is an outbound marketing project that user wants to plan, manage, and track within Salesforce. It can be a direct mail program, seminar, print advertisement, email, or other type of marketing initiative.</b></li>
+      <li>Marketing Manager will be responsible for creating the Campaigns.</li>
+      <li>NSM will add the All the products that fall under each campaign along with the product details such as product type, quantity, quantity in etc.</li>
+      <li>Marketing Manager will also monitor the status of the Campaign i.e. Campaign End Date, Products Sold, Products Left which fall under the campaign.</li>
+      <li>Marketing Manager can also monitor the sales progress done using campaigns through Reports and Dashboard.</li>
+    </ul>
+    <div id="header" style="background-color:#139c83;color:#FFFFFF;text-align:left;padding-left:10px;">
+      <h3 style="margin-bottom:0;font-family:Segoe UI;">Campaigns Tab</h3>
+    </div>
+    <p><b>Overview</b></p>
+    <ul>
+      <li>The Campaign tab displays a home page that lets user to quickly create and locate Campaign and also sort and filter Campaign using standard and custom list views. In addition, this tab lets user to view and edit detailed information on each product to which user has access to.</li>
+      <p><b>Clicking on the Campaign tab displays the Campaign home page. From this page user can:</b></p>
+      <li>View a filtered list of sales order using a predefined list from View or by creating a custom view. To define own custom views click on <b>Create New View</b>. To edit or delete any view that is created, select it from the View drop-down list and click Edit.</li>
+      <li>See a list of User’s most recently viewed, created, or modified Campaign in Recent Campaign. The displayed fields are determined by the Campaigns Search Layout defined by your administrator and by your field-level security settings.</li>
+    </ul>
+    <div id="header" style="background-color:#139c83;color:#FFFFFF;text-align:left;padding-left:10px;">
+      <h3 style="margin-bottom:0;font-family:Segoe UI;">Campaign Home</h3>
+    </div>
+    <p><b>Campaign Home Page</b></p>
+    <div style="width:100%;">
+      <center>
+        <img src="images/campaignshme.png" width="600px" height="400px" align="center"/>
+      </center>
+    </div>
+    <ul>
+      <li>Click on <b>Go</b> button as shown in above screen shot with an arrow mark. User is redirected to Campaign view page.</li>
+    </ul>
+  </div>
+  
+  
+  <div id="div7" class="alist" style="display:none;background-color:#EEEEEE;height:615px;width:73%;float:right;font-family:Segoe UI; font-size:13px; line-height:25px;overflow:scroll;">
+    <div id="header" style="background-color:#139c83;color:#FFFFFF;text-align:left;padding-left:10px;">
+      <h3 style="margin-bottom:0;font-family:Segoe UI;">Dealers</h3>
+    </div>
+    <p><b>Overview</b></p>
+    <ul>
+      <li><b>Dealers are the one who are responsible for delivery of stock to end customer.Dealers will get indents from executives.</b></li>
+      <li>Marketing Manager Or NSM/RM/SM can Create/Read/Update the Dealers Information.</li>
+    </ul>
+    <div id="header" style="background-color:#139c83;color:#FFFFFF;text-align:left;padding-left:10px;">
+      <h3 style="margin-bottom:0;font-family:Segoe UI;">Dealers Tab</h3>
+    </div>
+    <p><b>Overview</b></p>
+    <ul>
+      <li>The Dealers tab displays a home page that lets user quickly create and locate Dealers. User can also sort and filter Dealers using standard and custom list views. In addition, this tab lets user to view and edit detailed information on Dealers</li>
+      <p><b>Clicking on the Dealers tab displays the Dealers home page. From this page user can:</b></p>
+      <li>View a filtered list of Dealers using a predefined list from View or by creating a custom view. To define own custom views click on Create New View. To edit or delete any view that is created, select it from the View drop-down list and click Edit.</li>
+      <li>See a list of User’s most recently viewed, created, or modified Dealers in Recent Dealers. The displayed fields are determined by the Dealers Search Layout defined by your administrator and by your field-level security settings. </li>
+    </ul>
+    <div id="header" style="background-color:#139c83;color:#FFFFFF;text-align:left;padding-left:10px;">
+      <h3 style="margin-bottom:0;font-family:Segoe UI;">Dealers Home</h3>
+    </div>
+    <p><b>Dealers Home Page</b></p>
+    <div style="width:100%;">
+      <center>
+        <img src="images/dealershme.png" width="600px" height="400px" align="center"/>
+      </center>
+    </div>
+    <ul>
+      <li>Click on <b>Go</b>button -indicated with arrow mark in above screenshot. User is redirected Dealers View Page.</li>
+    </ul>
+  </div>
+  
+  
+  <div id="div8" class="alist" style="display:none;background-color:#EEEEEE;height:615px;width:73%;float:right;font-family:Segoe UI; font-size:13px; line-height:25px;overflow:scroll;">
+    <div id="header" style="background-color:#139c83;color:#FFFFFF;text-align:left;padding-left:10px;">
+      <h3 style="margin-bottom:0;font-family:Segoe UI;">Demo Products</h3>
+    </div>
+    <p><b>Overview</b></p>
+    <ul>
+      <li><b>Demo Products are the products that are offered to customer for promotion of the product for free of cost.</b></li>
+      <li>NSM will be adding the Demo Products Information dispatched to the Sales managers of different regions.</li>
+      <li> NSM will add All Products that would be dispatched as demo pieces.</li>
+      <li>NSM will also monitor the status of the Demo products quantity dispatched to different sales managers.</li>
+      <li>RM/ SM will be adding the Demo Products Information dispatched to Area Managers/ Sales Executives of their region.</li>
+      <li>RM/ SM will add All Products that would be dispatched as demo pieces.</li>
+      <li>RM/ SM can also monitor the status of the Demo products quantity dispatched to different Area Managers/ Sales Executives.</li>
+    </ul>
+    <div id="header" style="background-color:#139c83;color:#FFFFFF;text-align:left;padding-left:10px;">
+      <h3 style="margin-bottom:0;font-family:Segoe UI;">Demo Products Tab</h3>
+    </div>
+    <p><b>Overview</b></p>
+    <ul>
+      <li>The Demo Products tab displays a home page that lets user to quickly create and locate Demo Products. User can also sort and filter Demo Products using standard and custom list views. In addition, this tab lets user to view and edit detailed information on Demo Products.</li>
+      <p><b>Clicking on the Demo Products tab displays the Demo Products home page. From this page user can:</b></p>
+      <li>View a filtered list of Demo Products using a predefined list from View or by creating a custom view. To define own custom views click on Create New View. To edit or delete any view that is created, select it from the View drop-down list and click Edit.</li>
+      <li>See a list of User’s most recently viewed, created, or modified Demo Products in Recent Demo Products. The displayed fields are determined by the Demo Products Search Layout defined by your administrator and by your field-level security settings. </li>
+    </ul>
+    <div id="header" style="background-color:#139c83;color:#FFFFFF;text-align:left;padding-left:10px;">
+      <h3 style="margin-bottom:0;font-family:Segoe UI;">Demo Product Home</h3>
+    </div>
+    <p><b>Demo Product Home Page</b></p>
+    <div style="width:100%;">
+      <center>
+        <img src="images/demoproducthme.png" width="600px" height="400px" align="center"/>
+      </center>
+    </div>
+    <ul>
+      <li>Click on <b>Go</b> button -indicated with arrow mark in above screenshot. User is redirected Demo Products View Page.</li>
+    </ul>
+  </div>
+  
+  
+  <div id="div9" class="alist" style="display:none;background-color:#EEEEEE;height:615px;width:73%;float:right;font-family:Segoe UI; font-size:13px; line-height:25px;overflow:scroll;">
+    <div id="header" style="background-color:#139c83;color:#FFFFFF;text-align:left;padding-left:10px;">
+      <h3 style="margin-bottom:0;font-family:Segoe UI;">Goals</h3>
+    </div>
+    <p><b>Overview</b></p>
+    <ul>
+      <li><b>Goals can be Calculated either by revenue or quantity of product.</b></li>
+      <li>NSM will be responsible for setting the goals for the Sales Managers / Regional Managers.</li>
+      <li>NSM tracks the achievements of Sales Managers/ Regional Managers based on the goals set for each of them.</li>
+      <li>RM/ SM will be responsible for setting the goals for Area Managers/ Sales Executives.</li>
+      <li>RM/ SM tracks the achievements of Area Managers/ Sales Executives based on the goals set for each of them.</li>
+    </ul>
+    <div id="header" style="background-color:#139c83;color:#FFFFFF;text-align:left;padding-left:10px;">
+      <h3 style="margin-bottom:0;font-family:Segoe UI;">Goals Tab</h3>
+    </div>
+    <p><b>Overview</b></p>
+    <ul>
+      <li>The Goals tab displays a home page that lets user to quickly create and locate Goals. User can also sort and filter Goals using standard and custom list views. In addition, this tab lets user to view and edit detailed information on each Goals to which user has access to..</li>
+      <p><b>Clicking on the Goals tab displays the Goals home page. From this page user can:</b></p>
+      <li>Show a filtered list of Goals using a predefined list from View or by creating a custom view. To define own custom views click on Create New View. To edit or delete any view that is created, select it from the View drop-down list and click Edit.</li>
+      <li>See a list of User’s most recently viewed, created, or modified Goals in Recent Goals. The displayed fields are determined by the Goals Search Layout defined by your administrator and by your field-level security settings.</li>
+    </ul>
+    <div id="header" style="background-color:#139c83;color:#FFFFFF;text-align:left;padding-left:10px;">
+      <h3 style="margin-bottom:0;font-family:Segoe UI;">Goals Home</h3>
+    </div>
+    <p><b>Goals Home Page</b></p>
+    <div style="width:100%;">
+      <center>
+        <img src="images/goalshome.png" width="600px" height="400px" align="center"/>
+      </center>
+    </div>
+    <ul>
+      <li>Click on <b>Go</b> button as shown in above screenshot with an arrow mark. User is redirected to Goals View Page.</li>
+    </ul>
+  </div> 
+  
+   <div id="div11" class="alist" style="display:none;background-color:#EEEEEE;height:615px;width:73%;float:right;font-family:Segoe UI; font-size:13px; line-height:25px;overflow:scroll;">
+    <div id="header" style="background-color:#139c83;color:#FFFFFF;text-align:left;padding-left:10px;">
+      <h3 style="margin-bottom:0;font-family:Segoe UI;">Primary Order Goals</h3>
+    </div>
+    <p><b>Overview</b></p>
+    <ul>
+    <li>NSM will be responsible for setting the Primary Order goals for the Sales Managers / Regional Managers.</li>
+    <li>SM/RSM will be In turn responsible for setting the Primary Order goals for the dealers.</li>
+    <li>NSM Sets The Target Revenue to SM/RSM Who inturn set Target Revenue to Dealers.</li>
+    <li>Achievements are calucalated based on total revenue generated by each Dealer.</li>
+    </ul>
+    <div id="header" style="background-color:#139c83;color:#FFFFFF;text-align:left;padding-left:10px;">
+    <h3 style="margin-bottom:0;font-family:Segoe UI;">Primary Order Goals Tab</h3>
+    </div>
+    <p><b>Overview</b></p>
+    <ul>
+      <li>The Primary Order Goals tab displays a home page that lets user to quickly create and locate Primary Order Goals . User can also sort and filter Primary Order Goals using standard and custom list views. In addition, this tab lets user to view and edit detailed information on each Goals to which user has access to..</li>
+      <p><b>Clicking on the Primary Order Goals tab displays the Primary Order Goals home page. From this page user can:</b></p>
+      <li>Show a filtered list of Goals using a predefined list from View or by creating a custom view. To define own custom views click on Create New View. To edit or delete any view that is created, select it from the View drop-down list and click Edit.</li>
+      <li>See a list of User’s most recently viewed, created, or modified Goals in Recent Goals. The displayed fields are determined by the Goals Search Layout defined by your administrator and by your field-level security settings.</li>
+    </ul>
+    <div id="header" style="background-color:#139c83;color:#FFFFFF;text-align:left;padding-left:10px;">
+      <h3 style="margin-bottom:0;font-family:Segoe UI;">Primary Order Goals Home</h3>
+    </div>
+    <p><b>Primary Order Goals Home Page</b></p>
+    <div style="width:100%;">
+      <center>
+        <img src="images/POGHME.png" width="600px" height="400px" align="center"/>
+      </center>
+    </div>
+     <ul>
+      <li>Click on <b>Go</b> button as shown in above screenshot with an arrow mark. User is redirected to Primary Order Goals View Page.</li>
+    </ul>
+  </div>
+    <div id="div12" class="alist" style="display:none;background-color:#EEEEEE;height:615px;width:73%;float:right;font-family:Segoe UI; font-size:13px; line-height:25px;overflow:scroll;">
+    <div id="header" style="background-color:#139c83;color:#FFFFFF;text-align:left;padding-left:10px;">
+      <h3 style="margin-bottom:0;font-family:Segoe UI;">SEARCH</h3>
+    </div>
+    <p><b>Overview</b>:</p>
+    <ul>
+    <li>Search tab helps user to search a customer either by Name , city , Phone Or Clinic Name.</li>
+    <li>Click on Go Button as indicated in below image.User can find the list of customers based on search criteria.</li>
+    <li>List of results can be seen based on search criteria.</li>
+    <li>Click on Customer Name to view the details of customer.</li>
+    </ul>
+    <p><b>Search Home Page</b></p>
+    <div style="width:100%;">
+      <center>
+        <img src="images/SEARCH.png" width="700px" height="400px" align="center"/>
+      </center>
+    </div>
+   </div>
+   
+   <div id="div13" class="alist" style="display:none;background-color:#EEEEEE;height:615px;width:73%;float:right;font-family:Segoe UI; font-size:13px; line-height:25px;overflow:scroll;">
+    <div id="header" style="background-color:#139c83;color:#FFFFFF;text-align:left;padding-left:10px;">
+      <h3 style="margin-bottom:0;font-family:Segoe UI;">Total Sales Productivity At a Glance</h3>
+    </div>
+    <p><b>Overview</b>:</p>
+    <p><b>Sales Productivity helps user to find the total sales productivity at a glance.</b></p>
+    <p>NSM can view total sales productivity based on</p>
+    <ul>
+    <li>Product Wise Sales Report.</li>
+    <li>Manager Wise Reports.</li>
+    <li>Customer Wise Reports.</li>
+    <li>No Of Visits.</li>
+    <li>Goals Vs Achievements.</li>
+    </ul>
+    <P>Sales Productivity Home page</p>
+    <div style ="width:100%;">
+      <center>
+        <img src="images/salesproductivity.png" width="600px" height="400px" align="center"/>
+      </center>
+    </div>
+    </div>
+    
+     <div id="div14" class="alist" style="display:none;background-color:#EEEEEE;height:615px;width:73%;float:right;font-family:Segoe UI; font-size:13px; line-height:25px;overflow:scroll;">
+    <div id="header" style="background-color:#139c83;color:#FFFFFF;text-align:left;padding-left:10px;">
+      <h3 style="margin-bottom:0;font-family:Segoe UI;">Total Sales Productivity At a Glance</h3>
+    </div>
+    <p><b>Overview</b>:</p>
+    <p><b>Sales Productivity helps user to find the total sales productivity at a glance.</b></p>
+    <p>SM/RSM can view total sales productivity based on</p>
+    <ul>
+    <li>Executive Wise Reports.</li>
+    <li>Customer Wise Reports.</li>
+    <li>No Of Visits.</li>
+    <li>Goals Vs Achievements.</li>
+    </ul>
+    <P>Sales Productivity Home page</p>
+    <div style ="width:100%;">
+      <center>
+        <img src="images/Executivewisesm.png" width="600px" height="400px" align="center"/>
+      </center>
+    </div>
+    </div>
+    
+    <div id="div15" class="alist" style="display:none;background-color:#EEEEEE;height:615px;width:73%;float:right;font-family:Segoe UI; font-size:13px; line-height:25px;overflow:scroll;">
+    <div id="header" style="background-color:#139c83;color:#FFFFFF;text-align:left;padding-left:10px;">
+      <h3 style="margin-bottom:0;font-family:Segoe UI;">Total Sales Productivity At a Glance</h3>
+    </div>
+    <p><b>Overview</b>:</p>
+    <p><b>Sales Productivity helps user to find the total sales productivity at a glance.</b></p>
+    <p>SE/ASM can view total sales productivity based on</p>
+    <ul>
+    <li>Customer Wise Reports.</li>
+    <li>No Of Visits.</li>
+    </ul>
+    <P>Sales Productivity Home page</p>
+    <div style ="width:100%;">
+      <center>
+        <img src="images/salesproductivityse.png" width="600px" height="400px" align="center"/>
+      </center>
+    </div>
+    </div>
+   
+ <div id="div10" class="alist" style="display:none;background-color:#EEEEEE;height:615px;width:73%;float:right;font-family:Segoe UI; font-size:13px; line-height:25px;overflow:scroll;">
+    <div id="header" style="background-color:#139c83;color:#FFFFFF;text-align:left;padding-left:10px;">
+      <h3 style="margin-bottom:0;font-family:Segoe UI;">Roles and Responsibilties</h3>
+    </div>
+    <h3 style="text-align:left;padding-left:10px;">Roles and Responsibilties of following people from GC India Dental India Pvt. Ltd. will be listed in this group.</h3>
+    <ul>
+      <li>CEO/ COO</li>
+      <li>Admin</li>
+      <li>Marketing Manager</li>
+      <li>National Sales Manager (NSM)</li>
+      <li>Regional Manager / Sales Manager (RM/ SM)</li>
+      <li>Sales Executive/ Area Manager (SE/ AM)</li>
+    </ul>
+  </div>
+  <div id="tablist42" class="alist" style="display:none;background-color:#EEEEEE;height:615px;width:73%;float:left;font-family:Segoe UI; font-size:13px; line-height:25px;overflow:scroll;">
+    <div id="header" style="background-color:#139c83;color:#FFFFFF;text-align:left;padding-left:10px;">
+      <h3 style="margin-bottom:0;font-family:Segoe UI;">Sales Executive/ Area Manager (SE/ AM)</h3>
+    </div>
+    <ul>
+      <li>SE/ AM of the Organization have the permission for <b>View and Edit - Self</b>.</li>
+      <li>SE/ AM can <b>Create/Read/Update</b> the information of the following tables,
+        <ol>
+          <li>Customers</li>
+          <li>Contacts</li>
+          <li>logs</li>
+          <li>Sales Orders</li>
+        </ol>
+      </li>
+      <li>SE/ AM can Create/Read/Update the Customers Information and add multiple contacts if the Customer is Institution.</li>
+      <li>SE/ AM will raise Sales orders for Customers; SE/ AM can also select the campaign for each sales order.</li>
+      <li>Upon selection of campaign, SE/AM can also additionally input the number of times the campaign can be offered. All Products that fall under that campaign are listed in the sales order line item in the read only format except price of product.</li>
+      <li>SE/AM can also select the demo product for each sales order; only one product can be selected for one sales order which is used for product promotion.</li>
+      <li>SE/ AM can also select the co sales worker with whom SE/ AM is working with for closing the sales order.</li>
+      <li>SE/ AM can view/ monitor the sales progress of them within the organization through Reports and Dashboard.</li>
+    </ul>
+  </div>
+  
+  <div id="tablist41" class="alist" style="display:none;background-color:#EEEEEE;height:615px;width:73%;float:left;
+font-family:Segoe UI; font-size:13px; line-height:25px;overflow:scroll;">
+    <div id="header" style="background-color:#139c83;color:#FFFFFF;text-align:left;padding-left:10px;">
+      <h3 style="margin-bottom:0;font-family:Segoe UI;">Regional Manager / Sales Manager (RM/ SM)</h3>
+    </div>
+    <ul>
+      <li>RM/ SM of the Organization have the permission for <b>View and Edit - Subordinates and Self</b>.</li>
+      <li>RM/ SM can <b>Create/Read/Update</b> the information of the following tables,
+        <ol>
+          <li>Customers</li>
+          <li>Contacts</li>
+          <li>logs</li>
+          <li>Dealers</li>
+          <li>Sales Orders</li>
+          <li>Demo Products</li>
+          <li>Goals</li>
+        </ol>
+      </li>
+      <li>RM/ SM can Create/Read/Update the Customers Information and add multiple contacts if the Customer is Institution.</li>
+      <li>RM/ SM can Create/Read/Update the Dealers Information.</li>
+      <li>RM/ SM will raise Sales orders for Customers; RM/ SM can also select the campaign for each sales order.</li>
+      <li>Upon selection of campaign, RM/ SM can also additionally input the number of times the campaign can be offered. All Products that fall under that campaign are listed in the sales order line item in the read only format except price of product.</li>
+      <li>RM/ SM can also select the demo product for each sales order; only one product can be selected for one sales order which is used for product promotion.</li>
+      <li>RM/ SM can also select the co sales worker with whom RM/ SM is working with for closing the sales order.</li>
+      <li>RM/ SM will be adding the Demo Products Information dispatched to Area Managers/ Sales Executives of their region. RM/ SM will add All Products that would be dispatched as demo pieces. RM/ SM can also monitor the status of the Demo products quantity dispatched to different Area Managers/ Sales Executives.</li>
+      <li>RM/ SM will be responsible for setting the goals for Area Managers/ Sales Executives.</li>
+      <li>RM/ SM tracks the achievements of Area Managers/ Sales Executives based on the goals set for each of them.</li>
+      <li>RM/ SM can view/ monitor the sales process of the organization of their region through Reports and Dashboard.</li>
+      <li>RM/ SM can also view scheduled Reports and Dashboard which would be emailed to their emails daily/weekly/monthly.</li>
+    </ul>
+  </div>
+  
+  
+  <div id="tablist40" class="alist" style="display:none;background-color:#EEEEEE;height:615px;width:70%;float:left;font-family:Segoe UI; font-size:13px; line-height:25px;overflow:scroll;">
+    <div id="header" style="background-color:#139c83;color:#FFFFFF;text-align:left;padding-left:10px;">
+      <h3 style="margin-bottom:0;font-family:Segoe UI;">National Sales Manager (NSM)</h3>
+    </div>
+    <ul>
+      <li>NSM of the Organization has the permission for <b>View and Edit - Subordinates and Self</b>.</li>
+      <li>NSM can <b>Create/Read/Update</b> the information of the following tables,
+        <ol>
+          <li>Customers</li>
+          <li>Contacts</li>
+          <li>logs</li>
+          <li>Dealers</li>
+        </ol>
+      </li>
+      <li>NSM can Create/Read/Update the Customers Information and add multiple contacts if the Customer is Institution.</li>
+      <li>NSM can Create/Read/Update the Dealers Information.</li>
+      <li>NSM is responsible to Create/Read/Update/Delete the entire master data of Products. </li>
+      <li>NSM will be adding the Demo Products Information dispatched to the Sales managers of different regions. NSM will add All Products that would be dispatched as demo pieces. NSM will also monitor the status of the Demo products quantity dispatched to different sales managers.</li>
+      <li>NSM will be responsible for setting the goals for the Sales Managers / Regional Managers.</li>
+      <li>NSM tracks the achievements of Sales Managers/ Regional Managers based on the goals set for each of them.</li>
+      <li>NSM can view/ monitor the sales process of the organization of all the regions through Reports and Dashboard.</li>
+      <li>NSM can also view scheduled Reports and Dashboard which would be emailed to their emails weekly/monthly.</li>
+    </ul>
+  </div>
+  
+  <div id="tablist39" class="alist" style="display:none;background-color:#EEEEEE;height:615px;width:70%;float:left;font-family:Segoe UI; font-size:13px; line-height:25px;overflow:scroll;">
+    <div id="header" style="background-color:#139c83;color:#FFFFFF;text-align:left;padding-left:10px;">
+      <h3 style="margin-bottom:0;font-family:Segoe UI;">Marketing Manager</h3>
+    </div>
+    <ul>
+      <li>Marketing Manager of the Organization has the permission for <b>View and Edit - Subordinates and Self</b>.</li>
+      <li>Marketing Manager can <b>Create/Read/Update</b> the information of the following tables,
+        <ol>
+          <li>Customers</li>
+          <li>Contacts</li>
+          <li>logs</li>
+          <li>Dealers</li>
+          <li>Campaigns</li>
+        </ol>
+      </li>
+      <li>Marketing Manager can Create/Read/Update the Customers Information and add multiple contacts if the Customer is Institution.</li>
+      <li>Marketing Manager can Create/Read/Update the Dealers Information.</li>
+      <li>Marketing Manager will be responsible for creating the Campaigns. NSM will add the All the products that fall under each campaign along with the product details such as product type, quantity, quantity in etc.</li>
+      <li>Marketing Manager will also monitor the status of the Campaign i.e. Campaign End Date, Products Sold, Products Left which fall under the campaign.</li>
+      <li>Marketing Manager can also monitor the sales progress done using campaigns through Reports and Dashboard.</li>
+    </ul>
+  </div>
+  
+  
+  <div id="tablist37" class="alist" style="display:none;background-color:#EEEEEE;height:615px;width:70%;float:left;font-family:Segoe UI; font-size:13px; line-height:25px;overflow:scroll;">
+    <div id="header" style="background-color:#139c83;color:#FFFFFF;text-align:left;padding-left:10px;">
+      <h3 style="margin-bottom:0;font-family:Segoe UI;">CEO/ COO</h3>
+    </div>
+    <ul>
+      <li>CEO/ COO of the Organization have the permission for <b>View All / Edit All</b>.</li>
+      <li>They have the ability to modify or delete any record within the organization.</li>
+      <li>They can view/ monitor the sales process of the Organization through Reports and Dashboard.</li>
+      <li>They can also view scheduled Reports and Dashboard which would be emailed to their emails weekly/monthly.</li>
+    </ul>
+  </div>
+  
+  
+  
+  <div id="tablist38" class="alist" style="display:none;background-color:#EEEEEE;height:615px;width:70%;float:left;font-family:Segoe UI; font-size:13px; line-height:25px;overflow:scroll;">
+    <div id="header" style="background-color:#139c83;color:#FFFFFF;text-align:left;padding-left:10px;">
+      <h3 style="margin-bottom:0;font-family:Segoe UI;">Admin</h3>
+    </div>
+    <ul>
+      <li>Admin of the Organization have the permission for <b>View and Edit - Subordinates and Self</b>.</li>
+      <li>Admin will be responsible to create new Users (Sales Team) or modify/delete existing Users of the Organization.</li>
+      <li>Admin has to monitor all the Reports and Dashboard of the organization. Admin can also generate the reports and mail them to the concerned sales managers when required.</li>
+      <li>Admin is also responsible to Create/Read/Update/Delete the entire master data of Products.</li>
+      <li>Admin has to update the users list in the ‘Assign To’ field of Customers Table when the new user has been added or updated. Users list in Customers Object is used for the Customer Assignment Rule (Assigning the Lead/Customer to the Sales Executive/ Sales Manager).</li>
+    </ul>
+  </div>
+  
+ <div id="tablist2" class="alist" style="display:none;background-color:#EEEEEE;height:615px;width:73%;float:right;font-family:Segoe UI; font-size:13px; line-height:25px;overflow:scroll;">
+    <div id="header" style="background-color:#139c83;color:#FFFFFF;text-align:left;padding-left:10px;">
+      <h3 style="margin-bottom:0;font-family:Segoe UI;">Sidebar items</h3>
+    </div>
+    <br/>
+    <ul>
+      <li><u> <b>Create New.... </b></u>
+        <div style ="width:100%;">
+          <centre><img src="images/create new.png" width="150px" height="150px" align="right" style="margin:0px;"/></centre>
+        </div>
+      </li>
+      <ul>
+        <li>This Provides a drop down list options (Event, log, Customer, contact, product, etc……..).…</li>
+        <li>User can select one from this drop down list to create a new entity. . </li>
+        <li>Screen will redirect to the appropriate tab and allows user for entering the new entries. </li>
+      </ul>
+    </ul>
+    <br/>
+    <br/>
+    <ul>
+      <li><u> <b>Recent Items</b></u>
+        <div style ="width:100%;">
+          <centre><img src="images/recent items.png" width="150px" height="200px" align="right"/></centre>
+        </div>
+      </li>
+      <ul>
+        <li>Lists up to 10 specific customers, sales order, demo products etc…that user have recently added or  
+          viewed – the icon to the left indicates the type of record</li>
+        <li>To see the details of an item, click the <b>name</b> of the item</li>
+        <li>Hover mouse over an item to view key information about the record before clicking into that     
+          record. </li>
+      </ul>
+    </ul>
+  </div>
+  
+  
+  <div id="tablist3" class="alist" style="display:none;background-color:#EEEEEE;height:615px;width:73%;float:right;font-family:Segoe UI; font-size:13px; line-height:25px;overflow:scroll;">
+    <div id="header" style="background-color:#139c83;color:#FFFFFF;text-align:left;padding-left:10px;">
+      <h3 style="margin-bottom:0;font-family:Segoe UI;">Main Section Items</h3>
+    </div>
+    <ul>
+      <li><u> <b> Dashboards </b></u> -  Dashboards are graphical representation of reports. Dashboards display data as Per last time report was run.</li>
+      <ol>
+        <li>Click the <b>Customize Page</b> link in the Dashboard section</li>
+        <li> In the <b>Show Data From</b>: box, select a different dashboard to display.</li>
+        <li>Click on <b>Save</b> button.</li>
+        <li>Click the <b>Refresh</b> button to refresh the data in your dashboard.</li>
+      </ol>
+    </ul>
+    <ul>
+      <li><u> <b> My Logs </b></u>-Represents a business activity such as making a phone call or sending email or other “to-do”  
+        items.</li>
+      In the My Logs section, user can:
+      <ol>
+        <li>Click the <b>New button</b> to create a log</li>
+        Enter the log details:
+        <ul>
+          <li><b>Related To (optional)</b>: Record that the log is related to-such as a Customer,campaign,dealer,etc.</li>
+          <li> <b>Assigned To </b>: Assigned owner of a log. By default, the log is assigned to the user. To assign the log to another user, enter a user’s name or select a user with the lookup icon.</li>
+          <li><b>Date </b>(optional):  Date when the log is Created. User can enter a date or choose a date from the calendar that displays when User put his/her cursor in the field.</li>
+          <li><b>Meeting Type</b>(<i><b>Required</b></i>):User Can select the Type of meeting with the customer from the drop down list available.(Recieved a call from customer,Made a phone call to customer,visited the customer or other.)</li>
+          <li><b>Outcome Of Meeting</b>:Describes response of customer about meeting.User Can select from drop down list available.(Placed an Order,Asked me to visit again,Could not meet him,Items not Required,Other) </li>
+          <li><b>Outcome Of Meeting(Other):</b>This is mandatory if the Outcome of meeting is selected as other.User has to enter the response of customer manually.</li>
+          <li><b>Next Visit Date</b>:If the outcome of meeting is Asked to visit again-----then user has to enter the next visiting date of customer.User can enter a date or choose a date from the calendar that displays when User put his/her cursor in the field. </li>
+          <li><b>Next Visit Time</b>:User has to enter next visit time if the outcome of meeting is Asked to visit again.</li>
+          <li><b>Comments </b>(optional): A description of the log.</li>
+          <li><b>Status</b>:User has to Specify the <b>status</b> of the log.User can pick from drop down list (Not Started,In Progress,Completed,Waiting On someone else,Deffered).If the status is selected as <b>completed</b> log is completed.</li>
+          <li><b>Priority</b>:User has to Specify the <b>Priority</b> of the log.User can pick from drop down list (High,Normal,Low).</li>
+          <li>Select the <b>Send Notification Email </b> check box to send a notification email to the log’s assignee when user save the log. </li>
+          <li>Optionally, set a <b>reminder</b> on log.</li>
+          <p>User is reminded about the activity on selected date And time.</p>
+          <li>Click on <b>Save</b> or <b>Save and New log</b> or <b>Save and New Event</b>.</li>
+          <li><b>Save and New log</b> helps user to save present log and enter a fresh log.</li>
+        </ul>
+        <b>Open Logs</b>
+        <li>User can view the list of open logs assigned at home page--Up to fifteen logs are displayed.</li>
+        <ul>
+          <li>To view all logs, click <b>View More</b></li>
+          <li>High Priority log are represented by “!” at the log view page.</li>
+        </ul>
+        <li>User can choose a time-frame from the drop-down i.e.…, Overdue, Today, Today + overdue , Tomorrow etc….list to change which logs to display.</li>
+        <li>Hover mouse curser over the Subject of a log to see the details of the log in an overlay;alternatively, click the subject of a log to open the detail page of that log.</li>
+        <li>Click X to open the page to complete/edit a log.on clicking X status of log is defaulty made as completed.</li>
+         </ol>
+         </ul>
+        <div style ="width:100%">
+      <center>
+        <img src="images/open logs.png" width="700px" height="200px" align="center"/>
+      </center>
+    </div>
+        <b>Completed Logs</b>
+         <li>User can view the completed logs in Logs Detail History of that assigned customer.</li>
+         <div style ="width:100%">
+      <center>
+        <img src="images/logdetailhistory.png" width="700px" height="100px" align="center"/>
+      </center>
+         </div>
+  <!----- <ul>
+      <li><u> <b> Calender </b></u>-Represents events scheduled for the user.</li>
+      In the Calender section, user can:
+      <ol>
+        <li>Click the <b>New Event button</b> to create a new event</li>
+        Enter the Event details:
+        <ul>
+          <li> <b>Assigned To </b>: Assigned owner of a Event. By default, the Event is assigned to the user. To assign the Event to another user, enter a user’s name or select a user with the lookup icon.</li>
+          <li> <b>Subject</b>: Subject of an event, for example, “Meeting”. User can enter asubject or select from a picklist of previously defined subjects.To create multiday events check in <b> All Day Event </b>. User can create events that last up to 14 days.</li>
+          <li>Set the <b>Start Date and Time</b> and <b>End Date and Time</b> for an Event. User can enter a date or choose a date from the calendar that displays when User put his/her cursor in the field. Similarly User can enter time or choose time from the picklist that displays when User put his/her cursor in the field.</li>
+          <li>Enter the <b>Location</b> that describes where the Event is held.</li>
+          <li>Choose from the <b>Show time as</b> from dropdown list which describes assigned user is busy or out of office or free in that duration.</li>
+          <li>Enter the <b>Name</b> of the contact or lead related to the event in Name or click on lookup icon to open the Select Contacts dialog box.</li>
+          <li>To invite the related contacts or lead to the event, click <b>Add to Invitees</b>. The contacts or lead are added to the calendar in the <b>Add Invitees</b> section.</li>
+          <li>If Spell Checker is enabled for your organization, click <b>Check Spelling</b> to spell-check the contents of the Description field. </li>
+          <li>If the <b>Private</b> Field is checked in, it disables Name and Related to fields.</li>
+          <p> User can also <b>Create Recurring series of Event.</b></p>
+          <li>Select the Create Recurring Series of Events check box. 
+            a)  Select the frequency of recurrence.
+            b)  Set the start date and end date. Click Calculate max end date to automatically set the maximum end date allowed based on the frequency user selected..
+            Optionally, set a reminder on event.
+            If user is creating a recurring event, the reminder applies to each occurrence in the event series.</li>
+          <li>To attach files, click Attach File on the Attachments related list..</li>
+          <li>Click on Save or Save and New log or Save and New Event.</li>
+        </ul>
+        <li>Click on Scheduled Meetings sub-tab to view the events user has scheduled for the next 7 days.</li>
+        <li>Click on the Requested Meetings sub-tab to view requested meetings but not confirmed.</li>
+        <li>User can View a small calendar of the current month; Use the icons underneath the small monthly calendar as appropriate. </li>
+      </ol>
+    </ul> !------>
+  </div>
+  
+  <div id="tablist6" class="alist" style="display:none;background-color:#EEEEEE;height:615px;width:73%;float:right;font-family:Segoe UI; font-size:13px; line-height:25px;overflow:scroll;">
+    <div id="header" style="background-color:#139c83;color:#FFFFFF;text-align:left;padding-left:10px;">
+      <h3 style="margin-bottom:0;font-family:Segoe UI;">Customer View</h3>
+    </div>
+    <p><b>Customer View Page</b></p>
+    <div style ="width:100%">
+      <center>
+        <img src="images/customerview.png" width="700px" height="400px" align="center"/>
+      </center>
+    </div>
+    <ul>
+      <li>Click on the  <b>customer Name</b> to view details of the customer. Click <b>EDIT</b> to edit the customer.</li>
+      <li>User can also sort customers using the Alphabetical hyperlinks(A-Z) available in the page.</li>
+      <li>Click on the <b>New Customer</b> button as shown in above screenshot with an arrow mark.  User will be redirected to new customer’s edit page.</li>
+    </ul>
+  </div>
+  
+  
+  <div id="tablist7" class="alist" style="display:none;background-color:#EEEEEE;height:615px;width:73%;float:right;font-family:Segoe UI; font-size:13px; line-height:25px;overflow:scroll;">
+    <div id="header" style="background-color:#139c83;color:#FFFFFF;text-align:left;padding-left:10px;">
+      <h3 style="margin-bottom:0;font-family:Segoe UI;">Customer Fields</h3>
+    </div>
+    <br/>
+    <div style ="width:100%">
+      <center>
+        <img src="images/customeredit.png" width="700px" height="400px" align="center"/>
+      </center>
+    </div
+>
+    <p><b>Enter all the mandatory fields (indicated by |) in record</b></p>
+    <ul>
+      <li><b>Salutation</b> : Title for addressing the lead/customer, for example, Mr, Miss, Dr, or None. Entry is selected from a picklist of available values, which are set by an administrator.</li>
+      <li><b>Customer Name</b> (<i><b>Required</b></i>): It can be the Name of Dentist or Institution. Up to 80 characters are allowed in this field.</li>
+      <li><b>Phone </b>(<i><b>Required</b></i>): Primary Contact number of customer. Cellular or mobile phone number.Phone number must be atleast 10 digit.</li>
+      <li><b>Mobile</b>: Alternative Contact number of customer. Up to 40 characters are allowed in this field.</li>
+      <li><b>Email</b>: Must be a valid email address in the form: jsmith@acme.com. Up to 80 characters are allowed in this field.</li>
+      <li><b>Clinic Name</b>: Clinic Name of Customer (Only for Dentist).</li>
+      <li><b>Status</b>: User can select from available drop down list as either Lead or Customer.<br/>
+        <ul>
+          <li>A lead is one who expressed interest in company’s service.</li>
+          <li>Customer: When a lead is prospecting and willing to give business i.e.., he is ready to give an order for GC India Dental Pvt.Ltd, then he is converted to customer</li>
+        </ul>
+      </li>
+      <li><b>Assign To</b>: If you want to assign customer to any other user,user can select from the drop down list available.</li>
+      <li><b>Parent Customer</b>: If the customer is of reference of any other existing customer,then the existing customer becomes parent customers.The parent customer must be an existing customer for Gc India Dental Pvt.Ltd. User can enter the Customer name, or select the customer using the lookup icon.</li>
+      <li><b>Type</b>:Determines the type of customer i.e.
+        <ol>
+          <li>Customer. (Customer is dentist or any individual).</li>
+          <li>Institution (Institution is any medical institution).</li>
+          <li>Others.</li>
+        </ol>
+      </li>
+      <li><b>Qualification</b>: Qualification of customer.</li>
+      <li><b>Source</b>:Describes source of lead/customer,i.e.from where customer information is tracked.For example Web,Phone Enquiry,Partner Refferal.Entry is selected from a picklist of available values, which are set by an administrator.</li>
+      <li><b>Class</b>:Rating of a customer can be selected from pick list (A, B, C).</li>
+      <li><b>Billing Country</b>: Country portion of billing address. Entry is selected from a drop-down of standard values.</li>
+      <li><b>Billing State</b>: State portion of billing address. Entry is selected from a drop-down of standard values.</li>
+      <li><b>Billing City</b>: City portion of billing address. Entry is selected from a drop-down of standard values.</li>
+      <li><b>Billing Street</b>: Street portion of billing address. User has to enter it manually.</li>
+      <li><b>Billing ZipCode</b>: Zip or postal code portion of billing address. Up to 20 characters are allowed in this field.</li>
+      <li><b>Description</b>: Description about customer. Up to 32 KB of data are allowed in this field. Only the first 255 characters display in reports.</li>
+      <li>Click on <b>save</b> button to save record.</li>
+      <li>Click on <b>save and New</b> button for saving and entering into new records page.</li>
+    </ul>
+    <p>After Saving Record User Is redirected to Detailed Page view of Customer</p>
+    <p><b>Edit</b> is the button that helps to make changes in record.Click on save to save the record.</p>
+    <div id="header" style="background-color:#139c83;color:#FFFFFF;text-align:left;padding-left:10px;">
+      <h3 style="margin-bottom:0;font-family:Segoe UI;">Detailed Page Of customer</h3>
+    </div>
+    <ul>
+      <li><u> <b> Overview</b></u></li>
+      Detailed Page consists of:
+      <ul>
+        <li>Custom Links</li>
+        <li>Contacts</li>
+        <li>Sales Order</li>
+        <li>Open Log Details</li>
+        <li>Log Detail History</li>
+        <li>Notes And Attachment</li>
+      </ul>
+    </ul>
+    <ul>
+      <li><u> <b>Custom Links</b></u>-Contains links to websites or Salesforce pages that gives information of the customer..</li>
+      <ul>
+        <li><u>Google Search</u>: This Link helps to search information regarding customer.</li>
+        <li><u>Google Maps</u>: This Link shows address of customer.</li>
+        <li><u>Google News</u>: This Link helps to know if the customer is in news any time.</li>
+      </ul>
+    </ul>
+    <ul>
+      <li><u> <b>Contacts</b></u>-If the customer is of type Institution--- customer has multiple contacts. These contacts can be included in related list of customer.</li>
+    </ul>
+    <ul>
+      <li><u> <b>Sales Order</b></u>-When a customer is interested in GC INDIA PVT.LTD and ready to order products, user raises sales order to the customer.</li>
+      <ul>
+        <li>If any sales orders are given to customer, these sales orders are seen in related list of customer.</li>
+        <li>New sales order can also be directly created for customer from the customer’s related list.</li>
+      </ul>
+    </ul>
+    <ul>
+      <li><u> <b>Open Log Details</b></u>-Log Details include logs, calendar events. User can define and track Log Details for many different objects, including customers, contacts and sales orders.</li>
+      <ul>
+        <li>Log Details are displayed in related lists on associated records as well as on the Home tab.</li>
+        <li>The Open Log Details related list displays:</li>
+        <ol>
+          <li>Open logs.</li>
+          <li>Open events.</li>
+        </ol>
+        <li>These Log Details are displayed for a record and its associated records. For example, if user have a log related to a contact, that log displays in the Open Log Details related list of the contact as well as the associated account.
+          <b>From the Open Log Details related list:</b></li>
+        <ul>
+          <li>Click <b>New log</b> or <b>New Event</b> to create an activity that is associated with the record.</li>
+          <li>Click <b>Edit</b> to edit an activity.</li>
+          <li>Click <b>Cls</b> to close a log</li>
+          <li>click <b>Del</b> to delete an event. Salesforce.com emails the invitees that the event or meeting was cancelled.</li>
+          <li>Click the subject of an activity to open the detail page of the activity.</li>
+        </ul>
+      </ul>
+    </ul>
+    <ul>
+      <li><u> <b>Log Detail History</b></u>-The Log Detail History related list of a record displays all completed logs, logged phone calls, saved interaction logs, expired events and merged documents for the record and its associated records.</li>
+      In the Log Detail History related list, click:
+      <ul>
+        <li><b>Log a Call</b>: This is to enter the results of unplanned phone calls and then schedule a follow up log.</li>
+        <li><b>Mail Merge</b>: To generate personalized documents using your data and Microsoft Word templates provided by your administrator. If user choose, the merged document is listed in the Log Detail History related list of the associated record. This button is not available for all types of records...</li>
+        <li><b>View All</b>: User can click this button to display a printable view of all completed Logs. </li>
+        Note that the View All button is displayed only when there are records to view.
+      </ul>
+    </ul>
+    <ul>
+      <li><u> <b>Notes and Attachments</b></u>-User can create, view, and edit notes and add attachments from the Notes and Attachments related list on selected detail pages such as Customers, contacts, Sales Order and products.</li>
+      <ul>
+        <li>To view the contents of note, Click on the <b>title</b> of note.</li>
+        <li>To view the details of all notes and attachments click <b>VIEW ALL</b>.</li>
+        <li>To view the details of a feed attachment, click the <b>title</b> of the file.</li>
+        <li>To view the details of an attachment, click the title of the file and then click on the <b>View File</b> link on the Attached File detail page.</li>
+        <li>To edit a note or the title of an attachment, click <b>Edit</b> and make the changes required. user can't edit the attached file directly and user can't edit feed attachments.</li>
+        <li>To delete an attachment click on <b>DEL</b>.</li>
+        <b>Consider the following when working with notes and attachments.</b>
+        <li>Notes and attachments marked as private via the Private Checkbox are accessible only to the person who attached them and administrators.</li>
+      </ul>
+    </ul>
+  </div>
+  
+  <div id="tablist12" class="alist" style="display:none;background-color:#EEEEEE;height:615px;width:73%;float:right;font-family:Segoe UI; font-size:13px; line-height:25px;overflow:scroll;">
+    <div id="header" style="background-color:#139c83;color:#FFFFFF;text-align:left;padding-left:10px;">
+      <h3 style="margin-bottom:0;font-family:Segoe UI;">Contact Fields</h3>
+    </div><br/>
+    <div style ="width:100%">
+      <center>
+        <img src="images/contactsedit.png" width="700px" height="400px" align="center"/>
+      </center>
+    </div
+>
+    <p><b>Enter all the mandatory fields (indicated by |) in record</b></p>
+    <ul>
+      <li><b>Customer</b>(<i><b>Required</b></i>): Name of customer that contact is linked to. This field is Auto filled by default.User can enter the customer name, or select the customer using the lookup icon.</li>
+      <li><b>Salutation</b>: Title for addressing the contact. For example Mr, Miss, Dr, or None. Entry is selected from a drop-down of available values, which are set by an administrator.</li>
+      <li><b>First Name</b>: It can be First Name or given name of Dentist. Up to 40 characters are allowed in this field.</li>
+      <li><b>Last Name</b>: It can be Last Name of Dentist or Institution. Up to 80 characters are allowed in this field.</li>
+      <li><b>Email</b>: Must be a valid email address in the form: jsmith@acme.com. Up to 80 characters are allowed in this field.</li>
+      <li><b>Phone</b> (<i><b>Required</b></i>): Primary Contact number of Contact. Cellular or mobile phone number. Up to 40 characters are allowed in this field.</li>
+      <li><b>Mobile</b>: Alternative Contact number of customer. Up to 40 characters are allowed in this field.</li>
+      <li><b>Qualification</b>: Qualification of Contact.</li>
+      <li><b>Department</b>: To which Department contact belongs to.</li>
+      <li><b>Level</b>: Describes the Level of Contact. User can select from drop down list Level of contact (primary, secondary, tertiary).</li>
+      <li><b>Description</b>: Description regarding Contact.</li>
+      <li>Click <b>Save</b> to save the record.</li>
+      <li>Click <b>Save and New</b> to save the record and enter fresh record.</li>
+    </ul>
+  </div>
+  
+  
+  <div id="tablist15" class="alist" style="display:none;background-color:#EEEEEE;height:615px;width:73%;float:right;font-family:Segoe UI; font-size:13px; line-height:25px;overflow:scroll;">
+    <div id="header" style="background-color:#139c83;color:#FFFFFF;text-align:left;padding-left:10px;">
+      <h3 style="margin-bottom:0;font-family:Segoe UI;">Product View</h3>
+    </div>
+    <p><b>Products View Page</b></p>
+    <div style="text-align:center;"><img src="images/productsview.png" width="600px" height="400px" align="center" style="margin:0px auto"/></div>
+    <ul>
+      <li>Click on a Product name to view the details of Product. Click <b>EDIT</b> to edit the Product..</li>
+      <li>Click on the <b>New Product</b> button as shown in above screenshot with an arrow mark.  User will be redirected to enter new Product edit page.</li>
+    </ul>
+  </div>
+  
+  <div id="tablist16" class="alist" style="display:none;background-color:#EEEEEE;height:615px;width:73%;float:right;font-family:Segoe UI; font-size:13px; line-height:25px;overflow:scroll;">
+    <div id="header" style="background-color:#139c83;color:#FFFFFF;text-align:left;padding-left:10px;">
+      <h3 style="margin-bottom:0;font-family:Segoe UI;">Product Fields</h3>
+    </div><br/>
+    <div style ="width:100%">
+      <center>
+        <img src="images/productedit.png" width="600px" height="400px" align="center"/>
+      </center>
+    </div
+>
+    <p><b>Enter all the mandatory fields (indicated by |) in record</b></p>
+    <ul>
+      <li><b>Product Name</b> (<i><b>Required</b></i>): User can enter Name of product.</li>
+      <li><b>Product Code</b> (<i><b>Required</b></i>): User has to enter unique code of the Product.</li>
+      <li><b>Product Description</b>: Description of the product.</li>
+      <li><b>Product Family</b> : This field describes To which family the product belongs to.Select one from drop down list (Luting GIC,Restorative GIC,Luting,Bonding,Composite,Coating,Impressioning,Temporary,MI). </li>
+      <li><b>Product Price </b>(<i><b>Required</b></i>): Enter Price of a Product.</li>
+      <li><b>Quantity in each Box</b>: Enter number of pieces in each box.</li>
+      <li>Click <b>Save</b> to save the record.</li>
+      <li>Clicl <b>Save and New </b> to save the record and enter into new record.</li>
+    </ul>
+  </div>
+  
+  
+  
+  <div id="tablist19" class="alist" style="display:none;background-color:#EEEEEE;height:615px;width:73%;float:right;font-family:Segoe UI; font-size:13px; line-height:25px;overflow:scroll;">
+    <div id="header" style="background-color:#139c83;color:#FFFFFF;text-align:left;padding-left:10px;">
+      <h3 style="margin-bottom:0;font-family:Segoe UI;">Sales Order View</h3>
+    </div>
+    <p><b>Sales Order View Page</b></p>
+    <div style ="width:100%">
+      <center>
+        <img src="images/salesorderview.png" width="600px" height="400px" align="center"/>
+      </center>
+    </div>
+    <ul>
+      <li>Click on a Sales Order no to view the details of Sales Order. Click <b>EDIT</b> to edit the Sales Order..</li>
+      <li>Click on the <b>New Sales Order</b> button as shown in above screenshot with an arrow mark.  User will be redirected to enter new Sales Order edit page.</li>
+    </ul>
+  </div>
+  
+  
+  <div id="tablist20" class="alist" style="display:none;background-color:#EEEEEE;height:615px;width:73%;float:right;font-family:Segoe UI; font-size:13px; line-height:25px;overflow:scroll;">
+    <div id="header" style="background-color:#139c83;color:#FFFFFF;text-align:left;padding-left:10px;">
+      <h3 style="margin-bottom:0;font-family:Segoe UI;">Sales Order Fields</h3>
+    </div><br/>
+    <div style ="width:100%;">
+      <center>
+        <img src="images/salesorder edit.png" width="600px" height="400px" align="center"/>
+      </center>
+    </div>
+    <b>Enter all the mandatory fields (indicated by |) in record</b>
+    <ul>
+       <h3 style="margin-bottom:0;font-family:Segoe UI;">Log Details Fields</h3>
+      <li><b>Meeting Type</b>(<i><b>Required</b></i>):User Can select the Type of meeting with the customer from the drop down list available.(Recieved a call from customer,Made a phone call to customer,visited the customer or other.)</li>
+      <li><b>Outcome Of Meeting</b>:Describes response of customer about meeting.User Can select from drop down list available.(Placed an Order,Asked me to visit again,Could not meet him,Items not Required,Other).<b>By Default it is set as Placed an Order.</b></li>
+      <li><b>Outcome Of Meeting(Other):</b>This is mandatory if the Outcome of meeting is selected as other.User has to enter the response of customer manually.</li>
+      <li><b>Next Visit Date</b>:If the outcome of meeting is Asked to visit again-----then user has to enter the next visiting date of customer.User can enter a date or choose a date from the calendar that displays when User put his/her cursor in the field. </li>
+      <li><b>Status</b>:User has to Specify the <b>status</b> of the log.User can pick from drop down list (Not Started,In Progress,Completed,Waiting On someone else,Deffered).By default status is selected as <b>completed</b>.</li>
+      <li><b>Priority</b>:User has to Specify the <b>Priority</b> of the log.User can pick from drop down list (High,Normal,Low).</li>
+             
+      <h3 style="margin-bottom:0;font-family:Segoe UI;">Sales Order Fields</h3>
+     
+      <li><b>Customer</b>(<i><b>Required</b></i>):Name of customer that Sales Order is linked to. RM/SM/SE/AM  will raise Sales orders for Customers.RM/SM/SE/AM can enter the customer name, or select the customer using the lookup icon.</li>
+      <li><b>Dealer</b>:Describes which dealer is responsible for stock delivery to end customers.RM/SM/SE/AM can enter the Dealer Name,or select the dealer from lookup icon</li>
+      <li><b>Order Date</b>:Describes on which date Order is raised.RM/SM/SE/AM can enter 
+      Date or choose a date from the calendar that displays when RM/ SM put his/her cursor in the field.</li>
+      <li><b>Working With</b>:RM/SM/SE/AM can also select the co sales worker with whom RM/SM/SE/AM is working with for closing the sales order.RM/SM/SE/AM can enter the name, or select using the lookup icon.</li>
+      <li><b>Demo Product</b>:RM/SM/SE/AM can also select the demo product for each sales order.<br/>
+        Click on <b>products</b> it displays list of demo Product Items.only one product can be selected as demo product for one sales order which is used for product promotion.</li>
+      <li><b>Campaign</b>:RM/SM/SE/AM can also select the campaign for each sales order.RM/SM/SE/AM  can enter the campaign name, or select the campaign using the lookup icon.</li>
+      <li><b>Campaign Items</b>:Upon selection of campaign, RM/SM/SE/AM can also additionally input the number of times the campaign items can be offered by clicking on <b>Get campaign Items</b>. All Products that fall under that campaign are listed in the sales order line item in the read only format except price of product.</li>
+      
+      <h3 style="margin-bottom:0;font-family:Segoe UI;">Sales Order Items</h3>
+      click on <b>Add More</b> to add Multiple products.Multiple Products can be added on clicking Add More Button.
+      <li><b>Product</b>:Describes which products are given in sales order. RM/SM/SE/AM can pick from drop down list of available products.</li>
+      <li><b>Product Specification</b>:Describes Specification of product.RM/SM/SE/AM  can enter it manually. </li>
+      <li><b>Quantity</b>(<i><b>Required</b></i>):Describes the quantity of product given in salesorder.RM/SM/SE/AM  can enter it manually.</li>
+      <li><b>Quality in</b> : Describes how the product is available for customer whether as box or unit. RM/SM/SE/AM  can select from the drop down list (each or box).</li>
+      <li><b>Price/Unit</b>(<i><b>Required</b></i>):Describes Price/Unit Of Product.RM/SM/SE/AM Can enter it manually.</li>
+      <li>Click <b>Save</b> to save the record.</li>
+    </ul>
+  </div>
+  
+  
+  <div id="tablist23" class="alist" style="display:none;background-color:#EEEEEE;height:615px;width:73%;float:right;font-family:Segoe UI; font-size:13px; line-height:25px;overflow:scroll;">
+    <div id="header" style="background-color:#139c83;color:#FFFFFF;text-align:left;padding-left:10px;">
+      <h3 style="margin-bottom:0;font-family:Segoe UI;">Campaign View</h3>
+    </div>
+    <p><b>Campaign View Page</b></p>
+    <div style ="width:100%;">
+      <center>
+        <img src="images/campaignview.png" width="600px" height="400px" align="center"/>
+      </center>
+    </div>
+    <ul>
+      <li>Click on a Campaign name to view the details of Campaign. Click <b>EDIT</b> to edit the Campaign..</li>
+      <li>Click on the <b>New Campaign</b> button as shown in above screenshot with an arrow mark.  User will be redirected to enter new Campaign edit page.</li>
+    </ul>
+  </div>
+  
+  
+  <div id="tablist24" class="alist" style="display:none;background-color:#EEEEEE;height:615px;width:73%;float:right;font-family:Segoe UI; font-size:13px; line-height:25px;overflow:scroll;">
+    <div id="header" style="background-color:#139c83;color:#FFFFFF;text-align:left;padding-left:10px;">
+      <h3 style="margin-bottom:0;font-family:Segoe UI;">Campaign Fields</h3>
+    </div><br/>
+    <div style ="width:100%;">
+      <center>
+        <img src="images/campaignedit.png" width="700px" height="300px" align="center"/>
+      </center>
+    </div
+>
+    <p><b>Enter all the mandatory fields (indicated by |) in record</b></p>
+    <ul>
+      <li><b>Campaign Name</b>(<i><b>Required</b></i>): Describes Name of Campaign. User can enter the Name of Campaign.</li>
+      <li><b>Activation Date</b>: Describes Date from which campaign is under activation (starts). User can enter Activation Date or choose a date from the calendar that displays when User put his/her cursor in the field.</li>
+      <li><b>Deactivation Date</b>: Describes Date at which campaign gets deactivated (ends). ). User can enter Deactivation Date or choose a date from the calendar that displays when User put his/her cursor in the field.</li>
+      <li><b>Campaign Description</b>: Description about Campaign. User can enter Description up to 255 characters are allowed in this field.</li>
+      <br/><b>Click on Add Line Items To add products available in campaign.Multiple Products can be added on clicking Add Line Items Button.</b> <br/>    
+     <li><b>Products</b>:Describes which products are available in campaign. User can pick from drop down list of available products.</li>
+     <li><b>Price</b>:Price of Product for that campaign has to be mentioned here.</li>
+     <li><b>Quantity</b>(<i><b>Required</b></i>): Describes Quantity of Product available in campaign. User can enter Quantity of product manually.</li>
+      <li><b>Quality in</b> (<i><b>Required</b></i>): Describes how the product is available for customer whether as box or unit. User can select from the drop down list (each or box).</li>
+      <li><b>Product Type</b> (<i><b>Required</b></i>): Describes how the product is available for customer as free or paid. User can select from drop down (Paid, Free).</li>
+       <li>Click <b>Save</b> to save the record.</li>
+    </ul>
+  </div>
+  
+  
+  <div id="tablist27" class="alist" style="display:none;background-color:#EEEEEE;height:615px;width:73%;float:right;font-family:Segoe UI; font-size:13px; line-height:25px;overflow:scroll;">
+    <div id="header" style="background-color:#139c83;color:#FFFFFF;text-align:left;padding-left:10px;">
+      <h3 style="margin-bottom:0;font-family:Segoe UI;">Dealer View</h3>
+    </div>
+    <p><b>Dealers View Page</b></p>
+    <div style ="width:100%;">
+      <center>
+        <img src="images/dealerview.png" width="600px" height="400px" align="center"/>
+      </center>
+    </div>
+    <ul>
+      <li>Click on a Dealer Name to view the details of Campaign. Click <b>EDIT</b> or to edit the Dealer.</li>
+      <li>Click on the <b>New Dealer</b> button as shown in above screenshot with an arrow mark.  User will be redirected to enter New Dealer edit Page</li>
+    </ul>
+  </div>
+  
+  
+  <div id="tablist28" class="alist" style="display:none;background-color:#EEEEEE;height:615px;width:73%;float:right;font-family:Segoe UI; font-size:13px; line-height:25px;overflow:scroll;">
+    <div id="header" style="background-color:#139c83;color:#FFFFFF;text-align:left;padding-left:10px;">
+      <h3 style="margin-bottom:0;font-family:Segoe UI;">Dealer Fields</h3>
+    </div>
+    <div style ="width:100%;">
+      <center>
+        <img src="images/dealeredit.png" width="600px" height="400px" align="center"/>
+      </center>
+    </div
+>
+    <p><b>Enter all the mandatory fields (indicated by |) in record</b></p>
+    <ul>
+      <li><b>Dealer Name</b> (<i><b>Required</b></i>): Describes Name of Dealer. User can enter the Name of Dealer.</li>
+      <li><b>Dealer Code</b> (<i><b>Required</b></i>): Describes Code of the Dealer.</li>
+      <li><b>Phone</b>: Primary Contact number of Dealer. Cellular or mobile phone number. Up to 40 characters are allowed in this field.</li>
+      <li><b>Mobile</b>: Alternative Contact number of Dealer. Up to 40 characters are allowed in this field.</li>
+      <li><b>Email</b>: Describes Email of the Dealer. User must enter a valid email address in the form: jsmith@acme.com. Up to 80 characters are allowed in this field.</li>
+      <li><b>Type</b>: Determines type of dealer he/she is i.e. Dealer or sub dealer. User can select from drop down list (Dealer/Sub dealer).</li>
+      <li><b>Name of the sub dealers</b>: Determines Name of the sub dealer .User can enter the name of sub dealer manually.</li>
+      <li><b>Billing Country</b>: Country portion of billing address. Entry is selected from a picklist of standard values.</li>
+      <li><b>Billing State</b>: State portion of billing address. Entry is selected from a picklist of standard values.</li>
+      <li><b>Billing City</b>: City portion of billing address. Entry is selected from a picklist of standard values.</li>
+      <li><b>Billing Street</b>: Street address used for billing. Up to 255 characters are allowed in this field.</li>
+      <li><b>Billing Zip Code</b>: Zip or postal code portion of billing address. Up to 20 characters are allowed in this field.</li>
+      <li><b>Shipping Country</b>: Country portion of primary mailing or shipping address. Entry is selected from a picklist of standard values.</li>
+      <li><b>Shipping State</b>: State portion of shipping address. Entry is selected from a picklist of standard values.</li>
+      <li><b>Shipping City</b>: City portion of shipping address. Entry is selected from a picklist of standard values.</li>
+      <li><b>Shipping Street</b>: Street address used for shipping. Up to 255 characters are allowed in this field.</li>
+      <li><b>Shipping Zip Code</b>: Zip or postal code portion of shipping address. Up to 20 characters are allowed in this field.</li>
+      <li>Click <b>Save</b> to save the record.</li >
+    </ul>
+  </div>
+  
+  
+  <div id="tablist31" class="alist" style="display:none;background-color:#EEEEEE;height:615px;width:73%;float:right;font-family:Segoe UI; font-size:13px; line-height:25px;overflow:scroll;">
+    <div id="header" style="background-color:#139c83;color:#FFFFFF;text-align:left;padding-left:10px;">
+      <h3 style="margin-bottom:0;font-family:Segoe UI;">Demo Product View</h3>
+    </div>
+    <p><b>Demo Product View Page</b></p>
+    <div style ="width:100%;">
+      <div style="text-align:center;"><img src="images/demoproductview.png" width="600px" height="400px" align="center"/></div>
+    </div>
+    <ul>
+      <li>Click on a Demo Products No to view the details of Demo product. Click <b>EDIT</b> to edit the Demo Product.</li>
+      <li>Click on the <b>New Demo Product</b> button as shown in above screenshot with an arrow mark.  User will be redirected to enter New Demo Product edit Page.</li>
+    </ul>
+  </div>
+  
+  
+  <div id="tablist32" class="alist" style="display:none;background-color:#EEEEEE;height:615px;width:73%;float:right;font-family:Segoe UI; font-size:13px; line-height:25px;overflow:scroll;">
+    <div id="header" style="background-color:#139c83;color:#FFFFFF;text-align:left;padding-left:10px;">
+      <h3 style="margin-bottom:0;font-family:Segoe UI;">Demo Product Fields</h3>
+    </div><br/>
+    <div style ="width:100%;">
+      <center>
+        <img src="images/demoproductedit.png" width="600px" height="400px" align="center"/>
+      </center>
+    </div>
+    <p><b>Enter all the mandatory fields (indicated by |) in record</b></p>
+    <ul>
+      <li><b>Sales Executive</b> (<i><b>Required</b></i>): Describes name of Sales Executive that Demo Product is linked to. User can enter the Sales Executive name, or select the Sales Executive using the lookup icon.</li>
+      <li><b>From </b>(<i><b>Required</b></i>): User can enter Demo Product Raised date or choose a date from the calendar that displays when User put his/her cursor in the field.</li>
+      <li><b>To </b>(<i><b>Required</b></i>): User can enter Demo Product Close date or choose a date from the calendar that displays when User put his/her cursor in the field.</li>
+      
+      <b>Add More: User can add multiple products for a Demo Product Record by clicking Add More.</b>
+     
+      <li><b>Product</b>: Describes for what product the Demo Product is given. User can pick up the product from the drop down list of products.</li>
+      <li><b>Demo Product Quantity</b>: Describes the quantity of Product. User can enter the demo product quantity for the product.</li>
+      <li><b>Demo Product Quantity Type</b>: Describes how the product is available whether as box or unit. User can select from the drop down list (each or box).</li>
+       <li>Click <b>Save</b> to save the record.</li>
+    </ul>
+  </div>
+  
+  
+  <div id="tablist35" class="alist" style="display:none;background-color:#EEEEEE;height:615px;width:73%;float:right;font-family:Segoe UI; font-size:13px; line-height:25px;overflow:scroll;">
+    <div id="header" style="background-color:#139c83;color:#FFFFFF;text-align:left;padding-left:10px;">
+      <h3 style="margin-bottom:0;font-family:Segoe UI;">Goal View</h3>
+    </div>
+    <p><b>Goals View Page</b></p>
+     <div style ="width:100%;">
+      <center>
+        <img src="images/goalsview.png" width="600px" height="400px" align="center"/>
+      </center>
+    </div>
+     <ul>
+      <li>Click on a Goal Number to view the details of Goal. Click <b>EDIT</b> to edit the Goal.</li>
+      <li>Click on the <b>New Goal</b> button as shown in above screenshot with an arrow mark.  User will be redirected to enter new Goal edit page..</li>
+    </ul>
+  </div>
+  
+  <div id="tablist36" class="alist" style="display:none;background-color:#EEEEEE;height:615px;width:73%;float:right;font-family:Segoe UI; font-size:13px; line-height:25px;overflow:scroll;">
+    <div id="header" style="background-color:#139c83;color:#FFFFFF;text-align:left;padding-left:10px;">
+      <h3 style="margin-bottom:0;font-family:Segoe UI;">Goals Fields</h3>
+    </div><br/>
+    <div style ="width:100%;">
+      <center>
+        <img src="images/goalsedit.png" width="600px" height="400px" align="center"/>
+      </center>
+    </div>
+    <p><b>Enter all the mandatory fields (indicated by |) in record</b></p>
+    <ul>
+      <li><b>Sales Executive</b>: Describes name of Sales Executive that Goal is linked to. User can enter the Sales Executive name, 
+        or select the Sales Executive using the lookup icon.</li>
+        
+      <li><b>Start Date</b> (<i><b>Required</b></i>): User can enter Goal Raised date or choose a date from 
+        the calendar that displays when User put his/her cursor in the field.</li>
+        
+      <li><b>End Date</b> (<i><b>Required</b></i>): User can enter Goal Close date or choose a date from the calendar 
+        that displays when User put his/her cursor in the field.</li><br/>
+     
+      <b>Add More: User can add multiple products for a Goal Record by clicking Add More.</b><br/><br/>
+     
+     <li><b>Product</b>: Describes for what product the Goal is given. User can pick up the product from the drop down list of products. </li>
+      <li><b>Quantity Goal</b>: Describes the quantity of Product set as Goal. User can enter the quantity of Product for the Goal.</li>
+      <li><b>Quantity Type</b>: Describes how the product is available whether as box or unit. User can select from the drop down list (each or box).</li>
+      <li><b>Revenue Goal</b>: Describes Revenue set as Goal. User has to enter manually.</li>
+      <li><b>Achieved Goal Quantity</b>: Describes Achieved Quantity for that product by selling.</li>
+      <li><b>Achieved Revenue</b>: Describes Achieved Revenue for that product by selling.</li>
+      <li><b>Action </b>Button is used to delete the line item.</li>
+      <li>Click <b>Save</b> to save the record.</li>
+    </ul>
+  </div>
+  
+  <div id="tablist43" class="alist" style="display:none;background-color:#EEEEEE;height:615px;width:73%;float:right;font-family:Segoe UI; font-size:13px; line-height:25px;overflow:scroll;">
+    <div id="header" style="background-color:#139c83;color:#FFFFFF;text-align:left;padding-left:10px;">
+      <h3 style="margin-bottom:0;font-family:Segoe UI;">Primary Order Goal View</h3>
+    </div>
+    <p><b>Primary Order Goal View Page</b></p>
+     <div style ="width:100%;">
+      <center>
+        <img src="images/primarygoalsview.png" width="600px" height="400px" align="center"/>
+      </center>
+    </div>
+    <ul>
+      <li>Click on a Primary Order Goal Number to view the details of Goal. Click <b>EDIT</b> to edit the Goal.</li>
+      <li>Click on the <b>New Primary Order Goal</b> button as shown in above screenshot with an arrow mark.  User will be redirected to enter new Primary Order Goal edit page..</li>
+    </ul>
+  </div>
+  
+   <div id="tablist44" class="alist" style="display:none;background-color:#EEEEEE;height:615px;width:73%;float:right;font-family:Segoe UI; font-size:13px; line-height:25px;overflow:scroll;">
+    <div id="header" style="background-color:#139c83;color:#FFFFFF;text-align:left;padding-left:10px;">
+      <h3 style="margin-bottom:0;font-family:Segoe UI;">Primary Order Goal Fields</h3>
+    </div>
+    <div style ="width:100%;">
+      <center>
+        <img src="images/pogedit.png" width="600px" height="400px" align="center"/>
+      </center>
+    </div>
+    <p><b>Enter all the mandatory fields (indicated by |) in record</b></p>
+    <ul>
+    <li><b>Sales Manager </b>: Describes name of Sales Manager that Primary Order Goal is linked to. NSM can select the Sales Manager name
+       from the available drop-down list.</li>
+        
+      <li><b>Start Date</b> (<i><b>Required</b></i>): NSM can enter Goal Raised date or choose a date from 
+        the calendar that displays when User put his/her cursor in the field.</li>
+        
+      <li><b>End Date</b> (<i><b>Required</b></i>): NSM can enter Goal Close date or choose a date from the calendar 
+        that displays when User put his/her cursor in the field.</li>
+    <li><B>Target Revenue</B>(<i><b>Required</b></i>): NSM sets the Target Revenue for each Manager.</li>
+    <li><B>Total Revenue Generated</B>: This tells total Revenue achieved by all Dealers.</li>
+    
+    <br/>Click On <b>ADD MORE</b> button to add dealer name.
+    
+    <li><b>Dealer</b>:SM/RSM selects the Dealers from the available Drop Down list And sets Goals to Dealers.These Dealers are responsible for delivering products to end customer.</li>
+    <li><b>Target Revenue</b> :SM/RSM sets Target Revenue for each Dealer to Achieve.</li>
+    <li><b>Revenue Generated</b>:Revenue Generated is the field that describes the revenue achieved after supplying the products to end customer.</li>
+    </ul>
+   </div>
+   
+   <div id="tablist45" class="alist" style="display:none;background-color:#EEEEEE;height:615px;width:73%;float:right;font-family:Segoe UI; font-size:13px; line-height:25px;overflow:scroll;">
+    <div id="header" style="background-color:#139c83;color:#FFFFFF;text-align:left;padding-left:10px;">
+      <h3 style="margin-bottom:0;font-family:Segoe UI;">Product Wise Sales Report</h3>
+    </div><br/><br/>
+       <div style ="width:100%;">
+      <center>
+        <img src="images/product wise sales report NSM.png" width="600px" height="400px" align="center"/>
+      </center>
+    </div>
+    <ul>
+    <li>Enter the duration for which the report has to be displayed (From and To Dates)  </li>
+    <li>click on <b>Run Report.</b></li>
+    <li>NSM can find quantity of products sold by each manager.</li>
+    <li>NSM can also find the Grand total of a product sold by all managers.</li></ul>
+</div>
+
+   <div id="tablist46" class="alist" style="display:none;background-color:#EEEEEE;height:615px;width:73%;float:right;font-family:Segoe UI; font-size:13px; line-height:25px;overflow:scroll;">
+    <div id="header" style="background-color:#139c83;color:#FFFFFF;text-align:left;padding-left:10px;">
+      <h3 style="margin-bottom:0;font-family:Segoe UI;">Manager Wise Report</h3>
+    </div><br/><br/>
+       <div style ="width:100%;">
+      <center>
+        <img src="images/managerwisereportnsm.png" width="600px" height="400px" align="center"/>
+      </center>
+    </div>
+    <ul>
+    <li>Nsm can Select the manager from the drop down list available for which the report has to be displayed.</li>
+    <li>Enter the duration for which the report has to be displayed (From and To Dates)  </li>
+    <li>click on <b>Run Report.</b></li>
+    <li>NSM can find quantity of products sold by each sales executive related to selected sales manager.</li>
+    <li>NSM can also find the Grand total of a product sold by all Executives under selected sales Manager.</li>
+    </ul>
+    </div>
+    
+     <div id="tablist47" class="alist" style="display:none;background-color:#EEEEEE;height:615px;width:73%;float:right;font-family:Segoe UI; font-size:13px; line-height:25px;overflow:scroll;">
+    <div id="header" style="background-color:#139c83;color:#FFFFFF;text-align:left;padding-left:10px;">
+      <h3 style="margin-bottom:0;font-family:Segoe UI;">Customer Wise Report</h3>
+    </div><br/><br/>
+       <div style ="width:100%;">
+      <center>
+        <img src="images/customerwisesalesreportnsm.png" width="600px" height="400px" align="center"/>
+      </center>
+    </div>
+    <ul>
+    <li>Nsm can Select the <b>user</b> from the drop down list available for which the report has to be displayed.on selecting user report is generated for all the customers related to that user.</li>
+    <li>NSM can also Select <b>Product</b> for which the report has to be displayed.</li>
+    <li>NSM can also filter the results based on category (A,B,C,ALL) of customers.</li>
+    <li>NSM can also filter the results based on state of customers.</li></ul>
+    <li>Enter the duration for which the report has to be displayed (From and To Dates)  </li>
+    <li>click on <b>Run Report.</b></li>
+    <li>NSM can find quantity of products ordered by each customer under selected user.</li>
+    <li>NSM can also find the Grand total of a product ordered by all customers under selected user.</li>
+   </div>
+   
+     <div id="tablist48" class="alist" style="display:none;background-color:#EEEEEE;height:615px;width:73%;float:right;font-family:Segoe UI; font-size:13px; line-height:25px;overflow:scroll;">
+    <div id="header" style="background-color:#139c83;color:#FFFFFF;text-align:left;padding-left:10px;">
+      <h3 style="margin-bottom:0;font-family:Segoe UI;">No of visits</h3>
+    </div><br/><br/>
+       <div style ="width:100%;">
+      <center>
+        <img src="images/noofvisitsnsm.png" width="600px" height="400px" align="center"/>
+      </center>
+    </div>
+    <ul>
+    <li>Nsm can Select the manager from the drop down list available for which the report has to be displayed.</li>
+    <li>Enter the duration for which the report has to be displayed (From and To Dates)  </li>
+    <li>click on <b>Run Report.</b></li>
+    <li>On clicking Run Report NSM can find number of times all the executives related to selected manager approached a customer.</li>
+    <li>Report also displays on which date user has approached customer.</li>
+    </ul>
+   </div>
+   
+   <div id="tablist49" class="alist" style="display:none;background-color:#EEEEEE;height:615px;width:73%;float:right;font-family:Segoe UI; font-size:13px; line-height:25px;overflow:scroll;">
+    <div id="header" style="background-color:#139c83;color:#FFFFFF;text-align:left;padding-left:10px;">
+      <h3 style="margin-bottom:0;font-family:Segoe UI;">Goals Verses Achievements.</h3>
+    </div><br/><br/>
+       <div style ="width:100%;">
+      <center>
+        <img src="images/goalsvsachiementnsm.png" width="600px" height="400px" align="center"/>
+      </center>
+    </div>
+    <ul>
+    <li>Nsm can Select the manager from the drop down list available for which the report has to be displayed.</li>
+    <li>Nsm can Select the <b>Goal Category</b> (Revenue or Unit) from the drop down list available for which the report has to be displayed.</li>
+    <li>Enter the duration for which the report has to be displayed (From and To Dates)  </li>
+    <li>click on <b>Run Report.</b></li>
+    <li>Nsm can find list of executives related to selected manager.</li>
+    <li>On clicking Goal Category as Revenue NSM can find achieved revenue/Goal Revenue on each product for each executive.</li>
+    <li>NSM can also find Grand Total on each product that represents achieved revenue/goal revenue on each product by all executives together.</li>
+    <li>On clicking Goal Category as Unit NSM can find achieved Unit/Goal Unit on each product for each executive.</li>
+    <li>NSM can also find Grand Total on each product that represents achieved Unit/goal Unit on each product by all executives together.</li>
+    </ul>
+    </div>
+   
+   <div id="tablist50" class="alist" style="display:none;background-color:#EEEEEE;height:615px;width:73%;float:right;font-family:Segoe UI; font-size:13px; line-height:25px;overflow:scroll;">
+    <div id="header" style="background-color:#139c83;color:#FFFFFF;text-align:left;padding-left:10px;">
+      <h3 style="margin-bottom:0;font-family:Segoe UI;">Executive Wise Report</h3>
+    </div><br/><br/>
+       <div style ="width:100%;">
+      <center>
+        <img src="images/Executivewisesm.png" width="600px" height="400px" align="center"/>
+      </center>
+    </div>
+    <ul>
+    <li>Enter the duration for which the report has to be displayed (From and To Dates)  </li>
+    <li>click on <b>Run Report.</b></li>
+    <li>NSM can find quantity of products sold by each sales executive.</li>
+    <li>NSM can also find the Grand total of a product sold by all Executives.</li>
+    </ul>
+    </div>
+    
+    <div id="tablist51" class="alist" style="display:none;background-color:#EEEEEE;height:615px;width:73%;float:right;font-family:Segoe UI; font-size:13px; line-height:25px;overflow:scroll;">
+    <div id="header" style="background-color:#139c83;color:#FFFFFF;text-align:left;padding-left:10px;">
+      <h3 style="margin-bottom:0;font-family:Segoe UI;">Customer Wise Report</h3>
+    </div><br/><br/>
+       <div style ="width:100%;">
+      <center>
+        <img src="images/customer wise sm.png" width="600px" height="400px" align="center"/>
+      </center>
+    </div>
+    <ul>
+    <li>SM/RSM can Select the <b>user</b> from the drop down list available for which the report has to be displayed.on selecting user report is generated for all the customers related to that user.</li>
+    <li>SM/RSM can also Select <b>Product</b> for which the report has to be displayed.</li>
+    <li>SM/RSM can also filter the results based on category (A,B,C,ALL) of customers.</li>
+    <li>SM/RSM can also filter the results based on state of customers.</li></ul>
+    <li>Enter the duration for which the report has to be displayed (From and To Dates)  </li>
+    <li>click on <b>Run Report.</b></li>
+    <li>SM/RSM can find quantity of products ordered by each customer under selected user.</li>
+    <li>SM/RSM can also find the Grand total of a product ordered by all customers under selected user.</li>
+   </div>
+   
+   <div id="tablist52" class="alist" style="display:none;background-color:#EEEEEE;height:615px;width:73%;float:right;font-family:Segoe UI; font-size:13px; line-height:25px;overflow:scroll;">
+    <div id="header" style="background-color:#139c83;color:#FFFFFF;text-align:left;padding-left:10px;">
+      <h3 style="margin-bottom:0;font-family:Segoe UI;">No of visits</h3>
+    </div><br/><br/>
+       <div style ="width:100%;">
+      <center>
+        <img src="images/noofvisitssm.png" width="600px" height="400px" align="center"/>
+      </center>
+    </div>
+    <ul>
+    <li>Enter the duration for which the report has to be displayed (From and To Dates)  </li>
+    <li>click on <b>Run Report.</b></li>
+    <li>On clicking Run Report SM/RSM can find number of times all the executives related to selected manager approached a customer.</li>
+    <li>Report also displays on which date user has approached customer.</li>
+    </ul>
+   </div>
+   
+   <div id="tablist53" class="alist" style="display:none;background-color:#EEEEEE;height:615px;width:73%;float:right;font-family:Segoe UI; font-size:13px; line-height:25px;overflow:scroll;">
+    <div id="header" style="background-color:#139c83;color:#FFFFFF;text-align:left;padding-left:10px;">
+      <h3 style="margin-bottom:0;font-family:Segoe UI;">Goals Verses Achievements.</h3>
+    </div><br/><br/>
+       <div style ="width:100%;">
+      <center>
+        <img src="images/goalsvsachiementsm.png" width="600px" height="400px" align="center"/>
+      </center>
+    </div>
+    <ul>
+    <li>SM/RSM can Select the <b>Goal Category</b> (Revenue or Unit) from the drop down list available for which the report has to be displayed.</li>
+    <li>Enter the duration for which the report has to be displayed (From and To Dates)  </li>
+    <li>click on <b>Run Report.</b></li>
+    <li>SM/RSM can find list of executives related to selected manager.</li>
+    <li>On clicking Goal Category as Revenue SM/RSM can find achieved revenue/Goal Revenue on each product for each executive.</li>
+    <li>SM/RSM can also find Grand Total on each product that represents achieved revenue/goal revenue on each product by all executives together.</li>
+    <li>On clicking Goal Category as Unit SM/RSM can find achieved Unit/Goal Unit on each product for each executive.</li>
+    <li>SM/RSM can also find Grand Total on each product that represents achieved Unit/goal Unit on each product by all executives together.</li>
+    </ul>
+    </div>
+    
+    <div id="tablist54" class="alist" style="display:none;background-color:#EEEEEE;height:615px;width:73%;float:right;font-family:Segoe UI; font-size:13px; line-height:25px;overflow:scroll;">
+    <div id="header" style="background-color:#139c83;color:#FFFFFF;text-align:left;padding-left:10px;">
+      <h3 style="margin-bottom:0;font-family:Segoe UI;">Customer Wise Report</h3>
+    </div><br/><br/>
+       <div style ="width:100%;">
+      <center>
+        <img src="images/salesproductivityse.png" width="600px" height="400px" align="center"/>
+      </center>
+    </div>
+    <ul>
+    <li>SM/ASM can  Select <b>Product</b> for which the report has to be displayed.</li>
+    <li>SM/ASM can also filter the results based on category (A,B,C,ALL) of customers.</li>
+    <li>SM/ASM can also filter the results based on state of customers.</li></ul>
+    <li>Enter the duration for which the report has to be displayed (From and To Dates)  </li>
+    <li>click on <b>Run Report.</b></li>
+    <li>SM/ASM can find quantity of products ordered by each customer under selected user.</li>
+    <li>SM/ASM can also find the Grand total of a product ordered by all customers under selected user.</li>
+   </div>
+   
+   <div id="tablist55" class="alist" style="display:none;background-color:#EEEEEE;height:615px;width:73%;float:right;font-family:Segoe UI; font-size:13px; line-height:25px;overflow:scroll;">
+    <div id="header" style="background-color:#139c83;color:#FFFFFF;text-align:left;padding-left:10px;">
+      <h3 style="margin-bottom:0;font-family:Segoe UI;">No of visits</h3>
+    </div><br/><br/>
+       <div style ="width:100%;">
+      <center>
+        <img src="images/noofvisitsSE.png" width="600px" height="400px" align="center"/>
+      </center>
+    </div>
+    <ul>
+    <li>Enter the duration for which the report has to be displayed (From and To Dates)  </li>
+    <li>click on <b>Run Report.</b></li>
+    <li>On clicking Run Report SM/ASM can find number of times all the executives approached a customer.</li>
+    <li>Report also displays on which date user has approached customer.</li>
+    </ul>
+   </div>
+
+</div>
+<div style="background-color:#139c83; text-align:center; color:#FFFFFF; clear:both; height:40px; margin:0px auto;">Copyrights © Globalnest LLC.</div>
+</body>
+</html>
+
+
+
+</apex:form>
+</apex:page>

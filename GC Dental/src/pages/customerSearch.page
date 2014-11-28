@@ -1,0 +1,138 @@
+<apex:page standardController="Account" extensions="customersearchcontoller">
+<apex:includeScript value="{!$Resource.AjaxLoaderJs}/AjaxLoader.js"/> 
+<c:AjaxLoader LoaderImage="{!$Resource.AjaxLoaderImage}"/> 
+
+<apex:form id="form1">
+      <apex:pageBlock mode="edit" id="block">
+         <apex:pageBlockSection columns="5" >
+             <apex:pageBlockSectionItem >
+               <apex:outputLabel for="Name">Name</apex:outputLabel>
+               <apex:panelGroup >
+                   <apex:inputText value="{!searchByName}"/>
+               </apex:panelGroup>
+             </apex:pageBlockSectionItem>
+ 
+             <apex:pageBlockSectionItem >
+               <apex:outputLabel for="City">City</apex:outputLabel>
+               <apex:panelGroup >
+                  <apex:inputText value="{!searchByCity}"/>
+               </apex:panelGroup> 
+             </apex:pageBlockSectionItem>
+                
+             <apex:pageBlockSectionItem >
+                 <apex:outputLabel for="Phone">Phone</apex:outputLabel>
+                 <apex:panelGroup >
+                 <apex:inputText value="{!searchByPhone}"/>
+                 </apex:panelGroup> 
+             </apex:pageBlockSectionItem>
+                     
+              <apex:pageBlockSectionItem >
+                 <apex:outputLabel for="ClinicName">Clinic Name</apex:outputLabel>
+                   <apex:panelGroup >
+                   <apex:inputText value="{!searchByClinicName}"/>               
+               </apex:panelGroup> 
+             </apex:pageBlockSectionItem>
+             
+             <apex:commandButton value="Go!" action="{!search}"  status="AjaxLoader" rerender="form1"/>
+        
+        </apex:pageBlockSection>
+        
+          <apex:pageBlock mode="edit">
+          <apex:pageBlockSection columns="40"  >
+           
+            <apex:commandLink value="A" action="{!search}">
+            <apex:param value="a" assignTo="{!searchByName}"/>
+            </apex:commandLink>   
+            <apex:commandLink value="B" action="{!search}">
+            <apex:param value="b" assignTo="{!searchByName}"/>
+            </apex:commandLink> 
+            <apex:commandLink value="C" action="{!search}">
+            <apex:param value="c" assignTo="{!searchByName}"/>
+            </apex:commandLink>   
+            <apex:commandLink value="D" action="{!search}">
+            <apex:param value="d" assignTo="{!searchByName}"/>
+            </apex:commandLink> 
+            <apex:commandLink value="E" action="{!search}">
+            <apex:param value="e" assignTo="{!searchByName}"/>
+            </apex:commandLink>   
+            <apex:commandLink value="F" action="{!search}">
+            <apex:param value="f" assignTo="{!searchByName}"/>
+            </apex:commandLink> 
+            <apex:commandLink value="G" action="{!search}">
+            <apex:param value="g" assignTo="{!searchByName}"/>
+            </apex:commandLink>   
+            <apex:commandLink value="H" action="{!search}">
+            <apex:param value="h" assignTo="{!searchByName}"/>
+            </apex:commandLink> 
+            <apex:commandLink value="I" action="{!search}">
+            <apex:param value="i" assignTo="{!searchByName}"/>
+            </apex:commandLink>   
+            <apex:commandLink value="J" action="{!search}">
+            <apex:param value="j" assignTo="{!searchByName}"/>
+            </apex:commandLink> 
+            <apex:commandLink value="K" action="{!search}">
+            <apex:param value="k" assignTo="{!searchByName}"/>
+            </apex:commandLink>   
+            <apex:commandLink value="L" action="{!search}">
+            <apex:param value="l" assignTo="{!searchByName}"/>
+            </apex:commandLink> 
+            <apex:commandLink value="M" action="{!search}">
+            <apex:param value="m" assignTo="{!searchByName}"/>
+            </apex:commandLink>   
+            <apex:commandLink value="N" action="{!search}">
+            <apex:param value="n" assignTo="{!searchByName}"/>
+            </apex:commandLink> 
+            <apex:commandLink value="O" action="{!search}">
+            <apex:param value="o" assignTo="{!searchByName}"/>
+            </apex:commandLink>   
+            <apex:commandLink value="P" action="{!search}">
+            <apex:param value="p" assignTo="{!searchByName}"/>
+            </apex:commandLink> 
+            <apex:commandLink value="Q" action="{!search}">
+            <apex:param value="q" assignTo="{!searchByName}"/>
+            </apex:commandLink>   
+            <apex:commandLink value="R" action="{!search}">
+            <apex:param value="r" assignTo="{!searchByName}"/>
+            </apex:commandLink> 
+            <apex:commandLink value="S" action="{!search}">
+            <apex:param value="s" assignTo="{!searchByName}"/>
+            </apex:commandLink>   
+            <apex:commandLink value="T" action="{!search}">
+            <apex:param value="t" assignTo="{!searchByName}"/>
+            </apex:commandLink> 
+            <apex:commandLink value="U" action="{!search}">
+            <apex:param value="u" assignTo="{!searchByName}"/>
+            </apex:commandLink>   
+            <apex:commandLink value="V" action="{!search}">
+            <apex:param value="v" assignTo="{!searchByName}"/>
+            </apex:commandLink> 
+            <apex:commandLink value="W" action="{!search}">
+            <apex:param value="w" assignTo="{!searchByName}"/>
+            </apex:commandLink>   
+            <apex:commandLink value="X" action="{!search}">
+            <apex:param value="x" assignTo="{!searchByName}"/>
+            </apex:commandLink> 
+               <apex:commandLink value="Y" action="{!search}">
+            <apex:param value="y" assignTo="{!searchByName}"/>
+            </apex:commandLink>   
+            <apex:commandLink value="Z" action="{!search}">
+            <apex:param value="z" assignTo="{!searchByName}"/>
+            </apex:commandLink> 
+           </apex:pageBlockSection>
+         
+        </apex:pageBlock>
+
+        <apex:pageBlockSection title="Results" id="results" columns="1">
+         <apex:pageBlockTable value="{!searchResults}" var="l">
+              <apex:column headerValue="Customer Name" width="24%">
+              <apex:outputLink value="/{!l.id}">{!l.name}</apex:outputLink>
+              </apex:column>
+              <apex:column value="{!l.Clinic_Name__c}" width="26%"/>
+              <apex:column value="{!l.Phone__c}" width="15%"/>
+              <apex:column value="{!l.Type__c}" width="15%"/>
+              <apex:column value="{!l.Billing_City__c}" headerValue="City" width="20%"/>
+           </apex:pageBlockTable>
+        </apex:pageBlockSection>
+      </apex:pageBlock>
+   </apex:form>
+</apex:page>

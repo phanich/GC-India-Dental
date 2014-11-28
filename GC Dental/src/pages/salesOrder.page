@@ -1,0 +1,174 @@
+<apex:page standardController="SalesOrder__c" extensions="salesOrderCon" id="thePage">
+
+<apex:includeScript value="{!$Resource.AjaxLoaderJs}/AjaxLoader.js"/> 
+<c:AjaxLoader LoaderImage="{!$Resource.AjaxLoaderImage}"/> 
+
+ <apex:form id="form1">  
+   <apex:pageBlock title="Sales Order" id="sorder">
+  <!-- <apex:pageMessages /> -->
+  
+   
+       <apex:pageBlockButtons >
+           <apex:commandButton value="Save" action="{!Save}" status="AjaxLoader" rerender="form1"/>      
+           <apex:commandButton value="Cancel" action="{!Cancel}"/>
+       </apex:pageBlockButtons>
+        <div style="margin: 10px 10px 2px 20px;">
+               <apex:outputText value="{!errorMessage}" id="errorMessage" style="color:red;" escape="false"></apex:outputText>
+          </div>
+          
+          <div style="margin: 10px 10px 2px 20px;">
+               <apex:outputText value="{!errorMessage1}" id="errorMessage1" style="color:red;" escape="false"></apex:outputText>
+          </div>
+            <div style="margin: 10px 10px 2px 20px;">
+               <apex:outputText value="{!errorMessage2}" id="errorMessage2" style="color:red;" escape="false"></apex:outputText>
+          </div>
+            <div style="margin: 10px 10px 2px 20px;">
+               <apex:outputText value="{!errorMessage3}" id="errorMessage3" style="color:red;" escape="false"></apex:outputText>
+          </div>
+           <div style="margin: 10px 10px 2px 20px;">
+               <apex:outputText value="{!errorMessage4}" id="errorMessage4" style="color:red;" escape="false"></apex:outputText>
+          </div>
+          
+                
+        <apex:pageBlockSection columns="2" id="tasklineItem" collapsible="false" title="Log Details" rendered="{!Logdetailsbool}">
+          <!-- <apex:inputField value="{!ta.ActivityDate}" required="true"/> -->
+          <apex:inputField value="{!ta.Meeting_Type__c}" required="true"/>
+          <apex:inputField value="{!ta.Status}"/>
+          <apex:outputField value="{!ta.Outcome_of_Meeting__c}"/>                  
+                                
+          <apex:inputField value="{!ta.Priority}"/>
+          <apex:inputField value="{!ta.Next_Visit_Date__c}"/>
+          <apex:pageBlockSectionItem ></apex:pageBlockSectionItem>
+          <apex:inputField value="{!ta.Next_Visit_Time__c}"/>
+        </apex:pageBlockSection>
+      
+       <apex:pageBlockSection columns="2" id="SOMainItems" collapsible="false" title="Sales Order">
+                
+           <apex:inputField value="{!so.Customer__c}"/>
+           <apex:inputField value="{!so.Dealer__c}"/>
+           <apex:inputField value="{!so.Close_Date__c}" required="true" id="OrderDate"/>
+           <apex:inputField value="{!so.Working_with__c}"/>
+          
+          <apex:outputText >
+             <apex:param value=""/>
+                 
+           <font style="padding-left:15%;color:#4A4A56;font-weight:bold;font-size:11px;"> Demo Product </font>&nbsp;&nbsp; <apex:inputField value="{!so.Demo_Product__c}"/>   
+               &nbsp; <apex:commandButton value="Products" action="{!demoProductRefine}" reRender="demoLineItem,sorder" status="AjaxLoader"/>
+           </apex:outputText>
+            
+          
+            <apex:param value=""/>
+            
+            <apex:inputField value="{!so.Campaign__c}" />
+           <apex:outputText >
+            <font style="padding-left:15%;color:#4A4A56;font-weight:bold;font-size:11px;"> Campaign Items </font>&nbsp;&nbsp; <apex:inputText value="{!campaignItems}" />
+               &nbsp; <apex:commandButton value="Get Campaign Items" action="{!campaignRefine}" rerender="campaignLineItem,sorder" status="AjaxLoader"/>
+           </apex:outputText>
+                 
+       </apex:pageBlockSection>  
+     
+    <apex:pageBlockSection columns="1" id="lineItem" collapsible="false" title=" Sales Order Items " >
+        
+       <apex:pageBlockTable value="{!soLine}" var="sl">
+            <apex:column headerValue="Product" >  
+            <apex:outputPanel styleClass="requiredInput" layout="block" id="pwPanel" >
+            <apex:outputPanel styleClass="requiredBlock"/>   
+            <apex:selectList value="{!sl.Product__c}" multiselect="false" size="1" required="true">
+                    <apex:selectOptions value="{!productpicklistValues}"/>
+            </apex:selectList>
+            </apex:outputPanel>
+            </apex:column>    
+           <apex:column headerValue="Product Specification" >
+               <apex:inputField value="{!sl.Name_of_the_Product__c}"/>
+            </apex:column>  
+           <apex:column headerValue="Quantity" >
+               <apex:inputField value="{!sl.Order_Quantity__c}" required="true"/>
+           </apex:column>  
+           <apex:column headerValue="Quantity In" >
+               <apex:inputField value="{!sl.Quantity_in__c}" required="true"/>
+           </apex:column>   
+           <apex:column headerValue="Customer Type" >
+               <apex:inputField value="{!sl.customer_Product__c }" required="true"/>
+           </apex:column>   
+           <apex:column headerValue="Price/ Unit (Rs.)">
+               <apex:inputField value="{!sl.Price__c}" required="true"/>
+           </apex:column>
+           <apex:column headerValue="Action">
+                   <apex:commandLink action="{!deleteSalesOrderLine}" reRender="lineItem" onclick="confirm('Do you want to delete the item?');">
+                       <apex:image value="{!$Resource.DeleteIcon}" title="Delete"/>
+                       <apex:param value="{!sl.UniqueNumber__c}" name="deletedId"/>
+                   </apex:commandLink>  
+           </apex:column>   
+       </apex:pageBlockTable>
+    </apex:pageBlockSection>
+    
+     <apex:commandButton value="Add Products" action="{!AddLineItems}" rerender="lineItem,sorder,errorMessage,errorMessage1,errorMessage2,errorMessage3" />
+    
+    <apex:outputPanel id="demoLineItem">
+       <!---- DemoProduct LineItems pageblock   ---->  
+       <apex:pageBlockSection columns="1" id="demoLineItemSection" collapsible="false" title="DemoProduct Items" rendered="{! IF( SODemoLine.size == 0 , 'FALSE' , 'TRUE') }">
+      
+             
+       <apex:pageBlockTable value="{!SODemoLine}" var="sl" >
+            <apex:column headerValue="Product" >
+               
+               <apex:selectList value="{!sl.Product__c}" multiselect="false" size="1" >
+                        <apex:selectOptions value="{!DemoproductpicklistValues}"/>
+                </apex:selectList>
+            </apex:column>    
+           <apex:column headerValue="Product Specification" >
+               <apex:inputField value="{!sl.Name_of_the_Product__c}"/>
+            </apex:column>  
+           <apex:column headerValue="Quantity" >
+               <apex:inputField value="{!sl.Order_Quantity__c}"/>
+           </apex:column>  
+           <apex:column headerValue="Quantity In" >
+               <apex:inputField value="{!sl.Quantity_in__c}"/>
+           </apex:column>   
+           <apex:column headerValue="Price/ Unit (Rs.)" >
+                Free Sample
+           </apex:column>
+         <!-- <apex:column headerValue="Action">
+                   <apex:commandLink action="{!deleteSalesOrderLine}" reRender="demoLineItem">
+                       <apex:image value="{!$Resource.DeleteIcon}" title="Delete"/>
+                       <apex:param value="{!sl.UniqueNumber__c}" name="deletedId"/>
+                   </apex:commandLink>  
+           </apex:column>   -->
+       </apex:pageBlockTable>
+    </apex:pageBlockSection>
+  </apex:outputPanel> 
+     
+    <!---- campaign LineItems pageblock ---->   
+       <apex:pageBlockSection columns="1" id="campaignLineItem" collapsible="false" title=" Campaign Items  " rendered="{! IF( campaignSOLine.size == 0 , 'FALSE' , 'TRUE') }"> <!-------  rendered="{! IF( campaignSOLine.size == 0 , 'FALSE' , 'TRUE') }"  ---->
+           
+       <apex:pageBlockTable value="{!campaignSOLine}" var="cl" >
+            <apex:column headerValue="Product" >
+               <apex:outputField value="{!cl.Product__c}"></apex:outputField> 
+                   
+            </apex:column>    
+           <apex:column headerValue="Product Specification" >
+               <apex:outputField value="{!cl.Name_of_the_Product__c}"/>
+            </apex:column>  
+           <apex:column headerValue="Quantity" >
+               <apex:outputField value="{!cl.Order_Quantity__c}"/>
+           </apex:column>  
+           <apex:column headerValue="Quantity In" >
+               <apex:outputField value="{!cl.Quantity_in__c}"/>
+           </apex:column>
+           <apex:column headerValue="Product Type" >
+               <apex:outputField value="{!cl.Product_Type__c}"/>
+           </apex:column>     
+           <apex:column headerValue="Price/ Unit (Rs.)">      
+                 <apex:inputField value="{!cl.Price__c}" rendered="{!IF( cl.Price__c != 0 ,'TRUE','FALSE' ) }"/>
+                 <apex:outputField value="{!cl.Price__c}" rendered="{!IF(cl.Price__c != 0 ,'FALSE','TRUE' ) }"/>
+           </apex:column>
+              
+       </apex:pageBlockTable>
+    </apex:pageBlockSection>
+   
+
+   </apex:pageBlock>
+   
+ </apex:form>  
+    
+</apex:page>

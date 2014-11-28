@@ -1,0 +1,69 @@
+<apex:page standardController="Primary_Order_Goals_for_manager__c" extensions="PrimaryOrdergoalscon">
+<apex:includeScript value="{!$Resource.AjaxLoaderJs}/AjaxLoader.js"/> 
+<c:AjaxLoader LoaderImage="{!$Resource.AjaxLoaderImage}"/> 
+
+<apex:form id="form1">  
+<apex:pageBlock title="Primary Order Goals" mode="edit" id="pb">
+<apex:pageBlockButtons >
+                <apex:commandButton action="{!saveall}" value="Save" status="AjaxLoader" rerender="form1"/>
+                <apex:commandButton value="Cancel" action="{!cancel}" />
+</apex:pageBlockButtons>
+ 
+<apex:pageBlockSection collapsible="false" columns="2" id="pbs" >
+<apex:outputText rendered="{!IF(LoggedInuser.GC_User_Role__c == 'NSM',TRUE, FALSE)}" >
+                <font style="padding-left:12%;color:#4A4A56;font-weight:bold;font-size:11px;"> Sales Manager</font>&nbsp;&nbsp;      
+                <apex:selectList id="SelectedUser"  value="{!SelectedUser}" size="1" style="width:150px;" >
+                <apex:selectOptions value="{!ChoosenUser}" />
+                </apex:selectList>
+     </apex:outputText><Br/>
+     <apex:outputfield value="{!primarygoalRecord.Sales_Manager__c}" rendered="{!IF(LoggedInuser.GC_User_Role__c == 'Manager',TRUE, FALSE)}"/>
+     <apex:inputField value="{!primarygoalRecord.Start_Date__c}" required="true" rendered="{!IF(LoggedInuser.GC_User_Role__c == 'NSM',TRUE, FALSE)}"/>
+     <apex:outputField value="{!primarygoalRecord.Start_Date__c}" rendered="{!IF(LoggedInuser.GC_User_Role__c == 'Manager',TRUE, FALSE)}"/>
+     <apex:inputField value="{!primarygoalRecord.End_Date__c}"  required="true" rendered="{!IF(LoggedInuser.GC_User_Role__c == 'NSM',TRUE, FALSE)}"/>
+     <apex:outputField value="{!primarygoalRecord.End_Date__c}" rendered="{!IF(LoggedInuser.GC_User_Role__c == 'Manager',TRUE, FALSE)}"/> 
+     <apex:inputField value="{!primarygoalRecord.Target_Revenue1__c}" required="true" rendered="{!IF(LoggedInuser.GC_User_Role__c == 'NSM',TRUE, FALSE)}"/>
+     <apex:outputField value="{!primarygoalRecord.Target_Revenue1__c}" rendered="{!IF(LoggedInuser.GC_User_Role__c == 'Manager',TRUE, FALSE)}"/>
+     <apex:outputField value="{!primarygoalRecord.Total_Revnue__c}"/>
+</apex:pageBlockSection>
+
+ <div style="margin: 10px 10px 2px 20px;">
+               <apex:outputText value="{!errorMessage}" id="errorMessage" style="color:red;" escape="false"></apex:outputText>
+           </div> 
+           
+<apex:pageBlockSection collapsible="false" columns="1" id="DlLine">
+<apex:pageBlockTable value="{!PrimarygoalsLineItems}" var="gl">
+    <apex:column headerValue="Dealer">
+     <apex:selectList value="{!gl.Dealer__c}" multiselect="false" size="1" required="true">
+                            <apex:selectOptions value="{!picklistValues}"/>
+                    </apex:selectList>
+     </apex:column>
+      <apex:column headerValue="Target Revenue" >
+     <apex:inputField value="{!gl.Target_Revenue__c}"  />
+     </apex:column> 
+     <apex:column headerValue="Revenue Generated" >
+     <apex:inputField value="{!gl.Revenue_Generated__c}"  />
+     </apex:column> 
+     <!-- <apex:column headerValue="Issued Date">
+     <apex:inputField value="{!gl.Issued_Date__c}" />
+     </apex:column>
+     -->
+     <apex:column headerValue="Action">
+        <apex:commandLink action="{!deletegoalLine}" reRender="DlLine" immediate="true">
+            <apex:image value="{!$Resource.DeleteIcon}" title="Delete"/>
+            <apex:param value="{!gl.UniqueName__c}" name="deletedId"/>
+        </apex:commandLink>    
+     </apex:column>     
+
+</apex:pageBlockTable>
+</apex:pageBlockSection>
+<div style="text-align:left;margin: 15px 10px 2px 20px;">
+    <apex:commandButton value="Add Dealers"  action="{!addMore}" reRender="DlLine,errormessage" status="Ajaxloader"/>
+</div>
+</apex:pageBlock>
+<apex:outputPanel rendered="{!Showerror}">
+<script>
+       alert('Error');
+</script>
+</apex:outputPanel>
+</apex:form>
+</apex:page>

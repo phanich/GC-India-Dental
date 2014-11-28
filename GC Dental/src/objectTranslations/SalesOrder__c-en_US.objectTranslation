@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObjectTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <caseValues>
+        <plural>false</plural>
+        <value>Sales Order</value>
+    </caseValues>
+    <caseValues>
+        <plural>true</plural>
+        <value>Sales Orders</value>
+    </caseValues>
+    <fields>
+        <label><!-- Campaign SalesOrder --></label>
+        <name>Campaign_SalesOrder__c</name>
+    </fields>
+    <fields>
+        <label><!-- Campaign --></label>
+        <lookupFilter>
+            <errorMessage><!-- Please select only active campaigns. --></errorMessage>
+            <informationalMessage><!-- List of Active Campaigns --></informationalMessage>
+        </lookupFilter>
+        <name>Campaign__c</name>
+        <relationshipLabel><!-- Sales Orders --></relationshipLabel>
+    </fields>
+    <fields>
+        <label><!-- Order Date --></label>
+        <name>Close_Date__c</name>
+    </fields>
+    <fields>
+        <label><!-- Customer --></label>
+        <name>Customer__c</name>
+        <relationshipLabel><!-- Sales Orders --></relationshipLabel>
+    </fields>
+    <fields>
+        <label><!-- Dealer --></label>
+        <name>Dealer__c</name>
+        <relationshipLabel><!-- Sales Orders --></relationshipLabel>
+    </fields>
+    <fields>
+        <label><!-- Demo Product --></label>
+        <lookupFilter>
+            <errorMessage><!-- Please select the active demo products. --></errorMessage>
+            <informationalMessage><!-- Please select the active demo products.Please start the search with &quot;  D-  &quot; --></informationalMessage>
+        </lookupFilter>
+        <name>Demo_Product__c</name>
+        <relationshipLabel><!-- Sales Orders --></relationshipLabel>
+    </fields>
+    <fields>
+        <label><!-- Demo Products Sales Order --></label>
+        <name>Demo_Products_Sales_Order__c</name>
+    </fields>
+    <fields>
+        <label><!-- Only SalesOrder Amount --></label>
+        <name>Only_SalesOrder_Amount__c</name>
+    </fields>
+    <fields>
+        <label><!-- Order Type --></label>
+        <name>Order_Type__c</name>
+        <picklistValues>
+            <masterLabel>I have called the Customer</masterLabel>
+            <translation><!-- I have called the Customer --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>I have visited the Customer</masterLabel>
+            <translation><!-- I have visited the Customer --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Received a call from Customer</masterLabel>
+            <translation><!-- Received a call from Customer --></translation>
+        </picklistValues>
+    </fields>
+    <fields>
+        <label><!-- SalesOrder Amount --></label>
+        <name>SalesOrder_Amount__c</name>
+    </fields>
+    <fields>
+        <label><!-- Working with --></label>
+        <lookupFilter>
+            <errorMessage><!-- Please select active User. --></errorMessage>
+            <informationalMessage><!-- Active Users --></informationalMessage>
+        </lookupFilter>
+        <name>Working_with__c</name>
+        <relationshipLabel><!-- Sales Orders --></relationshipLabel>
+    </fields>
+    <layouts>
+        <layout>SalesOrder Layout</layout>
+        <sections>
+            <label><!-- Custom Links --></label>
+            <section>Custom Links</section>
+        </sections>
+    </layouts>
+    <startsWith>Consonant</startsWith>
+</CustomObjectTranslation>

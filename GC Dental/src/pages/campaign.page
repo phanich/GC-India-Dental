@@ -1,0 +1,63 @@
+<apex:page standardController="Campaign__c" extensions="campaignCon">
+<apex:includeScript value="{!$Resource.AjaxLoaderJs}/AjaxLoader.js"/> 
+<c:AjaxLoader LoaderImage="{!$Resource.AjaxLoaderImage}"/> 
+
+<apex:form id="form1">   
+    <apex:pageBlock title="Campaign Information" id="pb">
+    
+        <apex:pageBlockButtons location="bottom">
+            <apex:commandButton value="Save" action="{!saveAllRecords}" status="AjaxLoader" rerender="form1"/>
+            <apex:commandButton value="Cancel" action="{!cancel}" />
+        </apex:pageBlockButtons>
+     
+        <apex:pageBlockSection collapsible="false" columns="2" id="pbs">
+            <apex:inputField value="{!campaignRecord.Name}" required="true"/>
+            <apex:inputField value="{!campaignRecord.Activation_Date__c}" required="true"/>
+            <apex:inputField value="{!campaignRecord.Campaign_Description__c}"/>
+            <apex:inputField value="{!campaignRecord.Deactivation_Date__c}" required="true"/>           
+        </apex:pageBlockSection>
+           
+        <div style="margin: 25px 10px 2px 20px;">
+            <apex:outputText value="{!errorMessage}" id="errorMessage" style="color:red;" escape="false"></apex:outputText>
+        </div>
+           
+        <apex:pageBlockSection collapsible="false" columns="1" id="cLine"> 
+            <apex:pageBlockTable value="{!campaignLineItems}" var="cl">
+                <apex:column headerValue="Products">
+                    <apex:outputPanel styleClass="requiredInput" layout="block" id="pwPanel" >
+     
+                    <apex:outputPanel styleClass="requiredBlock"/>
+                        <apex:selectList value="{!cl.Product__c}" multiselect="false" size="1" required="true">
+                        <apex:selectOptions value="{!picklistValues}"/>
+                       <!-- <apex:actionSupport rerender="cLine,errorMessage" event="onchange" action="{!addMore}"/> -->
+                        </apex:selectList>
+                    </apex:outputPanel>
+                </apex:column>
+                <apex:column headerValue="Price">
+                    <apex:inputField value="{!cl.Product_Price__c}" />
+                </apex:column>
+                <apex:column headerValue="Quantity">
+                    <apex:inputField value="{!cl.Quantity__c}" required="true"/>
+                </apex:column>  
+                <apex:column headerValue="Quantity In">
+                    <apex:inputField value="{!cl.Quantity_in__c}" required="true"/>
+                </apex:column>  
+                <apex:column headerValue="Product Type">
+                    <apex:inputField value="{!cl.Product_Type__c}" required="true"/>
+                </apex:column>  
+                <apex:column headerValue="Action">
+                    <apex:commandLink action="{!deleteCampaignLine}" reRender="cLine,errorMessage" onclick="confirm('Do you want to delete the item?');">
+                    <apex:image value="{!$Resource.DeleteIcon}" title="Delete"/>
+                        <apex:param value="{!cl.UniqueNo__c}" name="deletedId"/>
+                    </apex:commandLink>    
+                </apex:column>    
+            </apex:pageBlockTable>
+        </apex:pageBlockSection>   
+        
+<div style="text-align:left;margin: 15px 10px 2px 10px;">                 
+        <apex:commandButton value="Add Products" action="{!addMore}" reRender="cLine,errorMessage"/>
+</div>       
+    </apex:pageBlock>
+</apex:form>  
+
+</apex:page>

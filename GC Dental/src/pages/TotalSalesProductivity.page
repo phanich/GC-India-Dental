@@ -1,0 +1,323 @@
+<apex:page sidebar="false" controller="TotalSalesProductivityCon" id="myPage" standardStylesheets="true" showHeader="true">
+<apex:includeScript value="{!$Resource.AjaxLoaderJs}/AjaxLoader.js"/> 
+<c:AjaxLoader LoaderImage="{!$Resource.AjaxLoaderImage}"/> 
+
+
+
+<style>
+.tableclass{width:100%; border:1px solid #00aa90; border-collapse:collapse; font-family:Verdana, Geneva, sans-serif;}
+.tableclass th{ text-align:left; font-weight:bold; background-color:#fff9a4; border:1px solid #00aa90; padding-left:8px; font-size:12px; letter-spacing:1px; color:#414141;}
+.tableclass tr{text-align:left;  border:1px solid #00aa90;}
+.tableclass td{ text-align:left; font-weight:normal; font-size:12px; color:#000000; padding-left:8px; border:1px solid #00aa90; line-height:15px;}
+</style>
+
+<table width="100%" border="0" align="center" cellpadding="0" cellspacing="0">
+   <apex:form id="ww">
+    <tr>
+      <td height="35" align="left" valign="middle" style="padding-left:20px; color:#2daebf;">
+          <font style="font-size:25px;font-weight:bold;">Total Sales Productivity at a Glance</font>
+      </td>
+    </tr>
+    <tr>
+      <td align="center" valign="top">
+      <table width="100%" border="0" align="center" cellpadding="0" cellspacing="0">
+          <tr height="35px">
+            <td align="center" valign="middle" bgcolor="#00AA90">             
+              <div class="wall-of-buttons" style="text-align:left;margin:0px auto;width:98%;overflow:auto; height:50px;"> 
+                    <apex:commandLink value="Product Wise Sales Report" action="{!productwisereportselect}" style="text-decoration:none;" styleClass="{!IF(ShowManagerWiseSelect, 'activebtn', 'passivebtn')}" rendered="{!IF(LoggedInuser.GC_User_Role__c == 'NSM',TRUE, FALSE)}"/>
+                    <apex:commandLink value="{!IF(LoggedInuser.GC_User_Role__c == 'NSM','Manager Wise Report', 'Executive Wise Report')}" action="{!executivewisereportselect}" style="text-decoration:none;" styleClass="{!IF(ShowExecutiveWiseTable, 'activebtn', 'passivebtn')}" rendered="{!IF(LoggedInuser.GC_User_Role__c == 'Executive', FALSE, TRUE)}"/>
+                    <apex:commandLink value="Customer Wise Report" action="{!customerwisereportselect}" style="text-decoration:none;" styleClass="{!IF(ShowCustomerWiseSelect, 'activebtn', 'passivebtn')}"/>
+                    <apex:commandLink value="No. of Visits " action="{!noofvisitsreportselect}" style="text-decoration:none;" styleClass="{!IF(ShowNoofVisitsWiseSelect, 'activebtn', 'passivebtn')}"/>
+                    <apex:commandLink value="Goals Vs. Achievements" action="{!goalsreportselect}" style="text-decoration:none;" styleClass="{!IF(ShowGoalsWiseSelect, 'activebtn', 'passivebtn')}" rendered="{!IF(LoggedInuser.GC_User_Role__c == 'Executive', FALSE, TRUE)}"/> 
+              </div>
+             </td>
+          </tr>
+       </table>
+       </td>
+     </tr>
+      <tr>
+      <td height="1" align="center" valign="middle" style="background-color:#CCCCCC; height:35px;">
+      <table width="100%" border="0" align="center" cellpadding="0" cellspacing="0">
+          <tr>
+            <td>
+                <td width="50%" align="left" valign="middle" style="padding-left:5px;">    
+                <apex:outputPanel rendered="{!IF(LoggedInuser.GC_User_Role__c == 'NSM',TRUE, FALSE)}">
+                    <B>
+                        <apex:outputText value="Select Manager :" rendered="{!OR(ShowExecutiveWiseTable,ShowNoofVisitsWiseSelect)}"></apex:outputText>       
+                    </B>
+                    <!----  2nd Tab & 4th Tab ------>
+                    <apex:outputText rendered="{!OR(ShowExecutiveWiseTable, ShowNoofVisitsWiseSelect)}">
+                        <apex:selectList id="SelectedManager" value="{!SelectedManager}" size="1">
+                            <apex:selectOptions value="{!ChoosenManager}">
+                                <apex:actionSupport event="onchange" action="{!executivewisereportselect}" />
+                            </apex:selectOptions>
+                        </apex:selectList>
+                    </apex:outputText>  
+                </apex:outputPanel>    
+                <!----  3rd Tab ------> 
+                
+                <!---- 5th Tab ------->
+                <apex:outputPanel rendered="{!IF(LoggedInuser.GC_User_Role__c == 'NSM', TRUE, FALSE)}">
+                    <B>
+                        <apex:outputText value="Select Manager :" rendered="{!ShowGoalsWiseSelect}"></apex:outputText>       
+                    </B>
+                    <apex:outputText rendered="{!ShowGoalsWiseSelect}">
+                        <apex:selectList id="SelectedGoalManager" value="{!SelectedManager}" size="1">
+                            <apex:selectOptions value="{!ChoosenManager}">
+                            </apex:selectOptions>
+                        </apex:selectList>
+                    </apex:outputText> &nbsp;&nbsp;
+                    
+                    </apex:outputPanel> 
+                    <apex:outputPanel rendered="{!IF(LoggedInuser.GC_User_Role__c == 'Executive', FALSE, TRUE)}">
+                    <B>
+                        <apex:outputText value="Select Goal Category :" rendered="{!ShowGoalsWiseSelect}"></apex:outputText>       
+                    </B>
+                    <apex:outputText rendered="{!ShowGoalsWiseSelect}">
+                        <apex:selectList id="SelectedGoalType" value="{!SelectedGoalType}" size="1">
+                            <apex:selectOptions value="{!ChoosenGoalType}">
+                            </apex:selectOptions>
+                        </apex:selectList>
+                    </apex:outputText>  
+                </apex:outputPanel> 
+                <!---- 5th Tab ------->
+                
+                   <apex:outputText rendered="{!ShowCustomerWiseSelect}"> 
+                   <apex:outputPanel rendered="{!IF(LoggedInuser.GC_User_Role__c == 'Executive', FALSE, TRUE)}">
+                        <B>
+                            <apex:outputText value="User :" rendered="{!ShowCustomerWiseSelect}"></apex:outputText>
+                        </B>
+                        <apex:selectList id="SelectedExecutive" value="{!SelectedExecutive}" size="1" style="width:100Px;">
+                            <apex:selectOptions value="{!ChoosenExecutive}"/>
+                        </apex:selectList>  
+                   </apex:outputPanel>       
+                        <B>
+                            <apex:outputText value="Product :" rendered="{!ShowCustomerWiseSelect}"></apex:outputText>
+                        </B>
+                        <apex:selectList id="SelectedProduct" value="{!SelectedProduct}" size="1" style="width:100Px;">
+                            <apex:selectOptions value="{!ProductsPicklist}"/>
+                        </apex:selectList>
+                        
+                        <B>
+                            <apex:outputText value="Category :" rendered="{!ShowCustomerWiseSelect}"></apex:outputText>
+                        </B>
+                        <apex:selectList id="SelectedCategory" value="{!SelectedCustomerCategory}" size="1" style="width:55Px;">
+                            <apex:selectOptions value="{!ChoosenCustomerCategory}"/>
+                        </apex:selectList>
+
+                    
+                        <B>
+                            <apex:outputText value="State :" rendered="{!ShowCustomerWiseSelect}"></apex:outputText>
+                        </B>
+                        <apex:selectList id="SelectedCustomerState" value="{!SelectedCustomerState}" size="1" style="width:75px;">
+                            <apex:selectOptions value="{!ChoosenCustomerState}"/>
+                        </apex:selectList>
+                    </apex:outputText> 
+                    
+               </td>
+               
+                <td width="40%" align="right" valign="middle" style="padding-right:30px;border:0px solid #000;" >
+                  <table width="100%" cellpadding="0" cellspacing="0">
+                  <tr>
+                      <td><apex:inputField value="{!seo.Clinic_Name__c}" style="width:0px;background-color:#C0C0C0;padding-right:1px;"/> </td>
+                      <td><b>View Report </b></td>
+                      <td><b>From :</b></td><td> <apex:inputField value="{!goa.Start_Date__c}" id="StartDateId"/></td>
+                      <td><b>To :</b></td><td><apex:inputField value="{!goa.End_Date__c}" id="EndDateId"/></td>
+                  </tr>
+                </table>
+                </td>
+             
+           <apex:outputPanel rendered="{!ShowProductWiseSelect}" id="Productwisepanel1">
+            <td align="left" valign="middle" style="padding-left:5px;padding-right:10px;">
+                <apex:commandButton value="Run Report" action="{!productwisereportselect}" status="AjaxLoader" reRender="form2"/>
+            </td>
+            </apex:outputPanel>
+            <apex:outputPanel rendered="{!ShowExecutiveWiseTable}">
+            <td align="left" valign="middle" style="padding-left:5px;padding-right:10px;">
+                <apex:commandButton value="Run Report" action="{!executivewisereportselect}" status="AjaxLoader" reRender="form2"/>
+            </td>
+            </apex:outputPanel>
+          <apex:outputPanel rendered="{!ShowCustomerWiseSelect}" >
+            <td align="left" valign="middle" style="padding-left:5px;padding-right:10px;">
+                <apex:commandButton value="Run Report" action="{!customerwisereportselect}" status="AjaxLoader" reRender="form2"/>
+            </td>
+            </apex:outputPanel>
+             <apex:outputPanel rendered="{!ShowNoofVisitsWiseSelect}">
+            <td align="left" valign="middle" style="padding-left:5px;padding-right:10px;">
+                <apex:commandButton value="Run Report" action="{!noofvisitsreportselect}" status="AjaxLoader" reRender="form2"/>
+            </td>
+            </apex:outputPanel>  
+            <apex:outputPanel rendered="{!ShowGoalsWiseSelect}">
+            <td align="left" valign="middle" style="padding-left:5px;padding-right:10px;">
+                <apex:commandButton value="Run Report" action="{!goalsreportselect}" status="AjaxLoader" reRender="form2"/>
+            </td>
+            </apex:outputPanel>  
+           </td> 
+          </tr>
+          </table>
+        </td>
+     </tr> 
+   </apex:form>   
+  </table>
+        <apex:form id="form2">   
+           <table width="100%" border="0" cellspacing="0" cellpadding="0" class="tableclass" id="table1">   
+            <apex:variable value="{!1}" var="row"/>
+             <apex:repeat value="{!SalesManagerProductAchived}" var="sep" rendered="{!ShowManagerWiseSelect}">
+                 <tr style="background-color:{!(IF(row == 2,'#fff9a4',''))};">
+                     <th style="background-color: #00AA90; text-align:left;border-bottom:1px solid #FFFFFF; border-right:1px solid #FFFFFF; height:30px;">
+                      <apex:outputText value="{!sep.UserName.Name}" style="text-align:left; height:30px; color:#FFFFFF;" rendered="{!NOT( ISBlank(sep.UserName.Name))}"/>
+                      <apex:outputText value="UserName" style=" text-align:left; height:30px; color:#FFFFFF;  " rendered="{!( ISBlank(sep.UserName.Name))}"/>
+                     </th>    
+
+                 <apex:repeat value="{!sep.manageInner}" var="mi"> 
+                     <td style="{! IF(mi.DisplayHeader , 'background-color: #00AA90; color:#FFFFFF; border-right:1px solid #FFFFFF; font-size:12px;  text-align:left; padding-left:2px; border-bottom:1px solid #a9dcf6; height:30px; width:5%;', 'width:3%; text-align:center;')}">    
+                         <apex:outputText value="{!mi.OrderNo}"> </apex:outputText>
+                     </td>
+                 </apex:repeat>
+                 </tr>
+                <apex:variable value="{!row+1}" var="row" /> 
+              </apex:repeat> 
+             </table> 
+             
+            <!------------------------------------- End of 1st Report ---------------------------------------->
+           
+            <table width="100%" border="0" cellspacing="0" cellpadding="0" class="tableclass">
+                <apex:variable value="{!1}" var="row"/>
+                <apex:repeat value="{!SalesExecutiveProductAchived}" var="sep" rendered="{!ShowExecutiveWiseTable}">
+                       <tr style="background-color:{!(IF(row == 2,'#fff9a4',''))};">
+                       <th style="background-color: #00AA90; text-align:left;border-bottom:1px solid #FFFFFF;border-right:1px solid #FFFFFF; height:30px;">
+                              <apex:outputText value="{!sep.UserName.Name}" style="text-align:left; height:30px; color:#FFFFFF;" rendered="{!NOT( ISBlank(sep.UserName.Name))}"/>
+                              <apex:outputText value="UserName" style="text-align:left; height:30px; color:#FFFFFF;" rendered="{!( ISBlank(sep.UserName.Name))}"/> 
+                       </th>  
+                       <apex:repeat value="{!sep.manageInner}" var="mi"> 
+                       <td  style="{! IF(mi.DisplayHeader , 'background-color: #00AA90; color:#FFFFFF; border-right:1px solid #FFFFFF; font-size:12px;  text-align:left; padding-left:2px; border-bottom:1px solid #a9dcf6; height:30px; width:5%;', 'width:3%; text-align:center;')}">    
+                           <apex:outputText value="{!mi.OrderNo}"  > </apex:outputText>
+                       </td>
+                        </apex:repeat>
+                        </tr>   
+                        <apex:variable value="{!row+1}" var="row" />                 
+                 </apex:repeat>  
+           </table>  
+           
+          <!--------------------------------------- End of 2nd Report ---------------------------->
+  
+          <table width="100%" border="0" cellspacing="0" cellpadding="0" class="tableclass">
+              <apex:variable value="{!1}" var="row"/>
+              <apex:repeat value="{!AccountProductivityAchived}" var="ap" rendered="{!ShowCustomerWiseSelect}">
+                     <tr style="background-color:{!(IF(row == 2,'#fff9a4',''))};">
+                     <th style="background-color: #00AA90; text-align:left;border-bottom:1px solid #FFFFFF;border-right:1px solid #FFFFFF; height:30px;">
+                          <apex:outputText value="{!ap.acc.Name}" style="text-align:left; height:30px; color:#FFFFFF;" rendered="{!NOT( ISBlank(ap.acc.Name))}"/>
+                          <apex:outputText value="Customer Name" style="text-align:left; height:30px; color:#FFFFFF;" rendered="{!( ISBlank(ap.acc.Name))}"/>  
+                     </th>  
+                     <apex:repeat value="{!ap.manageInner}" var="mi"> 
+                         <td  style="{! IF(mi.DisplayHeader , 'background-color: #00AA90; color:#FFFFFF; border-right:1px solid #FFFFFF; font-size:12px;  text-align:left; padding-left:2px; border-bottom:1px solid #a9dcf6; height:30px; width:5%;', 'width:3%; text-align:center;')}">    
+                             <apex:outputText value="{!mi.OrderNo}"  > </apex:outputText>
+                         </td>
+                     </apex:repeat>
+                     </tr>
+                     <apex:variable value="{!row+1}" var="row" />
+                  </apex:repeat>  
+         </table>
+ 
+         <!---------------------------------------- END of 3rd Report  --------------------------------->
+         
+         <table width="100%" border="0" cellspacing="0" cellpadding="0" class="tableclass">
+             <apex:variable value="{!1}" var="row"/>
+             <apex:repeat value="{!seDateWiseVisits}" var="sep"  rendered="{!ShowNoofVisitsWiseSelect}">
+                  <tr style="background-color:{!(IF(row == 2,'#fff9a4',''))};">
+                  <th style="background-color: #00AA90; text-align:left;border-bottom:1px solid #FFFFFF;border-right:1px solid #FFFFFF; height:30px;">
+                          <apex:outputText value="{!sep.UserName.Name}" style="text-align:left; height:30px; color:#FFFFFF;" rendered="{!NOT( ISBlank(sep.UserName.Name))}"/>
+                          <apex:outputText value="UserName" style="text-align:left; height:30px; color:#FFFFFF;" rendered="{!( ISBlank(sep.UserName.Name))}"/> 
+                  </th>  
+                  <apex:repeat value="{!sep.userVisits}" var="mi"> 
+                      <td  style="{! IF(mi.DisplayHeader , 'background-color: #00AA90; color:#FFFFFF; border-right:1px solid #FFFFFF; font-size:12px;  text-align:left; padding-left:2px; border-bottom:1px solid #a9dcf6; height:30px; width:5%;', 'width:3%; text-align:center;')}">    
+                          <apex:outputText value="{!mi.noOfVisits  } " style="width:3%" rendered="{!NOT(mi.DisplayHeader)}"> </apex:outputText>                            
+                          <apex:outputText value="{0,date,dd/MM}" rendered="{!mi.DisplayHeader}">
+                              <apex:param value="{!mi.ActivityDate}"/> 
+                          </apex:outputText>  
+                      </td>
+                   </apex:repeat>
+                   </tr>  
+                   <apex:variable value="{!row+1}" var="row" />   
+               </apex:repeat> 
+         </table>
+         
+         <!------------------------------------------- End of 4th Report ---------------------------------->
+         
+         <table width="100%" border="0" cellspacing="0" cellpadding="0" class="tableclass">
+                <apex:variable value="{!1}" var="row"/>
+                <apex:repeat value="{!SalesExecutiveGoalAchived}" var="sep" rendered="{!ShowGoalsWiseSelect}">
+                       <tr style="background-color:{!(IF(row == 2,'#fff9a4',''))};">
+                       <th style="background-color: #00AA90; text-align:left;border-bottom:1px solid #FFFFFF;border-right:1px solid #FFFFFF; height:30px;">
+                              <apex:outputText value="{!sep.UserName.Name}" style="text-align:left; height:30px; color:#FFFFFF;" rendered="{!NOT( ISBlank(sep.UserName.Name))}"/>
+                              <apex:outputText value="UserName" style="text-align:left; height:30px; color:#FFFFFF;" rendered="{!( ISBlank(sep.UserName.Name))}"/> 
+                       </th>  
+                       <apex:repeat value="{!sep.executiveinner}" var="mi"> 
+                       <td  style="{! IF(mi.DisplayHeader , 'background-color: #00AA90; color:#FFFFFF; border-right:1px solid #FFFFFF; font-size:12px;  text-align:left; padding-left:2px; border-bottom:1px solid #a9dcf6; height:30px; width:5%;', 'width:3%; text-align:center;')}">    
+                           <apex:outputText value="{!mi.QuantityGoal}"> </apex:outputText>
+                       </td>
+                        </apex:repeat>
+                        </tr> 
+                        <apex:variable value="{!row+1}" var="row" />                    
+                 </apex:repeat>  
+           </table>  
+          
+          <!--------------------------------------- End of 5th Report ---------------------------->
+         </apex:form>
+  <style>
+      .activebtn {
+            border:0px;
+            border-radius: 5px;
+            margin-left:2px;
+            background: #222 repeat-x 0 0;
+            display: inline-block;
+            padding: 5px 5px 5px;
+            margin-top:15px;
+            color: #fff !important;
+            font-size: 13px;
+            font-weight: normal;
+            line-height: 1;
+            text-decoration: none;
+            -moz-border-radius: 5px;
+            -webkit-border-radius: 5px;
+            -moz-box-shadow: 0 1px 3px rgba(0,0,0,0.25);
+            -webkit-box-shadow: 0 1px 3px rgba(0,0,0,0.25);
+            text-shadow: 0 -1px 1px rgba(0,0,0,0.25);
+            border-bottom: 1px solid rgba(0,0,0,0.25);
+            position: relative;
+            cursor: pointer;
+            overflow: visible;
+            width: auto;
+            text-decoration: none;
+            background-color: #E66000; 
+        }
+      
+      .passivebtn {
+            border:0px;
+            border-radius: 5px;
+            margin-left:2px;
+            background: #222 repeat-x 0 0;
+            display: inline-block;
+            padding: 5px 5px 5px;
+            margin-top:15px;
+            color: #fff !important;
+            font-size: 13px;
+            font-weight: normal;
+            line-height: 1;
+            text-decoration: none;
+            -moz-border-radius: 5px;
+            -webkit-border-radius: 5px;
+            -moz-box-shadow: 0 1px 3px rgba(0,0,0,0.25);
+            -webkit-box-shadow: 0 1px 3px rgba(0,0,0,0.25);
+            text-shadow: 0 -1px 1px rgba(0,0,0,0.25);
+            border-bottom: 1px solid rgba(0,0,0,0.25);
+            position: relative;
+            cursor: pointer;
+            overflow: visible;
+            width: auto;
+            text-decoration: none;
+             background-color: #BF733D;
+        }
+  
+  </style>
+</apex:page>

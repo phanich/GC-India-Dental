@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObjectTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <caseValues>
+        <plural>false</plural>
+        <value>Log</value>
+    </caseValues>
+    <caseValues>
+        <plural>true</plural>
+        <value>Logs</value>
+    </caseValues>
+    <fields>
+        <caseValues>
+            <plural>false</plural>
+            <value>Group Log</value>
+        </caseValues>
+        <name>group_task</name>
+        <startsWith>Consonant</startsWith>
+    </fields>
+    <fields>
+        <caseValues>
+            <plural>false</plural>
+            <value>Log Data</value>
+        </caseValues>
+        <name>task_data</name>
+        <startsWith>Consonant</startsWith>
+    </fields>
+    <fields>
+        <caseValues>
+            <plural>false</plural>
+            <value>Log Information</value>
+        </caseValues>
+        <name>task_information</name>
+        <startsWith>Consonant</startsWith>
+    </fields>
+    <fields>
+        <caseValues>
+            <plural>false</plural>
+            <value>Log Occurrence</value>
+        </caseValues>
+        <caseValues>
+            <plural>true</plural>
+            <value>Log Occurrences</value>
+        </caseValues>
+        <name>task_occurrence</name>
+        <startsWith>Consonant</startsWith>
+    </fields>
+    <fields>
+        <caseValues>
+            <plural>false</plural>
+            <value>Log Priority</value>
+        </caseValues>
+        <name>task_priority</name>
+        <startsWith>Consonant</startsWith>
+    </fields>
+    <fields>
+        <caseValues>
+            <plural>false</plural>
+            <value>Log Record Type</value>
+        </caseValues>
+        <name>task_record_type</name>
+        <startsWith>Consonant</startsWith>
+    </fields>
+    <fields>
+        <caseValues>
+            <plural>false</plural>
+            <value>Log Series</value>
+        </caseValues>
+        <name>task_series</name>
+        <startsWith>Consonant</startsWith>
+    </fields>
+    <fields>
+        <label><!-- Meeting Type --></label>
+        <name>Meeting_Type__c</name>
+    </fields>
+    <fields>
+        <label><!-- Next Visit Date --></label>
+        <name>Next_Visit_Date__c</name>
+    </fields>
+    <fields>
+        <label><!-- Next Visit Time --></label>
+        <name>Next_Visit_Time__c</name>
+    </fields>
+    <fields>
+        <label><!-- Outcome of Meeting (Other) --></label>
+        <name>Outcome_of_Meeting_Other__c</name>
+    </fields>
+    <fields>
+        <label><!-- Outcome of Meeting --></label>
+        <name>Outcome_of_Meeting__c</name>
+    </fields>
+    <fields>
+        <name>Priority</name>
+        <picklistValues>
+            <masterLabel>High</masterLabel>
+            <translation><!-- High --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Low</masterLabel>
+            <translation><!-- Low --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Normal</masterLabel>
+            <translation><!-- Normal --></translation>
+        </picklistValues>
+    </fields>
+    <fields>
+        <label><!-- Sales Order No. --></label>
+        <name>Sales_Order_No__c</name>
+    </fields>
+    <fields>
+        <label><!-- Set Reminder By Manually --></label>
+        <name>Set_Remainder_Manually__c</name>
+    </fields>
+    <fields>
+        <name>Status</name>
+        <picklistValues>
+            <masterLabel>Completed</masterLabel>
+            <translation><!-- Completed --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Deferred</masterLabel>
+            <translation><!-- Deferred --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>In Progress</masterLabel>
+            <translation><!-- In Progress --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Not Started</masterLabel>
+            <translation><!-- Not Started --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Waiting on someone else</masterLabel>
+            <translation><!-- Waiting on someone else --></translation>
+        </picklistValues>
+    </fields>
+    <fields>
+        <name>Type</name>
+        <picklistValues>
+            <masterLabel>Call</masterLabel>
+            <translation><!-- Call --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Meeting</masterLabel>
+            <translation><!-- Meeting --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Other</masterLabel>
+            <translation><!-- Other --></translation>
+        </picklistValues>
+    </fields>
+    <layouts>
+        <layout>Task Layout</layout>
+        <sections>
+            <label><!-- Custom Links --></label>
+            <section>Custom Links</section>
+        </sections>
+    </layouts>
+    <quickActions>
+        <label><!-- Defer --></label>
+        <name>Defer</name>
+    </quickActions>
+    <quickActions>
+        <label><!-- EditDescription --></label>
+        <name>EditDescription</name>
+    </quickActions>
+    <quickActions>
+        <label><!-- UpdatePriority --></label>
+        <name>UpdatePriority</name>
+    </quickActions>
+    <quickActions>
+        <label><!-- UpdateStatus --></label>
+        <name>UpdateStatus</name>
+    </quickActions>
+    <startsWith>Consonant</startsWith>
+    <validationRules>
+        <errorMessage><!-- Please select Next Visit Date and Time. --></errorMessage>
+        <name>Next_Visit_Date</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- Please fill the other reason --></errorMessage>
+        <name>Other_Outcome</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- Next Visit Date cannot be less than today. --></errorMessage>
+        <name>Visit_Date_Validation</name>
+    </validationRules>
+</CustomObjectTranslation>

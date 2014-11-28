@@ -1,0 +1,80 @@
+<apex:page standardController="Demo_Product__c" extensions="DemoproductsCon">
+<apex:includeScript value="{!$Resource.AjaxLoaderJs}/AjaxLoader.js"/> 
+<c:AjaxLoader LoaderImage="{!$Resource.AjaxLoaderImage}"/>
+
+<!-- Javascript -->
+<script type="text/javascript">
+function validate()
+{
+    if(document.getElementById('{!$Component.formid.pb.pbs.SelectedUser}').value == 'None')
+    {
+        alert("User name is mandatory");
+        return false;
+    }
+    else{
+        return true;
+    } 
+}
+</script>
+<!-- Javascript -->
+
+
+<apex:form id="formid">
+<apex:pageBlock title="Demo Product Information" mode="edit" id="pb">
+
+         <apex:pageBlockButtons location="bottom">
+          <apex:commandButton action="{!saveAllRecords}" value="Save" status="AjaxLoader" reRender="formid" onclick="validate();"/>
+         <apex:commandButton action="{!cancel}" value="Cancel"/>
+    </apex:pageBlockButtons> 
+
+
+
+ 
+     <apex:pageBlockSection collapsible="false" columns="2" id="pbs">
+          <apex:outputText >
+                    <font style="padding-left:28%;color:#4A4A56;font-weight:bold;font-size:11px;"> User</font>&nbsp;&nbsp;      
+                    <apex:selectList id="SelectedUser" value="{!SelectedUser}" size="1" style="width:150px;">
+                        <apex:selectOptions value="{!ChoosenUser}"/>
+                    </apex:selectList>
+                </apex:outputText><br/>
+         <apex:inputField value="{!demoRecord.From__c}" id="Fromid" required="true"  />
+         <apex:inputField value="{!demoRecord.To__c}" id="Toid" required="true"/>
+     </apex:pageBlockSection>
+     
+      <div style="margin: 10px 10px 2px 20px;">
+           <apex:outputText value="{!errorMessage}" id="errorMessage" style="color:red;" escape="false"></apex:outputText>
+      </div> 
+
+      <apex:pageBlockSection collapsible="false" columns="1" id="DlLine">
+      <apex:pageBlockTable value="{!demoLineItems}" var="dl">
+       <apex:column headerValue="Products">
+        <apex:outputPanel styleClass="requiredInput" layout="block" id="pwPanel" >
+        <apex:outputPanel styleClass="requiredBlock"/>
+                   <apex:selectList value="{!dl.Product__c}" multiselect="false" size="1" >
+                   <apex:selectOptions value="{!picklistValues}"/>
+                   </apex:selectList>
+        </apex:outputPanel>           
+        </apex:column>
+        <apex:column headerValue="Quantity">
+                   <apex:inputField value="{!dl.Quantity__c}" required="true"/>
+        </apex:column>  
+        <apex:column headerValue="Quantity In">
+                  <apex:inputField value="{!dl.Quantity_in__c}" required="true"/>
+        </apex:column> 
+       <apex:column headerValue="Action">
+        <apex:commandLink action="{!deletedemoLine}" reRender="DlLine,errorMessage" onclick="confirm('Do you want to delete the item?');">
+            <apex:image value="{!$Resource.DeleteIcon}" title="Delete"/>
+            <apex:param value="{!dl.UniqueName__c}" name="deletedId"/>
+        </apex:commandLink>    
+       </apex:column>  
+     </apex:pageBlockTable>
+     </apex:pageBlockSection>      
+
+<div style="text-align:left;margin: 15px 10px 2px 20px;">  
+    <apex:commandButton value="Add Products" action="{!addMore}" reRender="DlLine,errorMessage"/> 
+</div>
+     
+</apex:pageBlock>
+
+</apex:form>
+</apex:page>
